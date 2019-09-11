@@ -1,0 +1,184 @@
+find packets that match to multiple pk_patient_ids
+
+with multi as (
+  select PACKET_UUID, count(DISTINCT PK_PATIENT_ID)
+  from PDS_VIEW_USER.BIOBANK_MATCH_MV
+  group by PACKET_UUID
+  having count(DISTINCT PK_PATIENT_ID) = 2
+  /* order by count(PK_PATIENT_ID) desc */
+)
+select match.packet_uuid, match.pk_patient_id, match.empi, match.* 
+from PDS_VIEW_USER.BIOBANK_MATCH_MV match
+join multi on multi.PACKET_UUID = match.PACKET_UUID
+order by match.packet_uuid, match.empi
+
+
+find packets that match to multiple empis
+
+select match.packet_uuid, match.pk_patient_id, match.empi, match.* 
+from PDS_VIEW_USER.BIOBANK_MATCH_MV match,
+(
+select PACKET_UUID, count(DISTINCT EMPI)
+from PDS_VIEW_USER.BIOBANK_MATCH_MV
+group by PACKET_UUID
+having count(DISTINCT EMPI) > 1
+/* order by count(EMPI) desc */
+) multi
+where multi.PACKET_UUID = match.PACKET_UUID
+order by match.packet_uuid, match.empi
+
+
+
+
+find people who have multiple empis
+
+with multi as (
+select mrn, last_name, count(empi) as num_empi
+from (
+  select distinct mrn, last_name, empi
+  from PDS_VIEW_USER.BIOBANK_MATCH_MV
+) people
+group by mrn, last_name
+having count(empi) > 1
+)
+select multi.*, match.empi, match.*
+from PDS_VIEW_USER.BIOBANK_MATCH_MV match
+join multi on multi.mrn = match.mrn
+order by multi.mrn
+
+
+
+
+
+vw_squash_specimens_pivot
+
+CREATE 
+    ALGORITHM = UNDEFINED 
+    DEFINER = `root`@`localhost` 
+    SQL SECURITY DEFINER
+VIEW `vw_squash_specimens_pivot` AS
+    (SELECT 
+        (CASE
+            WHEN
+                ((`items`.`id_study` = _LATIN1'PMBB')
+                    OR (`items`.`id_study` = _LATIN1'PMBB_TISSUE'))
+            THEN
+                `items`.`collection_packet_uuid`
+            ELSE `items`.`id_subject`
+        END) AS `packet_uuid`,
+        `items`.`id_subject` AS `id_subject`,
+        MAX(`items`.`encounter_code`) AS `encounter_code`,
+        MAX(`items`.`collection_packet_uuid`) AS `collection_packet_uuid`,
+        MAX(`items`.`id_encounter`) AS `encounter_uuid`,
+        `items`.`id_study` AS `study`,
+        MAX(`cgi_exome_dna`.`count`) AS `exome_available`,
+        MAX((CASE
+            WHEN
+                ((`items`.`sample_type` = _LATIN1'BUFFY')
+                    OR (`items`.`sample_type` = _LATIN1'buffy_edta')
+                    OR (`items`.`sample_type` = _LATIN1'buffy_nacit'))
+            THEN
+                1
+            ELSE 0
+        END)) AS `buffy_available`,
+        MAX((CASE
+            WHEN
+                ((`items`.`sample_type` = _LATIN1'DNA')
+                    AND (ISNULL(`items`.`plated`)
+                    OR (`items`.`plated` = 0)))
+            THEN
+                1
+            ELSE 0
+        END)) AS `nonplated_dna_available`,
+        SUM((CASE
+            WHEN
+                ((`items`.`sample_type` = _LATIN1'DNA')
+                    AND (ISNULL(`items`.`plated`)
+                    OR (`items`.`plated` = 0)))
+            THEN
+                1
+            ELSE 0
+        END)) AS `nonplated_dna_total`,
+        SUM((CASE
+            WHEN
+                ((`items`.`sample_type` = _LATIN1'DNA')
+                    AND (`items`.`plated` = 1))
+            THEN
+                1
+            ELSE 0
+        END)) AS `plated_dna_total`,
+        SUM((CASE
+            WHEN
+                ((`items`.`sample_type` = _LATIN1'serum')
+                    OR (`items`.`sample_type` = _LATIN1'SST'))
+            THEN
+                1
+            ELSE 0
+        END)) AS `serum_total`,
+        SUM((CASE
+            WHEN
+                ((`items`.`sample_type` = _LATIN1'BUFFY')
+                    OR (`items`.`sample_type` = _LATIN1'buffy_edta'))
+            THEN
+                1
+            ELSE 0
+        END)) AS `buffy_edta_total`,
+        SUM((CASE
+            WHEN (`items`.`sample_type` = _LATIN1'buffy_nacit') THEN 1
+            ELSE 0
+        END)) AS `buffy_nacit_total`,
+        SUM((CASE
+            WHEN
+                ((`items`.`sample_type` = _LATIN1'edta_plasma')
+                    OR (`items`.`sample_type` = _LATIN1'P_EDTA')
+                    OR (`items`.`sample_type` = _LATIN1'edta'))
+            THEN
+                1
+            ELSE 0
+        END)) AS `edta_plasma_total`,
+        SUM((CASE
+            WHEN
+                ((`items`.`sample_type` = _LATIN1'nacit_plasma')
+                    OR (`items`.`sample_type` = _LATIN1'P_NACIT')
+                    OR (`items`.`sample_type` = _LATIN1'NaCit'))
+            THEN
+                1
+            ELSE 0
+        END)) AS `nacit_plasma_total`,
+        SUM((CASE
+            WHEN (`items`.`sample_type` = _LATIN1'tissue_button') THEN 1
+            ELSE 0
+        END)) AS `tissue_button_total`,
+        SUM((CASE
+            WHEN (`items`.`sample_type` = _LATIN1'rbc_edta') THEN 1
+            ELSE 0
+        END)) AS `rbc_edta`,
+        SUM((CASE
+            WHEN
+                (`items`.`sample_type` NOT IN (_LATIN1'DNA' , _LATIN1'serum',
+                    _LATIN1'SST',
+                    _LATIN1'BUFFY',
+                    _LATIN1'buffy_edta',
+                    _LATIN1'edta_plasma',
+                    _LATIN1'P_EDTA',
+                    _LATIN1'edta',
+                    _LATIN1'nacit_plasma',
+                    _LATIN1'P_NACIT',
+                    _LATIN1'NaCit',
+                    _LATIN1'tissue_button',
+                    _LATIN1'buffy_nacit',
+                    'rbc_edta'))
+            THEN
+                1
+            ELSE 0
+        END)) AS `other_total`
+    FROM
+        (`items`
+        LEFT JOIN `cgi_exome_dna` ON ((`items`.`id_subject` = `cgi_exome_dna`.`id_subject`)))
+    WHERE
+        ((`items`.`type` = _LATIN1'tube')
+            AND (`items`.`consumed` = _UTF8'0')
+            AND ((`items`.`id_study` = _LATIN1'PMBB')
+            OR (`items`.`id_study` = _LATIN1'PMBB_TISSUE')
+            OR (`items`.`id_study` = _LATIN1'CGI')))
+    GROUP BY `items`.`id_study` , `items`.`id_subject`)

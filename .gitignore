@@ -1,0 +1,100 @@
+# gradle working directory
+.gradle
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Cache of project
+.gradletasknamecache
+
+# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
+# gradle/wrapper/gradle-wrapper.properties
+
+# ignore local logging configs
+logback.xml
+
+# MacOS thing
+.DS_Store
+
+# typically good to ignore anything named build
+build
+
+# we do not necessarily want to ignore all of these
+# *.csv
+
+# do not ignore the docker-compose file
+!docker-compose.yml
+
+# the below are typically data or config files
+*.yaml
+*.yml
+*.conf
+*.jnl
+*.log
+*.zip
+*.tgz
+*.properties
+
+# this file contains connection parameters including usernames and passwords
+dbconfig.yaml
+
+# the target directory is an output directory
+target
+
+# this stuff is probably snuck in when the TURBO group was working in this repo
+# carnival-core/.idea/*
+# carnival-core/target-288snapshot
+
+# we used to have the neo4j in the root directory... it has since been moved to data/graph
+# neo4j
+
+#
+# the data includes both transient and non-transient data
+# we want to track some of it
+#
+
+# ignore the data directory entirely by default
+# carnival-core/data
+
+# we want to ignore most data directories
+#data/cache
+#data/graph
+#data/h2
+#data/tmp/
+#data/source
+
+# include the source/readme which describes how the directory is to be used
+#!data/source/readme.txt
+
+# include the test data
+!app/carnival-core/data/test
+!app/carnival-core/data/test/*/*.yaml
+
+# track the reference folder
+!app/carnival-core/data/reference/*/*.csv
+
+# not sure what these were about
+# carnival-core/src/main/main.iml
+# carnival-core/src/test/test.iml
+# carnival-core/data/*_*
+
+# java heap profiles
+*.hprof
+
+# pmbb graph workspace command line stuff
+app/carnival-core/*.xlsx
+app/carnival-core/*.csv
+# code-assignments-report-config*
+
+# transitional
+# app/
+
+# ignore files created in the tutorial directory
+docs/tutorial/*.csv
+docs/tutorial/*.yml
+
+# ignore vi swap files
+*.swp

@@ -1,0 +1,56 @@
+// patients who have participated in at least 3 biobank encounters
+MATCH (p)-[:participated_in_encounter]->(enc:BiobankEncounter)
+WITH p, count(enc) as encs ORDER BY encs desc
+WHERE encs > 2
+MATCH (p:Patient)-[:is_member_of]->(pg:PatientGroup)
+RETURN p, encs, pg
+
+// top 20 patients with the most biobank encounters
+MATCH (p:Patient)-[:participated_in_encounter]->(enc:BiobankEncounter) 
+WITH p, COUNT(enc) as encs 
+ORDER BY encs DESC 
+RETURN p, encs LIMIT 20
+
+
+// patient with the most encounters, and that patient's identifiers
+MATCH (p:Patient)-[:participated_in_encounter]->(enc:BiobankEncounter) 
+WITH p, COUNT(enc) as encs 
+ORDER BY encs DESC LIMIT 1 
+MATCH 
+	(p)-[:is_identified_by]->(id),
+	(id)-[:is_instance_of]->(idClass:IdentifierClass)
+OPTIONAL MATCH (id)-[:is_scoped_by]->(idScope:IdentifierScope)
+RETURN p, id, encs, idClass, idScope
+
+// details of the patient with the second most most biobank encounters
+MATCH (p:Patient)-[:participated_in_encounter]->(enc:BiobankEncounter) 
+WITH p, COUNT(enc) as encs 
+ORDER BY encs DESC SKIP 1 LIMIT 1
+MATCH 
+	(p)-[:participated_in_encounter]->(enc:BiobankEncounter),
+	(enc)-[:is_under_protocol]->(protocol:Protocol)
+//ORDER BY enc.encounterDate ASC
+return p, enc, protocol
+
+
+//----
+// PDS demographics for patients
+MATCH (p:Patient)-[:has_demographics_summary]->(demo:PatientDemographicsSummary),
+RETURN demo.EMR_GENDER_CODE, demo.EMR_CURRENT_AGE, demo.EMR_RACE_CODE, demo.EMR_RACE_HISPANIC_YN
+
+// PDS demographics for patients and the number of biobank encounters
+MATCH (p:Patient)-[:has_demographics_summary]->(demo:PatientDemographicsSummary),
+(p)-[:participated_in_encounter]->(enc:BiobankEncounter)
+WITH  demo, count(enc) as numberEncounters
+RETURN demo.EMR_CURRENT_AGE, demo.EMR_RACE_CODE, demo.EMR_RACE_HISPANIC_YN, numberEncounters
+
+
+//---
+// female patients with current age >= 60 who have prevalent mi
+MATCH (p:Patient)-[:is_member_of]->(pGroup:PatientGroup),
+(p)-[:has_demographics_summary]->(demo:PatientDemographicsSummary)
+WHERE 
+pGroup.name = "PREV-MI" and
+toInteger(demo.EMR_CURRENT_AGE) >= 60 and
+demo.EMR_GENDER_CODE = "F"
+return p

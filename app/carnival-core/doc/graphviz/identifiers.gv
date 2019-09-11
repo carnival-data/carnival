@@ -1,0 +1,13 @@
+digraph Identifiers {
+nodesep=1.0
+node [shape="box", fontsize=20]
+
+Identifier [label=":Identifier\nvalue:<string>"]
+IdentifierClass [label=":IdentifierClass \nname:<string>\nhasScope:<boolean>\nhasCreationFacility:<boolean>"]
+IdentifierFacility [label=":IdentifierFacility \nname:<string>", style = dashed]
+IdentifierScope [label=":IdentifierScope \nname:<string>", style = dashed]
+
+Identifier -> IdentifierClass [label="is_instance_of"];
+Identifier -> IdentifierFacility [label="was_created_by\nRequired iff :IdentifierClass.hasCreationFacility=true", style=dashed];
+Identifier -> IdentifierScope [label="is_scoped_by\nRequired iff :IdentifierClass.hasScope=true",  style=dashed];
+}

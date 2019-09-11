@@ -1,0 +1,15 @@
+digraph Encounters {
+	nodesep=1.0
+	node [shape="box", fontsize=20]
+
+	BiobankEncounter [label = ":BiobankEncounter\nencounterDate:<date>"]
+	Protocol [label = ":BiobankProtocol \nname:<string>\nfutureEmrAlwaysAllowed:<boolean>"]
+	Crf [label = ":CaseReportForm\nfutureEmrAllowed:<boolean>"]
+	// Identifier [label=":Identifier\nvalue:<string>"]
+
+	//BiobankEncounter -> Identifier [label="is_identified_by"]
+	BiobankEncounter -> Protocol [label="is_under_protocol"]
+	BiobankEncounter -> Crf [label="is_under_consent"]
+	BiobankEncounter -> Crf  [label="participated_in_form_filling", style=dashed]
+	Crf -> Protocol [label ="is_under_protocol"]
+}

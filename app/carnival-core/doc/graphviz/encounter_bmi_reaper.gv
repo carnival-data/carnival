@@ -1,0 +1,11 @@
+digraph Encounters {
+	nodesep=1.0
+	node [shape="box", fontsize=20]
+
+	BiobankEncounter [label = ":BiobankEncounter\nencounterDate:<date>"]
+	CrfData [label = ":CrfBmiData \nheightInches:<float>\nweightLbs:<float>\nbmi:<float>"]
+	SummaryData [label = ":SummaryBmiData\nproximalHeightInches:<float>\nproximalWeightLbs:<float>\nproximalBmi:<float>\ndayDiff:<int>\nminBmiBeforeEncounter:<float>\nmaxBmiBeforeEncounter:<float>\nmedianBmiBeforeEncounter:<float>"]
+
+	BiobankEncounter -> CrfData [label="has_bmi_data"]
+	BiobankEncounter -> SummaryData [label="has_bmi_data"]
+}

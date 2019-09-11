@@ -1,0 +1,105 @@
+/**
+ * Graph to cover the LifeProcess data and conclusionation sub-graphs.
+ *
+ */
+digraph LifeProcess {
+
+	nodesep=1.0
+	
+	node [
+		shape=box, 
+		fontsize=20
+	]
+
+	Patient [
+		label = "Patient"
+	]
+
+	/* SSA DEATH INDEX */
+
+	DeathStatusReaperProcess [
+		label = "DeathStatusReaperProcess\ncreated:<Date>"
+		, shape=oval
+	]
+	DeathStatusData [
+		label = "DeathStatusData",
+		shape = "note"
+	]
+	Patient -> DeathStatusReaperProcess [
+		label="is_input_of",
+		dir=both, 
+		arrowtail=odiamondodiamond, 
+		arrowhead=normal
+	]
+	Patient -> DeathStatusData [label="has_death_status_data"]
+	DeathStatusData -> DeathStatusReaperProcess [
+		label="is_output_of",
+		dir=both, 
+		arrowtail=odiamondodiamond, 
+		arrowhead=normal
+	]
+
+	/* MDM PATIENT */
+
+	MdmPatientReaperProcess [
+		label = "MdmPatientReaperProcess\ncreated:<Date>"
+		, shape=oval		
+	]
+	MdmPatientData [
+		label = "MdmPatientData",
+		shape = "note"
+	]
+	Patient -> MdmPatientData [label="has_mdm_patient_data"]
+	Patient -> MdmPatientReaperProcess [
+		label="is_input_of",
+		dir=both, 
+		arrowtail=odiamondodiamond, 
+		arrowhead=normal
+	]
+	MdmPatientData -> MdmPatientReaperProcess [
+		label="is_output_of",
+		dir=both, 
+		arrowtail=odiamondodiamond, 
+		arrowhead=normal
+	]
+
+
+	/* DEATH STATUS CONCLUSIONATION */
+
+	DeathConclusionationProcess [label="DeathConclusionationProcess", shape=oval]
+	DeathStatusReaperProcess -> DeathConclusionationProcess [
+		label="is_input_of",
+	]
+	MdmPatientReaperProcess -> DeathConclusionationProcess [
+		label="is_input_of",
+	]
+
+	BirthConclusionationProcess [label="BirthConclusionationProcess", shape=oval]
+
+	LifeProcess [label="LifeProcess", shape=oval]
+	Patient -> LifeProcess [label="participates_in"]
+
+	Birth [label="Birth"]
+	LifeProcess -> Birth [label="has_part"]
+	LifeProcess -> Birth [label="has_part_potential\ndiscrepancy:Enum"]
+	Birth -> BirthConclusionationProcess [
+		label="is_output_of"
+		dir=both, 
+		arrowtail=odiamondodiamond, 
+		arrowhead=normal		
+	]
+
+	Death [label="Death"]
+	LifeProcess -> Death [label="has_part"]
+	LifeProcess -> Death [label="has_part_potential\ndiscrepancy:Enum"]
+	Death -> DeathConclusionationProcess [
+		label="is_output_of\nevidence:STRING",
+		dir=both, 
+		arrowtail=odiamondodiamond, 
+		arrowhead=normal		
+	]
+
+	Patient -> Death [label="has_death_boundary"]
+	Patient -> Birth [label="has_birth_boundary"]
+
+}

@@ -1,0 +1,16 @@
+digraph Encounters {
+nodesep=1.0
+node [shape="box", fontsize=20]
+
+enc [label = ":BiobankEncounter\nencounterDate:<date>"]
+crf [label = ":CaseReportForm"]
+id [label = ":Identifier"]
+idClass [label = ":IdentifierClass"]
+protocol [label = ":Protocol"]
+
+id -> idClass [label="is_instance_of"]
+enc -> id [label="is_identified_by"]
+enc -> crf [label="participated_in_form_filing"]
+enc -> protocol [label="is_under_protocol"]
+
+}

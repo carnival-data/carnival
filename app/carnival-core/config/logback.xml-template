@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+    <property name="LOG_DIR" value="${CARNIVAL_LOCAL}/log" />
+
+
+    <!-- appenders -->
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+        <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+        </layout>
+    </appender>
+  
+    <appender name="DATA_ENTITY_FILE" class="ch.qos.logback.core.FileAppender">
+        <file>${LOG_DIR}/data-entity-report.log</file>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender> 
+
+    <appender name="SQL_FILE" class="ch.qos.logback.core.FileAppender">
+        <file>${LOG_DIR}/sql.log</file>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender> 
+
+    <appender name="CARNIVAL" class="ch.qos.logback.core.FileAppender">
+        <file>${LOG_DIR}/carnival.log</file>
+      <encoder>
+        <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+      </encoder>
+    </appender> 
+
+    <appender name="CARNIVAL_QUERY_UPDATES" class="ch.qos.logback.core.FileAppender">
+        <file>${LOG_DIR}/carnival-query-updates.log</file>
+      <encoder>
+        <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+      </encoder>
+    </appender> 
+
+
+    <!-- loggers -->
+
+    <!-- java -->
+    <logger name="javax.management" level="INFO"/>
+
+    <!-- groovy -->
+    <logger name="groovy.util" level="INFO"/>
+
+    <!-- netty -->
+    <logger name="org.jboss.netty" level="INFO"/>
+    <logger name="com.ning.http.client" level="INFO"/>
+    <logger name="reactor.ipc.netty.http.server" level="INFO"/>
+    <logger name="reactor.ipc.netty.channel" level="INFO"/>
+
+    <!-- spring -->
+    <logger name="org.springframework.web.reactive" level="INFO"/>
+    <logger name="org.springframework.beans" level="INFO"/>
+    <logger name="org.springframework.data.neo4j" level="INFO"/>
+    <logger name="org.springframework.web.reactive" level="INFO"/>
+    <logger name="org.springframework.boot" level="INFO"/>
+    <logger name="org.springframework.core" level="INFO"/>
+    <logger name="org.springframework.context" level="INFO"/>
+    <logger name="org.springframework.data" level="INFO"/>
+    <logger name="org.springframework.util" level="INFO"/>
+    <logger name="org.springframework.aop" level="INFO"/>
+    <logger name="org.springframework.jmx" level="INFO"/>
+    <logger name="org.springframework.transaction" level="INFO"/>
+    <logger name="org.springframework.jdbc" level="INFO"/>
+
+    <!-- reactor -->
+    <logger name="reactor" level="INFO"/>
+
+    <!-- hibernate -->
+    <logger name="org.hibernate" level="INFO"/>
+
+    <!-- grails -->
+    <logger name="org.grails" level="INFO"/>
+
+    <!-- neo4j -->
+    <logger name="org.neo4j.ogm" level="INFO"/>
+
+    <!-- carnival -->
+    <logger name="sql" level="TRACE">
+        <appender-ref ref="SQL_FILE" />
+    </logger>
+
+    <logger name="db-entity-report" level="TRACE">
+        <appender-ref ref="DATA_ENTITY_FILE" />
+    </logger>
+
+    <logger name="console" level="TRACE">
+      <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="carnival-query-updates" level="TRACE">
+      <appender-ref ref="CARNIVAL_QUERY_UPDATES" />
+    </logger>
+
+    <logger name="carnival" level="TRACE">
+      <appender-ref ref="CARNIVAL" />
+    </logger>
+  
+    <!-- root -->
+    <root level="TRACE">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>

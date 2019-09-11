@@ -1,0 +1,18 @@
+digraph Encounters {
+nodesep=1.0
+node [shape="box", fontsize=20]
+
+DxEverNeverReaperProcess [label=":DxEverNeverReaperProcess\nname:<string>"]
+CodeGroup [label=":CodeGroup\nname:<string>"]
+CodeRef [label=":CodeRef\nvalue:<string>"]
+PatientGroup [label=":PatientGroup\nname:<string>"]
+Patient [label=":Patient"]
+
+CodeGroup -> CodeRef [label="has_part"]
+CodeGroup -> DxEverNeverReaperProcess [label="is_specified_input_of"]
+
+PatientGroup -> DxEverNeverReaperProcess [label="is_specified_output_of"]
+
+Patient -> PatientGroup [label="is_member_of"]
+Patient -> PatientGroup [label="is_not_member_of"]
+}

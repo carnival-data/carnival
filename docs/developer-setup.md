@@ -47,6 +47,8 @@ git clone git@github.com:pennbiobank/carnival-public.git
 		```
 		-Dcarnival.home=/Users/myuser/dev/carnival/carnival_home
 		```
+		
+		**Note** - If you use this method, then you will need to edit logback.xml, which by default references CARNIVAL_HOME.
 
 4. Setup the configuration files in the `${CARNIVAL_HOME}/config` directory:
 

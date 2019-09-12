@@ -2,7 +2,7 @@
 
 <configuration>
 
-    <property name="LOG_DIR" value="${CARNIVAL_LOCAL}/log" />
+    <property name="LOG_DIR" value="${CARNIVAL_HOME}/log" />
 
 
     <!-- appenders -->

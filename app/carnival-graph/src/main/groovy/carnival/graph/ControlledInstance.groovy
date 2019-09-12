@@ -91,7 +91,7 @@ class ControlledInstance {
         pvs.putAll(propertyValues)
         vertexDef.defaultProperties.each { PropertyDefTrait defVp ->
             def found = pvs.find({ vp, val -> vp.label == defVp.label})
-            log.debug "found: $found"
+            //log.debug "found: $found"
             
             if (!found) {
                 pvs.put(defVp, defVp.defaultValue)                

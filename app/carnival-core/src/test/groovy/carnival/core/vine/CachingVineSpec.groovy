@@ -74,6 +74,7 @@ class CachingVineSpec extends Specification {
         // set up target directory
         def ant = new AntBuilder()
         if (!Defaults.targetDirectory.exists()) ant.mkdir(dir:Defaults.targetDirectory)
+        if (!Defaults.dataCacheDirectory.exists()) ant.mkdir(dir:Defaults.dataCacheDirectory)        
     }  
 
 

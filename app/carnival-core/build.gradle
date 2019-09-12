@@ -278,8 +278,8 @@ task carnivalLocalDirInit (dependsOn: ['classes'], type: JavaExec) {
 
     if (System.getProperty('logback.configurationFile')) {
         systemProperty("logback.configurationFile", System.getProperty('logback.configurationFile'))
-    } else if (System.env.LOGBACK_CONFIGURATION_FILE) {
-        systemProperty("logback.configurationFile", System.env.LOGBACK_CONFIGURATION_FILE)
+    } else if (System.env.CARNIVAL_LOGBACK_CONFIG) {
+        systemProperty("logback.configurationFile", System.env.CARNIVAL_LOGBACK_CONFIG)
     } else {
         ant.echo "Set the system property logback.configurationFile to configure Logback. Ex. -Dlogback.configurationFile=/path/to/file.xml"
     }

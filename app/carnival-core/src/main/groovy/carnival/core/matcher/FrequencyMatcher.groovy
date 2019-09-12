@@ -1,7 +1,6 @@
 package carnival.core.matcher
 
 
-//import static org.math.array.LinearAlgebra.*
 import static org.math.array.IntegerArray.*
 import org.apache.commons.math3.util.CombinatoricsUtils
 import java.util.Random
@@ -11,7 +10,6 @@ import org.slf4j.LoggerFactory
 import au.com.bytecode.opencsv.*
 
 import carnival.core.*
-import carnival.core.relational.feature.*
 import carnival.util.Defaults
 import carnival.util.*
 

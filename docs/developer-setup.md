@@ -5,8 +5,8 @@ Carnival is a Groovy [multi-projects](https://guides.gradle.org/creating-multi-p
 Gradle task commands run from the root project filter down to the sub-projects.  Gradle commands referenced in this documentation are assumed to be called from the root project directory `carnival/app` unless otherwise noted.
 
 ## Contents
-1. [Installation](#quickstart)
-1. [Running Carnival](#running-carnival)
+1. [Installation](#installation)
+1. [Building](#building)
 1. [Testing](#testing)
 1. [Publishing Libraries](#publishing-libraries)
 
@@ -29,22 +29,23 @@ Gradle task commands run from the root project filter down to the sub-projects. 
 git clone git@github.com:pennbiobank/carnival-public.git
 ```
 
-2. Create a directory for local carnival data and set that path to the environment variable CARNIVAL_LOCAL.  For example:
-```
-mkdir /Users/myuser/dev/carnival/carnival_local
-CARNIVAL_LOCAL=/Users/myuser/dev/carnival/carnival_local
-```
+2. Create a directory for local carnival data and set that path to the environment variable `CARNIVAL_HOME`.  For example:
 
-3. Setup the configuration files in the `${CARNIVAL_LOCAL}/config` directory:
+	```
+	mkdir /Users/myuser/dev/carnival/carnival_home
+	export CARNIVAL_HOME=/Users/myuser/dev/carnival/carnival_home
+	```
 
-  * To set up the config files from scratch, copy the config template files from `${CARNIVAL_ROOT}/app/carnival-core/config` to `${CARNIVAL_LOCAL}/config`.  Rename the files named `*.*-template` to `*.yaml`.  `application.yaml` must be updated with datasource connection credentals.  See admins for details.
+3. Setup the configuration files in the `${CARNIVAL_HOME}/config` directory:
+
+	- To set up the config files from scratch: 
+		- Copy the config template files from `carnival/app/carnival-core/config` to `${CARNIVAL_HOME}/config`.  
+		- Rename the files named `*.*-template` to `*.*` (remove `-template` from the name).
 
   **Note** - In the config files windows paths should be specified using double forward-slashes (i.e. `C://Users//myuser//somedirectory`)
 
-	* File descriptions:
+	- File descriptions:
 		- application.yaml - Contains data source information (i.e. credentals to relational dbs, RDF dbs, REDCap, etc.), the default vine cache-mode, local directory configuration and the gremlin configuration.
-		- graph-init.yaml - Can be updated to modify what data is added to the default PMBB CLI property graph.
-		- graph-workspace.yaml - Can be updated to modify the behavior of the PMBB CLI interface.
 		- logback.xml - Can be modified to change the log levels.
 
 4. Install APOC neo4j plugin:
@@ -68,16 +69,16 @@ gremlin:
 ```
 
 
-<a name="running-carnival"></a>
-## Running Carnival
+<a name="building"></a>
+## Building Carnival
 
 ### Overview
 Carnival is a [Groovy multi-project](https://guides.gradle.org/creating-multi-project-builds/) application comprised of sub-projects.  Some sub-projects implement the data model and shared core functionality (`carnival-core`, `carnival-util`, `carnival-graph`, `carnival-gremlin-dsl`, etc.) and some extend the general data model to the biomedical domain (`carnival-clinical`).
 
 Every sub-project has a `build.gradle` configuration file that defines it's dependencies and the gradle tasks it can execute. The `build.gradle` file in the `carnival/app` directory defines project-wide configuration.  These files also contain the default java arguments that are used for each task.
 
-### Building
-Carnival can be built by running `gradle compileGroovy`.  The build can be cleaned by running `gradle clean`.  To run sub-project tasks, use the [gradle colon syntax](https://docs.gradle.org/current/userguide/multi_project_builds.html#sec:project_and_task_paths).
+### Compiling
+Carnival can be built by running `gradle compileGroovy`.  The build can be cleaned by running `gradle clean`.  To run sub-project tasks, use the [gradle colon syntax](https://docs.gradle.org/current/userguide/multi_project_builds.html#sec:project_and_task_paths): `gradle :carnival-util:compileGroovy`.
 
 
 

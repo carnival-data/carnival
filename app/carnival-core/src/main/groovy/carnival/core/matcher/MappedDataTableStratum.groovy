@@ -1,9 +1,13 @@
 package carnival.core.matcher
 
+
+
 import com.google.common.collect.*
 
 
+
 enum CriteriaType {INT_RANGE, STRING_SET}
+
 
 /**
 * Class that describes buckets to be used in frequency matching
@@ -123,42 +127,6 @@ class MappedDataTableStratum {
 		return bucket
 	}
 
-	public static MappedDataTableStratum generateGeneticRaceMappedDataTableStratum(String keyName) {
-		def bucket = new MappedDataTableStratum()
-
-		bucket.keyName = keyName
-		bucket.bucketCriteria.add(['EUR'] as Set)
-		bucket.bucketCriteria.add(['AFR'] as Set)
-		bucket.bucketCriteria.add(['SAS'] as Set)
-		bucket.bucketCriteria.add(['AMR'] as Set)
-		bucket.bucketCriteria.add(['EAS'] as Set)
-		bucket.bucketCriteria.add(['UNKNOWN0'] as Set)
-		bucket.bucketCriteria.add(['UNKNOWN1'] as Set)
-		bucket.bucketCriteria.add(['UNKNOWN2'] as Set)
-		bucket.caseSensitive = false
-		bucket.criteriaType = CriteriaType.STRING_SET
-		bucket.bucketNames = ['EUR', 'AFR', 'SAS', 'AMR', 'EAS', 'UNKNOWN0', 'UNKNOWN1', 'UNKNOWN2', 'not specified']
-
-		return bucket
-
-	}
-
-	public static MappedDataTableStratum generateGeneralRecruitmentLocationBucket(String keyName) {
-		def bucket = new MappedDataTableStratum()
-
-		bucket.keyName = keyName
-		bucket.bucketCriteria.add(["PAT"] as Set)
-		bucket.bucketCriteria.add(["Phlebotomy"] as Set)
-		bucket.bucketCriteria.add(["CVI"] as Set)
-		bucket.bucketCriteria.add(["CT"] as Set)
-		bucket.bucketCriteria.add(["Other"] as Set)
-		bucket.bucketCriteria.add(["HUP Clinic"] as Set)
-		bucket.caseSensitive = false
-		bucket.criteriaType = CriteriaType.STRING_SET
-		bucket.bucketNames = ['PAT', 'Phlebotomy', 'CVI', 'CT', 'HUP Clinic', 'Other', 'not specified']
-
-		return bucket
-	}
 
 	////////////////////////////////////
 	// Bucket list management

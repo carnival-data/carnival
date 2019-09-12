@@ -41,27 +41,28 @@ public class Defaults {
         else return null
     }
 
+    static public File findDirectoryFromSysProp(String tag) {
+        def propVal = System.getProperty(tag)
+        if (propVal == null) return null
+        File f = new File(propVal)
+        if (f.exists() && f.isDirectory()) return f
+        else return null
+    }
+
     static public File findApplicationConfigurationFile() {
         log.trace "findApplicationConfigurationFile()"
 
         // set-up
         Map<String, String> env = System.getenv()
         String configDirPath
-        File configDir
         File configFile
 
         // look for config in -DconfigDir
-        if (!configFile && System.getProperty('configDir')) {
-            configDirPath = System.getProperty('configDir')
+        if (!configFile && System.getProperty('carnival.home')) {
+            configDirPath = System.getProperty('carnival.home') + "/config"
             configFile = findApplicationConfigurationFileInDirectoryPath(configDirPath)
         }
         
-        // look for config in CARNIVAL_LOCAL/config
-        if (!configFile && env.containsKey('CARNIVAL_LOCAL')) {
-            configDirPath = env.get('CARNIVAL_LOCAL') + "/config"
-            configFile = findApplicationConfigurationFileInDirectoryPath(configDirPath)
-        }
-
         // look for config in CARNIVAL_HOME/config
         if (!configFile && env.containsKey('CARNIVAL_HOME')) {
             configDirPath = env.get('CARNIVAL_HOME') + "/config"
@@ -75,16 +76,16 @@ public class Defaults {
 
         // if we don't have a config file by now, it's an error.
         if (!configFile) {
-            def msg = "Could not find application config file."
-            msg += " System property 'configDir': ${System.getProperty('configDir')}"
-            if (env.containsKey('CARNIVAL_HOME')) msg += " CARNIVAL_HOME: ${env.get('CARNIVAL_HOME')}"
-            else msg += " CARNIVAL_HOME is not set."
-            if (env.containsKey('CARNIVAL_LOCAL')) msg += " CARNIVAL_LOCAL: ${env.get('CARNIVAL_LOCAL')}"
-            else msg += " CARNIVAL_LOCAL is not set."
+            def msg = "Could not find application config file. See documentation."
+            msg += " carnival.home(sys prop): ${System.getProperty('carnival.home')}."
+            if (env.containsKey('CARNIVAL_HOME')) msg += " CARNIVAL_HOME(env): ${env.get('CARNIVAL_HOME')}"
+            else msg += " CARNIVAL_HOME(env) is not set."
             
             log.error msg
             throw new RuntimeException(msg)
         }
+
+        log.trace "configFile: ${configFile}"
 
         return configFile
     }
@@ -116,7 +117,10 @@ public class Defaults {
 
         def configFile
         ['application.yml', 'application.yaml'].each {
-            if (!configFile) configFile = new File(dir, it)
+            if (!configFile) {
+                configFile = new File(dir, it)
+                if (!configFile.exists()) configFile = null
+            }
         }
 
         return configFile
@@ -208,14 +212,10 @@ public class Defaults {
 
     static private File getHomeDir() {
         def homeDir
-        if (!homeDir) homeDir = findDirectoryFromEnv('CARNIVAL_LOCAL')
+        if (!homeDir) homeDir = findDirectoryFromSysProp('carnival.home')
         if (!homeDir) homeDir = findDirectoryFromEnv('CARNIVAL_HOME')
         log.trace "homeDir: $homeDir"
         return homeDir
-    }
-
-    static private File getLocalDir() {
-        return findDirectoryFromEnv('CARNIVAL_LOCAL')
     }
 
     static private String getDirectoryConfigValue(String key, String defaultRelativePath) {
@@ -285,7 +285,7 @@ public class Defaults {
     static public void initDirectory(File dir) {
         assert dir != null
 
-        log.trace "\n\n\n\n\nDefaults.initDirectory dir: $dir\n\n\n\n\n\n"
+        log.trace "\n\nDefaults.initDirectory dir: $dir\n\n\n"
 
         if (!dir.exists()) {
             log.warn "${dir} does not exist. creating empty directory."

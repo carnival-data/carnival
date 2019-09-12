@@ -308,8 +308,6 @@ public class Defaults {
 
 
 
-
-
     /*
     static private void setSystemProps(Map conf) {
         log.trace "directories: ${conf.get('directories')}"

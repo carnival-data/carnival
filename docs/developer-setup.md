@@ -29,12 +29,24 @@ Gradle task commands run from the root project filter down to the sub-projects. 
 git clone git@github.com:pennbiobank/carnival-public.git
 ```
 
-2. Create a directory for local carnival data and set that path to the environment variable `CARNIVAL_HOME`.  For example:
+2. Create a carnival home directory.  This directory will contain your configuration files and be where carnival reads and writes graphs and files.
 
 	```
 	mkdir /Users/myuser/dev/carnival/carnival_home
-	export CARNIVAL_HOME=/Users/myuser/dev/carnival/carnival_home
 	```
+
+
+2. Make carnival aware of your carnival home directory.  There are a couple of ways you can do this. 
+	- Use the environment variable `CARNIVAL_HOME`.  For example:
+
+		```
+		export CARNIVAL_HOME=/Users/myuser/dev/carnival/carnival_home
+		```
+	- Pass your carnival home directory to future gradle commands using the `-D` syntax:
+	
+		```
+		-Dcarnival.home=/Users/myuser/dev/carnival/carnival_home
+		```
 
 3. Setup the configuration files in the `${CARNIVAL_HOME}/config` directory:
 

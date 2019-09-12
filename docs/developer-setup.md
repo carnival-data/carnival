@@ -29,14 +29,14 @@ Gradle task commands run from the root project filter down to the sub-projects. 
 git clone git@github.com:pennbiobank/carnival-public.git
 ```
 
-2. Create a carnival home directory.  This directory will contain your configuration files and be where carnival reads and writes graphs and files.
+2. Create a carnival home directory.  This directory will contain your configuration files and will be the location where carnival reads and writes graphs and files.
 
 	```
 	mkdir /Users/myuser/dev/carnival/carnival_home
 	```
 
 
-2. Make carnival aware of your carnival home directory.  There are a couple of ways you can do this. 
+3. Make carnival aware of your carnival home directory.  There are a couple of ways you can do this. 
 	- Use the environment variable `CARNIVAL_HOME`.  For example:
 
 		```
@@ -48,7 +48,7 @@ git clone git@github.com:pennbiobank/carnival-public.git
 		-Dcarnival.home=/Users/myuser/dev/carnival/carnival_home
 		```
 
-3. Setup the configuration files in the `${CARNIVAL_HOME}/config` directory:
+4. Setup the configuration files in the `${CARNIVAL_HOME}/config` directory:
 
 	- To set up the config files from scratch: 
 		- Copy the config template files from `carnival/app/carnival-core/config` to `${CARNIVAL_HOME}/config`.  
@@ -60,7 +60,7 @@ git clone git@github.com:pennbiobank/carnival-public.git
 		- application.yaml - Contains data source information (i.e. credentals to relational dbs, RDF dbs, REDCap, etc.), the default vine cache-mode, local directory configuration and the gremlin configuration.
 		- logback.xml - Can be modified to change the log levels.
 
-4. Install APOC neo4j plugin:
+5. Install APOC neo4j plugin:
 	- Download the [APOC library V3.4.0.7](https://neo4j.com/docs/labs/apoc/current/) [(download)](https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/tag/3.4.0.7) and save it to a directory on your local file system.  
 	- Add the path to that directory in gremlin section of the `application.yaml` config file in the entry `gremlin:neo4j:conf:dbms:directories:plugins`:
 

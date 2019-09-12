@@ -28,124 +28,14 @@ allprojects {
 
 subprojects {
     apply plugin: 'groovy'
-
-    /*
-    //https://docs.gradle.org/current/userguide/java_library_plugin.html#sec:java_library_configurations_graph
-    //https://docs.gradle.org/current/userguide/java_library_plugin.html#sec:java_library_known_issues
-    apply plugin: 'java-library'
-
-    configurations {
-        apiElements {
-            outgoing.variants.getByName('classes').artifact(
-                file: compileGroovy.destinationDir,
-                type: ArtifactTypeDefinition.JVM_CLASS_DIRECTORY,
-                builtBy: compileGroovy)
-        }
-    }
-    */
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// HELPERS - CONFIGURATION
-///////////////////////////////////////////////////////////////////////////////
-
-ext.checkEnvironment = {
-    if (!System.env.CARNIVAL_LOCAL) {
-        def curDir = System.getProperty("user.dir")
-        def msg = "WARNING: Environment variable CARNIVAL_LOCAL is not set. Using $curDir as default."
-        ant.echo "$msg"
-    }
-}
-
-ext.findConfigDir = {
-    //ant.echo "findConfigDir"
-    checkEnvironment()
-
-    def configDir
-
-    if (project.hasProperty('configDir')) {
-        def dirPathFromProp = project.getProperty('configDir')
-        configDir = new File(dirPathFromProp) 
-        if (!configDir.exists()) {
-            ant.echo "config dir not found: $dirPathFromProp"
-            configDir = null
-        }
-    }
-
-    if (!configDir && System.env.CARNIVAL_LOCAL) {
-        def cd = "${System.env.CARNIVAL_LOCAL}/config"
-        configDir = new File(cd)
-        if (!configDir.exists()) {
-            ant.echo "config dir not found: $cd"
-            configDir = null
-        }
-    }
-
-    if (!configDir) {
-        configDir = new File('config')
-        if (!configDir.exists() || !configDir.isDirectory()) {
-            ant.echo 'default config dir does not exist'
-            configDir = null
-        }
-    }
-
-    ant.echo "configDir: ${configDir.canonicalPath}"
-    return configDir
-    compileGroovy.dependsOn ':carnival-gremlin-dsl:publishToMavenLocal'
 }
 
 
-ext.findConfigFile = { String propertyName, String fileName ->
-    //ant.echo "findConfigFile $propertyName $fileName"
-    checkEnvironment()
-
-    def configFile
-
-    if (!configFile && project.hasProperty(propertyName)) {
-        def filePathFromProp = project.getProperty(propertyName)
-        configFile = new File(filePathFromProp) 
-        if (!configFile.exists()) {
-            ant.echo "config file not found: $propertyName $filePathFromProp"
-            configFile = null
-        }
-    }
-
-    if (!configFile) {
-        def configDir = findConfigDir()
-        if (!configDir) {
-            ant.echo "WARNING: No config directory."
-        } else {
-            configFile = new File(configDir, fileName)
-            if (!configFile.exists()) {
-                ant.echo "config file not found: $configFile"
-                configFile = null
-            }
-        }
-    }
-
-    ant.echo "findConfigFile($propertyName, $fileName) : $configFile"
-    return configFile
-}
-
-/*
-ext.setLogbackConfig = {
-    // set the logback config system property
-    def logbackConfigFile = findConfigFile('logback', 'logback.xml')
-    if (!logbackConfigFile?.exists()) ant.echo "WARNING: Could not find logback configuration file: $logbackConfigFile"
-    systemProperty "logback.configurationFile", "$logbackConfigFile"
-}
-
-task setLogbackConfig {
-    // set the logback config system property
-    def logbackConfigFile = findConfigFile('logback', 'logback.xml')
-    if (!logbackConfigFile?.exists()) ant.echo "WARNING: Could not find logback configuration file: $logbackConfigFile"
-    systemProperty "logback.configurationFile", "$logbackConfigFile"
-}
-*/
 
 ///////////////////////////////////////////////////////////////////////////////
 // Testing Tasks
 ///////////////////////////////////////////////////////////////////////////////
+
 
 subprojects {
     test.ignoreFailures true
@@ -158,25 +48,23 @@ subprojects {
         systemProperty 'test.graph.rollback', System.getProperty('test.graph.rollback')
         systemProperty 'allow.redcap.modification', System.getProperty('allow.redcap.modification')
         systemProperty 'disable.filevine.tests', System.getProperty('disable.filevine.tests')
-        //systemProperty 'config.file.path', findAppConfigFile()
         testLogging {
-            //showStandardStreams = true
-            //exceptionFormat = 'full'
             events 'standard_out'
         }
 
-        // set the logback config system property
-        def logbackConfigFile = findConfigFile('logback', 'logback.xml')
-        if (logbackConfigFile?.exists()) systemProperty("logback.configurationFile", "$logbackConfigFile")
-        else ant.echo("WARNING: Could not find logback configuration file: $logbackConfigFile")
-       
+        if (System.getProperty('logback.configurationFile')) {
+            systemProperty("logback.configurationFile", System.getProperty('logback.configurationFile'))
+        } else if (System.env.LOGBACK_CONFIGURATION_FILE) {
+            systemProperty("logback.configurationFile", System.env.LOGBACK_CONFIGURATION_FILE)
+        } else {
+            ant.echo "Set the system property logback.configurationFile to configure Logback. Ex. -Dlogback.configurationFile=/path/to/file.xml"
+        }
+
         jvmArgs '-Xms4g'
         jvmArgs '-Xmx6g'
-
-       // set JVM arguments for the test JVM(s)
-       // jvmArgs '-XX:MaxPermSize=256m'
     }
 }
+
 
 task testReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/allTests")
@@ -185,15 +73,7 @@ task testReport(type: TestReport) {
     reportOn subprojects*.test
 
     ant.echo "TestReport - buildDir: $buildDir/reports/allTests"
-    println "TestReport - buildDir: $buildDir/reports/allTests"
 }
-
-
-///////////////////////////////////////////////////////////////////////////////
-// stats
-///////////////////////////////////////////////////////////////////////////////
-
-//task aggregateStatsReport(type: org.kordamp.gradle.stats.AggregateStatsReportTask) {}
 
 
 ///////////////////////////////////////////////////////////////////////////////

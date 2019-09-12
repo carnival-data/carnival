@@ -65,30 +65,30 @@ publishing {
                 asNode().children().last() + {
                     resolveStrategy = Closure.DELEGATE_FIRST
                     name 'Carnival Graph'
-                    description 'A concise description of Carnival Graph'
-                    url 'https://pennbiobank.github.io/carnival/'
+                    description 'Property graph tools in the Carnival framework'
+                    url 'https://github.com/pennbiobank/carnival-public'
                     licenses {
                         license {
-                            name 'The Apache License, Version 2.0'
-                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            name 'GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007'
+                            url 'https://www.gnu.org/licenses/gpl-3.0.txt'
                         }
                     }
                     developers {
+                        developer {
+                            id 'augustearth'
+                            name 'David Birtwell'
+                            email 'augustearth@gmail.com'
+                        }
                         developer {
                             id 'hjwilli'
                             name 'Heather Williams'
                             email 'hjwilli@gmail.com'
                         }
-						developer {
-                            id 'augustearth'
-                            name 'David Birtwell'
-                            email 'augustearth@gmail.com'
-                        }
                     }
                     scm {
-                        connection 'scm:git:git://github.com:pennbiobank/carnival.git'
-                        developerConnection 'scm:git:ssh://github.com:pennbiobank/carnival.git'
-                        url 'https://github.com/pennbiobank/carnival'
+                        connection 'scm:git:git://github.com:pennbiobank/carnival-public.git'
+                        developerConnection 'scm:git:ssh://github.com:pennbiobank/carnival-public.git'
+                        url 'https://github.com/pennbiobank/carnival-public'
                     }
                 }
             }
@@ -148,10 +148,6 @@ dependencies {
     compile 'org.apache.tinkerpop:gremlin-core:3.4.3'
     compile 'org.apache.tinkerpop:gremlin-groovy:3.4.3'
     compile 'org.apache.tinkerpop:tinkergraph-gremlin:3.4.3'
-
-    // Neo4J
-    //compile 'org.apache.tinkerpop:neo4j-gremlin:3.3.1'
-    //compile 'org.neo4j:neo4j-tinkerpop-api-impl:0.7-3.2.3'    
 
     // We use the awesome Spock testing and specification framework
     testCompile 'org.spockframework:spock-core:1.2-groovy-2.5'

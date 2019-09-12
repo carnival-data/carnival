@@ -72,30 +72,30 @@ publishing {
                 asNode().children().last() + {
                     resolveStrategy = Closure.DELEGATE_FIRST
                     name 'Carnival Core'
-                    description 'A concise description of Carnival Core'
-                    url 'https://pennbiobank.github.io/carnival/'
+                    description 'The core classes of the Carnival framework'
+                    url 'https://github.com/pennbiobank/carnival-public'
                     licenses {
                         license {
-                            name 'The Apache License, Version 2.0'
-                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            name 'GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007'
+                            url 'https://www.gnu.org/licenses/gpl-3.0.txt'
                         }
                     }
                     developers {
-                        developer {
-                            id 'hjwilli'
-                            name 'Heather Williams'
-                            email 'hjwilli@gmail.com'
-                        }
                         developer {
                             id 'augustearth'
                             name 'David Birtwell'
                             email 'augustearth@gmail.com'
                         }
+                        developer {
+                            id 'hjwilli'
+                            name 'Heather Williams'
+                            email 'hjwilli@gmail.com'
+                        }
                     }
                     scm {
-                        connection 'scm:git:git://github.com:pennbiobank/carnival.git'
-                        developerConnection 'scm:git:ssh://github.com:pennbiobank/carnival.git'
-                        url 'https://github.com/pennbiobank/carnival'
+                        connection 'scm:git:git://github.com:pennbiobank/carnival-public.git'
+                        developerConnection 'scm:git:ssh://github.com:pennbiobank/carnival-public.git'
+                        url 'https://github.com/pennbiobank/carnival-public'
                     }
                 }
             }
@@ -126,10 +126,6 @@ publishing {
 ///////////////////////////////////////////////////////////////////////////////
 
 repositories {
-    /*maven {
-        url "https://maven.oracle.com/"
-    }*/    
-
     // central repository, used for the math dependencies
     // @see http://central.sonatype.org/
     maven { url "https://repo1.maven.org/maven2" }
@@ -153,6 +149,7 @@ configurations {
     providedRuntime
     apt
 }
+
 
 // Annotation Processors
 // 
@@ -179,9 +176,6 @@ dependencies {
     compile group: 'org.jyaml', name: 'jyaml', version: '1.3'
     compile group: 'org.yaml', name: 'snakeyaml', version: '1.23'
     
-    //compile group: 'com.oracle', name: 'ojdbc14', version: '10.2.0.4.0'
-    // runtime name: 'ojdbc6'
-
     // mysql
     compile 'mysql:mysql-connector-java:5.1.37'
 
@@ -271,9 +265,6 @@ compileGroovy {
 
 
 
-
-
-
 ///////////////////////////////////////////////////////////////////////////////
 // TASKS - CLI
 ///////////////////////////////////////////////////////////////////////////////
@@ -285,10 +276,13 @@ task carnivalLocalDirInit (dependsOn: ['classes'], type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
 
-    // set the logback config system property
-    def logbackConfigFile = findConfigFile('logback', 'logback.xml')
-    if (!logbackConfigFile?.exists()) ant.echo "WARNING: Could not find logback configuration file: $logbackConfigFile"
-    systemProperty "logback.configurationFile", "$logbackConfigFile"
+    if (System.getProperty('logback.configurationFile')) {
+        systemProperty("logback.configurationFile", System.getProperty('logback.configurationFile'))
+    } else if (System.env.LOGBACK_CONFIGURATION_FILE) {
+        systemProperty("logback.configurationFile", System.env.LOGBACK_CONFIGURATION_FILE)
+    } else {
+        ant.echo "Set the system property logback.configurationFile to configure Logback. Ex. -Dlogback.configurationFile=/path/to/file.xml"
+    }
 
     jvmArgs '-Xms4g'
     jvmArgs '-Xmx12g'

@@ -64,30 +64,30 @@ publishing {
                 asNode().children().last() + {
                     resolveStrategy = Closure.DELEGATE_FIRST
                     name 'Carnival Util'
-                    description 'A concise description of Carnival Util'
-                    url 'https://pennbiobank.github.io/carnival/'
+                    description 'Utility classes and services in the Carnival Framework.'
+                    url 'https://github.com/pennbiobank/carnival-public'
                     licenses {
                         license {
-                            name 'The Apache License, Version 2.0'
-                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            name 'GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007'
+                            url 'https://www.gnu.org/licenses/gpl-3.0.txt'
                         }
                     }
                     developers {
-                        developer {
-                            id 'hjwilli'
-                            name 'Heather Williams'
-                            email 'hjwilli@gmail.com'
-                        }
 						developer {
                             id 'augustearth'
                             name 'David Birtwell'
                             email 'augustearth@gmail.com'
                         }
+                        developer {
+                            id 'hjwilli'
+                            name 'Heather Williams'
+                            email 'hjwilli@gmail.com'
+                        }
                     }
                     scm {
-                        connection 'scm:git:git://github.com:pennbiobank/carnival.git'
-                        developerConnection 'scm:git:ssh://github.com:pennbiobank/carnival.git'
-                        url 'https://github.com/pennbiobank/carnival'
+                        connection 'scm:git:git://github.com:pennbiobank/carnival-public.git'
+                        developerConnection 'scm:git:ssh://github.com:pennbiobank/carnival-public.git'
+                        url 'https://github.com/pennbiobank/carnival-public'
                     }
                 }
             }

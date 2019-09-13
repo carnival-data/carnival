@@ -1,8 +1,10 @@
 # Developer Guide
 
-Carnival is a Groovy [multi-projects](https://guides.gradle.org/creating-multi-project-builds/) that uses [Gradle](https://gradle.org) as the build engine.  The main project is in the `app` directory.  Folders within `app` contain the sub-projects (eg. `app/public/carnival-core`, `app/public/carnival-gremlin-dsl`).  Every sub-project has a `build.gradle` configuration file that defines it's dependencies and the gradle tasks that it can execute.  The `build.gradle` file in the `app` directory defines project-wide configuration.
+Carnival is a Groovy [multi-project](https://guides.gradle.org/creating-multi-project-builds/) that uses [Gradle](https://gradle.org) as the build engine.  The main project is in the `app` directory.  Folders within `app` contain the sub-projects (eg. `app/public/carnival-core`, `app/public/carnival-gremlin-dsl`).  Every sub-project has a `build.gradle` configuration file that defines it's dependencies and the gradle tasks that it can execute.  The `build.gradle` file in the `app` directory defines project-wide configuration.
 
 Gradle task commands run from the root project filter down to the sub-projects.  Gradle commands referenced in this documentation are assumed to be called from the root project directory `carnival/app` unless otherwise noted.
+
+This project also includes a [Docker image configuration](https://www.docker.com/resources/what-container) that can be built to run Carnival or the test suite.
 
 ## Contents
 1. [Installation](#installation)
@@ -36,23 +38,23 @@ git clone git@github.com:pennbiobank/carnival-public.git
 	```
 
 
-3. Make carnival aware of your carnival home directory.  There are a couple of ways you can do this. 
+3. Make carnival aware of your carnival home directory.  There are a couple of ways you can do this.
 	- Use the environment variable `CARNIVAL_HOME`.  For example:
 
 		```
 		export CARNIVAL_HOME=/Users/myuser/dev/carnival/carnival_home
 		```
 	- Pass your carnival home directory to future gradle commands using the `-D` syntax:
-	
+
 		```
 		-Dcarnival.home=/Users/myuser/dev/carnival/carnival_home
 		```
-		
+
 		**Note** - If you use this method, then you will need to edit logback.xml, which by default references CARNIVAL_HOME.
 
 4. Setup the configuration files in the `${CARNIVAL_HOME}/config` directory:
 
-	- To set up the config files from scratch: 
+	- To set up the config files from scratch:
 		- Copy the config template files from `carnival/app/carnival-core/config` to `${CARNIVAL_HOME}/config`.  
 		- Rename the files named `*.*-template` to `*.*` (remove `-template` from the name).
 
@@ -125,6 +127,30 @@ To run a specific test suite, in this example the tests located in `carnival\app
 ```
 gradle :carnival-graph:test --tests "carnival.graph.VertexDefTraitSpec"
 ```
+
+### Running Tests using Docker
+The test suite can be run in the context of a docker image.  If running tests in this way gradle does not need to be installed, and any configuration in the users CARNIVAL_HOME directory will be ignored.
+
+#### Requirements
+  - Docker
+    - Most recent stable release, minimum version is 17.06.0
+      - [Official Docker Website Getting Started](https://docs.docker.com/engine/getstarted/step_one/)
+      - [Official Docker Installation for Windows](https://docs.docker.com/docker-for-windows/install/)
+  - Docker-Compose (Version 1.22.0 or greater, Linux only) - Separate installation is only needed for linux, docker-compose is bundled with windows and mac docker installations
+  	- [Linux Docker-Compose Installation](https://docs.docker.com/compose/install/)
+
+#### Running Tests in the Docker Environment
+First build the docker image using the command:
+```
+docker-compose -f .\docker-compose-test.yml build
+```
+
+Once built, the tests can be run using the command:
+```
+docker-compose -f .\docker-compose-test.yml up --force-recreate
+```
+
+This has the same effect as running `gradle testReports`, and the aggregated test results will be in the folder `carnival\app\build\reports\allTests`.
 
 <a name="publishing-libraries"></a>
 ## Publishing Libraries

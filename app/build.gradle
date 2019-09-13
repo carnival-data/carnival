@@ -65,9 +65,9 @@ subprojects {
             systemProperty("logback.configurationFile", System.env.CARNIVAL_LOGBACK_CONFIG)
         }
         if (!(System.getProperty('carnival.home') || System.env.CARNIVAL_HOME)) {
-            ant.echo "Carnival home is not set. Use command line argument -Dcarnival.home= or environment variable CARNIVAL_HOME. See documentation."
+            ant.echo "WARNING: Carnival home is not set. Use command line argument -Dcarnival.home= or environment variable CARNIVAL_HOME. See documentation."
             if (!(System.getProperty('logback.configurationFile') || System.env.CARNIVAL_LOGBACK_CONFIG)) {
-                ant.echo "Logback configuration file not set. Use the -D command line argument like -Dlogback.configurationFile=/path/to/file.xml.  Or, set the environment variable CARNIVAL_LOGBACK_CONFIG to /path/to/file.xml. See documentation."
+                ant.echo "WARNING: Logback configuration file not set. Use the -D command line argument like -Dlogback.configurationFile=/path/to/file.xml.  Or, set the environment variable CARNIVAL_LOGBACK_CONFIG to /path/to/file.xml. See documentation."
             }
         }
 

@@ -98,3 +98,7 @@ docs/tutorial/*.yml
 
 # ignore vi swap files
 *.swp
+
+
+# docker compose files
+!docker-compose*.yml

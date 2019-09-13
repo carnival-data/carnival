@@ -76,7 +76,7 @@ public class Defaults {
 
         // if we don't have a config file by now, it's an error.
         if (!configFile) {
-            def msg = "Could not find application config file. See documentation."
+            def msg = "Could not find application config file in 'config' directory. See documentation."
             msg += " carnival.home(sys prop): ${System.getProperty('carnival.home')}."
             if (env.containsKey('CARNIVAL_HOME')) msg += " CARNIVAL_HOME(env): ${env.get('CARNIVAL_HOME')}"
             else msg += " CARNIVAL_HOME(env) is not set."

@@ -19,7 +19,7 @@ This project also includes a [Docker image configuration](https://www.docker.com
     - [Installation with a package manager](https://gradle.org/install/#with-a-package-manager)
       - [SDKMan](https://sdkman.io/)
       - Windows: [Cygwin](http://www.cygwin.com/) + [SDKMan](https://sdkman.io/)
-      	- *Note* - Cygwin needs curl installed for sdkman to work successfully.  The windows 10 version of curl may cause an error when trying to install gradle.  See [https://stackoverflow.com/questions/56509430/sdkman-on-cygwin-cant-install](stack overflow)
+      	- *Note* - Cygwin needs curl installed for sdkman to work successfully.  The windows 10 version of curl may cause an error when trying to install gradle.  See [stack overflow](https://stackoverflow.com/questions/56509430/sdkman-on-cygwin-cant-install)
       - Windows: [Scoop](https://scoop.sh/)
     - [Install Manually](https://gradle.org/install/#manually)
   - Java V1.8+

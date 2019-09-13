@@ -13,11 +13,8 @@ RUN apt-get update --fix-missing && apt-get install -y \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-
-# make $CARNIVAL_HOME and $APOC_HOME persistant anon volumes attached to this image
-## VOLUME ["${CARNIVAL_HOME}", "{$APOC_HOME}"]
-
 # install APOC
+RUN mkdir -p ${APOC_HOME}
 ADD "https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/download/${APOC_VERSION}/apoc-${APOC_VERSION}-all.jar" $APOC_HOME
 
 
@@ -27,6 +24,7 @@ COPY app/carnival-core/config/*-template /${CARNIVAL_HOME}/config/
 RUN rename -v 's/-template//' *-template
 RUN dos2unix **
 
+RUN mkdir ${CARNIVAL_HOME}/target
 
 # update APOC location in application.yml config file
-RUN sed -i 's#/path/to/neo4j/plugins#${APOC_HOME}#' application.yml
+RUN sed -i "s#/path/to/neo4j/plugins#${APOC_HOME}#" application.yml

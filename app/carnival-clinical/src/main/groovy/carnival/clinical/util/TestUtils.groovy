@@ -142,14 +142,6 @@ class TestUtils {
         if (ids instanceof Range) ids = ids.toList()
         ids = ids.collect({ String.valueOf(it) })
 
-        if (args.containsKey('data')) {
-            assert args.data instanceof Map<Object, Map>
-            args.data.each {createPatient_dataId, demoData ->
-                demoData.keys.each {assert it in ['EMR_CURRENT_AGE', 'EMR_GENDER_CODE', 'EMR_RACE_CODE']}
-                assert createPatient_dataId in ids
-            }
-        }
-
         def idClassV = Core.VX.IDENTIFIER_CLASS.instance()
             .withProperties(
                 Core.PX.NAME, idc,
@@ -171,18 +163,6 @@ class TestUtils {
             if (patIdFacilityV) Core.EX.WAS_CREATED_BY.relate(g, patIdV, patIdFacilityV)
             Core.EX.IS_IDENTIFIED_BY.relate(g, patV, patIdV)
 
-            // add demographic data
-            def emrData = data?.containsKey(id) ? data.get(id) : [:]
-            if (emrData.containsKey('EMR_CURRENT_AGE') || emrData.containsKey('EMR_GENDER_CODE') || emrData.containsKey('EMR_RACE_CODE')) {         
-                def demoV = graph.addVertex(T.label, 'PatientDemographicsSummary')
-
-                if (emrData.containsKey('EMR_CURRENT_AGE')) demoV.property('EMR_CURRENT_AGE', emrData.get('EMR_CURRENT_AGE'))
-                if (emrData.containsKey('EMR_GENDER_CODE')) demoV.property('EMR_GENDER_CODE', emrData.get('EMR_GENDER_CODE'))
-                if (emrData.containsKey('EMR_RACE_CODE')) demoV.property('EMR_RACE_CODE', emrData.get('EMR_RACE_CODE'))
-
-                patV.addEdge('has_demographics_summary', demoV)
-                //println("Created demographic data: $emrData")
-            }
             patVs << patV
         }
 

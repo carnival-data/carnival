@@ -7,17 +7,14 @@ package carnival.core.cli
  *
  */
 enum CommandCategory {
+    APP('Application Navigation'),
+    SETTINGS('App Settings'),
     STATUS('Status'), 
     GRAPH_MODIFICATION('Graph Modification'), 
     REPORT('Report'),
-    PATIENT_REPORT('Patent Report'), 
-    ENCOUNTER_REPORT('Encounter Report'), 
-    INVENTORY_REPORT('Inventory Report'),
-    DRIVETRAIN_UPDATE('Drivetrain Update'),
-    PDS_UPDATE('Penn Data Store Update'),
-    APP('Application Navigation'),
+    SOWER('Sow data to external system'),
+    CLEAN('Delete out-of-date information'),
     COHORT_MANIPULATION('Patient Cohort Manipulation'),
-    SETTINGS('App Settings'),
     REAPERS('Reapers'),
     CONCLUSIONATORS('Conclusionators'),
     REASONERS('Reasoners')

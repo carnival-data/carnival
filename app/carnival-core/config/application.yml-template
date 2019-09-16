@@ -29,7 +29,7 @@ gremlin:
 # dataSources:
   # pds:
     # url: jdbc:oracle:thin:@localhost:7799/host.name
-    # user: birtwell
+    # user: username
     # password: 
     # driver: oracle.jdbc.pool.OracleDataSource
   # omop:
@@ -42,7 +42,7 @@ gremlin:
 # dataSourcesRedcap:  
   # myproj:
     # url: https://redcap.url/api/
-    # user: yourname
+    # user: username
     # apiToken: 
     # idField: the_id_field
 

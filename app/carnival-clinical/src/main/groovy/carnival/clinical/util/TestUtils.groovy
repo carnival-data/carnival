@@ -65,40 +65,6 @@ class TestUtils {
     }
 
 
-    /*
-    static Map setUpCacheForVineMethod(Map args) {
-        assert args.g
-        assert args.tag
-        assert args.vine
-        assert args.methodName
-        //assert args.methodArgs
-        assert args.sourceDataFileName
-
-        // set up test data cache directory
-        def tagd = args.tag.replaceAll(' ', '-').trim()
-        def ant = new AntBuilder()
-        def testdir = new File("build/test/${tagd}")
-        if (!testdir.exists()) ant.mkdir(dir:testdir)
-
-        // set cacheDirectory of vine
-        args.vine.cacheDirectory = testdir
-
-        // calculate dest file name
-        def methodArgs = args.methodArgs ?: [:]
-        DataTable.MetaData meta = args.vine.createDataTableMetaData(args.methodName, methodArgs)
-
-        // copy cache files from data directory
-        ['csv', 'yaml'].each { sfx ->
-            ant.copy( 
-                file:"data/test/${tagd}/${args.sourceDataFileName}.${sfx}", 
-                tofile:"${testdir.canonicalPath}/${meta.name}.${sfx}"
-            )        
-        }
-
-        // return a result
-        return [:]
-    }
-    */
 
 
     /**
@@ -112,19 +78,6 @@ class TestUtils {
      *            idClass:"generic_patient_id", 
      *            idFacilityName:idFacility, 
      *            ids:ids)
-     *
-     *
-     * Example with demographic data:
-     *     def patVs = TestUtils.createPatients(
-     *            graph:graph, 
-     *            g:g, 
-     *            idClass:"generic_patient_id", 
-     *            idFacilityName:idFacility, 
-     *            ids:ids, 
-     *            data:[
-     *                1: [EMR_CURRENT_AGE:30, EMR_GENDER_CODE: 'F', EMR_RACE_CODE: "UNKNOWN"],
-     *                2: [EMR_CURRENT_AGE:32, EMR_GENDER_CODE: 'F'],
-     *            ])
      *
      */
     static Collection<Vertex> createPatients(Map args) {

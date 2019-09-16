@@ -321,7 +321,7 @@ trait CachingVine {
 
         methodArgs.each { k, v ->
 
-            log.trace "\n\n\ncheckCacheValidity $k $v\n\n\n"
+            log.trace "checkCacheValidity $k $v"
 
             // TODO: hack - pmbbPds.pheCodeAssignments(vmargs) takes an argument 'logPrefix' which is only used to 
             // modify log output.  Ignore this argument for now.  In the future, either remove this argument
@@ -512,19 +512,17 @@ trait CachingVine {
         allSubClasses.addAll(Arrays.asList(this.class.getDeclaredClasses()));
 
         //log.debug "${this.class?.name} allSubClasses:"
-        allSubClasses.each { cl ->
-            //log.debug "cl: $cl ${cl.name}"
-            //if (VineMethod.isAssignableFrom(cl)) log.debug "VineMethod.isAssignableFrom(cl)"
-            //if (cl.isAssignableFrom(VineMethod)) log.debug "cl.isAssignableFrom(VineMethod)"
-            //cl.interfaces.each { ifc ->
-            //    log.debug "ifc: $ifc ${ifc.name}"
-            //}
-        }
+        //allSubClasses.each { cl ->
+        //    log.debug "cl: $cl ${cl.name}"
+        //    if (VineMethod.isAssignableFrom(cl)) log.debug "VineMethod.isAssignableFrom(cl)"
+        //    if (cl.isAssignableFrom(VineMethod)) log.debug "cl.isAssignableFrom(VineMethod)"
+        //    cl.interfaces.each { ifc ->
+        //        log.debug "ifc: $ifc ${ifc.name}"
+        //    }
+        //}
 
         // get all member classes that are sub-classes of VineMethod
         def allVineMethodClasses = allSubClasses.findAll { cl -> VineMethod.isAssignableFrom(cl) }
-        //log.debug "allVineMethodClasses"
-        //allVineMethodClasses.each { cl -> log.debug "log. $cl ${cl.name} ${cl.simpleName}" }
 
         return allVineMethodClasses
     }

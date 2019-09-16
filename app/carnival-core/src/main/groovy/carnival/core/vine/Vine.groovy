@@ -47,12 +47,9 @@ abstract class Vine {
 
         try {
             def keys = rows.first().keySet().toArray()
-            //log.debug "keys: $keys"
             pw.println keys.collect({ "${it.toLowerCase()}" }).join(",")
 
             rows.each { row ->
-                //log.debug "$row"
-
                 def orderedValues = []
                 keys.each { orderedValues << row[it] }
                 orderedValues = orderedValues.collect { 

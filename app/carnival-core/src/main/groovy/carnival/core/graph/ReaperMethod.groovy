@@ -155,9 +155,7 @@ abstract class ReaperMethod implements ReaperMethodInterface, TrackedProcessTrai
     /** */
     @Override
     VertexDefTrait getTrackedProcessClassDef() {
-        //log.debug "getTrackedProcessClassDef ${this.class.name} ${this.class.simpleName}"
         def name = getTrackedProcessClassName()
-        //log.debug "getTrackedProcessClassDef name:$name"
         DynamicVertexDef.singletonFromCamelCase(getGraph(), traversal(), name)
     }
 
@@ -181,7 +179,6 @@ abstract class ReaperMethod implements ReaperMethodInterface, TrackedProcessTrai
     Collection doCypher(String cypher, Map args = [:]) {
         if (args.log) {
             sqllog.info(cypher)
-            //log.debug(cypher)
             if (args) sqllog.info "args: ${args.keySet()}"
         }
         

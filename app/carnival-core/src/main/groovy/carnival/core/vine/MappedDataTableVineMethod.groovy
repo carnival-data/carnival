@@ -24,8 +24,6 @@ trait MappedDataTableVineMethod extends VineMethod {
     public Class getReturnType() { return MappedDataTable }
 
     public MappedDataTable createEmptyDataTable(Map methodArgs = [:]) {
-        //log.trace "MappedDataTableVineMethod.createEmptyDataTable methodArgs:${methodArgs}"
-
         def mdt = new MappedDataTable(meta(methodArgs))
         def vineData = generateVineData(methodArgs)
         assert vineData

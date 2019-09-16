@@ -140,7 +140,6 @@ class CoreGraphUtils {
         def idPatMap = idPatList.groupBy({it.id.property("value").value}).collectEntries{k,v ->[k, v.identifiedObject]}.withDefault{[]}
         def idEncMap = idEncList.groupBy({it.id.property("value").value}).collectEntries{k,v ->[k, v.identifiedObject]}.withDefault{[]}
 
-
         identifierMap = idList.groupBy({it.property("value").value}).collectEntries{ k, v -> [k, [ids:v, patients:idPatMap[k], biobankEncounters:idEncMap[k]]]}
         
         return identifierMap

@@ -24,8 +24,6 @@ trait GenericDataTableVineMethod extends VineMethod {
     public Class getReturnType() { return GenericDataTable }
 
     public GenericDataTable createEmptyDataTable(Map methodArgs = [:]) {
-        //log.trace "GenericDataTableVineMethod.createEmptyDataTable methodArgs:${methodArgs}"
-
         def mdt = new GenericDataTable(meta(methodArgs))
         def vineData = generateVineData(methodArgs)
         assert vineData

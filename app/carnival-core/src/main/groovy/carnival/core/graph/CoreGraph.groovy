@@ -61,7 +61,6 @@ abstract class CoreGraph {
 		tx.open()
 
         def maxClosureParams = cl.getMaximumNumberOfParameters()
-        //log.debug "\n\nmaxClosureParams: $maxClosureParams\n\n"
 
         def g
 		try {
@@ -222,11 +221,11 @@ abstract class CoreGraph {
     	// find all vertex defs
     	Reflections reflections = new Reflections(packageName)
     	Set<Class<VertexDefTrait>> classes = reflections.getSubTypesOf(VertexDefTrait.class)
-    	log.debug "findVertexDefClases classes: $classes"
+    	log.trace "findVertexDefClases classes: $classes"
 
     	// remove genralized classes
     	classes.remove(carnival.graph.DynamicVertexDef)
-    	log.debug "findVertexDefClases classes: $classes"
+    	log.trace "findVertexDefClases classes: $classes"
 
     	return classes
     }
@@ -245,10 +244,10 @@ abstract class CoreGraph {
 		assert packageName
 
 		def edgeDefClasses = findEdgeDefClases(packageName)
-		log.debug "edgeDefClasses: $edgeDefClasses"
+		log.trace "edgeDefClasses: $edgeDefClasses"
 
 		List<RelationshipDefinition> existingDefinitions = graphSchema.getRelationshipDefinitions()
-		log.debug "existing relationship definitions: $existingDefinitions"
+		log.trace "existing relationship definitions: $existingDefinitions"
 
 		withTransaction(graph) {
 	        edgeDefClasses.each { edc ->
@@ -282,11 +281,11 @@ abstract class CoreGraph {
     	// find all vertex defs
     	Reflections reflections = new Reflections(packageName)
     	Set<Class<EdgeDefTrait>> classes = reflections.getSubTypesOf(EdgeDefTrait.class)
-    	log.debug "findEdgeDefClases classes: $classes"
+    	log.trace "findEdgeDefClases classes: $classes"
 
     	// remove genralized classes
     	classes.remove(carnival.graph.DynamicVertexDef)
-    	log.debug "findEdgeDefClases classes: $classes"
+    	log.trace "findEdgeDefClases classes: $classes"
 
     	return classes
     }
@@ -300,7 +299,7 @@ abstract class CoreGraph {
 
 	/** */
 	public List<VertexLabelDefinition> reaperMethodLabelDefinitions(Graph graph, GraphTraversalSource g) {
-		log.debug "\n\nCoreGraph.reaperMethodLabelDefinitions\n\n"
+		log.trace "CoreGraph.reaperMethodLabelDefinitions"
 
 		reaperMethodLabelDefinitions(graph, g, 'carnival')
 	}
@@ -309,7 +308,7 @@ abstract class CoreGraph {
 	/** */
     public List<VertexLabelDefinition> reaperMethodLabelDefinitions(Graph graph, GraphTraversalSource g, String packageName) {
     	def rmcs = findReaperMethodClasses(packageName)
-    	log.debug "rmcs: $rmcs"
+    	log.trace "rmcs: $rmcs"
 
     	reaperMethodLabelDefinitions(graph, g, rmcs)
     }
@@ -328,7 +327,7 @@ abstract class CoreGraph {
 	        	def rm
 	        	try {
 	        		rm = rmc.newInstance()
-	        		log.debug "rm: $rm"
+	        		log.trace "rm: $rm"
 	    		} catch (Throwable t) {
 	    			log.info "rmc:${rmc.simpleName} t:${t.message}"
 	    		}
@@ -353,18 +352,18 @@ abstract class CoreGraph {
 	    		// created by the initializeDefinedVertices machinery
 	    		if (!(tpcd && tpd)) {
 	        		def tpcn = rm.getTrackedProcessClassName()
-	        		log.debug "tpcn:$tpcn"
+	        		log.trace "tpcn:$tpcn"
 	        		tpcd = DynamicVertexDef.singletonFromCamelCase(graph, g, tpcn)
 
 	        		def tpn = rm.getTrackedProcessName()
-	        		log.debug "tpn:$tpn"
+	        		log.trace "tpn:$tpn"
 	        		tpd = DynamicVertexDef.singletonFromCamelCase(graph, g, tpn)
 	    		}
 
 	    		// HACKY: add new vertex label definition iff it looks like one was created,
 	    		// ie, it's a DynamicVertexDef
-	    		log.debug "tpcd:$tpcd"
-	    		log.debug "tpd:$tpd"
+	    		log.trace "tpcd:$tpcd"
+	    		log.trace "tpd:$tpd"
 	    		[tpcd, tpd].each { vdef ->
 	    			if (!(vdef instanceof DynamicVertexDef)) return
 
@@ -374,7 +373,7 @@ abstract class CoreGraph {
 	            	if (!found) {
 		    			def vld = VertexLabelDefinition.create(vdef)
 		                //def vld = new VertexLabelDefinition(label:vdef.label)
-		                log.debug "adding VertexLabelDefinition ${vdef.label} $vld"
+		                log.trace "adding VertexLabelDefinition ${vdef.label} $vld"
 		                labelDefs << vld
 	            	}
 	    		}
@@ -393,7 +392,7 @@ abstract class CoreGraph {
     	// find all vertex defs
     	Reflections reflections = new Reflections(packageName)
     	Set<Class<ReaperMethod>> targetClasses = reflections.getSubTypesOf(ReaperMethod.class)
-    	log.debug "findReaperMethodClasses targetClasses: $targetClasses"
+    	log.trace "findReaperMethodClasses packageName:$packageName targetClasses:$targetClasses"
 
     	return targetClasses
     }
@@ -413,7 +412,7 @@ abstract class CoreGraph {
 		
 		withTransaction(graph) {
 			graphSchema.controlledInstances.each { ci ->
-				log.debug "creating controlled instance $ci"
+				log.trace "creating controlled instance $ci"
 				if (ci instanceof ControlledInstance) verts << ci.vertex(graph, g)
 				else verts << createControlledInstanceVertex(graph, g, ci)
 			}

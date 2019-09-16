@@ -127,7 +127,6 @@ trait TrackedProcessTrait implements TrackedProcessInterface {
         assert g
 
         def procDef = getTrackedProcessDef()
-        //log.debug "procDef: $procDef"
         assert procDef
 
         g.V()
@@ -142,7 +141,6 @@ trait TrackedProcessTrait implements TrackedProcessInterface {
         assert g
 
         def procDef = getTrackedProcessDef()
-        //log.debug "procDef: $procDef"
         assert procDef
 
         g.V().hasLabel(procDef.label).dedup().toSet()
@@ -254,7 +252,6 @@ public class TrackedProcess implements TrackedProcessTrait {
         assert graph
         assert g
         assert name != null
-        //assert description != null
         assert cl != null
         assert cl instanceof Closure
 

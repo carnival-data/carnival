@@ -88,32 +88,4 @@ trait CachingVineSpecTrait {
         if (resultCheckArgs.dataSourceDateOfUpdateMustBeSet) assert dt.dataSourceDateOfUpdate
     }
 
-
-    /////////////////////////
-    //example tests:
-    /////////////////////////
-    /*
-    def "test vine meta name"() {
-        expect:
-        assertExpectedVineMetaName(vine, methodName, methodArgs, expectedDtName)
-
-        where:
-        methodName | methodArgs | expectedDtName
-        "CgiDcCrfEncounterIdentifiers" | [:] | "cgi-dc-crf-encounter-identifiers"
-        "AnotherCachedVineMethod"	| [value:"1"] | "another-cached-vine-method-1"
-        "AnotherCachedVineMethod"	| [value:"2"] | "another-cached-vine-method-2"
-    }
-
-
-    @IgnoreIf({ !Boolean.valueOf(properties['test.vine.live.data']) })
-    def "test live data fetch"() {
-        expect:
-        assertLiveDataFetchReturnsSomeData(vine, methodName, methodArgs)
-
-        where:
-        methodName | methodArgs
-        "CgiDcCrfEncounterIdentifiers" | [:]
-        "AnotherCachedVineMethod"	| [value:"1"]
-    }
-    */
 }

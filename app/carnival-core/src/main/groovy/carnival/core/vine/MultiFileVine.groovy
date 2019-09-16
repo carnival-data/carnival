@@ -11,8 +11,6 @@ import org.slf4j.LoggerFactory
 
 import carnival.core.config.DatabaseConfig
 import carnival.core.config.RelationalDatabaseConfig
-//import carnival.core.relational.feature.CompoundFeature
-//import carnival.core.relational.domain.PatientCohort
 import carnival.util.SingleValueDateComparator
 import carnival.util.FirstOrLastDateComparator
 import carnival.util.SummaryDateComparator

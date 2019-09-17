@@ -11,6 +11,4 @@
 - Sowers export data
 - Data sources: Penn Medicine Biobank, Penn Data store, etc.
 
-*Carnival will be released as an open source project in 2019.  Stay tuned!*
-
 ![Carnival Logo](images/carnival-2.png)

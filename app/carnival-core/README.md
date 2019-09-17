@@ -33,10 +33,10 @@ gradle whereClauseChunker -Pfieldname=PACKET_UUID -Pfile=data/example-packet-uui
 #### All Tests
 
 ```
-gradle -Dtest.vine.live.data=true test
+gradle -Dtest.http=true test
 ```
 
-#### All Non-Live-Data Tests 
+#### All Tests -- No external resources required
 
 ```
 gradle test
@@ -62,12 +62,13 @@ gradle test --tests "carnival.core.util.*"
 ```
 
 
-### Live Data
-There are two flavors of tests, those that require a live database and those that do not.  By default, test that require a live database are disabled.  To run a live data test, use the `test.vine.live.data` flag:
+### HTTP
+Some of the tests require external HTTP resources.  To run these tests:
 
 ```
-gradle -Dtest.vine.live.data=true ...
+gradle -Dtest.http=true ...
 ```
+
 
 ### Neo4j Graph
 Some tests create and use a Neo4j graph.  By default convention, these tests will run in a transation and call `graph.tx().rollback()` to roll back the transaction at the end of testing.  To disable this functionality and instead call `graph.tx().commit()`, set the `test.graph.rollback` flag to false:

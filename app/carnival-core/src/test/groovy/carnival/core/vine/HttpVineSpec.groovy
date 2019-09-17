@@ -96,6 +96,7 @@ class HttpVineSpec extends Specification {
         http
     }
 
+    @IgnoreIf({ !Boolean.valueOf(properties['test.http']) })
     def "post from HttpServerConfig configured httpBuilder"() {
         given:
         def httpServerConfig = new HttpServerConfig(
@@ -104,6 +105,9 @@ class HttpVineSpec extends Specification {
             trustAllSSLCertificates: false
             )
 
+
+        expect:
+        1 == 2
 
         when:
         def http = httpServerConfig.instantiateHttpBuilder()
@@ -118,6 +122,7 @@ class HttpVineSpec extends Specification {
             res == testPostExpectedResult
     }
 
+    @IgnoreIf({ !Boolean.valueOf(properties['test.http']) })
     def "post from HttpEndpoint configured httpBuilder"() {
         given:
         def httpServerConfig = new HttpServerConfig(
@@ -188,11 +193,10 @@ class HttpVineSpec extends Specification {
         res.data == testPostExpectedResult
     }
 
-    @IgnoreIf({ !Boolean.valueOf(properties['test.vine.live.data']) })
     def "httpEndpoint handlePost UnknownHostException" () {
         given:
         def httpServerConfig = new HttpServerConfig(
-            baseUrl: 'http://turbo-dev-app01.pmacs.upenn.eduunknownhost/',
+            baseUrl: 'http://some.unknown.host/',
             ignoreAllSSLValidation: false,
             trustAllSSLCertificates: false
             )
@@ -207,7 +211,7 @@ class HttpVineSpec extends Specification {
 
         then:
         !res.success
-        res.message.contains("UnknownHostException")
+        res.message.contains("Exception when handling HttpEndpoint.handlePost")
     }
 
 }

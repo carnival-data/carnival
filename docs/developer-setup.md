@@ -128,6 +128,14 @@ To run a specific test suite, in this example the tests located in `carnival\app
 gradle :carnival-graph:test --tests "carnival.graph.VertexDefTraitSpec"
 ```
 
+### HTTP Tests
+Some of the tests require external HTTP resources.  To run these tests:
+
+```
+gradle -Dtest.http=true :carnival-core:test
+```
+
+
 ### Running Tests using Docker
 The test suite can be run in the context of a docker image.  If running tests in this way gradle does not need to be installed, and any configuration in the users CARNIVAL_HOME directory will be ignored.
 

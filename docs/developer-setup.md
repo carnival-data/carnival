@@ -132,7 +132,7 @@ gradle :carnival-graph:test --tests "carnival.graph.VertexDefTraitSpec"
 Some of the tests require external HTTP resources.  To run these tests:
 
 ```
-gradle -Dtest.http=true :carnival-core:test
+gradle -Dtest-http=true :carnival-core:test
 ```
 
 

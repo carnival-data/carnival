@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+    <property name="LOG_DIR" value="${CARNIVAL_HOME}/log" />
+
+
+    <!-- appenders -->
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+        <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+        </layout>
+    </appender>
+  
+
+    <!-- loggers -->
+
+    <!-- java -->
+    <logger name="javax.management" level="INFO"/>
+
+    <!-- groovy -->
+    <logger name="groovy.util" level="INFO"/>
+
+    <!-- netty -->
+    <logger name="org.jboss.netty" level="INFO"/>
+    <logger name="com.ning.http.client" level="INFO"/>
+    <logger name="reactor.ipc.netty.http.server" level="INFO"/>
+    <logger name="reactor.ipc.netty.channel" level="INFO"/>
+
+    <!-- spring -->
+    <logger name="org.springframework.web.reactive" level="INFO"/>
+    <logger name="org.springframework.beans" level="INFO"/>
+    <logger name="org.springframework.data.neo4j" level="INFO"/>
+    <logger name="org.springframework.web.reactive" level="INFO"/>
+    <logger name="org.springframework.boot" level="INFO"/>
+    <logger name="org.springframework.core" level="INFO"/>
+    <logger name="org.springframework.context" level="INFO"/>
+    <logger name="org.springframework.data" level="INFO"/>
+    <logger name="org.springframework.util" level="INFO"/>
+    <logger name="org.springframework.aop" level="INFO"/>
+    <logger name="org.springframework.jmx" level="INFO"/>
+    <logger name="org.springframework.transaction" level="INFO"/>
+    <logger name="org.springframework.jdbc" level="INFO"/>
+
+    <!-- reactor -->
+    <logger name="reactor" level="INFO"/>
+
+    <!-- hibernate -->
+    <logger name="org.hibernate" level="INFO"/>
+
+    <!-- grails -->
+    <logger name="org.grails" level="INFO"/>
+
+    <!-- neo4j -->
+    <logger name="org.neo4j.ogm" level="INFO"/>
+
+    <!-- carnival -->
+    <logger name="sql" level="INFO" >
+    </logger>
+
+    <logger name="db-entity-report" level="INFO">
+    </logger>
+
+    <logger name="console" level="INFO">
+    </logger>
+
+    <logger name="carnival-query-updates" level="INFO">
+    </logger>
+
+    <logger name="carnival" level="INFO">
+    </logger>
+  
+    <!-- root -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>

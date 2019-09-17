@@ -43,6 +43,9 @@
     <logger name="org.springframework.transaction" level="INFO"/>
     <logger name="org.springframework.jdbc" level="INFO"/>
 
+    <!-- reflections -->
+    <logger name="org.reflections.Reflections" level="INFO"/>
+
     <!-- reactor -->
     <logger name="reactor" level="INFO"/>
 

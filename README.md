@@ -1,5 +1,5 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://github.com/pennbiobank/pennai/carnival-public/master/LICENSE)
-
+[![Build Status](https://travis-ci.org/pmbb-ibi/carnival.svg?branch=master)](https://travis-ci.org/pmbb-ibi/carnival)
 # Carnival
 
 *It's a party of information!*

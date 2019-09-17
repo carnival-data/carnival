@@ -19,9 +19,6 @@ build
 # we do not necessarily want to ignore all of these
 # *.csv
 
-# do not ignore the docker-compose file
-!docker-compose.yml
-
 # the below are typically data or config files
 *.yaml
 *.yml
@@ -31,6 +28,12 @@ build
 *.zip
 *.tgz
 *.properties
+
+# do not ignore the docker-compose file
+!docker-compose.yml
+
+#do not ignore travis file
+!.travis.yml
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar

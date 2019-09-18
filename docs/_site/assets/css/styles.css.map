@@ -7,8 +7,8 @@
 	],
 	"sourcesContent": [
 		"@import \"main\";",
-		".current {\n  color: green;\n}"
+		".current {\n  color: green;\n}\n\n.navbar .topnav {\n\tmargin-left:1em;\n\tmargin-right:1em;\n}"
 	],
 	"names": [],
-	"mappings": "ACAA,AAAA,QAAQ,CAAC,EACP,KAAK,EAAE,KAAK,GACb"
+	"mappings": "ACAA,AAAA,QAAQ,CAAC,EACP,KAAK,EAAE,KAAK,GACb;;AAED,AAAA,OAAO,CAAC,OAAO,CAAC,EACf,WAAW,EAAC,GAAG,EACf,YAAY,EAAC,GAAG,GAChB"
 }

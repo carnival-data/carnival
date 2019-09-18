@@ -1,0 +1,31 @@
+
+<div class="container-fluid" id="DataTables">
+  <h1 class="mt-4">Data Tables</h1>
+  
+  <p>Carnival contains a DataTable class with two sub-classes, MappedDataTable and GenericDataTable. Please see an example below about the basics of a MappedDataTable.</p>
+
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='edu.upenn.pmbb', module='carnival-util', version='0.2.6') <i class="conum" data-value="1"></i><b>(1)</b>
+
+import carnival.util.MappedDataTable
+import carnival.util.KeyType
+
+def mdt = new MappedDataTable(
+name:"myMappedDataTable",
+idFieldName:'ID',
+idKeyType:KeyType.GENERIC_STRING_ID
+)
+
+mdt.dataAdd(ID:'1A', NAME:'alex')
+def currentDir = new File(System.getProperty("user.dir"))
+mdt.writeFiles(currentDir)</code></pre>
+
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Use <code>@Grab</code> to incorporate the carnival-util dependency.</td>
+</tr>
+</table>
+</div>
+
+</div>

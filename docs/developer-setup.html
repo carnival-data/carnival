@@ -1,0 +1,77 @@
+
+<div class="container-fluid" id="DeveloperSetup">
+  <h1 class="mt-4">Developer Setup</h1>
+  <p>
+Carnival is a Groovy <a href="https://guides.gradle.org/creating-multi-project-builds/">multi-project</a> that uses <a href="https://gradle.org">Gradle</a> as the build engine. The main project is in the app directory. Folders within app contain the sub-projects (eg. app/public/carnival-core, app/public/carnival-gremlin-dsl). Every sub-project has a build.gradle configuration file that defines it's dependencies and the gradle tasks that it can execute. The build.gradle file in the app directory defines project-wide configuration.
+
+Gradle task commands run from the root project filter down to the sub-projects. Gradle commands referenced in this documentation are assumed to be called from the root project directory carnival/app unless otherwise noted.
+
+This project also includes a <a href="https://www.docker.com/resources/what-container">Docker image configuration</a> that can be built to run Carnival or the test suite.
+  </p>
+
+  <h2 class="mt-4">Installation</h2>
+
+  <h3 class="mt-4">Build Requirements</h3>
+  <ul>
+    <li><a href="https://gradle.org/">Gradle</a> V5.1.1</li>
+    <ul>
+      <li><a href="https://gradle.org/install/#with-a-package-manager">Installation with a package manager</a></li>
+      <ul>
+        <li><a href="https://sdkman.io/">SDKMan</a></li>
+        <li>Windows: <a href="http://www.cygwin.com/">Cygwin</a> + SDKMan</li>
+        <li>Note - Cygwin needs curl installed for sdkman to work successfully. The windows 10 version of curl may cause an error when trying to install gradle. See <a href="https://stackoverflow.com/questions/56509430/sdkman-on-cygwin-cant-install">stack overflow.</a></li>
+        <li>Windows: <a href="https://scoop.sh/">Scoop</a></li>
+      </ul>
+      <li><a href="https://gradle.org/install/#manually">Install Manually</a></li>
+    </ul>
+    <li>Java V1.8+</li>
+    <li><a href="https://neo4j.com/download/">Neo4J</a> (Optional) - Helpful to browse the property graph.</li>
+  </ul>
+
+  <h3 class="mt-4">Environment Setup</h3>
+  <ol>
+    <li>
+      Clone the repository using:
+      <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">git clone git@github.com:pennbiobank/carnival-public.git</code></pre>
+    </li>
+    <li>
+      Create a carnival home directory. This directory will contain your configuration files and will be the location where carnival reads and writes graphs and files.
+      <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">mkdir /Users/myuser/dev/carnival/carnival_home</code></pre>
+    </li>
+    <li>
+      Make carnival aware of your carnival home directory. There are a couple of ways you can do this.
+      <ul>
+        <li>
+          Use the environment variable CARNIVAL_HOME. For example:
+          <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">export CARNIVAL_HOME=/Users/myuser/dev/carnival/carnival_home</code></pre>
+        </li>
+        <li>
+          Pass your carnival home directory to future gradle commands using the <code class="language-bash" data-lang="bash">-D</code> syntax:
+          <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">-Dcarnival.home=/Users/myuser/dev/carnival/carnival_home</code></pre>
+          <p>
+            <b>Note</b> - If you use this method, then you will need to edit logback.xml, which by default references <code class="language-bash" data-lang="bash">CARNIVAL_HOME</code>.
+          </p>
+        </li>
+      </ul>
+    </li>
+  </ol>
+
+  <h2 class="mt-4">Building</h2>
+  <h3 class="mt-4">Overview</h3>
+  <h3 class="mt-4">Compiling</h3>
+  
+  
+
+  <h2 class="mt-4">Testing</h2>
+  <h3 class="mt-4">Aggregating Test Results</h3>
+  <h3 class="mt-4">Common Test Commands</h3>
+  <h3 class="mt-4">HTTP Tests</h3>
+  <h3 class="mt-4">Running Tests using Docker</h3>
+
+  <h4 class="mt-4">Requirements</h4>
+  <h4 class="mt-4">Running Tests in the Docker Environment</h4>
+  
+  <h2 class="mt-4">Publishing Libraries</h2>
+
+
+</div>

@@ -1,3 +1,7 @@
+---
+layout: default
+title: Developer Setup
+---
 # Developer Guide
 
 Carnival is a Groovy [multi-project](https://guides.gradle.org/creating-multi-project-builds/) that uses [Gradle](https://gradle.org) as the build engine.  The main project is in the `app` directory.  Folders within `app` contain the sub-projects (eg. `app/public/carnival-core`, `app/public/carnival-gremlin-dsl`).  Every sub-project has a `build.gradle` configuration file that defines it's dependencies and the gradle tasks that it can execute.  The `build.gradle` file in the `app` directory defines project-wide configuration.

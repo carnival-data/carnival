@@ -1,0 +1,200 @@
+I"Z0<h1 id="developer-guide">Developer Guide</h1>
+
+<p>Carnival is a Groovy <a href="https://guides.gradle.org/creating-multi-project-builds/">multi-project</a> that uses <a href="https://gradle.org">Gradle</a> as the build engine.  The main project is in the <code class="highlighter-rouge">app</code> directory.  Folders within <code class="highlighter-rouge">app</code> contain the sub-projects (eg. <code class="highlighter-rouge">app/public/carnival-core</code>, <code class="highlighter-rouge">app/public/carnival-gremlin-dsl</code>).  Every sub-project has a <code class="highlighter-rouge">build.gradle</code> configuration file that defines it’s dependencies and the gradle tasks that it can execute.  The <code class="highlighter-rouge">build.gradle</code> file in the <code class="highlighter-rouge">app</code> directory defines project-wide configuration.</p>
+
+<p>Gradle task commands run from the root project filter down to the sub-projects.  Gradle commands referenced in this documentation are assumed to be called from the root project directory <code class="highlighter-rouge">carnival/app</code> unless otherwise noted.</p>
+
+<p>This project also includes a <a href="https://www.docker.com/resources/what-container">Docker image configuration</a> that can be built to run Carnival or the test suite.</p>
+
+<h2 id="contents">Contents</h2>
+<ol>
+  <li><a href="#installation">Installation</a></li>
+  <li><a href="#building">Building</a></li>
+  <li><a href="#testing">Testing</a></li>
+  <li><a href="#publishing-libraries">Publishing Libraries</a></li>
+</ol>
+
+<p><a name="installation"></a></p>
+<h2 id="installation">Installation</h2>
+<h3 id="build-requirements">Build Requirements</h3>
+<ul>
+  <li><a href="https://gradle.org/">Gradle</a> V5.1.1
+    <ul>
+      <li><a href="https://gradle.org/install/#with-a-package-manager">Installation with a package manager</a>
+        <ul>
+          <li><a href="https://sdkman.io/">SDKMan</a></li>
+          <li>Windows: <a href="http://www.cygwin.com/">Cygwin</a> + <a href="https://sdkman.io/">SDKMan</a>
+            <ul>
+              <li><em>Note</em> - Cygwin needs curl installed for sdkman to work successfully.  The windows 10 version of curl may cause an error when trying to install gradle.  See <a href="https://stackoverflow.com/questions/56509430/sdkman-on-cygwin-cant-install">stack overflow</a></li>
+            </ul>
+          </li>
+          <li>Windows: <a href="https://scoop.sh/">Scoop</a></li>
+        </ul>
+      </li>
+      <li><a href="https://gradle.org/install/#manually">Install Manually</a></li>
+    </ul>
+  </li>
+  <li>Java V1.8+</li>
+  <li><a href="https://neo4j.com/download/">Neo4J</a> (Optional) - Helpful to browse the property graph</li>
+</ul>
+
+<h3 id="environment-setup">Environment Setup</h3>
+<ol>
+  <li>Clone the repository using:
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone git@github.com:pennbiobank/carnival-public.git
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Create a carnival home directory.  This directory will contain your configuration files and will be the location where carnival reads and writes graphs and files.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> mkdir /Users/myuser/dev/carnival/carnival_home
+</code></pre></div>    </div>
+  </li>
+  <li>Make carnival aware of your carnival home directory.  There are a couple of ways you can do this.
+    <ul>
+      <li>
+        <p>Use the environment variable <code class="highlighter-rouge">CARNIVAL_HOME</code>.  For example:</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  export CARNIVAL_HOME=/Users/myuser/dev/carnival/carnival_home
+</code></pre></div>        </div>
+      </li>
+      <li>
+        <p>Pass your carnival home directory to future gradle commands using the <code class="highlighter-rouge">-D</code> syntax:</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  -Dcarnival.home=/Users/myuser/dev/carnival/carnival_home
+</code></pre></div>        </div>
+
+        <p><strong>Note</strong> - If you use this method, then you will need to edit logback.xml, which by default references CARNIVAL_HOME.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Setup the configuration files in the <code class="highlighter-rouge">${CARNIVAL_HOME}/config</code> directory:</p>
+
+    <ul>
+      <li>To set up the config files from scratch:
+        <ul>
+          <li>Copy the config template files from <code class="highlighter-rouge">carnival/app/carnival-core/config</code> to <code class="highlighter-rouge">${CARNIVAL_HOME}/config</code>.</li>
+          <li>Rename the files named <code class="highlighter-rouge">*.*-template</code> to <code class="highlighter-rouge">*.*</code> (remove <code class="highlighter-rouge">-template</code> from the name).</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Note</strong> - In the config files windows paths should be specified using double forward-slashes (i.e. <code class="highlighter-rouge">C://Users//myuser//somedirectory</code>)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- File descriptions:
+	- application.yaml - Contains data source information (i.e. credentals to relational dbs, RDF dbs, REDCap, etc.), the default vine cache-mode, local directory configuration and the gremlin configuration.
+	- logback.xml - Can be modified to change the log levels.
+</code></pre></div></div>
+
+<ol>
+  <li>Install APOC neo4j plugin:
+    <ul>
+      <li>Download the <a href="https://neo4j.com/docs/labs/apoc/current/">APOC library V3.4.0.7</a> <a href="https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/tag/3.4.0.7">(download)</a> and save it to a directory on your local file system.</li>
+      <li>Add the path to that directory in gremlin section of the <code class="highlighter-rouge">application.yaml</code> config file in the entry <code class="highlighter-rouge">gremlin:neo4j:conf:dbms:directories:plugins</code>:</li>
+    </ul>
+  </li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># gremlin
+gremlin:
+ neo4j:
+   conf:
+     dbms:
+       directories:
+         plugins: /Users/myuser/Documents/Neo4j/default.graphdb/plugins
+       security:
+         auth_enabled: "false"      
+         procedures:
+           unrestricted: apoc.*
+           whitelist: apoc.*
+
+</code></pre></div></div>
+
+<p><a name="building"></a></p>
+<h2 id="building-carnival">Building Carnival</h2>
+
+<h3 id="overview">Overview</h3>
+<p>Carnival is a <a href="https://guides.gradle.org/creating-multi-project-builds/">Groovy multi-project</a> application comprised of sub-projects.  Some sub-projects implement the data model and shared core functionality (<code class="highlighter-rouge">carnival-core</code>, <code class="highlighter-rouge">carnival-util</code>, <code class="highlighter-rouge">carnival-graph</code>, <code class="highlighter-rouge">carnival-gremlin-dsl</code>, etc.) and some extend the general data model to the biomedical domain (<code class="highlighter-rouge">carnival-clinical</code>).</p>
+
+<p>Every sub-project has a <code class="highlighter-rouge">build.gradle</code> configuration file that defines it’s dependencies and the gradle tasks it can execute. The <code class="highlighter-rouge">build.gradle</code> file in the <code class="highlighter-rouge">carnival/app</code> directory defines project-wide configuration.  These files also contain the default java arguments that are used for each task.</p>
+
+<h3 id="compiling">Compiling</h3>
+<p>Carnival can be built by running <code class="highlighter-rouge">gradle compileGroovy</code>.  The build can be cleaned by running <code class="highlighter-rouge">gradle clean</code>.  To run sub-project tasks, use the <a href="https://docs.gradle.org/current/userguide/multi_project_builds.html#sec:project_and_task_paths">gradle colon syntax</a>: <code class="highlighter-rouge">gradle :carnival-util:compileGroovy</code>.</p>
+
+<p><a name="testing"></a></p>
+<h2 id="testing">Testing</h2>
+<p><a href="https://docs.gradle.org/current/dsl/org.gradle.api.tasks.testing.Test.html">Gradle</a> is used to execute the test suite.  Running tests produces html test result files in the sub-project directories <code class="highlighter-rouge">carnvial\app\carnival-*\build\reports\tests\test\index.html</code>.</p>
+
+<h3 id="aggregating-test-results">Aggregating Test Results</h3>
+<p>Running the command <code class="highlighter-rouge">gradle testReport</code> will run all tests and generate aggregated results in <code class="highlighter-rouge">carnival\app\build\reports\allTests</code>.</p>
+
+<h3 id="common-test-commands">Common Test Commands</h3>
+<p>To run tests for all gradle sub-projects:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gradle test
+</code></pre></div></div>
+
+<p>To run tests for all gradle sub-projects and aggrigate the results:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gradle testReport
+</code></pre></div></div>
+
+<p>To run tests in a specific gradle sub-project:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gradle :carnival-util:test
+</code></pre></div></div>
+
+<p>To run a specific test suite, in this example the tests located in <code class="highlighter-rouge">carnival\app\carnival-graph/src/test/groovy/carnival/graph/VertexDefTraitSpec.groovy</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gradle :carnival-graph:test --tests "carnival.graph.VertexDefTraitSpec"
+</code></pre></div></div>
+
+<h3 id="http-tests">HTTP Tests</h3>
+<p>Some of the tests require external HTTP resources.  To run these tests:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gradle -Dtest-http=true :carnival-core:test
+</code></pre></div></div>
+
+<h3 id="running-tests-using-docker">Running Tests using Docker</h3>
+<p>The test suite can be run in the context of a docker image.  If running tests in this way gradle does not need to be installed, and any configuration in the users CARNIVAL_HOME directory will be ignored.</p>
+
+<h4 id="requirements">Requirements</h4>
+<ul>
+  <li>Docker
+    <ul>
+      <li>Most recent stable release, minimum version is 17.06.0
+        <ul>
+          <li><a href="https://docs.docker.com/engine/getstarted/step_one/">Official Docker Website Getting Started</a></li>
+          <li><a href="https://docs.docker.com/docker-for-windows/install/">Official Docker Installation for Windows</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Docker-Compose (Version 1.22.0 or greater, Linux only) - Separate installation is only needed for linux, docker-compose is bundled with windows and mac docker installations
+  	- <a href="https://docs.docker.com/compose/install/">Linux Docker-Compose Installation</a></li>
+</ul>
+
+<h4 id="running-tests-in-the-docker-environment">Running Tests in the Docker Environment</h4>
+<p>First build the docker image using the command:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker-compose -f .\docker-compose-test.yml build
+</code></pre></div></div>
+
+<p>Once built, the tests can be run using the command:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker-compose -f .\docker-compose-test.yml up --force-recreate
+</code></pre></div></div>
+
+<p>This has the same effect as running <code class="highlighter-rouge">gradle testReports</code>, and the aggregated test results will be in the folder <code class="highlighter-rouge">carnival\app\build\reports\allTests</code>.</p>
+
+<p><a name="publishing-libraries"></a></p>
+<h2 id="publishing-libraries">Publishing Libraries</h2>
+<p>The Groovy sub-project modules can be published to local maven repositories by running commands like the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gradle :carnival-util:publishToMavenLocal
+gradle :carnival-core:publishToMavenLocal
+</code></pre></div></div>
+
+<p>To publish all modules:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gradle publishAll
+</code></pre></div></div>
+:ET

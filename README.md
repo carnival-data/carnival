@@ -11,7 +11,7 @@ Inspired by Open Biological and Biomedical Ontology (OBO) Foundry ontologies, th
 
 ## Quick Links
 
-* [Github Pages Website](https://pennbiobank.github.io/carnival/)
+* [Github Pages Website](https://pmbb-ibi.github.io/carnival/)
 * [Developer Guide](docs/developer-setup.md) - Installation and running instructions
 * [carnival-core](app/carnival-core/README.md) - Developer details on the core carnival module
 * [carnival-gremlin-dsl](app/carnival-gremlin-dsl/README.md) - Gremlin dsl patterns for the carnival schema

@@ -108,3 +108,5 @@ docs/tutorial/*.yml
 
 # jekyll
 .jekyll-cache
+.sass-cache
+_site

@@ -54,7 +54,55 @@ This project also includes a <a href="https://www.docker.com/resources/what-cont
         </li>
       </ul>
     </li>
+    <li>
+      Setup the configuration files in the <code class="language-bash" data-lang="bash">${CARNIVAL_HOME}/config directory</code>:
+      <ul>
+        <li>
+          To set up the config files from scratch:
+          <ul>
+            <li>Copy the config template files from <code class="language-bash" data-lang="bash">carnival/app/carnival-core/config</code> to <code class="language-bash" data-lang="bash">${CARNIVAL_HOME}/config</code>.</li>
+            <li>Rename the files named <code class="language-bash" data-lang="bash">*.*-template</code> to <code class="language-bash" data-lang="bash">*.*</code> (remove -template from the name).</li>
+          </ul>
+        </li>
+      </ul>
+      <p>
+        <b>Note</b> - In the config files windows paths should be specified using double forward-slashes (i.e. <code class="language-bash" data-lang="bash">C://Users//myuser//somedirectory)</code>.
+      </p>
+      <ul>
+        <li>
+          File descriptions:
+          <ul>
+            <li>application.yaml - Contains data source information (i.e. credentals to relational dbs, RDF dbs, REDCap, etc.), the default vine cache-mode, local directory configuration and the gremlin configuration.</li>
+            <li>logback.xml - Can be modified to change the log levels.</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      Install APOC neo4j plugin:
+      <ul>
+        <li>Download the <a href="https://neo4j.com/docs/labs/apoc/current/">APOC</a> <a href="https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/tag/3.4.0.7">V3.4.0.7</a> and save it to a directory on your local file system.</li>
+        <li>Add the path to that directory in gremlin section of the <code class="language-bash" data-lang="bash">application.yaml</code> config file in the entry <code class="language-bash" data-lang="bash">gremlin:neo4j:conf:dbms:directories:plugins</code>:</li>
+      </ul>
+<pre class="highlightjs highlight"><code class="language-yaml" data-lang="yaml"># gremlin
+gremlin:
+ neo4j:
+   conf:
+     dbms:
+       directories:
+         plugins: /Users/myuser/Documents/Neo4j/default.graphdb/plugins
+       security:
+         auth_enabled: "false"      
+         procedures:
+           unrestricted: apoc.*
+           whitelist: apoc.*
+</code></pre>
+    </li>
   </ol>
+
+
+
+
 
   <h2 class="mt-4">Building</h2>
   <h3 class="mt-4">Overview</h3>

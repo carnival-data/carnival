@@ -32,22 +32,38 @@ This project also includes a <a href="https://www.docker.com/resources/what-cont
   <ol>
     <li>
       Clone the repository using:
-      <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">git clone git@github.com:pennbiobank/carnival-public.git</code></pre>
+      <div class="listingblock">
+        <div class="content">
+          <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">git clone git@github.com:pennbiobank/carnival-public.git</code></pre>
+        </div>
+      </div>
     </li>
     <li>
       Create a carnival home directory. This directory will contain your configuration files and will be the location where carnival reads and writes graphs and files.
-      <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">mkdir /Users/myuser/dev/carnival/carnival_home</code></pre>
+      <div class="listingblock">
+        <div class="content">
+          <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">mkdir /Users/myuser/dev/carnival/carnival_home</code></pre>
+        </div>
+      </div>
     </li>
     <li>
       Make carnival aware of your carnival home directory. There are a couple of ways you can do this.
       <ul>
         <li>
           Use the environment variable CARNIVAL_HOME. For example:
-          <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">export CARNIVAL_HOME=/Users/myuser/dev/carnival/carnival_home</code></pre>
+          <div class="listingblock">
+            <div class="content">
+              <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">export CARNIVAL_HOME=/Users/myuser/dev/carnival/carnival_home</code></pre>
+            </div>
+          </div>
         </li>
         <li>
           Pass your carnival home directory to future gradle commands using the <code class="language-bash" data-lang="bash">-D</code> syntax:
-          <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">-Dcarnival.home=/Users/myuser/dev/carnival/carnival_home</code></pre>
+          <div class="listingblock">
+            <div class="content">
+              <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">-Dcarnival.home=/Users/myuser/dev/carnival/carnival_home</code></pre>
+            </div>
+          </div>
           <p>
             <b>Note</b> - If you use this method, then you will need to edit logback.xml, which by default references <code class="language-bash" data-lang="bash">CARNIVAL_HOME</code>.
           </p>
@@ -84,6 +100,8 @@ This project also includes a <a href="https://www.docker.com/resources/what-cont
         <li>Download the <a href="https://neo4j.com/docs/labs/apoc/current/">APOC</a> <a href="https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/tag/3.4.0.7">V3.4.0.7</a> and save it to a directory on your local file system.</li>
         <li>Add the path to that directory in gremlin section of the <code class="language-bash" data-lang="bash">application.yaml</code> config file in the entry <code class="language-bash" data-lang="bash">gremlin:neo4j:conf:dbms:directories:plugins</code>:</li>
       </ul>
+        <div class="listingblock">
+          <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml" data-lang="yaml"># gremlin
 gremlin:
  neo4j:
@@ -97,6 +115,8 @@ gremlin:
            unrestricted: apoc.*
            whitelist: apoc.*
 </code></pre>
+        </div>
+      </div>
     </li>
   </ol>
 

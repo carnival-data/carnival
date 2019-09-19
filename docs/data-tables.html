@@ -5,6 +5,7 @@
   Carnival contains a DataTable class with two sub-classes, MappedDataTable and GenericDataTable.  MappedDataTable is like a database table with a primary key.  The value of the primary key field of each row is enforced to be unique within the scope of the data table.  GenericDataTable is like a database table with no primary key.  For data interchange, it is safer to use MappedDataTable, assuming your data set has a primary key.  If there is no primary key, use GenericDataTable.
 </p>
 
+
 <h3>MappedDataTable</h3>
 
 <div class="listingblock">
@@ -89,5 +90,51 @@ mdt.dataAdd(ID:'1A', NAME:'bob') <i class="conum" data-value="1"></i><b>(1)</b><
 
   </div>
 </div>
+
+
+<h3>GenericDataTable</h3>
+
+<p>
+  Generic data tables can hold arbitrary tabular data.
+</p>
+
+<div class="listingblock">
+  <div class="title">docs/groovy/basic/generic-data-table-1.groovy</div>
+  <div class="content">
+
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='edu.upenn.pmbb', module='carnival-util', version='0.2.6')
+
+import carnival.util.GenericDataTable
+
+def mdt = new GenericDataTable(
+    name:"myMappedDataTable" <i class="conum" data-value="1"></i><b>(1)</b>
+)
+mdt.dataAdd(ID:'1A', NAME:'alex')
+mdt.dataAdd(ID:'1A', NAME:'bob') <i class="conum" data-value="2"></i><b>(2)</b>
+
+def currentDir = new File(System.getProperty("user.dir"))
+mdt.writeFiles(currentDir)</code></pre>
+
+    <div class="colist arabic">
+      <table>
+        <tr>
+          <td><i class="conum" data-value="1"></i><b>1</b></td>
+          <td>The only required parameter to the GenericDataTable constructor is name.</td>
+        </tr>
+        <tr>
+          <td><i class="conum" data-value="2"></i><b>2</b></td>
+          <td>This will not throw an error. The ID column has no special meaning here.</td>
+        </tr>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
 
 

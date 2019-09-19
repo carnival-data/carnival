@@ -77,13 +77,13 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
             assert args
             assert args.name
             assert args.idFieldName
-            assert args.idKeyType
 
             this.data = [:]
 
             this.data.name = args.name
-            this.data.idKeyType = args.idKeyType
             this.data.idFieldName = toFieldName(args.idFieldName)
+
+            if (args.containsKey('idKeyType')) this.data.idKeyType = args.idKeyType
             
             if (args.containsKey("secondaryIdFieldMap")) {
                 if (args.secondaryIdFieldMap) assert args.secondaryIdFieldMap instanceof Map : "Error in MappedDataTable.MetaData.setMeta(): could not parse secondaryIdFieldMap, expected to be of type 'Map', got ${args.secondaryIdFieldMap?.class}.  args: $args"
@@ -257,7 +257,7 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
     String idFieldName
 
     /** the type of the id key */
-    KeyType idKeyType
+    KeyType idKeyType = KeyType.GENERIC_STRING_ID
 
     /** id -> map of vals */
     SortedMap<String,Map<String,String>> data = new TreeMap<String, Map<String,String>>()
@@ -298,10 +298,10 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
 
         this.name = args.name
         this.idFieldName = args.idFieldName
-        this.idKeyType = args.idKeyType
         this.queryDate = args.queryDate
         this.dataSourceDateOfUpdate = args.dataSourceDateOfUpdate
 
+        if (args.idKeyType) this.idKeyType = args.idKeyType
         if (args.secondaryIdFieldMap) this.secondaryIdFieldMap = args.secondaryIdFieldMap
         if (args.vine) this.vine = args.vine
     }
@@ -351,9 +351,9 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
             name:name, 
             queryDate:queryDate,
             idFieldName:idFieldName, 
-            idKeyType:idKeyType, 
             secondaryIdFieldMap:secondaryIdFieldMap
         ]
+        if (idKeyType != null) m.idKeyType = idKeyType
         if (dataSourceDateOfUpdate != null) m.dataSourceDateOfUpdate = dataSourceDateOfUpdate
         
         new MetaData(m)

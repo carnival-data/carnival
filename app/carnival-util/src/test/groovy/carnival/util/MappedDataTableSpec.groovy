@@ -84,6 +84,31 @@ class MappedDataTableSpec extends Specification {
 
 
     ///////////////////////////////////////////////////////////////////////////
+    // KEY TYPE
+    ///////////////////////////////////////////////////////////////////////////
+
+    def "default idKeyType"() {
+        given:
+        def mdt
+        Throwable e
+
+        when:        
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
+
+        then:
+        mdt.idKeyType == KeyType.GENERIC_STRING_ID
+
+        when:
+        mdt.dataAddWithModifications(id:'id1', v1:'v11')
+
+        then:
+        mdt.dataGet('id1').size() == 2
+        mdt.dataGet('id1').get(DataTable.toFieldName('id')) == 'id1'
+        mdt.dataGet('id1').get(DataTable.toFieldName('v1')) == 'v11'
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////
     // MAPPEDDATAINTERFACE - MAPPED DATA INTERFACE
     ///////////////////////////////////////////////////////////////////////////
 

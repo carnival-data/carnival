@@ -5,8 +5,7 @@ import carnival.util.KeyType
 
 def mdt = new MappedDataTable(
     name:"myMappedDataTable",
-    idFieldName:'ID',
-    idKeyType:KeyType.GENERIC_STRING_ID
+    idFieldName:'ID'
 )
 
 mdt.dataAdd(ID:'1A', NAME:'alex')

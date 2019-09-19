@@ -1,34 +1,57 @@
 
-<div class="container-fluid" id="DataTables">
-  <h1 class="mt-4">Data Tables</h1>
-  
-  <p>Carnival contains a DataTable class with two sub-classes, MappedDataTable and GenericDataTable. Please see an example below about the basics of a MappedDataTable.</p>
+<h2 class="mt-4">Data Tables</h1>
+
+<p>Carnival contains a DataTable class with two sub-classes, MappedDataTable and GenericDataTable. Please see an example below about the basics of a MappedDataTable.</p>
+
+<div class="listingblock">
+  <div class="title">docs/tutorial/basics-util.groovy</div>
+  <div class="content">
 
 <pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='edu.upenn.pmbb', module='carnival-util', version='0.2.6') <i class="conum" data-value="1"></i><b>(1)</b>
 
 import carnival.util.MappedDataTable
-import carnival.util.KeyType
 
 def mdt = new MappedDataTable(
-    name:"myMappedDataTable",
-    idFieldName:'ID' <i class="conum" data-value="2"></i><b>(2)</b>
+  name:"myMappedDataTable", <i class="conum" data-value="2"></i><b>(2)</b>
+  idFieldName:'ID' <i class="conum" data-value="3"></i><b>(3)</b>
 )
+mdt.dataAdd(ID:'1A', NAME:'alex') <i class="conum" data-value="4"></i><b>(4)</b>
 
-mdt.dataAdd(ID:'1A', NAME:'alex')
 def currentDir = new File(System.getProperty("user.dir"))
-mdt.writeFiles(currentDir)</code></pre>
+mdt.writeFiles(currentDir)<i class="conum" data-value="5"></i><b>(5)</b></code></pre>
 
-  <div class="colist arabic">
-    <table>
-      <tr>
-        <td><i class="conum" data-value="1"></i><b>1</b></td>
-        <td>Use <code>@Grab</code> to incorporate the carnival-util dependency.</td>
-      </tr>
-      <tr>
-        <td><i class="conum" data-value="2"></i><b>2</b></td>
-        <td>Set the name of the identifier field of this data table to 'ID'</td>
-      </tr>
-    </table>
+    <div class="colist arabic">
+      <table>
+        <tr>
+          <td><i class="conum" data-value="1"></i><b>1</b></td>
+          <td>Use <code>@Grab</code> to incorporate the carnival-util dependency.</td>
+        </tr>
+        <tr>
+          <td><i class="conum" data-value="2"></i><b>2</b></td>
+          <td>All data tables have a name, which will be used to name file representations.</td>
+        </tr>
+        <tr>
+          <td><i class="conum" data-value="3"></i><b>3</b></td>
+          <td>Set the name of the identifier field of this data table to 'ID'</td>
+        </tr>
+        <tr>
+          <td><i class="conum" data-value="4"></i><b>4</b></td>
+          <td>Add a record to the data table.</td>
+        </tr>
+        <tr>
+          <td><i class="conum" data-value="5"></i><b>5</b></td>
+          <td>Write the file representation of this data table to the current directory.</td>
+        </tr>
+      </table>
+    </div>
+
   </div>
-
 </div>
+
+<p>The result of this script will be two files in the current directory:</p> 
+<ul>
+  <li>myMappedDataTable.yaml - data descriptor</li>
+  <li>myMappedDataTable.csv - the data in comma separated value format</li>
+</ul>
+
+

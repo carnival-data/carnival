@@ -11,7 +11,7 @@ import carnival.util.KeyType
 
 def mdt = new MappedDataTable(
     name:"myMappedDataTable",
-    idFieldName:'ID',
+    idFieldName:'ID', <i class="conum" data-value="2"></i><b>(2)</b>
     idKeyType:KeyType.GENERIC_STRING_ID
 )
 
@@ -19,13 +19,17 @@ mdt.dataAdd(ID:'1A', NAME:'alex')
 def currentDir = new File(System.getProperty("user.dir"))
 mdt.writeFiles(currentDir)</code></pre>
 
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Use <code>@Grab</code> to incorporate the carnival-util dependency.</td>
-</tr>
-</table>
-</div>
+  <div class="colist arabic">
+    <table>
+      <tr>
+        <td><i class="conum" data-value="1"></i><b>1</b></td>
+        <td>Use <code>@Grab</code> to incorporate the carnival-util dependency.</td>
+      </tr>
+      <tr>
+        <td><i class="conum" data-value="2"></i><b>2</b></td>
+        <td>Set the name of the identifier field of this data table to 'ID'</td>
+      </tr>
+    </table>
+  </div>
 
 </div>

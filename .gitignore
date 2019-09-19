@@ -96,8 +96,8 @@ app/carnival-core/*.csv
 # app/
 
 # ignore files created in the tutorial directory
-docs/tutorial/*.csv
-docs/tutorial/*.yml
+docs/groovy/**/*.csv
+docs/groovy/**/*.yml
 
 # ignore vi swap files
 *.swp

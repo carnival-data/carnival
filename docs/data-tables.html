@@ -8,7 +8,7 @@
 <h3>MappedDataTable</h3>
 
 <div class="listingblock">
-  <div class="title">docs/tutorial/basics-util.groovy</div>
+  <div class="title">docs/groovy/basic/mapped-data-table-1.groovy</div>
   <div class="content">
 
 <pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='edu.upenn.pmbb', module='carnival-util', version='0.2.6') <i class="conum" data-value="1"></i><b>(1)</b>
@@ -57,5 +57,37 @@ mdt.writeFiles(currentDir)<i class="conum" data-value="5"></i><b>(5)</b></code><
   <li>myMappedDataTable.yaml - data descriptor</li>
   <li>myMappedDataTable.csv - the data in comma separated value format</li>
 </ul>
+
+
+<p>
+  As noted above, mapped data tables have a primary key, which is enforced to be unique.
+</p>
+
+<div class="listingblock">
+  <div class="title">docs/groovy/basic/mapped-data-table-2.groovy</div>
+  <div class="content">
+
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">@Grab(group='edu.upenn.pmbb', module='carnival-util', version='0.2.6')
+
+import carnival.util.MappedDataTable
+
+def mdt = new MappedDataTable(
+    name:"myMappedDataTable",
+    idFieldName:'ID'
+)
+mdt.dataAdd(ID:'1A', NAME:'alex')
+mdt.dataAdd(ID:'1A', NAME:'bob') <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+
+    <div class="colist arabic">
+      <table>
+        <tr>
+          <td><i class="conum" data-value="1"></i><b>1</b></td>
+          <td>This line will cause an exception, since the ID '1A' was already added to the data table.</td>
+        </tr>
+      </table>
+    </div>
+
+  </div>
+</div>
 
 

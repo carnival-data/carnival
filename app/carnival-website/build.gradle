@@ -1,0 +1,147 @@
+/**
+ * carnival-website
+ *
+ */
+
+
+///////////////////////////////////////////////////////////////////////////////
+// build script settings
+///////////////////////////////////////////////////////////////////////////////
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath group: 'org.yaml', name: 'snakeyaml', version: '1.21'
+        classpath group: 'org.kordamp.gradle', name: 'stats-gradle-plugin', version: '0.2.2'
+    }    
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// plugins
+///////////////////////////////////////////////////////////////////////////////
+plugins {
+    id 'groovy'
+    id 'maven-publish'
+}
+apply plugin: 'org.kordamp.gradle.stats'
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+// dependencies
+///////////////////////////////////////////////////////////////////////////////
+
+repositories {
+    maven { url "https://repo1.maven.org/maven2" }
+    maven { url "https://jitpack.io" }
+    maven { url "http://download.java.net/maven/2/" }
+    maven { url "http://central.maven.org/maven2"}
+
+    // Use 'jcenter' for resolving your dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+    jcenter()
+}
+
+
+configurations {
+    providedRuntime
+    apt
+}
+
+
+// In this section you declare the dependencies for your production and test code
+dependencies {
+
+    // Groovy
+    compile group: 'org.codehaus.groovy', name: 'groovy', version: '2.5.7'
+
+    // ASCII Doctor
+    compile group: 'org.asciidoctor', name: 'asciidoctorj', version: '2.1.0'
+
+    // YAML
+    compile group: 'org.yaml', name: 'snakeyaml', version: '1.23'
+    
+    // We use the awesome Spock testing and specification framework
+    testCompile 'org.spockframework:spock-core:1.2-groovy-2.5'
+
+    // Logging
+    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile 'ch.qos.logback:logback-classic:1.2.3'
+
+    // Apache commons
+    compile group: 'commons-io', name: 'commons-io', version: '2.5'
+}
+
+
+compileGroovy {
+    options.annotationProcessorPath = configurations.apt
+}
+
+
+
+
+task main (dependsOn: ['classes'], type: JavaExec) {
+    description 'Run Main script'
+
+    main = 'carnival.doc.Main'
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+
+    systemProperty "app.version", version
+
+    if (System.getProperty('carnival.home')) {
+        systemProperty('carnival.home', System.getProperty('carnival.home'))
+        systemProperty('logback.configurationFile', System.getProperty('carnival.home') + '/config/logback.xml')
+    }
+    if (System.env.CARNIVAL_HOME) {
+        systemProperty('logback.configurationFile', System.env.CARNIVAL_HOME + '/config/logback.xml')
+    }
+    if (System.getProperty('logback.configurationFile')) {
+        systemProperty("logback.configurationFile", System.getProperty('logback.configurationFile'))
+    } else if (System.env.CARNIVAL_LOGBACK_CONFIG) {
+        systemProperty("logback.configurationFile", System.env.CARNIVAL_LOGBACK_CONFIG)
+    }
+    if (!(System.getProperty('carnival.home') || System.env.CARNIVAL_HOME)) {
+        ant.echo "Carnival home is not set. Use command line argument -Dcarnival.home= or environment variable CARNIVAL_HOME. See documentation."
+        if (!(System.getProperty('logback.configurationFile') || System.env.CARNIVAL_LOGBACK_CONFIG)) {
+            ant.echo "Logback configuration file not set. Use the -D command line argument like -Dlogback.configurationFile=/path/to/file.xml.  Or, set the environment variable CARNIVAL_LOGBACK_CONFIG to /path/to/file.xml. See documentation."
+        }
+    }
+
+    jvmArgs '-Xms1g'
+    jvmArgs '-Xmx3g'
+    jvmArgs '-XX:+UnlockExperimentalVMOptions'
+    jvmArgs '-XX:+UseG1GC'
+    jvmArgs '-XX:G1MaxNewSizePercent=80'
+    jvmArgs '-XX:G1NewSizePercent=80'
+    jvmArgs '-XX:G1HeapWastePercent=5'
+    jvmArgs '-XX:G1MixedGCLiveThresholdPercent=50'
+    jvmArgs '-XX:-PrintGC'
+    jvmArgs '-XX:-PrintGCTimeStamps'        
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+// BUILD 
+///////////////////////////////////////////////////////////////////////////////
+task createProperties(dependsOn: processResources) {
+  doLast {
+    new File("$buildDir/resources/main/version.properties").withWriter { w ->
+        Properties p = new Properties()
+        p['version'] = project.version.toString()
+        p.store w, null
+    }
+  }
+}
+
+classes {
+    dependsOn createProperties
+}
+
+
+

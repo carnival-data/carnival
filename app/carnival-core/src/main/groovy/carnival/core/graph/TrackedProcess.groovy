@@ -100,6 +100,15 @@ trait TrackedProcessTrait implements TrackedProcessInterface {
 
         return procV
     }
+
+
+    /** */
+    void addTrackedProcessInput(Vertex procVert, Vertex inputVertex) {
+        assert procVert
+        assert inputVertex
+
+        inputVertex.addEdge(Core.EX.IS_INPUT_OF.label, procVert)
+    }
     
 
     /** */

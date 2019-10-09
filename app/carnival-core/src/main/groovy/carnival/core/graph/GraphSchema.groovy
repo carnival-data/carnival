@@ -4,6 +4,7 @@ package carnival.core.graph
 
 import groovy.util.AntBuilder
 import groovy.transform.ToString
+import groovy.transform.EqualsAndHashCode
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -70,6 +71,7 @@ interface ElementDef {
 
 /** */
 @ToString
+@EqualsAndHashCode(allProperties=true)
 class DefaultElementDef implements ElementDef {
 	String label
 	String nameSpace

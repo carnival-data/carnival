@@ -28,8 +28,15 @@ class EdgeDefTraitSpec extends Specification {
 
     static enum VX implements VertexDefTrait {
         EDTS_THING,
-        EDTS_ANOTHER_THING,
+        EDTS_ANOTHER_THING
+    }
 
+    static enum VX2 implements VertexDefTrait {
+        EDTS_THING (global:true),
+        EDTS_ANOTHER_THING (global:true)
+
+        private VX2() {}
+        private VX2(Map m) { m.each { k,v -> this."$k" = v } }
     }
 
     static enum EX1 implements EdgeDefTrait {
@@ -91,6 +98,58 @@ class EdgeDefTraitSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+    def "vertex vertex enforce range with global"() {
+        given:
+        def v1
+        def v2
+        def e
+        Throwable t
+
+        when:
+        v1 = VX.EDTS_THING.controlledInstance().vertex(graph, g)
+        v2 = VX2.EDTS_ANOTHER_THING.controlledInstance().vertex(graph, g)
+        e = EX2.EDTS_RELATION.setRelationship(g, v1, v2)
+
+        println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
+        println "v2: ${v2} ${v2.label()} ${v2.value('nameSpace')}"
+
+        then:
+        noExceptionThrown()
+
+        when:
+        e = EX2.EDTS_RELATION.setRelationship(g, v1, v1)
+
+        then:
+        t = thrown()
+    }
+
+
+    def "vertex vertex enforce domain with global"() {
+        given:
+        def v1
+        def v2
+        def e
+        Throwable t
+
+        when:
+        v1 = VX2.EDTS_THING.controlledInstance().vertex(graph, g)
+        v2 = VX.EDTS_ANOTHER_THING.controlledInstance().vertex(graph, g)
+        e = EX2.EDTS_RELATION.setRelationship(g, v1, v2)
+
+        println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
+        println "v2: ${v2} ${v2.label()} ${v2.value('nameSpace')}"
+
+        then:
+        noExceptionThrown()
+
+        when:
+        e = EX2.EDTS_RELATION.setRelationship(g, v2, v2)
+
+        then:
+        t = thrown()
+    }
+
 
     def "vertex vertex enforce domain dynamic"() {
         given:

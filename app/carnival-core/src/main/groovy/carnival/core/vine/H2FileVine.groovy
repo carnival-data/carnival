@@ -132,10 +132,16 @@ abstract class H2FileVine extends FileVine implements RelationalVine {
      */
     abstract String getCreateTableSql()
 
+
+    /**
+     * Return the list of columns that should be indexed
+     *
+     */
     Collection<String> getIndexedColumnNames()
     {
         return []
     }
+
 
     /**
      * Return an insert statemenet for a single record that pairs with the 
@@ -216,6 +222,7 @@ abstract class H2FileVine extends FileVine implements RelationalVine {
         return sql
     }
 
+    /** */
     void addIndexes(Sql sql)
     {
         getIndexedColumnNames().each {

@@ -411,7 +411,6 @@ abstract class Reaper {
      */
     public ReaperMethod createReaperMethodInstance(String methodName) {
         def rmc = findReaperMethodClass(methodName)
-        //log.debug "Reaper rmc: $rmc"
         if (!rmc) return null
         createReaperMethodInstance(rmc)
     }

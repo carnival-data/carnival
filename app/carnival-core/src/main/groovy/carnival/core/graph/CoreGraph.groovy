@@ -329,7 +329,7 @@ abstract class CoreGraph {
 	        		rm = rmc.newInstance()
 	        		log.trace "rm: $rm"
 	    		} catch (Throwable t) {
-	    			log.info "rmc:${rmc.simpleName} t:${t.message}"
+	    			log.trace "rmc:${rmc.simpleName} t:${t.message}"
 	    		}
 	    		if (!rm) return
 
@@ -340,7 +340,7 @@ abstract class CoreGraph {
 	        		tpcd = rm.getTrackedProcessClassDef()
 	        		tpd = rm.getTrackedProcessDef()
 	    		} catch (Throwable t) {
-	    			log.info "rmc:${rmc.simpleName} t:${t.message}"
+	    			log.trace "rmc:${rmc.simpleName} t:${t.message}"
 	    		}
 
 	    		// they both need to be defined or none of them

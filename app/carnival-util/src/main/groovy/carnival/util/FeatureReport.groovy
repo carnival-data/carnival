@@ -748,8 +748,7 @@ class FeatureReport extends MappedDataTable {
      * @param data Collection<Map> matrix of data
      * @param subjectIdKey String data key for subjectId
      * @param featureName String name of feature
-     * @param featureIdKey String data key for field that identifies the linked entity
-     * @param featureValueKey String data key for the feature value pertaining to the linked entity
+     * @param featureValueKeys String data keys for the feature values pertaining to the linked entity
      *
      * Data example:
      *   EMPI   STAGE   DATE

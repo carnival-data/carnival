@@ -1057,8 +1057,8 @@ abstract class DataTable {
      * returned from groovy.Sql.rows().
      *
      */
-    public void dataAddAllGroovyRowResults(Collection<GroovyRowResult> rows) {
-        assert rows
+    public void dataAddAllGroovyRowResults(Collection<GroovyRowResult> rows, Boolean emptyOk = false) {
+        if (!emptyOk) assert rows
         rows.each { dataAdd(it) }
     }    
 

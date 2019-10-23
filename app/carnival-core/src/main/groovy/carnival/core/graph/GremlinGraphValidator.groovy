@@ -251,7 +251,10 @@ public class GremlinGraphValidator implements GraphValidator {
 			def ns = e.property(Base.PX.NAME_SPACE.label).orElse(GLOBAL_NAME_SPACE)
 			dbElementDefs << new DefaultElementDef(label:lbl, nameSpace:ns)
 		}
-		log.trace "dbElementDefs: $dbElementDefs"
+
+		//Set<DefaultElementDef> dbElementDefs = new HashSet<DefaultElementDef>()
+		//dbElementDefs.addAll(dbElementDefMap.values())
+		log.trace "dbElementDefs: ${dbElementDefs?.size()} ${dbElementDefs?.take(100)}"
 
 		Set<String> unmodeledElements = new HashSet<String>()
 		dbElementDefs.each { dbr ->

@@ -84,7 +84,10 @@ trait EdgeDefTrait {
     /** */
     public void assertDomain(VertexDefTrait fromDef) {
         if (this.domain.size() > 0) {
-            if (!this.domain.contains(fromDef)) throw new RuntimeException("The 'in' vertex is not found in the domain of this relation -- relation:${this} relationDomain:${this.domain} inVertexDef:${fromDef}")
+            if (this.domain.contains(fromDef)) return
+            if (fromDef.isGlobal() && this.domain.find({ it.label == fromDef.label })) return
+            if (this.domain.find({ it.label == fromDef.label && it.isGlobal() })) return
+            throw new RuntimeException("The 'from' vertex is not found in the domain of this relation -- relation:${this} relationDomain:${this.domain} fromVertexDef:${fromDef}")
         }
     }
 
@@ -99,7 +102,10 @@ trait EdgeDefTrait {
     /** */
     public void assertRange(VertexDefTrait toDef) {
         if (this.range.size() > 0) {
-            if (!this.range.contains(toDef)) throw new RuntimeException("The 'out' vertex is not found in the range of this relation -- relation:${this} relationDomain:${this.range} outVertexDef:${toDef}")
+            if (this.range.contains(toDef)) return
+            if (toDef.isGlobal() && this.range.find({ it.label == toDef.label })) return
+            if (this.range.find({ it.label == toDef.label && it.isGlobal() })) return
+            throw new RuntimeException("The 'to' vertex is not found in the range of this relation -- relation:${this} relationDomain:${this.range} toVertexDef:${toDef}")
         }
     }
 

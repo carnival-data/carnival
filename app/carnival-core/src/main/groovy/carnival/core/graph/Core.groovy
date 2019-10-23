@@ -131,7 +131,8 @@ class Core {
         VERSION,
         HAS_SCOPE,
         HAS_CREATION_FACILITY,
-        SUCCESS
+        SUCCESS,
+        MESSAGE
     }
 
 }

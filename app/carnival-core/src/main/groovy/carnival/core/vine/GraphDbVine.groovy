@@ -4,14 +4,15 @@ package carnival.core.vine
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import java.util.concurrent.atomic.AtomicInteger
-import org.ho.yaml.Yaml
-
-import org.eclipse.rdf4j.*
-import org.eclipse.rdf4j.repository.*
-import org.eclipse.rdf4j.repository.manager.*
-import org.eclipse.rdf4j.model.*
-import org.eclipse.rdf4j.model.impl.*
+import org.eclipse.rdf4j.model.IRI
+import org.eclipse.rdf4j.model.impl.SimpleIRI
+import org.eclipse.rdf4j.model.impl.SimpleLiteral
+import org.eclipse.rdf4j.model.Model
+import org.eclipse.rdf4j.model.Resource
+import org.eclipse.rdf4j.model.Value
+import org.eclipse.rdf4j.repository.Repository
+import org.eclipse.rdf4j.repository.RepositoryConnection
+import org.eclipse.rdf4j.repository.manager.RepositoryManager
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory
 
 import carnival.core.config.RdfConfig

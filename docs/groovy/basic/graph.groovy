@@ -12,6 +12,7 @@ import carnival.graph.PropertyDefTrait
 
 
 
+/** vertex definitions */
 enum VX implements VertexDefTrait {
     THING_1,
 
@@ -32,6 +33,7 @@ enum VX implements VertexDefTrait {
 }
 
 
+/** property definitions */
 enum PX implements PropertyDefTrait {
     PROP_A,
     PROP_B,
@@ -41,6 +43,7 @@ enum PX implements PropertyDefTrait {
 }
 
 
+/** helper method to debug print a vertex to standard out */
 def printVert = { vertex ->
 	def str = "$vertex ${vertex.label} "
 	vertex.keys().each { propKey ->
@@ -52,32 +55,43 @@ def printVert = { vertex ->
 }
 
 
-
+// open an in-memory graph and graph traversal
 def graph = TinkerGraph.open()
 def g = graph.traversal()
 
+// graph is empty to start
 assert g.V().count().next() == 0
-
 
 def v
 
+// create a THING_1 with no properties
 v = VX.THING_1.instance().createVertex(graph, g)
 assert g.V().count().next() == 1
 printVert(v)
 
-v = VX.THING_2.instance().withProperty(PX.PROP_A, 'a').createVertex(graph, g)
+// create a THING_2 with no properties
+v = VX.THING_2.instance().createVertex(graph, g)
 assert g.V().count().next() == 2
 printVert(v)
 
+// create a THING_2 with a single optional property
+v = VX.THING_2.instance().withProperty(PX.PROP_A, 'a').createVertex(graph, g)
+assert g.V().count().next() == 3
+printVert(v)
+
+// try to create a THING_3 with no properties
+// it will fail, because THING_3 has a required property
 try {
     v = VX.THING_3.instance().createVertex(graph, g)
-    fail 'we will not get here'
+    fail 'an exception will be thrown before we reach this line of code'
 } catch (Exception e) {
     println e.message
 }
-assert g.V().count().next() == 2
+
+// no new vertices were created
+assert g.V().count().next() == 3
 
 
-
+// close the graph resources
 g.close()
 graph.close()

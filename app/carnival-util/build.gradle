@@ -131,13 +131,13 @@ configurations {
 dependencies {
 
     // Groovy
-    //compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.5.7', ext: 'pom'
-    compile group: 'org.codehaus.groovy', name: 'groovy', version: '2.5.7'
-    compile group: 'org.codehaus.groovy', name: 'groovy-ant', version: '2.5.7'
-    compile group: 'org.codehaus.groovy', name: 'groovy-sql', version: '2.5.7'
-    compile group: 'org.codehaus.groovy', name: 'groovy-dateutil', version: '2.5.7'
-    compile group: 'org.codehaus.groovy', name: 'groovy-json', version: '2.5.7'
-    compile group: 'org.codehaus.groovy', name: 'groovy-templates', version: '2.5.7'
+    //compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.5.8', ext: 'pom'
+    compile group: 'org.codehaus.groovy', name: 'groovy', version: '2.5.8'
+    compile group: 'org.codehaus.groovy', name: 'groovy-ant', version: '2.5.8'
+    compile group: 'org.codehaus.groovy', name: 'groovy-sql', version: '2.5.8'
+    compile group: 'org.codehaus.groovy', name: 'groovy-dateutil', version: '2.5.8'
+    compile group: 'org.codehaus.groovy', name: 'groovy-json', version: '2.5.8'
+    compile group: 'org.codehaus.groovy', name: 'groovy-templates', version: '2.5.8'
 
     //compile group: 'net.sf.opencsvopencsv', name: 'opencsv', version: '2.3'
     compile 'com.xlson.groovycsv:groovycsv:1.3'

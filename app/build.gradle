@@ -116,3 +116,44 @@ task publishAll {
     dependsOn 'carnival-clinical:publishToMavenLocal'
 }
 
+task deleteLocalRepos {
+    doLast {
+        [
+            "${System.getProperty('user.home')}/.m2/repository/edu/upenn/pmbb/", 
+            "${System.getProperty('user.home')}/.groovy/grapes/edu.upenn.pmbb/"
+        ].each { bd ->
+            ant.echo(bd)
+            def path = ant.path {
+                dirset(dir:bd, includes:'carnival-*')
+            }
+            path.list().each {
+                println it
+                ant.delete(includeEmptyDirs:true, verbose:true, dir:it)
+            }        
+            //ant.delete(includeEmptyDirs:true, verbose:true) {
+            //    dirset(dir:bd, includes:'carnival-*')
+            //}
+        }
+    }
+}
+
+task cleanBuild {
+    subprojects.each { dependsOn("${it.name}:clean") } 
+    subprojects.each { finalizedBy("${it.name}:compileGroovy") } 
+    doLast {println 'cleanBuild'} 
+}
+
+task localRebuildAndPublish { 
+    dependsOn cleanBuild
+    dependsOn deleteLocalRepos
+    finalizedBy publishAll
+    doLast {println 'localRebuildAndPublish'} 
+}
+
+task localBuildAndPublish { 
+    subprojects.each { dependsOn("${it.name}:compileGroovy") } 
+    dependsOn deleteLocalRepos
+    finalizedBy publishAll
+    doLast {println 'localBuildAndPublish'} 
+}
+

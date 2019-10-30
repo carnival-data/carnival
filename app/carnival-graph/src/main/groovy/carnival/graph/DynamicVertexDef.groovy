@@ -67,9 +67,9 @@ class DynamicVertexDef implements VertexDefTrait {
     public String getNameSpace() {
         if (this.nameSpaceOverride != null) return this.nameSpaceOverride
 
-        log.debug "${this.metaClass}"
-        log.debug "${this.metaClass.theClass}"
-        log.debug "${this.metaClass.theClass.name}"
+        //log.debug "${this.metaClass}"
+        //log.debug "${this.metaClass.theClass}"
+        //log.debug "${this.metaClass.theClass.name}"
 
         assert this.metaClass.theClass.name != null
 

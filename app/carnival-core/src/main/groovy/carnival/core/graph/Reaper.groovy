@@ -38,6 +38,32 @@ public @interface ReaperMethodResource {
 
 
 /** */
+public class DefaultReaper extends Reaper {
+
+    //@ReaperMethodResource
+    //Graph graph
+
+    @ReaperMethodResource
+    CoreGraph coreGraph
+
+    public DefaultReaper(CoreGraph coreGraph) {
+        assert coreGraph
+        assert coreGraph.graph
+        this.coreGraph = coreGraph
+        //this.graph = coreGraph.graph
+    }
+
+    protected Graph getGraph() { this.coreGraph.graph }
+
+    protected GraphTraversalSource traversal() {
+        this.coreGraph.graph.traversal()
+    }
+
+}
+
+
+
+/** */
 abstract class Reaper {
 	
 	///////////////////////////////////////////////////////////////////////////
@@ -150,6 +176,7 @@ abstract class Reaper {
     public Reaper(Map args = [:]) {
 		// configuration
 		if (args.forcedCacheMode) this.forcedCacheMode = args.forcedCacheMode
+        //args.each { k,v -> this."$k" = v }
 	}
 
 

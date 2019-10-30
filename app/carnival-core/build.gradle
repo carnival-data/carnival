@@ -240,8 +240,8 @@ dependencies {
     compile(group: 'org.eclipse.rdf4j', name: 'rdf4j-repository-manager', version: '2.5.5')
     
     // not sure why/if these are needed...
-    compile group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1'
-    compile group: 'commons-codec', name: 'commons-codec', version: '1.10'
+    //compile group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1'
+    //compile group: 'commons-codec', name: 'commons-codec', version: '1.10'
 
     // Spock testing
     compile('cglib:cglib-nodep:3.2.12') 

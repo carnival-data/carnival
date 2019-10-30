@@ -23,6 +23,7 @@ import org.apache.tinkerpop.gremlin.structure.Transaction
 import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.structure.Edge
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
+import org.apache.tinkerpop.gremlin.structure.Graph.Features.GraphFeatures
 
 import carnival.util.Defaults
 import carnival.graph.EdgeDefTrait
@@ -55,10 +56,16 @@ abstract class CoreGraph {
 	///////////////////////////////////////////////////////////////////////////
 
 	/** */
-	static public void withTransaction(Graph graph, Closure cl) {
-		def tx = graph.tx()
-		if (tx.isOpen()) tx.close()
-		tx.open()
+	static public void withTransactionIfSupported(Graph graph, Closure cl) {
+		def transactionsAreSupported = graph.features().graph().supportsTransactions()
+		log.debug "transactionsAreSupported:${transactionsAreSupported}"
+
+		def tx
+		if (transactionsAreSupported) {
+			tx = graph.tx()
+			if (tx.isOpen()) tx.close()
+			tx.open()
+		}
 
         def maxClosureParams = cl.getMaximumNumberOfParameters()
 
@@ -67,11 +74,14 @@ abstract class CoreGraph {
 			if (maxClosureParams == 0) {
 				cl()
 			} else if (maxClosureParams == 1) {
-				cl(tx)
+				if (transactionsAreSupported) cl(tx)
+				else cl()
 			}
 		} finally {
-			tx.commit()
-			tx.close()
+			if (transactionsAreSupported) {
+				tx.commit()
+				tx.close()
+			}
 		}
 	}
 
@@ -154,7 +164,7 @@ abstract class CoreGraph {
 
 		List<VertexLabelDefinition> newDefinitions = findNewVertexLabelDefinitions(graph, g, packageName)
 
-		withTransaction(graph) {
+		withTransactionIfSupported(graph) {
 	        newDefinitions.each { vld ->
 	        	log.trace "initializeDefinedVertices vld: $vld"
 
@@ -249,7 +259,7 @@ abstract class CoreGraph {
 		List<RelationshipDefinition> existingDefinitions = graphSchema.getRelationshipDefinitions()
 		log.trace "existing relationship definitions: $existingDefinitions"
 
-		withTransaction(graph) {
+		withTransactionIfSupported(graph) {
 	        edgeDefClasses.each { edc ->
 	        	log.trace "initializeDefinedEdges edc: $edc"
 
@@ -320,7 +330,7 @@ abstract class CoreGraph {
     	List<VertexLabelDefinition> labelDefs = new ArrayList<VertexLabelDefinition>()
     	def existingDefinitions = graphSchema.labelDefinitions
 
-    	withTransaction(graph) {
+    	withTransactionIfSupported(graph) {
 			rmcs.each { rmc ->
 
 	        	// try to create a reaper method instance
@@ -410,7 +420,7 @@ abstract class CoreGraph {
 
 		def verts = []
 		
-		withTransaction(graph) {
+		withTransactionIfSupported(graph) {
 			graphSchema.controlledInstances.each { ci ->
 				log.trace "creating controlled instance $ci"
 				if (ci instanceof ControlledInstance) verts << ci.vertex(graph, g)

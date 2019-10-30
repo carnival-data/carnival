@@ -125,7 +125,7 @@ abstract class ReaperMethod implements ReaperMethodInterface, TrackedProcessTrai
         Reaper.VX.REAPER_PROCESS_CLASS.setSubclassOf(g, Core.VX.DATA_TRANSFORMATION_PROCESS_CLASS)
 
         def procClassDef = getTrackedProcessClassDef()
-        log.debug "procClassDef: $procClassDef"
+        log.trace "procClassDef: $procClassDef"
         
         procClassDef.setSubclassOf(g, Reaper.VX.REAPER_PROCESS_CLASS)
 

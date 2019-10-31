@@ -60,24 +60,28 @@ println "allRecs: $allRecs"
 allRecs.dataIterator().each { println "$it" }
 
 
+
+// model
+enum VX implements VertexDefTrait {
+    PERSON (vertexProperties:[Core.PX.NAME]), 
+    HAIR (vertexProperties:[PX.COLOR]), 
+    EYE (vertexProperties:[PX.COLOR])
+
+    private VX() {}
+    private VX(Map m) {m.each { k,v -> this."$k" = v }}
+}
+
+enum PX implements PropertyDefTrait {
+    COLOR
+}
+
+
+
 // example reaper
 class ExampleReaper extends DefaultReaper {
 
     @ReaperMethodResource
     CsvFileVine cohortVine
-
-    static enum VX implements VertexDefTrait {
-    	PERSON (vertexProperties:[Core.PX.NAME]), 
-    	HAIR (vertexProperties:[PX.COLOR]), 
-    	EYE (vertexProperties:[PX.COLOR])
-
-	    private VX() {}
-	    private VX(Map m) {m.each { k,v -> this."$k" = v }}
-    }
-
-    static enum PX implements PropertyDefTrait {
-    	COLOR
-    }
 
     public ExampleReaper(CoreGraph coreGraph, CsvFileVine cohortVine) {
     	super(coreGraph)

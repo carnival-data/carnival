@@ -318,12 +318,12 @@ abstract class Reaper {
             }
         }
 
-        // process is a success
-        procV.property(Core.PX.SUCCESS.label, true)
-
         // compute success
         res.success = !(res.checkPreConditions || res.checkPostConditions)
         if (res.reap.success != null && !res.reap.success) res.success = false
+
+        // process is a success
+        procV.property(Core.PX.SUCCESS.label, res.success)
 
         // return the result
         return res

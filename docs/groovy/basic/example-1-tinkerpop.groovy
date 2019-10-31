@@ -82,4 +82,4 @@ printGraph()
 
 
 // close the graph
-coreGraph.graph.close()
+graph.close()

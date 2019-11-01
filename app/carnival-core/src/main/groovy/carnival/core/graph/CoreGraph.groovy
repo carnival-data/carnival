@@ -55,6 +55,29 @@ abstract class CoreGraph {
 	// UTILITY
 	///////////////////////////////////////////////////////////////////////////
 
+
+	/** */
+	static public void withTransaction(Graph graph, Closure cl) {
+		def tx = graph.tx()
+		if (tx.isOpen()) tx.close()
+		tx.open()
+
+        def maxClosureParams = cl.getMaximumNumberOfParameters()
+
+        def g
+		try {
+			if (maxClosureParams == 0) {
+				cl()
+			} else if (maxClosureParams == 1) {
+				cl(tx)
+			}
+		} finally {
+			tx.commit()
+			tx.close()
+		}
+	}
+
+
 	/** */
 	static public void withTransactionIfSupported(Graph graph, Closure cl) {
 		def transactionsAreSupported = graph.features().graph().supportsTransactions()

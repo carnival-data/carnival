@@ -26,6 +26,7 @@ import carnival.core.*
 import carnival.core.config.RedcapConfig
 import carnival.core.vine.RedcapVine
 import carnival.core.vine.CachingVine
+import carnival.core.vine.CachingVine.CacheMode
 import carnival.core.vine.FileVine
 import carnival.core.vine.VineMethod
 import carnival.core.vine.GenericDataTableVineMethod
@@ -112,6 +113,22 @@ abstract class H2FileVine extends FileVine implements RelationalVine {
         } finally {
             sql.close()
         }
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // CONSTRUCTOR
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** 
+     * Default construct defaults to cache mode of optional, not ignore, which
+     * is the default of file vines.  The default cache mode for all fines is
+     * optional, so this brings H2 vines back to where they were previously to
+     * the change in default in file vines.
+     *
+     */
+    public H2FileVine() {
+        this.cacheMode = CacheMode.OPTIONAL
     }
 
 
@@ -260,7 +277,9 @@ abstract class H2FileVine extends FileVine implements RelationalVine {
         try {
             closure(sql)
         } finally {
+            log.trace "H2FileVine.withSql(closure) sql:$sql closing sql connection..."
             sql.close()
+            log.trace "H2FileVine.withSql(closure) sql:$sql done."
         }
     }
 

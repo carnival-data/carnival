@@ -13,6 +13,7 @@ import org.eclipse.rdf4j.model.Value
 import org.eclipse.rdf4j.repository.Repository
 import org.eclipse.rdf4j.repository.RepositoryConnection
 import org.eclipse.rdf4j.repository.manager.RepositoryManager
+import org.eclipse.rdf4j.repository.manager.RemoteRepositoryManager
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory
 
 import carnival.core.config.RdfConfig

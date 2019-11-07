@@ -218,6 +218,7 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
             //log.trace "hasNext: ${dataIterator.hasNext()} "
             if (!dataIterator.hasNext()) log.warn "createFromFiles for file $dataFile: no data found."
             mdt.dataAddAll(dataIterator)
+            mdt.readFrom = dataFile
         }
     }
 

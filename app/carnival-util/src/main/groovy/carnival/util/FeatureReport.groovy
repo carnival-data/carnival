@@ -691,6 +691,40 @@ class FeatureReport extends MappedDataTable {
 
 
     ///////////////////////////////////////////////////////////////////////////
+    // FEATURE REPORT COMBINATION
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    @WithWriteLock
+    public void addFeatureSets(FeatureReport source, Closure featureNamesToAdd) {
+        assert this.idFieldName == source.idFieldName
+        assert this.idKeyType == source.idKeyType
+
+        source.dataIterator().each { rec ->
+            def subjectId = rec.get(this.idFieldName)
+            //log.trace "subjectId: $subjectId"
+
+            source.keySet.each { k ->
+                this.keySet.add(k)
+                def v = rec.get(k)
+                if (v == null) return
+                if (featureNamesToAdd(k, v)) {
+                    //log.trace "adding $subjectId $k $v"
+                    this.addFeature(subjectId, k, v)
+                }
+            }
+
+            /*rec.each { k, v ->
+                if (featureNamesToAdd(k, v)) {
+                    log.trace "adding $subjectId $k $v"
+                    this.addFeature(subjectId, k, v)
+                }
+            }*/
+        }
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////
     // FEATURE EXTRACTION
     ///////////////////////////////////////////////////////////////////////////
 

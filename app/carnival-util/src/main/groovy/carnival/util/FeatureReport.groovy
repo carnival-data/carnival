@@ -717,15 +717,6 @@ class FeatureReport extends MappedDataTable {
                 if (v == null) return
                 this.addFeature(subjectId, k, v)
             }
-
-            /*source.keySet.each { fieldName ->
-                if (!shouldIncludeField(fieldName)) return
-
-                def v = rec.get(fieldName)
-                if (v == null) return
-
-                this.addFeature(subjectId, fieldName, v)
-            }*/
         }
     }
 

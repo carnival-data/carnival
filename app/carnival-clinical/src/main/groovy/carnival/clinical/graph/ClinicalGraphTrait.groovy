@@ -73,8 +73,8 @@ trait ClinicalGraphTrait {
 			assert m
 			assert m.p
 			assert m.enc
-			log.debug "m.p: ${m.p} ${m.p.label()}"
-			log.debug "m.enc: ${m.enc} ${m.enc.label()}"
+			//log.debug "m.p: ${m.p} ${m.p.label()}"
+			//log.debug "m.enc: ${m.enc} ${m.enc.label()}"
 			g.V(m.p)
 				.out(Clinical.EX.PARTICIPATED_IN_ENCOUNTER.label).as('r')
 				.is(m.enc)

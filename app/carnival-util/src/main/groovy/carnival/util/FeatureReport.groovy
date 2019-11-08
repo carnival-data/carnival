@@ -696,29 +696,35 @@ class FeatureReport extends MappedDataTable {
 
     /** */
     @WithWriteLock
-    public void addFeatureSets(FeatureReport source, Closure featureNamesToAdd) {
+    public void addFeatureSets(FeatureReport source, Closure shouldIncludeField) {
         assert this.idFieldName == source.idFieldName
         assert this.idKeyType == source.idKeyType
+
+        //log.debug "source.keySet: ${source.keySet}"
+        source.keySet.each { fieldName ->
+            if (shouldIncludeField(fieldName)) {
+                //log.debug "${this.keySet} << ${fieldName}"
+                this.keySet.add(fieldName)
+            }
+        }
 
         source.dataIterator().each { rec ->
             def subjectId = rec.get(this.idFieldName)
             //log.trace "subjectId: $subjectId"
 
-            source.keySet.each { k ->
-                this.keySet.add(k)
-                def v = rec.get(k)
+            rec.each { k, v ->
+                if (!shouldIncludeField(k)) return
                 if (v == null) return
-                if (featureNamesToAdd(k, v)) {
-                    //log.trace "adding $subjectId $k $v"
-                    this.addFeature(subjectId, k, v)
-                }
+                this.addFeature(subjectId, k, v)
             }
 
-            /*rec.each { k, v ->
-                if (featureNamesToAdd(k, v)) {
-                    log.trace "adding $subjectId $k $v"
-                    this.addFeature(subjectId, k, v)
-                }
+            /*source.keySet.each { fieldName ->
+                if (!shouldIncludeField(fieldName)) return
+
+                def v = rec.get(fieldName)
+                if (v == null) return
+
+                this.addFeature(subjectId, fieldName, v)
             }*/
         }
     }

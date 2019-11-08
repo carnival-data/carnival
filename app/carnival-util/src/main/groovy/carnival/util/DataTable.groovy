@@ -945,7 +945,12 @@ abstract class DataTable {
 
             // headers
             List keys = this.keySet.toList()
-            if (args.keys) keys.retainAll(args.keys)
+            if (args.keys) {
+                List filteredKeys = []
+                keys.each { k -> if (args.keys.contains(k)) filteredKeys.add(k)}
+                //keys.retainAll(args.keys)
+                keys = filteredKeys
+            }
             line = keys.toArray()
             writer.writeNext(line)
 

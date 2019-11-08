@@ -1048,8 +1048,13 @@ abstract class DataTable {
      *
      */
     public void dataAddAll(CsvIterator csvIterator) {
+        def firstRec = true
         csvIterator.each { rec ->
-            //log.debug "dataAddAll(CsvIterator): ${rec.columns}"
+            if (firstRec) {
+                //log.debug "dataAddAll(CsvIterator): ${rec.columns}"
+                rec.columns.each { colName, colIndex -> this.keySet.add(colName) }
+                firstRec = false
+            }
             dataAdd(rec) 
         }
     }

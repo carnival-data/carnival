@@ -703,7 +703,7 @@ class FeatureReport extends MappedDataTable {
         //log.debug "source.keySet: ${source.keySet}"
         source.keySet.each { fieldName ->
             if (shouldIncludeField(fieldName)) {
-                //log.debug "${this.keySet} << ${fieldName}"
+                //log.debug "adding ${fieldName}"
                 this.keySet.add(fieldName)
             }
         }

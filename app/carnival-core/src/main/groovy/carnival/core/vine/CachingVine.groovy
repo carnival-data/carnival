@@ -321,7 +321,7 @@ trait CachingVine {
 
         methodArgs.each { k, v ->
 
-            log.trace "checkCacheValidity $k $v"
+            log.trace "checkCacheValidity $k $v".take(500)
 
             // TODO: hack - pmbbPds.pheCodeAssignments(vmargs) takes an argument 'logPrefix' which is only used to 
             // modify log output.  Ignore this argument for now.  In the future, either remove this argument

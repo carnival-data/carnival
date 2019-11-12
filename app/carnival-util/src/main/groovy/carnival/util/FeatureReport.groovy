@@ -196,6 +196,7 @@ class FeatureReport extends MappedDataTable {
     }
 
 
+
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
@@ -208,6 +209,7 @@ class FeatureReport extends MappedDataTable {
 
     /** map of field name to feature descriptor */
     Map<String,FeatureSetDescriptor> featureDescriptors = new HashMap<String,FeatureSetDescriptor>()
+
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -245,6 +247,32 @@ class FeatureReport extends MappedDataTable {
         if (args.containsKey('reportDescriptor')) this.reportDescriptor = args.reportDescriptor
     }
 
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // KEY SET
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    public void moveKeyBefore(String keyToMove, String objectKey) {
+        assert keyToMove != null
+        assert objectKey != null
+
+        keyToMove = toFieldName(keyToMove)
+        objectKey = toFieldName(objectKey)
+        assert keySet.contains(keyToMove)
+        assert keySet.contains(objectKey)
+
+        LinkedHashSet<String> curKeys = new LinkedHashSet<String>()
+        keySet.each { key ->
+            if (key.equals(keyToMove)) return
+            if (key.equals(objectKey)) {
+                curKeys.add(keyToMove)
+            } 
+            curKeys.add(key) 
+        }
+        keySet = curKeys
+    }
 
 
 
@@ -313,6 +341,7 @@ class FeatureReport extends MappedDataTable {
             cl.delegate = curDelegate
         }
     }
+
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -432,7 +461,6 @@ class FeatureReport extends MappedDataTable {
     // FEATURE SET RECIPE
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -462,6 +490,7 @@ class FeatureReport extends MappedDataTable {
         keySet.clear()
         keySet.addAll(orderedKeys)
     }
+
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -690,6 +719,7 @@ class FeatureReport extends MappedDataTable {
     }
 
 
+
     ///////////////////////////////////////////////////////////////////////////
     // FEATURE REPORT COMBINATION
     ///////////////////////////////////////////////////////////////////////////
@@ -719,6 +749,7 @@ class FeatureReport extends MappedDataTable {
             }
         }
     }
+
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -1050,6 +1081,7 @@ class FeatureReport extends MappedDataTable {
         (1..featureValues.size()).each { out << multiFeatureName(featureName, it) }
         return out
     }
+
 
 
     ///////////////////////////////////////////////////////////////////////////

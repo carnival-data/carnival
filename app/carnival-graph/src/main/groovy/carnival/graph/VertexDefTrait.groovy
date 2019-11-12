@@ -274,7 +274,7 @@ trait VertexDefTrait {
      *
      */
     public void setRelationship(GraphTraversalSource g, EdgeDefTrait rel, VertexDefTrait targetClassDef) {
-        log.debug "setRelationship rel:$rel"
+        //log.debug "setRelationship rel:$rel"
         g.V(vertex)
             .outE(rel.label).as('r')
             .inV()

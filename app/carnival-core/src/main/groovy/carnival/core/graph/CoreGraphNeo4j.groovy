@@ -126,7 +126,9 @@ class CoreGraphNeo4j extends CoreGraph {
    		if (args.graphDirectory) config.setProperty('gremlin.neo4j.directory', args.graphDirectory)
 
 		// create gremlin Neo4jGraph
+		log.trace "opening Neo4j graph config:${config} ..."
 		Graph graph = Neo4jGraph.open(config)
+		log.trace "done."
 		assert graph
 
 		return graph

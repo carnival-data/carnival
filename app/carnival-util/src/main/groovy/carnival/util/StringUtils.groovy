@@ -5,12 +5,20 @@ package carnival.util
 /** */
 class StringUtils {
 
-    /** */
+    /** 
+     * strings_like_this to StringsLikeThis
+     * STRINGS_LIKE_THIS to StringsLikeThis
+     *
+     */
     static public String toCapitalCase(String text) {
         toCamelCase(text, true)
     }
 
-    /** */
+    /** 
+     * strings_like_this to stringsLikeThis
+     * STRINGS_LIKE_THIS to stringsLikeThis
+     *
+     */
     static public String toCamelCase(String text, boolean capitalized = false) {
         text = text.replaceAll( "(_)([A-Za-z0-9])", { Object[] it -> it[2].toUpperCase() } )
         return capitalized ? capitalize(text) : text

@@ -1430,6 +1430,43 @@ class MappedDataTableSpec extends Specification {
     }
 
 
+    def "writeDataToCsvFile file data date format"() {
+        given:
+        def mdt
+        def data
+        def file
+        Throwable e
+        final SimpleDateFormat SQL_DEVELOPER_IMPORT_DATE_FORMAT = new SimpleDateFormat("dd-M-yyyy")
+        def d1 = SQL_DEVELOPER_IMPORT_DATE_FORMAT.parse('31-12-1999')
+        def d2 = SQL_DEVELOPER_IMPORT_DATE_FORMAT.parse('15-05-2020')
+
+        when:
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt.dataAddAllListList([
+            ['id', 'v1']
+            , ['id1', 'v11']
+            , ['id2', 'v12']
+        ])
+        file = mdt.writeDataToCsvFile(new File('build/mdt-test.csv'))
+
+        then:
+        file.exists()
+
+        when:
+        def fdata = DataTable.readDataFromCsvFile(file)
+        def rec = fdata[idx]
+        println "rec: $rec"
+
+        then:
+        rec['ID'] == id
+        rec['V1'] == v1
+
+        where:
+        idx << [0, 1]
+        id << ['id1', 'id2']
+        v1 << ['v11', 'v12']
+    }
+
 
     ///////////////////////////////////////////////////////////////////////////
     // dataAddAll

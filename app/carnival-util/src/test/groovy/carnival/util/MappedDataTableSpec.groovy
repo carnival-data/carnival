@@ -1,6 +1,8 @@
 package carnival.util
 
 
+import java.text.SimpleDateFormat
+
 import groovy.mock.interceptor.StubFor
 import groovy.sql.*
 import groovy.transform.InheritConstructors
@@ -1435,36 +1437,46 @@ class MappedDataTableSpec extends Specification {
         def mdt
         def data
         def file
+        def fdata
         Throwable e
         final SimpleDateFormat SQL_DEVELOPER_IMPORT_DATE_FORMAT = new SimpleDateFormat("dd-M-yyyy")
         def d1 = SQL_DEVELOPER_IMPORT_DATE_FORMAT.parse('31-12-1999')
         def d2 = SQL_DEVELOPER_IMPORT_DATE_FORMAT.parse('15-05-2020')
+        def outFile = new File('build/mdt-test.csv')
 
         when:
         mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
-        mdt.dataAddAllListList([
-            ['id', 'v1']
-            , ['id1', 'v11']
-            , ['id2', 'v12']
-        ])
-        file = mdt.writeDataToCsvFile(new File('build/mdt-test.csv'))
+        mdt.dataAdd(id:'id1', v1:d1)
+        mdt.dataAdd(id:'id2', v1:d2)
+        file = mdt.writeDataToCsvFile(outFile)
 
         then:
         file.exists()
 
         when:
-        def fdata = DataTable.readDataFromCsvFile(file)
-        def rec = fdata[idx]
-        println "rec: $rec"
+        fdata = DataTable.readDataFromCsvFile(file)
 
         then:
-        rec['ID'] == id
-        rec['V1'] == v1
+        fdata.size() == 2
+        fdata[0]['ID'] == 'id1'
+        fdata[0]['V1'] == SqlUtils.DEFAULT_TIMESTAMP_FORMATER.format(d1)
+        fdata[1]['ID'] == 'id2'
+        fdata[1]['V1'] == SqlUtils.DEFAULT_TIMESTAMP_FORMATER.format(d2)
 
-        where:
-        idx << [0, 1]
-        id << ['id1', 'id2']
-        v1 << ['v11', 'v12']
+        when:
+        mdt.dateFormat = SQL_DEVELOPER_IMPORT_DATE_FORMAT
+        mdt.dataAdd(id:'id3', v1:d1)
+        mdt.dataAdd(id:'id4', v1:d2)
+        file = mdt.writeDataToCsvFile(outFile)
+        fdata = DataTable.readDataFromCsvFile(file)
+
+        then:
+        fdata.size() == 4
+        fdata[2]['ID'] == 'id3'
+        fdata[2]['V1'] == SQL_DEVELOPER_IMPORT_DATE_FORMAT.format(d1)
+        fdata[3]['ID'] == 'id4'
+        fdata[3]['V1'] == SQL_DEVELOPER_IMPORT_DATE_FORMAT.format(d2)
+
     }
 
 

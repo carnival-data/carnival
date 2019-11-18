@@ -1,6 +1,8 @@
 package carnival.util
 
 
+import java.text.DateFormat
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -144,6 +146,10 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
         public Map getVine() {
             return data.vine
         }
+
+        public Map getDateFormat() {
+            return data.dateFormat
+        }
     }
 
 
@@ -275,6 +281,9 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
     /** if a query, the date the dataSource was last updated.  Default is null as set in metadata.setMeta */
     Date dataSourceDateOfUpdate 
 
+    /** the formatter to use with date values */
+    DateFormat dateFormat = SqlUtils.DEFAULT_TIMESTAMP_FORMATER
+
 
     ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTOR
@@ -304,6 +313,7 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
 
         if (args.idKeyType) this.idKeyType = args.idKeyType
         if (args.secondaryIdFieldMap) this.secondaryIdFieldMap = args.secondaryIdFieldMap
+        if (args.dateFormat) this.dateFormat = args.dateFormat
         if (args.vine) this.vine = args.vine
     }
 
@@ -647,7 +657,8 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
 
             // special cased types
             else if (v instanceof Date) {
-                cv = SqlUtils.timestampAsString(v) 
+                //cv = SqlUtils.timestampAsString(v) 
+                cv = dateFormat.format(v)
             }
 
             // handle as string

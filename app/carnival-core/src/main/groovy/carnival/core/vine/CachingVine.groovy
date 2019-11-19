@@ -442,12 +442,14 @@ trait CachingVine {
 
         // write files
         def files = dataTable.writeFiles(cacheDirectory)
-        files.each { file ->
-            ant.copy( 
-                file:file, 
-                todir:targetDirectory
-            )        
-        }
+        
+        // see https://github.com/pmbb-ibi/carnival/issues/3
+        //files.each { file ->
+        //    ant.copy( 
+        //        file:file, 
+        //        todir:targetDirectory
+        //    )        
+        //}
         //dataTable.writeFiles(targetDirectory)
         
         // make sure vine data has been set

@@ -72,7 +72,8 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
                 idKeyType: mdt.idKeyType,
                 secondaryIdFieldMap: mdt.secondaryIdFieldMap,
                 vine:mdt.vine,
-                dateFormat:mdt.dateFormat
+                dateFormat:mdt.dateFormat,
+                dateFormatPattern:mdt.dateFormat.toPattern()
             )
         }
 
@@ -120,6 +121,11 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
             if (args.get('vine') != null) this.data.vine = args.vine
 
             if (args.get('dateFormat') != null) this.data.dateFormat = args.dateFormat
+
+            if (args.get('dateFormatPattern') != null) {
+                this.data.dateFormatPattern = args.dateFormatPattern
+                this.data.dateFormat = new SimpleDateFormat(args.dateFormatPattern)
+            }
         }
 
         public String getName() {
@@ -152,6 +158,10 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
 
         public SimpleDateFormat getDateFormat() {
             return data.dateFormat
+        }
+
+        public String getDateFormatPattern() {
+            return data.dateFormatPattern
         }
     }
 
@@ -195,10 +205,10 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
         assert meta.idFieldName
         assert meta.idKeyType
 
-        if (meta.secondaryIdFieldMap) assert meta.secondaryIdFieldMap instanceof Map : "Error in MappedDataTable.createFromFiles($dir, $name): could not parse secondaryIdFieldMap, expected to be of type 'Map', was of type ${meta.secondaryIdFieldMap.class}.  meta: $meta"
+        if (meta.secondaryIdFieldMap) assert meta.secondaryIdFieldMap instanceof Map : "Error in MappedDataTable.loadMetaDataFromFile($dir, $name): could not parse secondaryIdFieldMap, expected to be of type 'Map', was of type ${meta.secondaryIdFieldMap.class}.  meta: $meta"
         meta.secondaryIdFieldMap.each {k, v ->
-            assert k instanceof String : "Error in MappedDataTable.createFromFiles($dir, $name): could not parse secondaryIdFieldMap, keys expected to be of type 'String'.  meta: $meta"
-            assert v instanceof KeyType : "Error in MappedDataTable.createFromFiles($dir, $name): could not parse secondaryIdFieldMap, values expected to be of type 'KeyType'.  meta: $meta"
+            assert k instanceof String : "Error in MappedDataTable.loadMetaDataFromFile($dir, $name): could not parse secondaryIdFieldMap, keys expected to be of type 'String'.  meta: $meta"
+            assert v instanceof KeyType : "Error in MappedDataTable.loadMetaDataFromFile($dir, $name): could not parse secondaryIdFieldMap, values expected to be of type 'KeyType'.  meta: $meta"
         }
 
         return meta
@@ -225,7 +235,7 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
             CsvIterator dataIterator = parseCsv(dataFileText)
             // TODO fix: this doesn't seem to work; hasNext() is returning true for a bad test file
             //log.trace "hasNext: ${dataIterator.hasNext()} "
-            if (!dataIterator.hasNext()) log.warn "createFromFiles for file $dataFile: no data found."
+            if (!dataIterator.hasNext()) log.warn "loadDataFromFile for file $dataFile: no data found."
             mdt.dataAddAll(dataIterator)
             mdt.readFrom = dataFile
         }
@@ -317,7 +327,12 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
         if (args.idKeyType) this.idKeyType = args.idKeyType
         if (args.secondaryIdFieldMap) this.secondaryIdFieldMap = args.secondaryIdFieldMap
         if (args.vine) this.vine = args.vine
+
         if (args.dateFormat) this.dateFormat = args.dateFormat
+        
+        if (args.dateFormatPattern) {
+            this.dateFormat = new SimpleDateFormat(args.dateFormatPattern)
+        }
     }
 
 
@@ -797,7 +812,7 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
             secondaryIdFieldMap:secondaryIdFieldMap,
             vine:vine,
             dateFormatPattern:dateFormat.toPattern(),
-            dateFormat:dateFormat
+            //dateFormat:dateFormat
         ]
 
         try {

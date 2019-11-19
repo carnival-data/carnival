@@ -1479,7 +1479,34 @@ class MappedDataTableSpec extends Specification {
         fdata[2]['V1'] == SQL_DEVELOPER_IMPORT_DATE_FORMAT.format(d1)
         fdata[3]['ID'] == 'id4'
         fdata[3]['V1'] == SQL_DEVELOPER_IMPORT_DATE_FORMAT.format(d2)
+    }
 
+
+    def "writeFiles date format pattern"() {
+        given:
+        def mdt
+        def data
+        def files
+        Throwable e
+        final SimpleDateFormat SQL_DEVELOPER_IMPORT_DATE_FORMAT = new SimpleDateFormat("dd-M-yyyy")
+        final File buildDir = new File('build')
+        final String mdtName = 'wfdfp-test'
+
+        when:
+        mdt = new MappedDataTable(name:mdtName, idFieldName:'id', idKeyType:KeyType.EMPI)
+        files = mdt.writeFiles(buildDir)
+        mdt = MappedDataTable.createFromFiles(buildDir, mdtName)
+
+        then:
+        mdt.dateFormat.toPattern() == SqlUtils.DEFAULT_TIMESTAMP_FORMATER.toPattern()
+
+        when:
+        mdt.dateFormat = SQL_DEVELOPER_IMPORT_DATE_FORMAT
+        files = mdt.writeFiles(buildDir)
+        mdt = MappedDataTable.createFromFiles(buildDir, mdtName)
+
+        then:
+        mdt.dateFormat.toPattern() == SQL_DEVELOPER_IMPORT_DATE_FORMAT.toPattern()
     }
 
 

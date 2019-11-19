@@ -25,6 +25,10 @@ trait MappedDataTableVineMethod extends VineMethod {
 
     public MappedDataTable createEmptyDataTable(Map methodArgs = [:]) {
         def mdt = new MappedDataTable(meta(methodArgs))
+        if (methodArgs.containsKey('dateFormat')) {
+        	//println "\n\n\nMappedDataTableVineMethod.createEmptyDataTable() methodArgs:${methodArgs}\n\n\n"
+        	mdt.dateFormat = methodArgs.dateFormat
+        }
         def vineData = generateVineData(methodArgs)
         assert vineData
         mdt.vine = vineData

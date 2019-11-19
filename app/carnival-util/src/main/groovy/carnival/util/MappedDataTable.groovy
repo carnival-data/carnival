@@ -1,7 +1,7 @@
 package carnival.util
 
 
-import java.text.DateFormat
+import java.text.SimpleDateFormat
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -71,7 +71,8 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
                 idFieldName: mdt.idFieldName,
                 idKeyType: mdt.idKeyType,
                 secondaryIdFieldMap: mdt.secondaryIdFieldMap,
-                vine:mdt.vine
+                vine:mdt.vine,
+                dateFormat:mdt.dateFormat
             )
         }
 
@@ -117,6 +118,8 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
             this.data.dataSourceDateOfUpdate = computeDataSourceDate(args, 'dataSourceDateOfUpdate')
 
             if (args.get('vine') != null) this.data.vine = args.vine
+
+            if (args.get('dateFormat') != null) this.data.dateFormat = args.dateFormat
         }
 
         public String getName() {
@@ -147,7 +150,7 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
             return data.vine
         }
 
-        public Map getDateFormat() {
+        public SimpleDateFormat getDateFormat() {
             return data.dateFormat
         }
     }
@@ -282,7 +285,7 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
     Date dataSourceDateOfUpdate 
 
     /** the formatter to use with date values */
-    DateFormat dateFormat = SqlUtils.DEFAULT_TIMESTAMP_FORMATER
+    SimpleDateFormat dateFormat = SqlUtils.DEFAULT_TIMESTAMP_FORMATER
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -313,8 +316,8 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
 
         if (args.idKeyType) this.idKeyType = args.idKeyType
         if (args.secondaryIdFieldMap) this.secondaryIdFieldMap = args.secondaryIdFieldMap
-        if (args.dateFormat) this.dateFormat = args.dateFormat
         if (args.vine) this.vine = args.vine
+        if (args.dateFormat) this.dateFormat = args.dateFormat
     }
 
 
@@ -792,7 +795,9 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
             idFieldName:idFieldName,
             idKeyType:idKeyType,
             secondaryIdFieldMap:secondaryIdFieldMap,
-            vine:vine
+            vine:vine,
+            dateFormatPattern:dateFormat.toPattern(),
+            dateFormat:dateFormat
         ]
 
         try {

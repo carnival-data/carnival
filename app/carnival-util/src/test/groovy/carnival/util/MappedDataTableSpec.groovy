@@ -1442,13 +1442,15 @@ class MappedDataTableSpec extends Specification {
         final SimpleDateFormat SQL_DEVELOPER_IMPORT_DATE_FORMAT = new SimpleDateFormat("dd-M-yyyy")
         def d1 = SQL_DEVELOPER_IMPORT_DATE_FORMAT.parse('31-12-1999')
         def d2 = SQL_DEVELOPER_IMPORT_DATE_FORMAT.parse('15-05-2020')
-        def outFile = new File('build/mdt-test.csv')
+        def outDataFile = new File('build/mdt-test.csv')
+        //def outMetaFile = new File('build/mdt-test.yaml')
 
         when:
         mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt.writeMetaFile(new File('build'))
         mdt.dataAdd(id:'id1', v1:d1)
         mdt.dataAdd(id:'id2', v1:d2)
-        file = mdt.writeDataToCsvFile(outFile)
+        file = mdt.writeDataToCsvFile(outDataFile)
 
         then:
         file.exists()
@@ -1465,9 +1467,10 @@ class MappedDataTableSpec extends Specification {
 
         when:
         mdt.dateFormat = SQL_DEVELOPER_IMPORT_DATE_FORMAT
+        mdt.writeMetaFile(new File('build'))
         mdt.dataAdd(id:'id3', v1:d1)
         mdt.dataAdd(id:'id4', v1:d2)
-        file = mdt.writeDataToCsvFile(outFile)
+        file = mdt.writeDataToCsvFile(outDataFile)
         fdata = DataTable.readDataFromCsvFile(file)
 
         then:

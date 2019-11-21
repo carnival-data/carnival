@@ -54,7 +54,7 @@ abstract class RelationalVineOracle extends RelationalVineAutoRecoverable {
 				throw e
 			}
 		}
-		log.trace "RelationalVineOracle.tryGetInstance established connection: $sql"
+		log.trace "RelationalVineOracle.tryGetInstance established connection: ${sql}"
 		sql
 	}
 

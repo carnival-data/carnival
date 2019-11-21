@@ -4,7 +4,7 @@
 @GrabExclude(group='org.codehaus.groovy', module='groovy-jsr223')
 @GrabExclude(group='org.codehaus.groovy', module='groovy-nio')
 @GrabExclude(group='org.codehaus.groovy', module='groovy-macro')
-@Grab(group='edu.upenn.pmbb', module='carnival-core', version='0.2.6')
+@Grab(group='edu.upenn.pmbb', module='carnival-core', version='0.2.7')
 
 
 // imports

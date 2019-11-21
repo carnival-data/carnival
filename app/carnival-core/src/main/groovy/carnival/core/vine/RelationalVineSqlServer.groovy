@@ -46,7 +46,7 @@ abstract class RelationalVineSqlServer extends RelationalVineAutoRecoverable {
 		} catch (java.sql.SQLRecoverableException e) {
 			elog.warn "withSql SQLRecoverableException: ${e.message}"
 		}
-		log.trace "RelationalVineSqlServer.tryGetInstance established connection: $sql"
+		log.trace "RelationalVineSqlServer.tryGetInstance established connection: ${sql}"
 		sql
 	}
 

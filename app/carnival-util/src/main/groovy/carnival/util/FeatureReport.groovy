@@ -847,7 +847,7 @@ class FeatureReport extends MappedDataTable {
         // marshall arguments
         Collection<Map> data = args.get('data')
         String subjectIdKey = args.get('subjectIdKey')
-        List<String> featureValueKeys = args.get('featureValueKeys')
+        List<String> featureValueKeys = args.get('featureValueKeys').toList()
 
         String featureName
         if (args.containsKey('featureDescriptor')) featureName = args.get('featureDescriptor').name
@@ -879,7 +879,11 @@ class FeatureReport extends MappedDataTable {
 
         // add features to report
         def groups = data.groupBy { it.get(subjectIdKey) }
+
+        //log.debug "FeatureReport groups: ${groups.size()} ${groups.take(10)}"
+
         groups.each { subjectId, recs ->
+
             if (args.includeNum) {
                 def fn = "${featureName}_COUNT"
                 def fv = recs.size().toString()

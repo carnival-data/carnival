@@ -144,6 +144,11 @@ abstract class ReaperMethod implements ReaperMethodInterface, TrackedProcessTrai
         setTrackedProcessInputs(inputVertices)
     }
 
+    /** */
+    void setReaperProcessInput(Vertex inputVertex) {
+        setTrackedProcessInputs([inputVertex])
+    }
+
 
     /** */
     String getTrackedProcessClassName() { "${this.class.simpleName}ProcessClass" }

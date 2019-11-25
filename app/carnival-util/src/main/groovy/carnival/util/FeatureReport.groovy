@@ -745,7 +745,7 @@ class FeatureReport extends MappedDataTable {
             rec.each { k, v ->
                 if (!shouldIncludeField(k)) return
                 if (v == null) return
-                this.addFeature(subjectId, k, v)
+                this.addFeature(subjectId, k, String.valueOf(v))
             }
         }
     }

@@ -28,6 +28,10 @@ allprojects {
 
 subprojects {
     apply plugin: 'groovy'
+
+    tasks.withType(GroovyCompile) {
+      options.debug = true
+    }
 }
 
 

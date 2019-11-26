@@ -16,7 +16,9 @@ import org.eclipse.rdf4j.model.impl.SimpleValueFactory
 
 import carnival.core.config.RdfConfig
 
-
+import org.eclipse.rdf4j.query.BooleanQuery
+import org.eclipse.rdf4j.query.TupleQuery
+import org.eclipse.rdf4j.query.TupleQueryResult
 
 /**
  * Convenience class that offers useful utilities for interacting with GraphDb RDF triplestores <http://graphdb.ontotext.com/>.
@@ -37,7 +39,6 @@ abstract class GraphDbVine extends Vine {
     RepositoryManager repositoryManager
     Repository repository
     RepositoryConnection connection
-
 
     ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTORS
@@ -120,4 +121,13 @@ abstract class GraphDbVine extends Vine {
     	connection.remove(subject, predicate, object)
     }
 
+    public Boolean launchSparqlBooleanQuery(String query) {
+        BooleanQuery boolResult = connection.prepareBooleanQuery(query)
+        return boolResult.evaluate()
+    }
+
+    public TupleQueryResult launchSparqlSelectQuery(String query) {
+        TupleQuery tupleQuery = connection.prepareTupleQuery(query)
+        return tupleQuery.evaluate()
+    }
 }

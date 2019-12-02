@@ -120,4 +120,10 @@ public enum KeyType {
 	 */
 	GENO_ID,
 
+	/**
+	 * A primary key from a relational database table.
+	 *
+	 */
+	RELATIONAL_PRIMARY_KEY,
+
 }

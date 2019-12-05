@@ -583,7 +583,7 @@ class GenericDataTable extends DataTable {
     public void dataAdd(GroovyRowResult row) {
         Map<String,Object> vals = new HashMap<String,Object>()
         row.each { k,v ->
-            String keyVal = "${k}"
+            String keyVal = toFieldName("${k}")
             this.keySet << keyVal
 
             // this is a hack to handle MySQL boolean fields that are binary(1)

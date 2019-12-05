@@ -571,17 +571,17 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
     public void dataAdd(GroovyRowResult row) {
         Map<String,Object> vals = new HashMap<String,Object>()
         row.each { k,v ->
-            String keyVal = "${k}"
-            this.keySet << keyVal
+            String fn = toFieldName("${k}")
+            this.keySet << fn
 
             // this is a hack to handle MySQL boolean fields that are binary(1)
             // they come back as byte arrays with a single value, either 48 or 49
             // for 0 and 1 respectively
             // the following code block maps [48,49] > [0,1]
             if (v instanceof byte[] && v.length == 1) {
-                vals[keyVal] = (char)v[0]
+                vals[fn] = (char)v[0]
             } else {
-                vals[keyVal] = v
+                vals[fn] = v
             }
         }
 

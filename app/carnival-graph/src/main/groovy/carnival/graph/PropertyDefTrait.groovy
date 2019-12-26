@@ -93,6 +93,13 @@ trait PropertyDefTrait {
     }
 
 
+    /** */
+    public PropertyDefTrait setIf(Vertex v, Object value, Closure cl) {
+        if (cl(value)) set(v, value)
+        this
+    }
+
+
 	/** */
     public String getLabel() {
         def chunks = name().split('_')

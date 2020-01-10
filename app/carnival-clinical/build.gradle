@@ -87,15 +87,7 @@ publishing {
                         url 'https://github.com/pmbb-ibi/carnival'
                     }
                 }
-            }
-            //pom.withXml {
-            //    Node pomNode = asNode()
-            //    pomNode.dependencies.'*'.findAll() {
-            //        it.artifactId.text() == 'ojdbc6'
-            //    }.each() {
-            //        it.parent().remove(it)
-            //    }
-            //}            
+            }          
         }
     }
     repositories {

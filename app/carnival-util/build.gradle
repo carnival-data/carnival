@@ -65,7 +65,7 @@ publishing {
                     resolveStrategy = Closure.DELEGATE_FIRST
                     name 'Carnival Util'
                     description 'Utility classes and services in the Carnival Framework.'
-                    url 'https://github.com/pennbiobank/carnival-public'
+                    url 'https://github.com/pmbb-ibi/carnival'
                     licenses {
                         license {
                             name 'GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007'
@@ -85,9 +85,9 @@ publishing {
                         }
                     }
                     scm {
-                        connection 'scm:git:git://github.com:pennbiobank/carnival-public.git'
-                        developerConnection 'scm:git:ssh://github.com:pennbiobank/carnival-public.git'
-                        url 'https://github.com/pennbiobank/carnival-public'
+                        connection 'scm:git:git://github.com:pmbb-ibi/carnival.git'
+                        developerConnection 'scm:git:ssh://github.com:pmbb-ibi/carnival.git'
+                        url 'https://github.com/pmbb-ibi/carnival'
                     }
                 }
             }

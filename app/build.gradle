@@ -31,6 +31,14 @@ subprojects {
 
     tasks.withType(GroovyCompile) {
       options.debug = true
+      //options.verbose = true
+      //options.listFiles = true
+    }
+
+    tasks.withType(JavaCompile) {
+      options.debug = true
+      //options.verbose = true
+      //options.listFiles = true
     }
 }
 

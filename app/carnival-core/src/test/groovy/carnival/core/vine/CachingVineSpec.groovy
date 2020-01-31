@@ -378,11 +378,11 @@ class CachingVineSpec extends Specification {
 
         when:
         def mdtCache = MappedDataTable.createFromFiles(cachingVine.cacheDirectory, mdt.name)
-        def mdtTarget = MappedDataTable.createFromFiles(cachingVine.targetDirectory, mdt.name)
+        //def mdtTarget = MappedDataTable.createFromFiles(cachingVine.targetDirectory, mdt.name)
 
         then:
         matchNumArgsVineData(mdtCache, numArgs)
-        matchNumArgsVineData(mdtTarget, numArgs)
+        //matchNumArgsVineData(mdtTarget, numArgs)
 
         where:
         args << [[:], [a:1], [a:1, b:2]]
@@ -413,11 +413,13 @@ class CachingVineSpec extends Specification {
         then:
         matchStaticVineData(mdtCache)
 
+        /*
         when:
         def mdtTarget = MappedDataTable.createFromFiles(cachingVine.targetDirectory, mdt.name)
 
         then:
         matchStaticVineData(mdtTarget)
+        */
     }
 
 

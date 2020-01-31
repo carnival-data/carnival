@@ -110,3 +110,4 @@ docs/groovy/**/*.yml
 .jekyll-cache
 .sass-cache
 _site
+docs/*.lock

@@ -13,7 +13,7 @@ This project also includes a <a href="https://www.docker.com/resources/what-cont
 
   <h3 class="mt-4">Build Requirements</h3>
   <ul>
-    <li><a href="https://gradle.org/">Gradle</a> V5.1.1</li>
+    <li><a href="https://gradle.org/">Gradle</a> V5+</li>
     <ul>
       <li><a href="https://gradle.org/install/#with-a-package-manager">Installation with a package manager</a></li>
       <ul>
@@ -25,7 +25,11 @@ This project also includes a <a href="https://www.docker.com/resources/what-cont
       <li><a href="https://gradle.org/install/#manually">Install Manually</a></li>
     </ul>
     <li>Java V1.8+</li>
-    <li><a href="https://neo4j.com/download/">Neo4J</a> (Optional) - Helpful to browse the property graph.</li>
+    <li>Neo4j V3.5+ (Optional) - Helpful to browse the property graph.</li>
+    <ul>
+      <li><a href="https://neo4j.com/download/">Desktop</a></li>
+      <li><a href="https://neo4j.com/download-center/#community">Community Server</a></li>
+    </ul>
   </ul>
 
   <h3 class="mt-4">Environment Setup</h3>
@@ -97,7 +101,7 @@ This project also includes a <a href="https://www.docker.com/resources/what-cont
     <li>
       Install APOC neo4j plugin:
       <ul>
-        <li>Download the <a href="https://neo4j.com/docs/labs/apoc/current/">APOC</a> <a href="https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/tag/3.4.0.7">V3.4.0.7</a> and save it to a directory on your local file system.</li>
+        <li>Download the <a href="https://neo4j.com/docs/labs/apoc/current/">APOC</a> <a href="https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/tag/3.5.0.7">V3.5.0.7</a> and save it to a directory on your local file system.</li>
         <li>Add the path to that directory in gremlin section of the <code class="language-bash" data-lang="bash">application.yaml</code> config file in the entry <code class="language-bash" data-lang="bash">gremlin:neo4j:conf:dbms:directories:plugins</code>:</li>
       </ul>
         <div class="listingblock">

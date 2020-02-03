@@ -145,15 +145,23 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 
 		/** validate arguments */
 	    void validateArgs(Map args = [:]) {
-	        assert (args.reapAllData || args.limit)
+	        assert (args.reapAllData || args.ids || args.limit)
+	        if (args.ids)
+	        {
+	        	assert (!args.reapAllData || args.reapAllData == false)
+	        	assert (!args.limit)
+	        	assert (args.ids.size() > 0)
+	        }
+	        if (args.reapAllData)
+	        {
+	        	assert (args.reapAllData == true || (args.reapAllData == false && (args.ids || args.limit)))
+	        	if (args.reapAllData == true) assert (!args.limit && !args.ids)
+	        }
 	        if (args.limit)
 	        {
 	        	assert (!args.reapAllData || args.reapAllData == false)
-	        	assert (args.limit.toString().isInteger())
-	        }
-	        if (args.realAllData)
-	        {
-	        	assert (args.reapAllData == true || (args.reapAllData == false && args.limit))
+	        	assert (!args.ids)
+	        	assert (args.limit > 0)
 	        }
 	    }
 
@@ -174,8 +182,16 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
         GenericDataTable fetch(Map args) {
             log.trace "GetRecords.fetch()"
             validateArgs(args)
-
             if (args.limit) sqlQuery += " LIMIT $args.limit "
+            if (args.ids) 
+            {
+            	def idsAsString = ""
+            	args.ids.eachWithIndex { id, i ->
+            		idsAsString += "'$id'"
+            		if (i < args.ids.size()-1) idsAsString += ","
+            	}
+            	sqlQuery += " AND person_id IN ($idsAsString) "
+            }
             //log.trace(q)
             sqllog.info(sqlQuery)
 
@@ -198,7 +214,8 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 						"""+dbName+""".condition_occurrence.visit_occurrence_id,
 						"""+dbName+""".concept.concept_name as condition_concept_name,
 						"""+dbName+""".concept.concept_code as condition_concept_code,
-						"""+dbName+""".concept.vocabulary_id as condition_vocabulary_id
+						"""+dbName+""".concept.vocabulary_id as condition_vocabulary_id,
+						"""+dbName+""".condition_occurrence.condition_occurrence_id
 
 						from """+dbName+""".condition_occurrence
 
@@ -218,15 +235,22 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 
 		/** validate arguments */
 	    void validateArgs(Map args = [:]) {
-	        assert (args.reapAllData || args.limit)
+	        assert (args.reapAllData || args.ids || args.limit)
+	        if (args.ids)
+	        {
+	        	assert (!args.reapAllData || args.reapAllData == false)
+	        	assert (args.ids.size() > 0)
+	        }
+	        if (args.reapAllData)
+	        {
+	        	assert (args.reapAllData == true || (args.reapAllData == false && (args.ids || args.limit)))
+	        	if (args.reapAllData == true) assert (!args.limit && !args.ids)
+	        }
 	        if (args.limit)
 	        {
 	        	assert (!args.reapAllData || args.reapAllData == false)
-	        	assert (args.limit.toString().isInteger())
-	        }
-	        if (args.realAllData)
-	        {
-	        	assert (args.reapAllData == true || (args.reapAllData == false && args.limit))
+	        	assert (!args.ids)
+	        	assert (args.limit > 0)
 	        }
 	    }
 
@@ -247,8 +271,17 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
         GenericDataTable fetch(Map args) {
             log.trace "GetRecords.fetch()"
             validateArgs(args)
-
             if (args.limit) sqlQuery += " LIMIT $args.limit "
+            if (args.ids) 
+            {
+            	def idsAsString = ""
+            	args.ids.eachWithIndex { id, i ->
+            		idsAsString += "'$id'"
+            		if (i < args.ids.size()-1) idsAsString += ","
+            	}
+            	sqlQuery += " AND visit_occurrence_id IN ($idsAsString) "
+            }
+
             //log.trace(q)
             sqllog.info(sqlQuery)
 
@@ -286,15 +319,22 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 
 		/** validate arguments */
 	    void validateArgs(Map args = [:]) {
-	        assert (args.reapAllData || args.limit)
+	        assert (args.reapAllData || args.ids || args.limit)
+	        if (args.ids)
+	        {
+	        	assert (!args.reapAllData || args.reapAllData == false)
+	        	assert (args.ids.size() > 0)
+	        }
+	        if (args.reapAllData)
+	        {
+	        	assert (args.reapAllData == true || (args.reapAllData == false && (args.ids || args.limit)))
+	        	if (args.reapAllData == true) assert (!args.limit && !args.ids)
+	        }
 	        if (args.limit)
 	        {
 	        	assert (!args.reapAllData || args.reapAllData == false)
-	        	assert (args.limit.toString().isInteger())
-	        }
-	        if (args.realAllData)
-	        {
-	        	assert (args.reapAllData == true || (args.reapAllData == false && args.limit))
+	        	assert (!args.ids)
+	        	assert (args.limit > 0)
 	        }
 	    }
 
@@ -315,8 +355,17 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
         GenericDataTable fetch(Map args) {
             log.trace "GetRecords.fetch()"
             validateArgs(args)
-
             if (args.limit) sqlQuery += " LIMIT $args.limit "
+            if (args.ids) 
+            {
+            	def idsAsString = ""
+            	args.ids.eachWithIndex { id, i ->
+            		idsAsString += "'$id'"
+            		if (i < args.ids.size()-1) idsAsString += ","
+            	}
+            	sqlQuery += " AND visit_occurrence_id IN ($idsAsString) "
+            }
+
             //log.trace(q)
             sqllog.info(sqlQuery)
 
@@ -359,21 +408,29 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 
 		/** validate arguments */
 	    void validateArgs(Map args = [:]) {
-	        assert (args.reapAllData || args.limit)
+	        assert (args.reapAllData || args.ids || args.limit)
 	        assert (args.omopConceptMap)
 	        assert (args.omopConceptMap.get("bmi"))
 	        assert (args.omopConceptMap.get("weight"))
 	        assert (args.omopConceptMap.get("height"))
 	        assert (args.omopConceptMap.get("diastolicBloodPressure"))
 	        assert (args.omopConceptMap.get("systolicBloodPressure"))
+	        assert (args.reapAllData || args.ids || args.limit)
+	        if (args.ids)
+	        {
+	        	assert (!args.reapAllData || args.reapAllData == false)
+	        	assert (args.ids.size() > 0)
+	        }
+	        if (args.reapAllData)
+	        {
+	        	assert (args.reapAllData == true || (args.reapAllData == false && (args.ids || args.limit)))
+	        	if (args.reapAllData == true) assert (!args.limit && !args.ids)
+	        }
 	        if (args.limit)
 	        {
 	        	assert (!args.reapAllData || args.reapAllData == false)
-	        	assert (args.limit.toString().isInteger())
-	        }
-	        if (args.realAllData)
-	        {
-	        	assert (args.reapAllData == true || (args.reapAllData == false && args.limit))
+	        	assert (!args.ids)
+	        	assert (args.limit > 0)
 	        }
 	    }
 
@@ -394,8 +451,17 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
         GenericDataTable fetch(Map args) {
             log.trace "GetRecords.fetch()"
             validateArgs(args)
-
             if (args.limit) sqlQuery += " LIMIT $args.limit "
+            if (args.ids) 
+            {
+            	def idsAsString = ""
+            	args.ids.eachWithIndex { id, i ->
+            		idsAsString += "'$id'"
+            		if (i < args.ids.size()-1) idsAsString += ","
+            	}
+            	sqlQuery += " AND visit_occurrence_id IN ($idsAsString) "
+            }
+
 
             //get omop concept IDs for bmi, height, and weight
             def omopHeightId = args.omopConceptMap.get("height")
@@ -413,7 +479,6 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 						)"""
 
             def sqlToRun = sqlQuery.replaceAll('SUB_WHERE_CLAUSE', sqlInsert)
-
             //log.trace(q)
             sqllog.info(sqlToRun)
 

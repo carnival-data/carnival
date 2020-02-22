@@ -135,6 +135,10 @@ task deleteLocalRepos {
             "${System.getProperty('user.home')}/.groovy/grapes/edu.upenn.pmbb/"
         ].each { bd ->
             ant.echo(bd)
+            
+            def file = new File(bd)
+            if (!file.exists()) return
+            
             def path = ant.path {
                 dirset(dir:bd, includes:'carnival-*')
             }

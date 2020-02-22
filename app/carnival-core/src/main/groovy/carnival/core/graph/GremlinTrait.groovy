@@ -24,22 +24,31 @@ class GremlinTraitUtilities {
      *
      */
     static public Object withGremlin(Graph graph, GraphTraversalSource g, Closure cl) {
+        assert graph != null
+        assert g != g
+        assert cl != null
+
         def res
+		def transactionsAreSupported = graph.features().graph().supportsTransactions()
         
         try {
             res = cl(graph, g)
         } catch (Exception e) {
-            try {
-                graph.tx().rollback()
-            } catch (Exception e2) {
-                log.error("could not rollback", e2)
+            if (transactionsAreSupported) {
+                try {
+                    graph.tx().rollback()
+                } catch (Exception e2) {
+                    log.error("could not rollback", e2)
+                }
             }
             throw e
         } finally {
-            try {
-                graph.tx().commit()
-            } catch (Exception e3) {
-                log.error("could not commit", e3)
+            if (transactionsAreSupported) {
+                try {
+                    graph.tx().commit()
+                } catch (Exception e3) {
+                    log.error("could not commit", e3)
+                }
             }
         }
 
@@ -99,11 +108,11 @@ trait GremlinTrait  {
 
 
     /**
-     * cl(graph, g)
+     * cl(g)
      *
      */
     public Object withTraversal(Closure cl) {
-        def g = traversal()
+        GraphTraversalSource g = traversal()
         try {
             cl(g)
         } finally {
@@ -117,7 +126,12 @@ trait GremlinTrait  {
      *
      */
     public Object withGremlin(Closure cl) {
-        def g = traversal()
+        GraphTraversalSource g = traversal()
+        assert g
+
+        Graph graph = graph
+        assert graph
+
         try {
             GremlinTraitUtilities.withGremlin(graph, g, cl)    
         } finally {

@@ -41,7 +41,7 @@ import carnival.graph.ControlledInstance
  * The core graph.  See the documentation for model details.
  *
  */
-abstract class CoreGraph {
+abstract class CoreGraph implements GremlinTrait {
 
 	///////////////////////////////////////////////////////////////////////////
 	// STATIC FIELDS
@@ -525,9 +525,12 @@ abstract class CoreGraph {
 				cl()
 			} else if (maxClosureParams == 1) {
 				cl(tx)
-			} else {
+			} else if (maxClosureParams == 2) {
 				g = traversal()
 				cl(tx, g)
+			} else {
+				g = traversal()
+				cl(tx, g, graph)
 			}
 		} finally {
 			tx.commit()

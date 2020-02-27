@@ -12,7 +12,7 @@ Inspired by Open Biological and Biomedical Ontology (OBO) Foundry ontologies, th
 ## Quick Links
 
 * [Github Pages Website](https://pmbb-ibi.github.io/carnival/)
-* [Developer Guide](docs/developer-setup.md) - Installation and running instructions
+* [Developer Guide](https://pmbb-ibi.github.io/carnival/#DeveloperSetup) - Installation and running instructions
 * [carnival-core](app/carnival-core/README.md) - Developer details on the core carnival module
 * [carnival-gremlin-dsl](app/carnival-gremlin-dsl/README.md) - Gremlin dsl patterns for the carnival schema
 * [graph specification](app/carnival-core/doc/graph.md)
@@ -44,4 +44,4 @@ Carnival’s property graph database:
 
 <a name="getting-started"></a>
 ## Getting Started
-See [developer setup](docs/developer-setup.md) for full documentation on how to set up a development environment.
+See [developer setup](https://pmbb-ibi.github.io/carnival/#DeveloperSetup) for full documentation on how to set up a development environment.

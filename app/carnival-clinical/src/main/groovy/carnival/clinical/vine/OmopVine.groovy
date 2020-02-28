@@ -188,6 +188,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
             if (args.ids) 
             {
             	sqlQuery += " AND person_id IN SUB_WHERE_CLAUSE "
+            	sqllog.info(sqlQuery)
             	gdt = enclosingVine.populateGenericDataTable(sqlQuery, gdt, args.ids)
             }
             else
@@ -275,6 +276,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
             if (args.ids) 
             {
             	sqlQuery += " AND visit_occurrence_id IN SUB_WHERE_CLAUSE "
+            	sqllog.info(sqlQuery)
             	gdt = enclosingVine.populateGenericDataTable(sqlQuery, gdt, args.ids)
             }
             else
@@ -356,6 +358,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
             if (args.ids) 
             {
             	sqlQuery += " AND visit_occurrence_id IN SUB_WHERE_CLAUSE "
+            	sqllog.info(sqlQuery)
             	gdt = enclosingVine.populateGenericDataTable(sqlQuery, gdt, args.ids)
             }
             else
@@ -467,6 +470,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
             if (args.ids) 
             {
             	sqlToRun += " AND visit_occurrence_id IN SUB_WHERE_CLAUSE "
+            	sqllog.info(sqlQuery)
             	gdt = enclosingVine.populateGenericDataTable(sqlToRun, gdt, args.ids)
             }
             else

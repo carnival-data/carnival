@@ -59,6 +59,62 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 	///////////////////////////////////////////////////////////////////////////
 
 	/** */
+	static class GetOmopPatientIds implements GenericDataTableVineMethod {
+
+		def sqlQuery = """
+
+						select 
+
+						"""+dbName+""".person.person_id
+						
+						from """+dbName+""".person
+
+						"""
+
+        GenericDataTable.MetaData meta(Map args = [:]) {
+        	validateArgs(args)
+            // create a hashed string value
+            def inputHash = MD5.digest(sqlQuery.bytes).encodeHex().toString()
+
+            new GenericDataTable.MetaData(
+                name:"omop-patient-all_ids-${inputHash}",
+                idFieldName:'person_id',
+                idKeyType:KeyType.GENERIC_PATIENT_ID
+            ) 
+
+        }
+
+        void validateArgs(Map args = [:]) {
+	        assert (args.reapAllData || args.limit)
+	        if (args.limit)
+	        {
+	        	assert (!args.reapAllData || args.reapAllData == false)
+	        	assert (args.limit.toString().isInteger())
+	        }
+	        if (args.reapAllData)
+	        {
+	        	assert (args.reapAllData == true || (args.reapAllData == false && args.limit))
+	        }
+	    }
+
+        GenericDataTable fetch(Map args) {
+        	validateArgs(args)
+            log.trace "GetRecords.fetch()"
+            //log.trace(q)
+            if (args.limit) sqlQuery += " LIMIT $args.limit "
+            sqllog.info(sqlQuery)
+
+            def gdt = createEmptyDataTable(args)
+            enclosingVine.withSql { sql ->
+                sql.eachRow(sqlQuery) { row ->
+                    gdt.dataAdd(row)
+                }
+            }
+            return gdt
+        }
+    }
+
+	/** */
 	static class GetOmopPatientDemographicData implements GenericDataTableVineMethod {
 
 		def sqlQuery = """

@@ -180,6 +180,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
         GenericDataTable fetch(Map args) {
             log.trace "GetRecords.fetch()"
             validateArgs(args)
+            def gdt = createEmptyDataTable(args)
 
             if (args.limit) sqlQuery += " LIMIT $args.limit "
             if (args.ids) 

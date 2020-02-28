@@ -143,15 +143,23 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 
 		/** validate arguments */
 	    void validateArgs(Map args = [:]) {
-	        assert (args.reapAllData || args.limit)
-	        if (args.limit)
+	        assert (args.reapAllData || args.ids || args.limit)
+	        if (args.ids)
 	        {
 	        	assert (!args.reapAllData || args.reapAllData == false)
-	        	assert (args.limit.toString().isInteger())
+	        	assert (!args.limit)
+	        	assert (args.ids.size() > 0)
 	        }
 	        if (args.reapAllData)
 	        {
-	        	assert (args.reapAllData == true || (args.reapAllData == false && args.limit))
+	        	assert (args.reapAllData == true || (args.reapAllData == false && (args.ids || args.limit)))
+	        	if (args.reapAllData == true) assert (!args.limit && !args.ids)
+	        }
+	        if (args.limit)
+	        {
+	        	assert (!args.reapAllData || args.reapAllData == false)
+	        	assert (!args.ids)
+	        	assert (args.limit > 0)
 	        }
 	    }
 
@@ -174,14 +182,21 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
             validateArgs(args)
 
             if (args.limit) sqlQuery += " LIMIT $args.limit "
-            //log.trace(q)
-            sqllog.info(sqlQuery)
-
-            def gdt = createEmptyDataTable(args)
-            enclosingVine.withSql { sql ->
-                sql.eachRow(sqlQuery) { row ->
-                    gdt.dataAdd(row)
-                }
+            if (args.ids) 
+            {
+            	sqlQuery += " AND person_id IN SUB_WHERE_CLAUSE "
+            	sqllog.info(sqlQuery)
+            	gdt = enclosingVine.populateGenericDataTable(sqlQuery, gdt, args.ids)
+            }
+            else
+            {
+            	sqllog.info(sqlQuery)
+	            def gdt = createEmptyDataTable(args)
+	            enclosingVine.withSql { sql ->
+	                sql.eachRow(sqlQuery) { row ->
+	                    gdt.dataAdd(row)
+	                }
+	            }
             }
             return gdt
         }

@@ -15,6 +15,7 @@ import carnival.core.vine.CachingVine
 import carnival.core.vine.RelationalVinePostgres
 
 import carnival.util.KeyType
+import carnival.util.SqlUtils
 
 import java.security.MessageDigest
 
@@ -187,7 +188,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
             if (args.ids) 
             {
             	sqlQuery += " AND person_id IN SUB_WHERE_CLAUSE "
-            	gdt = populateGenericDataTable(sqlQuery, gdt, args.ids)
+            	gdt = enclosingVine.populateGenericDataTable(sqlQuery, gdt, args.ids)
             }
             else
             {
@@ -274,7 +275,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
             if (args.ids) 
             {
             	sqlQuery += " AND visit_occurrence_id IN SUB_WHERE_CLAUSE "
-            	gdt = populateGenericDataTable(sqlQuery, gdt, args.ids)
+            	gdt = enclosingVine.populateGenericDataTable(sqlQuery, gdt, args.ids)
             }
             else
             {
@@ -355,7 +356,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
             if (args.ids) 
             {
             	sqlQuery += " AND visit_occurrence_id IN SUB_WHERE_CLAUSE "
-            	gdt = populateGenericDataTable(sqlQuery, gdt, args.ids)
+            	gdt = enclosingVine.populateGenericDataTable(sqlQuery, gdt, args.ids)
             }
             else
             {
@@ -466,7 +467,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
             if (args.ids) 
             {
             	sqlToRun += " AND visit_occurrence_id IN SUB_WHERE_CLAUSE "
-            	gdt = populateGenericDataTable(sqlToRun, gdt, args.ids)
+            	gdt = enclosingVine.populateGenericDataTable(sqlToRun, gdt, args.ids)
             }
             else
             {
@@ -482,7 +483,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
         }
     }
 
-    private GenericDataTable populateGenericDataTable(String parameterizedSql, GenericDataTable outputDataTable, Collection<String> filterValues, Boolean caching = false, Integer chunkSize = 1000) {
+    public GenericDataTable populateGenericDataTable(String parameterizedSql, GenericDataTable outputDataTable, ArrayList<String> filterValues, Integer chunkSize = 30000) {
 		assert parameterizedSql.contains("SUB_WHERE_CLAUSE")
 
 		def inClauses = filterValues.collate(chunkSize)
@@ -499,7 +500,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
             }
         }
 
-        outputDataTable.writeFiles(Defaults.dataCacheDirectory)
+        //outputDataTable.writeFiles(Defaults.dataCacheDirectory)
 
         return outputDataTable
 	}

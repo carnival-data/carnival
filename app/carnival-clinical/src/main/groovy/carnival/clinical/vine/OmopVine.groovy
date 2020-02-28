@@ -182,24 +182,22 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
         GenericDataTable fetch(Map args) {
             log.trace "GetRecords.fetch()"
             validateArgs(args)
+            def gdt = createEmptyDataTable(args)
             if (args.limit) sqlQuery += " LIMIT $args.limit "
             if (args.ids) 
             {
-            	def idsAsString = ""
-            	args.ids.eachWithIndex { id, i ->
-            		idsAsString += "'$id'"
-            		if (i < args.ids.size()-1) idsAsString += ","
-            	}
-            	sqlQuery += " AND person_id IN ($idsAsString) "
+            	sqlQuery += " AND person_id IN SUB_WHERE_CLAUSE "
+            	gdt = populateGenericDataTable(sqlQuery, gdt, args.ids)
             }
-            //log.trace(q)
-            sqllog.info(sqlQuery)
-
-            def gdt = createEmptyDataTable(args)
-            enclosingVine.withSql { sql ->
-                sql.eachRow(sqlQuery) { row ->
-                    gdt.dataAdd(row)
-                }
+            else
+            {
+            	//log.trace(q)
+	            sqllog.info(sqlQuery)
+	            enclosingVine.withSql { sql ->
+	                sql.eachRow(sqlQuery) { row ->
+	                    gdt.dataAdd(row)
+	                }
+	            }
             }
             return gdt
         }
@@ -271,25 +269,22 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
         GenericDataTable fetch(Map args) {
             log.trace "GetRecords.fetch()"
             validateArgs(args)
+            def gdt = createEmptyDataTable(args)
             if (args.limit) sqlQuery += " LIMIT $args.limit "
             if (args.ids) 
             {
-            	def idsAsString = ""
-            	args.ids.eachWithIndex { id, i ->
-            		idsAsString += "'$id'"
-            		if (i < args.ids.size()-1) idsAsString += ","
-            	}
-            	sqlQuery += " AND visit_occurrence_id IN ($idsAsString) "
+            	sqlQuery += " AND visit_occurrence_id IN SUB_WHERE_CLAUSE "
+            	gdt = populateGenericDataTable(sqlQuery, gdt, args.ids)
             }
-
-            //log.trace(q)
-            sqllog.info(sqlQuery)
-
-            def gdt = createEmptyDataTable(args)
-            enclosingVine.withSql { sql ->
-                sql.eachRow(sqlQuery) { row ->
-                    gdt.dataAdd(row)
-                }
+            else
+            {
+            	//log.trace(q)
+	            sqllog.info(sqlQuery)
+	            enclosingVine.withSql { sql ->
+	                sql.eachRow(sqlQuery) { row ->
+	                    gdt.dataAdd(row)
+	                }
+	            }
             }
             return gdt
         }
@@ -355,25 +350,22 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
         GenericDataTable fetch(Map args) {
             log.trace "GetRecords.fetch()"
             validateArgs(args)
+            def gdt = createEmptyDataTable(args)
             if (args.limit) sqlQuery += " LIMIT $args.limit "
             if (args.ids) 
             {
-            	def idsAsString = ""
-            	args.ids.eachWithIndex { id, i ->
-            		idsAsString += "'$id'"
-            		if (i < args.ids.size()-1) idsAsString += ","
-            	}
-            	sqlQuery += " AND visit_occurrence_id IN ($idsAsString) "
+            	sqlQuery += " AND visit_occurrence_id IN SUB_WHERE_CLAUSE "
+            	gdt = populateGenericDataTable(sqlQuery, gdt, args.ids)
             }
-
-            //log.trace(q)
-            sqllog.info(sqlQuery)
-
-            def gdt = createEmptyDataTable(args)
-            enclosingVine.withSql { sql ->
-                sql.eachRow(sqlQuery) { row ->
-                    gdt.dataAdd(row)
-                }
+            else
+            {
+            	//log.trace(q)
+	            sqllog.info(sqlQuery)
+	            enclosingVine.withSql { sql ->
+	                sql.eachRow(sqlQuery) { row ->
+	                    gdt.dataAdd(row)
+	                }
+	            }
             }
             return gdt
         }
@@ -398,7 +390,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 						"""+dbName+""".measurement.unit_concept_id =
 						unit_concept.concept_id
 						
-						SUB_WHERE_CLAUSE
+						OMOP_CODE_WHERE_CLAUSE
 
 						AND
 						value_as_number is not null
@@ -451,17 +443,6 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
         GenericDataTable fetch(Map args) {
             log.trace "GetRecords.fetch()"
             validateArgs(args)
-            if (args.limit) sqlQuery += " LIMIT $args.limit "
-            if (args.ids) 
-            {
-            	def idsAsString = ""
-            	args.ids.eachWithIndex { id, i ->
-            		idsAsString += "'$id'"
-            		if (i < args.ids.size()-1) idsAsString += ","
-            	}
-            	sqlQuery += " AND visit_occurrence_id IN ($idsAsString) "
-            }
-
 
             //get omop concept IDs for bmi, height, and weight
             def omopHeightId = args.omopConceptMap.get("height")
@@ -478,19 +459,50 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 						'$systolicBloodPressure'
 						)"""
 
-            def sqlToRun = sqlQuery.replaceAll('SUB_WHERE_CLAUSE', sqlInsert)
-            //log.trace(q)
-            sqllog.info(sqlToRun)
-
+            def sqlToRun = sqlQuery.replaceAll('OMOP_CODE_WHERE_CLAUSE', sqlInsert)
             def gdt = createEmptyDataTable(args)
-            enclosingVine.withSql { sql ->
-                sql.eachRow(sqlToRun) { row ->
-                    gdt.dataAdd(row)
-                }
+
+            if (args.limit) sqlToRun += " LIMIT $args.limit "
+            if (args.ids) 
+            {
+            	sqlToRun += " AND visit_occurrence_id IN SUB_WHERE_CLAUSE "
+            	gdt = populateGenericDataTable(sqlToRun, gdt, args.ids)
+            }
+            else
+            {
+            	//log.trace(q)
+	            sqllog.info(sqlToRun)
+	            enclosingVine.withSql { sql ->
+	                sql.eachRow(sqlToRun) { row ->
+	                    gdt.dataAdd(row)
+	                }
+	            }
             }
             return gdt
         }
     }
+
+    private GenericDataTable populateGenericDataTable(String parameterizedSql, GenericDataTable outputDataTable, Collection<String> filterValues, Boolean caching = false, Integer chunkSize = 1000) {
+		assert parameterizedSql.contains("SUB_WHERE_CLAUSE")
+
+		def inClauses = filterValues.collate(chunkSize)
+
+        inClauses.eachWithIndex { chunkedValues, inClauseIndex ->
+			withSql { sql ->
+                log.trace "populateGenericDataTable: ${inClauseIndex + 1} OF ${inClauses.size()}"
+
+            	def inClause = SqlUtils.inClause(chunkedValues)
+                def q = parameterizedSql.replaceAll('SUB_WHERE_CLAUSE', "$inClause")
+                sqllog.info q
+
+                outputDataTable.dataAddAllGroovyRowResults(sql.rows(q), true)
+            }
+        }
+
+        outputDataTable.writeFiles(Defaults.dataCacheDirectory)
+
+        return outputDataTable
+	}
 }
 
 

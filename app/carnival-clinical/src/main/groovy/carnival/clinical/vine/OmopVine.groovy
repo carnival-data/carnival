@@ -192,7 +192,6 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
             else
             {
             	sqllog.info(sqlQuery)
-	            def gdt = createEmptyDataTable(args)
 	            enclosingVine.withSql { sql ->
 	                sql.eachRow(sqlQuery) { row ->
 	                    gdt.dataAdd(row)

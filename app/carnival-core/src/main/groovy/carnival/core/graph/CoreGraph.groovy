@@ -47,7 +47,7 @@ abstract class CoreGraph implements GremlinTrait {
 	// STATIC FIELDS
 	///////////////////////////////////////////////////////////////////////////
 
-	/** Carnival log*/
+	/** Carnival log */
 	static Logger log = LoggerFactory.getLogger('carnival')
 
 
@@ -129,8 +129,8 @@ abstract class CoreGraph implements GremlinTrait {
 	// INSTANCE
 	///////////////////////////////////////////////////////////////////////////
 
-	/** */
-	Graph graph
+	/** Graph object is added by GremlinTrait. */
+	//Graph graph
 
 	/** */
 	CoreGraphSchema graphSchema
@@ -167,6 +167,7 @@ abstract class CoreGraph implements GremlinTrait {
 		initializeDefinedEdges(graph, g)
 		createControlledInstances(graph, g)
 	}
+	
 
 
 	///////////////////////////////////////////////////////////////////////////

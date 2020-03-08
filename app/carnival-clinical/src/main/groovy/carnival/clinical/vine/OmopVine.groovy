@@ -15,6 +15,7 @@ import carnival.core.vine.CachingVine
 import carnival.core.vine.RelationalVinePostgres
 
 import carnival.util.KeyType
+import carnival.util.SqlUtils
 
 import java.security.MessageDigest
 
@@ -58,6 +59,62 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 	///////////////////////////////////////////////////////////////////////////
 
 	/** */
+	static class GetOmopPatientIds implements GenericDataTableVineMethod {
+
+		def sqlQuery = """
+
+						select 
+
+						"""+dbName+""".person.person_id
+						
+						from """+dbName+""".person
+
+						"""
+
+        GenericDataTable.MetaData meta(Map args = [:]) {
+        	validateArgs(args)
+            // create a hashed string value
+            def inputHash = MD5.digest(sqlQuery.bytes).encodeHex().toString()
+
+            new GenericDataTable.MetaData(
+                name:"omop-patient-all_ids-${inputHash}",
+                idFieldName:'person_id',
+                idKeyType:KeyType.GENERIC_PATIENT_ID
+            ) 
+
+        }
+
+        void validateArgs(Map args = [:]) {
+	        assert (args.reapAllData || args.limit)
+	        if (args.limit)
+	        {
+	        	assert (!args.reapAllData || args.reapAllData == false)
+	        	assert (args.limit.toString().isInteger())
+	        }
+	        if (args.reapAllData)
+	        {
+	        	assert (args.reapAllData == true || (args.reapAllData == false && args.limit))
+	        }
+	    }
+
+        GenericDataTable fetch(Map args) {
+        	validateArgs(args)
+            log.trace "GetRecords.fetch()"
+            //log.trace(q)
+            if (args.limit) sqlQuery += " LIMIT $args.limit "
+            sqllog.info(sqlQuery)
+
+            def gdt = createEmptyDataTable(args)
+            enclosingVine.withSql { sql ->
+                sql.eachRow(sqlQuery) { row ->
+                    gdt.dataAdd(row)
+                }
+            }
+            return gdt
+        }
+    }
+
+	/** */
 	static class GetOmopPatientDemographicData implements GenericDataTableVineMethod {
 
 		def sqlQuery = """
@@ -86,15 +143,23 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 
 		/** validate arguments */
 	    void validateArgs(Map args = [:]) {
-	        assert (args.reapAllData || args.limit)
-	        if (args.limit)
+	        assert (args.reapAllData || args.ids || args.limit)
+	        if (args.ids)
 	        {
 	        	assert (!args.reapAllData || args.reapAllData == false)
-	        	assert (args.limit.toString().isInteger())
+	        	assert (!args.limit)
+	        	assert (args.ids.size() > 0)
 	        }
 	        if (args.reapAllData)
 	        {
-	        	assert (args.reapAllData == true || (args.reapAllData == false && args.limit))
+	        	assert (args.reapAllData == true || (args.reapAllData == false && (args.ids || args.limit)))
+	        	if (args.reapAllData == true) assert (!args.limit && !args.ids)
+	        }
+	        if (args.limit)
+	        {
+	        	assert (!args.reapAllData || args.reapAllData == false)
+	        	assert (!args.ids)
+	        	assert (args.limit > 0)
 	        }
 	    }
 
@@ -115,16 +180,23 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
         GenericDataTable fetch(Map args) {
             log.trace "GetRecords.fetch()"
             validateArgs(args)
+            def gdt = createEmptyDataTable(args)
 
             if (args.limit) sqlQuery += " LIMIT $args.limit "
-            //log.trace(q)
-            sqllog.info(sqlQuery)
-
-            def gdt = createEmptyDataTable(args)
-            enclosingVine.withSql { sql ->
-                sql.eachRow(sqlQuery) { row ->
-                    gdt.dataAdd(row)
-                }
+            if (args.ids) 
+            {
+            	sqlQuery += " AND person_id IN SUB_WHERE_CLAUSE "
+            	sqllog.info(sqlQuery)
+            	gdt = enclosingVine.populateGenericDataTable(sqlQuery, gdt, args.ids)
+            }
+            else
+            {
+            	sqllog.info(sqlQuery)
+	            enclosingVine.withSql { sql ->
+	                sql.eachRow(sqlQuery) { row ->
+	                    gdt.dataAdd(row)
+	                }
+	            }
             }
             return gdt
         }
@@ -145,15 +217,23 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 
 		/** validate arguments */
 	    void validateArgs(Map args = [:]) {
-	        assert (args.reapAllData || args.limit)
+	        assert (args.reapAllData || args.ids || args.limit)
+	        if (args.ids)
+	        {
+	        	assert (!args.reapAllData || args.reapAllData == false)
+	        	assert (!args.limit)
+	        	assert (args.ids.size() > 0)
+	        }
+	        if (args.reapAllData)
+	        {
+	        	assert (args.reapAllData == true || (args.reapAllData == false && (args.ids || args.limit)))
+	        	if (args.reapAllData == true) assert (!args.limit && !args.ids)
+	        }
 	        if (args.limit)
 	        {
 	        	assert (!args.reapAllData || args.reapAllData == false)
-	        	assert (args.limit.toString().isInteger())
-	        }
-	        if (args.realAllData)
-	        {
-	        	assert (args.reapAllData == true || (args.reapAllData == false && args.limit))
+	        	assert (!args.ids)
+	        	assert (args.limit > 0)
 	        }
 	    }
 
@@ -174,16 +254,23 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
         GenericDataTable fetch(Map args) {
             log.trace "GetRecords.fetch()"
             validateArgs(args)
-
-            if (args.limit) sqlQuery += " LIMIT $args.limit "
-            //log.trace(q)
-            sqllog.info(sqlQuery)
-
             def gdt = createEmptyDataTable(args)
-            enclosingVine.withSql { sql ->
-                sql.eachRow(sqlQuery) { row ->
-                    gdt.dataAdd(row)
-                }
+            if (args.limit) sqlQuery += " LIMIT $args.limit "
+            if (args.ids) 
+            {
+            	sqlQuery += " AND person_id IN SUB_WHERE_CLAUSE "
+            	sqllog.info(sqlQuery)
+            	gdt = enclosingVine.populateGenericDataTable(sqlQuery, gdt, args.ids)
+            }
+            else
+            {
+            	//log.trace(q)
+	            sqllog.info(sqlQuery)
+	            enclosingVine.withSql { sql ->
+	                sql.eachRow(sqlQuery) { row ->
+	                    gdt.dataAdd(row)
+	                }
+	            }
             }
             return gdt
         }
@@ -198,7 +285,8 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 						"""+dbName+""".condition_occurrence.visit_occurrence_id,
 						"""+dbName+""".concept.concept_name as condition_concept_name,
 						"""+dbName+""".concept.concept_code as condition_concept_code,
-						"""+dbName+""".concept.vocabulary_id as condition_vocabulary_id
+						"""+dbName+""".concept.vocabulary_id as condition_vocabulary_id,
+						"""+dbName+""".condition_occurrence.condition_occurrence_id
 
 						from """+dbName+""".condition_occurrence
 
@@ -218,15 +306,22 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 
 		/** validate arguments */
 	    void validateArgs(Map args = [:]) {
-	        assert (args.reapAllData || args.limit)
+	        assert (args.reapAllData || args.ids || args.limit)
+	        if (args.ids)
+	        {
+	        	assert (!args.reapAllData || args.reapAllData == false)
+	        	assert (args.ids.size() > 0)
+	        }
+	        if (args.reapAllData)
+	        {
+	        	assert (args.reapAllData == true || (args.reapAllData == false && (args.ids || args.limit)))
+	        	if (args.reapAllData == true) assert (!args.limit && !args.ids)
+	        }
 	        if (args.limit)
 	        {
 	        	assert (!args.reapAllData || args.reapAllData == false)
-	        	assert (args.limit.toString().isInteger())
-	        }
-	        if (args.realAllData)
-	        {
-	        	assert (args.reapAllData == true || (args.reapAllData == false && args.limit))
+	        	assert (!args.ids)
+	        	assert (args.limit > 0)
 	        }
 	    }
 
@@ -247,16 +342,23 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
         GenericDataTable fetch(Map args) {
             log.trace "GetRecords.fetch()"
             validateArgs(args)
-
-            if (args.limit) sqlQuery += " LIMIT $args.limit "
-            //log.trace(q)
-            sqllog.info(sqlQuery)
-
             def gdt = createEmptyDataTable(args)
-            enclosingVine.withSql { sql ->
-                sql.eachRow(sqlQuery) { row ->
-                    gdt.dataAdd(row)
-                }
+            if (args.limit) sqlQuery += " LIMIT $args.limit "
+            if (args.ids) 
+            {
+            	sqlQuery += " AND visit_occurrence_id IN SUB_WHERE_CLAUSE "
+            	sqllog.info(sqlQuery)
+            	gdt = enclosingVine.populateGenericDataTable(sqlQuery, gdt, args.ids)
+            }
+            else
+            {
+            	//log.trace(q)
+	            sqllog.info(sqlQuery)
+	            enclosingVine.withSql { sql ->
+	                sql.eachRow(sqlQuery) { row ->
+	                    gdt.dataAdd(row)
+	                }
+	            }
             }
             return gdt
         }
@@ -286,15 +388,22 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 
 		/** validate arguments */
 	    void validateArgs(Map args = [:]) {
-	        assert (args.reapAllData || args.limit)
+	        assert (args.reapAllData || args.ids || args.limit)
+	        if (args.ids)
+	        {
+	        	assert (!args.reapAllData || args.reapAllData == false)
+	        	assert (args.ids.size() > 0)
+	        }
+	        if (args.reapAllData)
+	        {
+	        	assert (args.reapAllData == true || (args.reapAllData == false && (args.ids || args.limit)))
+	        	if (args.reapAllData == true) assert (!args.limit && !args.ids)
+	        }
 	        if (args.limit)
 	        {
 	        	assert (!args.reapAllData || args.reapAllData == false)
-	        	assert (args.limit.toString().isInteger())
-	        }
-	        if (args.realAllData)
-	        {
-	        	assert (args.reapAllData == true || (args.reapAllData == false && args.limit))
+	        	assert (!args.ids)
+	        	assert (args.limit > 0)
 	        }
 	    }
 
@@ -315,16 +424,23 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
         GenericDataTable fetch(Map args) {
             log.trace "GetRecords.fetch()"
             validateArgs(args)
-
-            if (args.limit) sqlQuery += " LIMIT $args.limit "
-            //log.trace(q)
-            sqllog.info(sqlQuery)
-
             def gdt = createEmptyDataTable(args)
-            enclosingVine.withSql { sql ->
-                sql.eachRow(sqlQuery) { row ->
-                    gdt.dataAdd(row)
-                }
+            if (args.limit) sqlQuery += " LIMIT $args.limit "
+            if (args.ids) 
+            {
+            	sqlQuery += " AND visit_occurrence_id IN SUB_WHERE_CLAUSE "
+            	sqllog.info(sqlQuery)
+            	gdt = enclosingVine.populateGenericDataTable(sqlQuery, gdt, args.ids)
+            }
+            else
+            {
+            	//log.trace(q)
+	            sqllog.info(sqlQuery)
+	            enclosingVine.withSql { sql ->
+	                sql.eachRow(sqlQuery) { row ->
+	                    gdt.dataAdd(row)
+	                }
+	            }
             }
             return gdt
         }
@@ -349,7 +465,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 						"""+dbName+""".measurement.unit_concept_id =
 						unit_concept.concept_id
 						
-						SUB_WHERE_CLAUSE
+						OMOP_CODE_WHERE_CLAUSE
 
 						AND
 						value_as_number is not null
@@ -359,21 +475,29 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 
 		/** validate arguments */
 	    void validateArgs(Map args = [:]) {
-	        assert (args.reapAllData || args.limit)
+	        assert (args.reapAllData || args.ids || args.limit)
 	        assert (args.omopConceptMap)
 	        assert (args.omopConceptMap.get("bmi"))
 	        assert (args.omopConceptMap.get("weight"))
 	        assert (args.omopConceptMap.get("height"))
 	        assert (args.omopConceptMap.get("diastolicBloodPressure"))
 	        assert (args.omopConceptMap.get("systolicBloodPressure"))
+	        assert (args.reapAllData || args.ids || args.limit)
+	        if (args.ids)
+	        {
+	        	assert (!args.reapAllData || args.reapAllData == false)
+	        	assert (args.ids.size() > 0)
+	        }
+	        if (args.reapAllData)
+	        {
+	        	assert (args.reapAllData == true || (args.reapAllData == false && (args.ids || args.limit)))
+	        	if (args.reapAllData == true) assert (!args.limit && !args.ids)
+	        }
 	        if (args.limit)
 	        {
 	        	assert (!args.reapAllData || args.reapAllData == false)
-	        	assert (args.limit.toString().isInteger())
-	        }
-	        if (args.realAllData)
-	        {
-	        	assert (args.reapAllData == true || (args.reapAllData == false && args.limit))
+	        	assert (!args.ids)
+	        	assert (args.limit > 0)
 	        }
 	    }
 
@@ -395,8 +519,6 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
             log.trace "GetRecords.fetch()"
             validateArgs(args)
 
-            if (args.limit) sqlQuery += " LIMIT $args.limit "
-
             //get omop concept IDs for bmi, height, and weight
             def omopHeightId = args.omopConceptMap.get("height")
             def omopWeightId = args.omopConceptMap.get("weight")
@@ -412,20 +534,51 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 						'$systolicBloodPressure'
 						)"""
 
-            def sqlToRun = sqlQuery.replaceAll('SUB_WHERE_CLAUSE', sqlInsert)
-
-            //log.trace(q)
-            sqllog.info(sqlToRun)
-
+            def sqlToRun = sqlQuery.replaceAll('OMOP_CODE_WHERE_CLAUSE', sqlInsert)
             def gdt = createEmptyDataTable(args)
-            enclosingVine.withSql { sql ->
-                sql.eachRow(sqlToRun) { row ->
-                    gdt.dataAdd(row)
-                }
+
+            if (args.limit) sqlToRun += " LIMIT $args.limit "
+            if (args.ids) 
+            {
+            	sqlToRun += " AND visit_occurrence_id IN SUB_WHERE_CLAUSE "
+            	sqllog.info(sqlQuery)
+            	gdt = enclosingVine.populateGenericDataTable(sqlToRun, gdt, args.ids)
+            }
+            else
+            {
+            	//log.trace(q)
+	            sqllog.info(sqlToRun)
+	            enclosingVine.withSql { sql ->
+	                sql.eachRow(sqlToRun) { row ->
+	                    gdt.dataAdd(row)
+	                }
+	            }
             }
             return gdt
         }
     }
+
+    public GenericDataTable populateGenericDataTable(String parameterizedSql, GenericDataTable outputDataTable, ArrayList<String> filterValues, Integer chunkSize = 30000) {
+		assert parameterizedSql.contains("SUB_WHERE_CLAUSE")
+
+		def inClauses = filterValues.collate(chunkSize)
+
+        inClauses.eachWithIndex { chunkedValues, inClauseIndex ->
+			withSql { sql ->
+                log.trace "populateGenericDataTable: ${inClauseIndex + 1} OF ${inClauses.size()}"
+
+            	def inClause = SqlUtils.inClause(chunkedValues)
+                def q = parameterizedSql.replaceAll('SUB_WHERE_CLAUSE', "$inClause")
+                sqllog.info q
+
+                outputDataTable.dataAddAllGroovyRowResults(sql.rows(q), true)
+            }
+        }
+
+        //outputDataTable.writeFiles(Defaults.dataCacheDirectory)
+
+        return outputDataTable
+	}
 }
 
 

@@ -12,6 +12,7 @@
 plugins {
     id 'groovy'
     id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
+    id ("maven-publish")
 }
 
 
@@ -43,12 +44,28 @@ subprojects {
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
+// Github Publish
+///////////////////////////////////////////////////////////////////////////////
+subprojects {
+    apply plugin: "maven-publish"
+    publishing {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/pmbb-ibi/carnival")
+                credentials {
+                    username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USER")
+                    password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+                }
+            }
+        }
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Testing Tasks
 ///////////////////////////////////////////////////////////////////////////////
-
-
 subprojects {
     test.ignoreFailures true
 
@@ -100,7 +117,7 @@ task testReport(type: TestReport) {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// convenience tasks
+// convenience local publishing tasks
 ///////////////////////////////////////////////////////////////////////////////
 
 task refreshGremlinDsl {

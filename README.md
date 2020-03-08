@@ -12,7 +12,6 @@ Inspired by Open Biological and Biomedical Ontology (OBO) Foundry ontologies, th
 ## Quick Links
 
 * [Github Pages Website](https://pmbb-ibi.github.io/carnival/)
-* [carnival-core](app/carnival-core/README.md) - Developer details on the core carnival module
 * [carnival-gremlin-dsl](app/carnival-gremlin-dsl/README.md) - Gremlin dsl patterns for the carnival schema
 * [graph specification](app/carnival-core/doc/graph.md)
 
@@ -20,7 +19,8 @@ Inspired by Open Biological and Biomedical Ontology (OBO) Foundry ontologies, th
 ## Contents
 
 1. [Overview](#overview)
-1. [github-pages-site](#github-pages-site)
+1. [Github Pages](#github-pages-site)
+1. [Getting Started](#getting-started)
 
 <a name="overview"></a>
 ## Overview
@@ -45,9 +45,6 @@ Carnival’s property graph database:
 ## Github Pages Site
 The Github pages site is stored in the `docs` directory and makes use of [jekyll](https://jekyllrb.com).  See the [jekyll docs](https://jekyllrb.com/docs/) for jekyll installation and usage instructions.
 
-
-
-
-
-
-
+<a name="getting-started"></a>
+## Getting Started
+See [developer setup](https://pmbb-ibi.github.io/carnival/#DeveloperSetup) for full documentation on how to set up a development environment.

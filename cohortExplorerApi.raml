@@ -1,0 +1,70 @@
+#%RAML 1.0
+title: CohortExplorer
+version: .1
+baseUri: https://carnival
+types:
+  TestType:
+    type: object
+    properties:
+      id: number
+      optional?: string
+      expanded:
+        type: object
+        properties:
+          count: number
+
+
+/search:
+  post:
+    description: Perform a semantic search for the provided term
+
+/criteria:
+  /disease:
+    /graph:
+      post:
+        description: Get the graph context for a disease iri
+    /createCohort:
+      post:
+        description: Create a disease criteria cohort
+  /lab:
+    /graph:
+      post:
+        description: Get the graph context for a lab term
+    /createCohort:
+      post:
+        description: Create a lab criteria cohort
+
+/cohort:
+  get:
+    description: return a list of all cohorts, can specify filter parameters
+
+  /{cohortId}:
+    get:
+      description: Return the details of a specific cohort
+    post:
+      description: Modify an existing cohort
+    delete:
+      description: Attempt to delete an existing cohort
+
+
+/cohortQuery:
+  /graph:
+    get:
+      description: Get the graph of the current cohort query
+
+  /term:
+    get:
+      description: Get all terms in current query
+    post:
+      description: Add term to query (cohort1, cohort2, operation)
+    /{termId}:
+      post:
+        description: Modify an existing graph query term
+
+  /venn:
+    post:
+      description: Get the venn diagram for 2 cohorts
+
+  /history:
+    post:
+      description: Get the history of all user modifications to the cohort query

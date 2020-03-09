@@ -82,4 +82,15 @@ class CoreGraphTinker extends CoreGraph {
     	create(controlledInstances:controlledInstances)
     }
 
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // LIFE-CYCLE
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    public void close() {
+        graph.close()
+    }
+
 }

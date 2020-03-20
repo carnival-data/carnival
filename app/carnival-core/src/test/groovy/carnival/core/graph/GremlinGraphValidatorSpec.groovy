@@ -12,6 +12,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 import static org.apache.tinkerpop.gremlin.neo4j.process.traversal.LabelP.of
 
 import carnival.graph.*
+import test.TestModel
 
 
 
@@ -95,27 +96,35 @@ class GremlinGraphValidatorSpec extends Specification {
     // SET UP
     ///////////////////////////////////////////////////////////////////////////
     
-    def setupSpec() {
+    /*def setupSpec() {
         CoreGraphNeo4j.clearGraph()
         coreGraph = CoreGraphNeo4j.create(controlledInstances:controlledInstances)
         graph = coreGraph.graph
         graphSchema = coreGraph.graphSchema
         graphValidator = new GremlinGraphValidator()
     } 
-
-
     def setup() { 
         g = graph.traversal()
     }
-
-
     def cleanup() {
         if (g) g.close()
         if (coreGraph) coreGraph.graph.tx().rollback()
     }
-
-
     def cleanupSpec() {
+        if (coreGraph) coreGraph.graph.close()
+    }*/
+
+
+    def setup() { 
+        coreGraph = CoreGraphTinker.create(controlledInstances:controlledInstances)
+        graph = coreGraph.graph
+        graphSchema = coreGraph.graphSchema
+        graphValidator = new GremlinGraphValidator()
+        g = graph.traversal()
+    }
+
+    def cleanup() {
+        if (g) g.close()
         if (coreGraph) coreGraph.graph.close()
     }
 
@@ -124,6 +133,88 @@ class GremlinGraphValidatorSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+    def "carnival package is modelled on demand overload"() {
+        def thing, anotherThing, suitcase
+
+        expect:
+        graphValidator.checkModel(g, graphSchema).size() == 0
+        graphValidator.checkConstraints(g, graphSchema).size() == 0
+
+        when:
+        coreGraph.initializeGremlinGraph(graph, g, 'test')
+        TestModel.VX.APPLICATION.instance().withProperty(Core.PX.NAME, 'TestApp').vertex(graph, g)
+
+        then:
+        graphValidator.checkModel(g, graphSchema).size() == 0
+        graphValidator.checkConstraints(g, graphSchema).size() == 0
+    }
+
+
+    def "carnival package is not modelled by default overload"() {
+        def thing, anotherThing, suitcase
+
+        expect:
+        graphValidator.checkModel(g, graphSchema).size() == 0
+        graphValidator.checkConstraints(g, graphSchema).size() == 0
+
+        when:
+        TestModel.VX.APPLICATION.instance().withProperty(Core.PX.NAME, 'TestApp').vertex(graph, g)
+
+        then:
+        graphValidator.checkModel(g, graphSchema).size() > 0
+        graphValidator.checkConstraints(g, graphSchema).size() == 0
+    }
+
+
+    def "carnival package is modelled on demand"() {
+        def thing, anotherThing, suitcase
+
+        expect:
+        graphValidator.checkModel(g, graphSchema).size() == 0
+        graphValidator.checkConstraints(g, graphSchema).size() == 0
+
+        when:
+        coreGraph.initializeGremlinGraph(graph, g, 'test')
+        TestModel.VX.TEST_THING.instance().withProperty(Core.PX.NAME, 'TestThingName').vertex(graph, g)
+
+        then:
+        graphValidator.checkModel(g, graphSchema).size() == 0
+        graphValidator.checkConstraints(g, graphSchema).size() == 0
+    }
+
+
+    def "carnival package is not modelled by default"() {
+        def thing, anotherThing, suitcase
+
+        expect:
+        graphValidator.checkModel(g, graphSchema).size() == 0
+        graphValidator.checkConstraints(g, graphSchema).size() == 0
+
+        when:
+        TestModel.VX.TEST_THING.instance().withProperty(Core.PX.NAME, 'TestThingName').vertex(graph, g)
+
+        then:
+        graphValidator.checkModel(g, graphSchema).size() > 0
+        graphValidator.checkConstraints(g, graphSchema).size() == 0
+    }
+
+
+    def "carnival package is modelled"() {
+        def thing, anotherThing, suitcase
+
+        expect:
+        graphValidator.checkModel(g, graphSchema).size() == 0
+        graphValidator.checkConstraints(g, graphSchema).size() == 0
+
+        when:
+        Core.VX.APPLICATION.instance().withProperty(Core.PX.NAME, 'GremlinGraphValidatorSpecApp').vertex(graph, g)
+
+        then:
+        graphValidator.checkModel(g, graphSchema).size() == 0
+        graphValidator.checkConstraints(g, graphSchema).size() == 0
+    }
+
 
     def "global edge def constraints"() {
         def thing, anotherThing, suitcase

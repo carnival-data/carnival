@@ -161,11 +161,19 @@ abstract class CoreGraph implements GremlinTrait {
 	///////////////////////////////////////////////////////////////////////////
 
 	/** */
-	public void initializeGremlinGraph(Graph graph, GraphTraversalSource g) {
-		reaperMethodLabelDefinitions(graph, g)
-		initializeDefinedVertices(graph, g)
-		initializeDefinedEdges(graph, g)
+	public void initializeGremlinGraph(Graph graph, GraphTraversalSource g, String packageName) {
+		log.info "CoreGraph initializeGremlinGraph graph:$graph g:$g packageName:$packageName"
+
+		reaperMethodLabelDefinitions(graph, g, packageName)
+		initializeDefinedVertices(graph, g, packageName)
+		initializeDefinedEdges(graph, g, packageName)
 		createControlledInstances(graph, g)
+	}
+
+	/** */
+	public void initializeGremlinGraph(Graph graph, GraphTraversalSource g) {
+		log.info "CoreGraph initializeGremlinGraph graph:$graph g:$g"
+		initializeGremlinGraph(graph, g, 'carnival')
 	}
 	
 
@@ -175,13 +183,9 @@ abstract class CoreGraph implements GremlinTrait {
 	///////////////////////////////////////////////////////////////////////////
 
 	/** */
-	public void initializeDefinedVertices(Graph graph, GraphTraversalSource g) {
-		initializeDefinedVertices(graph, g, 'carnival')
-	}
-
-
-	/** */
     public void initializeDefinedVertices(Graph graph, GraphTraversalSource g, String packageName) {
+		log.info "CoreGraph initializeDefinedVertices graph:$graph g:$g packageName:$packageName"
+		
 		assert graph
 		assert g
 		assert packageName
@@ -219,6 +223,8 @@ abstract class CoreGraph implements GremlinTrait {
 
     /** */
     public Collection<VertexLabelDefinition> findNewVertexLabelDefinitions(Graph graph, GraphTraversalSource g, String packageName) {
+		log.info "CoreGraph findNewVertexLabelDefinitions graph:$graph g:$g packageName:$packageName"
+
 		assert graph
 		assert g
 		assert packageName
@@ -263,12 +269,6 @@ abstract class CoreGraph implements GremlinTrait {
 
     	return classes
     }
-
-
-	/** */
-	public void initializeDefinedEdges(Graph graph, GraphTraversalSource g) {
-		initializeDefinedEdges(graph, g, 'carnival')
-	}
 
 
 	/** */
@@ -329,14 +329,6 @@ abstract class CoreGraph implements GremlinTrait {
 	///////////////////////////////////////////////////////////////////////////
 	// REAPER METHOD GRAPH MODEL
 	///////////////////////////////////////////////////////////////////////////
-
-
-	/** */
-	public List<VertexLabelDefinition> reaperMethodLabelDefinitions(Graph graph, GraphTraversalSource g) {
-		log.trace "CoreGraph.reaperMethodLabelDefinitions"
-
-		reaperMethodLabelDefinitions(graph, g, 'carnival')
-	}
 
 
 	/** */

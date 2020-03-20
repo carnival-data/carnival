@@ -73,7 +73,7 @@ class CoreGraphSchema implements GraphSchema {
 	public List<ControlledInstance> getControlledInstances() {
 		return controlledInstances
 	}
-
+	
 
 	///////////////////////////////////////////////////////////////////////////
 	// LABEL DEFINITIONS

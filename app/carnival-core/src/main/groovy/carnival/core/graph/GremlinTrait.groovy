@@ -25,7 +25,7 @@ class GremlinTraitUtilities {
      */
     static public Object withGremlin(Graph graph, GraphTraversalSource g, Closure cl) {
         assert graph != null
-        assert g != g
+        assert g != null
         assert cl != null
 
         def res

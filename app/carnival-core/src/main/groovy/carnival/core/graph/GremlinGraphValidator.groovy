@@ -36,6 +36,18 @@ public class GremlinGraphValidator implements GraphValidator {
 
 
 	///////////////////////////////////////////////////////////////////////////
+	// STATIC METOHDS
+	///////////////////////////////////////////////////////////////////////////
+
+	/** */
+	static boolean sameAs(String a, String b) {
+		if (a == null && b == null) return true
+		if (a == null || b == null) return false
+		a.equals(b)
+	}
+
+
+	///////////////////////////////////////////////////////////////////////////
 	// MODEL CHECKING
 	///////////////////////////////////////////////////////////////////////////
 
@@ -244,6 +256,7 @@ public class GremlinGraphValidator implements GraphValidator {
 	Set<String> unmodeledElements(Traversal traversal, Collection<ElementDef> allModels) {
 
 		def modelsByLabel = modelsByLabel(allModels)
+		log.debug "modelsByLabel: $modelsByLabel"
 
 		Set<DefaultElementDef> dbElementDefs = new HashSet<DefaultElementDef>()
 		traversal.each { e ->
@@ -264,7 +277,9 @@ public class GremlinGraphValidator implements GraphValidator {
 			}
 
 			def models = modelsByLabel.get(dbr.label)
-			if (models.find({it.label == dbr.label && (it.isGlobal() || it.nameSpace == dbr.nameSpace)})) return
+			if (models.find({ 
+				sameAs(it.label, dbr.label) && (it.isGlobal() || sameAs(it.nameSpace, dbr.nameSpace)) 
+			})) return
 
 			unmodeledElements << "${dbr.nameSpace}.${dbr.label}"
 		}

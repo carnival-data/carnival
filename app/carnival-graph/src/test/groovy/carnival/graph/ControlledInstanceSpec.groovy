@@ -76,6 +76,14 @@ class ControlledInstanceSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
+    def "try next"() {
+        expect:
+        !VX.CIS_THING.instance().withProperties(
+            PX.CIS_PROP_A, 'a',
+            PX.CIS_PROP_B, 'b'
+        ).traversal(graph, g).tryNext().isPresent()
+    }
+
 
     def "default property values"() {
         given:

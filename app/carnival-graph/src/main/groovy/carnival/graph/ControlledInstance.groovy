@@ -106,16 +106,7 @@ class ControlledInstance {
         assert graph
         assert g
 
-        assertRequiredProperties(graph, g)
-
-        boolean isClass = vertexDef.isClass()
-        def lbl = vertexDef.getLabel()
-        def ns = vertexDef.getNameSpace()
-        assert ns != null
-        
-        def traversal = g.V().hasLabel(lbl)
-        if (isClass) traversal.has(Base.PX.IS_CLASS.label, isClass)
-        traversal.has(Base.PX.NAME_SPACE.label, ns)
+        def traversal = traversal(graph, g)
 
         def pvs = allPropertyValues()
         pvs.each { PropertyDefTrait vp, Object val -> 
@@ -127,6 +118,26 @@ class ControlledInstance {
         }
 
         return vertex
+    }
+
+
+    /** */
+    public Traversal traversal(Graph graph, GraphTraversalSource g) {
+        assert graph
+        assert g
+
+        assertRequiredProperties(graph, g)
+
+        boolean isClass = vertexDef.isClass()
+        def lbl = vertexDef.getLabel()
+        def ns = vertexDef.getNameSpace()
+        assert ns != null
+        
+        def traversal = g.V().hasLabel(lbl)
+        if (isClass) traversal.has(Base.PX.IS_CLASS.label, isClass)
+        traversal.has(Base.PX.NAME_SPACE.label, ns)
+
+        traversal
     }
 
 

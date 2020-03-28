@@ -62,6 +62,9 @@ trait VertexDefTrait {
     boolean global = false
 
 
+    /** */
+    VertexDefTrait superClass
+
 
     ///////////////////////////////////////////////////////////////////////////
     // BUILDER METHODS

@@ -216,6 +216,15 @@ abstract class CoreGraph implements GremlinTrait {
 	            	vdef.vertex = ci.vertex(graph, g)
 	            	log.trace "created controlled instance vertex ${vdef.vertex}"
             	}
+
+				// attempt to set super/sub class relationship
+				if (vdef.superClass) {
+					assert vdef.isClass()
+					assert vdef.superClass.isClass()
+					assert vdef.vertex
+					assert vdef.superClass.vertex
+					vdef.setSubclassOf(g, vdef.superClass)
+				}
 	        }
 		}
     }

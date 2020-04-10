@@ -20,10 +20,19 @@ import org.apache.tinkerpop.gremlin.structure.Edge
  *
  *
  */
-class ControlledInstance {
+class ControlledInstance implements WithPropertiesTrait {
+
+    ///////////////////////////////////////////////////////////////////////////
+    // STATIC
+    ///////////////////////////////////////////////////////////////////////////
 
     /** */
     static Logger log = LoggerFactory.getLogger('carnival')
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // FIELDS
+    ///////////////////////////////////////////////////////////////////////////
 
     /** */
     VertexDefTrait vertexDef
@@ -32,12 +41,28 @@ class ControlledInstance {
     Map<PropertyDefTrait,Object> propertyValues = new HashMap<PropertyDefTrait,Object>()
 
 
+    ///////////////////////////////////////////////////////////////////////////
+    // CONSTRUCTOR
+    ///////////////////////////////////////////////////////////////////////////
+
     /** */
     public ControlledInstance(VertexDefTrait vertexDef) {
         assert vertexDef
         this.vertexDef = vertexDef
     }
 
+
+    ///////////////////////////////////////////////////////////////////////////
+    // GETTERS
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    public WithPropertyDefsTrait getElementDef() { vertexDef }
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // METHODS
+    ///////////////////////////////////////////////////////////////////////////
 
     /** */
     public String toString() {
@@ -46,8 +71,7 @@ class ControlledInstance {
         return str
     }
 
-
-    /** */
+    /*
     public ControlledInstance withProperty(PropertyDefTrait propDef, Object propValue) {
         boolean found = vertexDef.vertexProperties.find({it.label == propDef.label})
         if (!found) throw new IllegalArgumentException("${propDef} is not a property of ${vertexDef.label}: ${vertexDef.vertexProperties}")
@@ -57,13 +81,11 @@ class ControlledInstance {
     }
 
 
-    /** */
     public ControlledInstance withProperties(Object... args) {
         withProperties(args.toList())
     }
 
 
-    /** */
     public ControlledInstance withProperties(List args) {
         def numArgs = args.size()
         assert numArgs >= 2
@@ -85,7 +107,6 @@ class ControlledInstance {
     }
 
 
-    /** */
     public Map<PropertyDefTrait,Object> allPropertyValues() {
         def pvs = [:]
         pvs.putAll(propertyValues)
@@ -99,6 +120,7 @@ class ControlledInstance {
         }
         return pvs
     } 
+    */
 
 
     /** */
@@ -126,7 +148,7 @@ class ControlledInstance {
         assert graph
         assert g
 
-        assertRequiredProperties(graph, g)
+        assertRequiredProperties()
 
         boolean isClass = vertexDef.isClass()
         def lbl = vertexDef.getLabel()
@@ -146,7 +168,7 @@ class ControlledInstance {
         assert graph
         assert g
 
-        assertRequiredProperties(graph, g)
+        assertRequiredProperties()
 
         def lbl = vertexDef.getLabel()
         def ns = vertexDef.getNameSpace()
@@ -160,10 +182,7 @@ class ControlledInstance {
         if (vertexDef.isClass()) v.property(Base.PX.IS_CLASS.label, vertexDef.isClass())
         if (vertexDef.isGlobal()) v.property(Base.PX.VERTEX_DEFINITION_CLASS.label, vertexDef.vertexDefinitionClass)
 
-        def pvs = allPropertyValues()
-        pvs.each { PropertyDefTrait vp, Object val ->
-            v.property(vp.label, val) 
-        }
+        setElementProperties(v)
 
         //log.debug "added vertex $v with label ${v.label()} and props $propertyValues"
         return v
@@ -171,7 +190,7 @@ class ControlledInstance {
 
 
     /** */
-    void assertRequiredProperties(Graph graph, GraphTraversalSource g) {
+    void assertRequiredProperties() {
         vertexDef.requiredProperties.each { requiredPropDef ->
             boolean found = allPropertyValues().find { k, v ->
                 k.label == requiredPropDef.label

@@ -23,7 +23,7 @@ import carnival.graph.Base
  *
  *
  */
-trait VertexDefTrait {
+trait VertexDefTrait extends WithPropertyDefsTrait {
 
     ///////////////////////////////////////////////////////////////////////////
     // STATIC
@@ -55,10 +55,6 @@ trait VertexDefTrait {
     
 
     /** */
-    List<PropertyDefTrait> vertexProperties = new ArrayList<PropertyDefTrait>()
-
-
-    /** */
     boolean global = false
 
 
@@ -67,16 +63,16 @@ trait VertexDefTrait {
 
 
     ///////////////////////////////////////////////////////////////////////////
-    // BUILDER METHODS
+    // GETTERS / SETTERS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
-    public VertexDefTrait withPropertyDef(PropertyDefTrait vertexPropertyDef) {
-        vertexProperties << vertexPropertyDef
-        return this
+    /** Setter wrapper for propertyDefs */
+    List<PropertyDefTrait> getVertexProperties() { this.propertyDefs }
+    
+    /** Getter wrapper for propertyDefs */
+    void setVertexProperties(List<PropertyDefTrait> propertyDefs) {
+        this.propertyDefs = propertyDefs
     }
-
-
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -109,59 +105,6 @@ trait VertexDefTrait {
     /** */
     public boolean isGlobal() {
         return global
-    }
-
-
-    /** */
-    public List<String> getUniquePropertyLabels() {
-        return uniqueProperties*.label
-    }
-
-
-    /** */
-    public List<String> getRequiredPropertyLabels() {
-        return requiredProperties*.label
-    }
-
-
-    /** */
-    public List<String> getIndexedPropertyLabels() {
-        return indexedProperties*.label
-    }
-
-
-    /** */
-    public List<PropertyDefTrait> getUniqueProperties() {
-        return vertexProperties.findAll {
-            it instanceof ConstrainedPropertyDefTrait &&
-            it.unique
-        }
-    }
-
-
-    /** */
-    public List<PropertyDefTrait> getRequiredProperties() {
-        return vertexProperties.findAll {
-            it instanceof ConstrainedPropertyDefTrait &&
-            it.required
-        }
-    }
-
-
-    /** */
-    public List<PropertyDefTrait> getIndexedProperties() {
-        return vertexProperties.findAll {
-            it instanceof ConstrainedPropertyDefTrait &&
-            it.index
-        }
-    }
-
-
-    /** */
-    public List<PropertyDefTrait> getDefaultProperties() {
-        return vertexProperties.findAll {
-            it.defaultValue != null
-        }
     }
 
 

@@ -10,8 +10,10 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 import org.apache.tinkerpop.gremlin.structure.T
 import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.structure.Vertex
+import org.apache.tinkerpop.gremlin.structure.Element
 import org.apache.tinkerpop.gremlin.structure.Edge
 import org.apache.tinkerpop.gremlin.structure.VertexProperty
+import org.apache.tinkerpop.gremlin.structure.Property
 
 
 
@@ -75,27 +77,27 @@ trait PropertyDefTrait {
 
 
     /** */
-    public VertexProperty of(Vertex v) {
-        v.property(getLabel())
+    public Property of(Element el) {
+        el.property(getLabel())
     }
 
 
     /** */
-    public Object valueOf(Vertex v) {
-        v.value(getLabel())
+    public Object valueOf(Element el) {
+        el.value(getLabel())
     }
 
 
     /** */
-    public PropertyDefTrait set(Vertex v, Object value) {
-        v.property(getLabel(), value)
+    public PropertyDefTrait set(Element el, Object value) {
+        el.property(getLabel(), value)
         this
     }
 
 
     /** */
-    public PropertyDefTrait setIf(Vertex v, Object value, Closure cl) {
-        if (cl(value)) set(v, value)
+    public PropertyDefTrait setIf(Element el, Object value, Closure cl) {
+        if (cl(value)) set(el, value)
         this
     }
 

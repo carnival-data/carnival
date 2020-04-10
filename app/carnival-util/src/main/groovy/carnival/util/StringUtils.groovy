@@ -26,10 +26,11 @@ class StringUtils {
      
     /** 
      * stringsLikeThis to strings_like_this
+     * stringsLikeThis1 to strings_like_this_1
      *
      */
     static public String toSnakeCase(String text) {
-        text.replaceAll( /([A-Z])/, /_$1/ ).toLowerCase().replaceAll( /^_/, '' )
+        text.replaceAll( /([A-Z0-9])/, /_$1/ ).toLowerCase().replaceAll( /^_/, '' )
     }
 
     /** 

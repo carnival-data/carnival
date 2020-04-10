@@ -40,11 +40,20 @@ class EdgeDefTraitSpec extends Specification {
     }
 
     static enum EX1 implements EdgeDefTrait {
-        EDTS_RELATION
+        EDTS_RELATION(            
+            propertyDefs:[
+                PX.EDTS_PROP_A.withConstraints(required:true)
+            ]
+        )
+        private EX1() {}
+        private EX1(Map m) {m.each { k,v -> this."$k" = v } }
     }
 
     static enum EX2 implements EdgeDefTrait {
         EDTS_RELATION(
+            propertyDefs:[
+                PX.EDTS_PROP_A
+            ],   
             domain: [VX.EDTS_THING], 
             range: [VX.EDTS_ANOTHER_THING]
         )
@@ -55,12 +64,23 @@ class EdgeDefTraitSpec extends Specification {
 
     static enum EX3 implements EdgeDefTrait {
         EDTS_RELATION(
+            propertyDefs:[
+                PX.EDTS_PROP_A.defaultValue(1).withConstraints(required:true)
+            ],
             domain: [DYNAMIC_THING], 
             range: [VX.EDTS_ANOTHER_THING]
         )
 
         private EX3() {}
         private EX3(Map m) {m.each { k,v -> this."$k" = v } }
+    }
+
+    static enum PX implements PropertyDefTrait {
+        EDTS_PROP_A,
+        EDTS_PROP_B,
+
+        public PX() {}
+        public PX(Map m) {m.each { k,v -> this."$k" = v }}
     }
 
 
@@ -98,6 +118,16 @@ class EdgeDefTraitSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+    def "property def constraints"() {
+
+        expect:
+        !PX.EDTS_PROP_A.hasProperty('required')
+        EX1.EDTS_RELATION.propertyDefs[0].hasProperty('required')
+        !EX2.EDTS_RELATION.propertyDefs[0].hasProperty('required')
+        EX3.EDTS_RELATION.propertyDefs[0].hasProperty('required')
+    }
+
 
     def "vertex vertex enforce range with global"() {
         given:

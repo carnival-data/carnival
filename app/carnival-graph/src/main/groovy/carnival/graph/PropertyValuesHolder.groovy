@@ -21,7 +21,7 @@ import org.apache.tinkerpop.gremlin.structure.Element
  *
  *
  */
-trait WithPropertiesTrait {
+class PropertyValuesHolder<T> {
 
     /** */
     static Logger log = LoggerFactory.getLogger('carnival')
@@ -31,7 +31,7 @@ trait WithPropertiesTrait {
 
 
     /** */
-    public WithPropertiesTrait withProperty(PropertyDefTrait propDef, Object propValue) {
+    public T withProperty(PropertyDefTrait propDef, Object propValue) {
         assert this.respondsTo("getElementDef")
         WithPropertyDefsTrait eDef = getElementDef()
 
@@ -44,13 +44,13 @@ trait WithPropertiesTrait {
 
 
     /** */
-    public WithPropertiesTrait withProperties(Object... args) {
+    public T withProperties(Object... args) {
         withProperties(args.toList())
     }
 
 
     /** */
-    public WithPropertiesTrait withProperties(List args) {
+    public T withProperties(List args) {
         def numArgs = args.size()
         assert numArgs >= 2
         assert numArgs % 2 == 0

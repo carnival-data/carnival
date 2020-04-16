@@ -20,7 +20,7 @@ import org.apache.tinkerpop.gremlin.structure.Edge
  *
  *
  */
-class ControlledInstance implements WithPropertiesTrait {
+class ControlledInstance extends PropertyValuesHolder<ControlledInstance> {
 
     ///////////////////////////////////////////////////////////////////////////
     // STATIC

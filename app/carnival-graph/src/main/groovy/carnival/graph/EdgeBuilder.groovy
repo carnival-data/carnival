@@ -20,7 +20,7 @@ import org.apache.tinkerpop.gremlin.structure.Edge
  *
  *
  */
-class EdgeBuilder implements WithPropertiesTrait {
+class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
 
     ///////////////////////////////////////////////////////////////////////////
     // STATIC

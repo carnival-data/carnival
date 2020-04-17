@@ -37,9 +37,6 @@ class ControlledInstance extends PropertyValuesHolder<ControlledInstance> {
     /** */
     VertexDefTrait vertexDef
 
-    /** */
-    Map<PropertyDefTrait,Object> propertyValues = new HashMap<PropertyDefTrait,Object>()
-
 
     ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTOR

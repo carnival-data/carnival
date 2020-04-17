@@ -64,7 +64,6 @@ abstract class CoreGraph implements GremlinTrait {
 
         def maxClosureParams = cl.getMaximumNumberOfParameters()
 
-        def g
 		try {
 			if (maxClosureParams == 0) {
 				cl()
@@ -92,7 +91,6 @@ abstract class CoreGraph implements GremlinTrait {
 
         def maxClosureParams = cl.getMaximumNumberOfParameters()
 
-        def g
 		try {
 			if (maxClosureParams == 0) {
 				cl()
@@ -194,9 +192,9 @@ abstract class CoreGraph implements GremlinTrait {
 
 		withTransactionIfSupported(graph) {
 	        newDefinitions.each { vld ->
-	        	log.trace "initializeDefinedVertices vld: $vld"
+	        	log.trace "initializeDefinedVertices vld: ${vld.label} $vld"
 
-	        	log.trace "adding vertex label definition to graph schema ${vld}"
+	        	log.trace "adding vertex label definition to graph schema ${vld.label} ${vld}"
 				graphSchema.dynamicLabelDefinitions << vld
 
 				// add the controlled instance, which can only be done if there
@@ -209,12 +207,12 @@ abstract class CoreGraph implements GremlinTrait {
 
 	            	if (!ci) {
 	            		ci = vdef.controlledInstance()
-	            		log.trace "created controlled instance ${ci}"
+	            		log.trace "created controlled instance ${ci.vertexDef.label} ${ci}"
 		            	graphSchema.controlledInstances << ci
 		            }
 	            	
 	            	vdef.vertex = ci.vertex(graph, g)
-	            	log.trace "created controlled instance vertex ${vdef.vertex}"
+	            	log.trace "created controlled instance vertex ${vdef.label} ${vdef.nameSpace} ${vdef.vertex}"
             	}
 
 				// attempt to set super/sub class relationship
@@ -255,7 +253,7 @@ abstract class CoreGraph implements GremlinTrait {
             	}
             	if (!found) {
 					def vld = VertexLabelDefinition.create(vdef)
-					log.trace "found new vertex label definition ${vld}"
+					log.trace "found new vertex label definition ${vld.label} ${vld}"
 	            	newDefinitions << vld
             	}
             }
@@ -270,11 +268,11 @@ abstract class CoreGraph implements GremlinTrait {
     	// find all vertex defs
     	Reflections reflections = new Reflections(packageName)
     	Set<Class<VertexDefTrait>> classes = reflections.getSubTypesOf(VertexDefTrait.class)
-    	log.trace "findVertexDefClases classes: $classes"
+    	log.trace "findVertexDefClases classes(${classes?.size()}): $classes"
 
     	// remove genralized classes
     	classes.remove(carnival.graph.DynamicVertexDef)
-    	log.trace "findVertexDefClases classes: $classes"
+    	log.trace "findVertexDefClases classes(${classes?.size()}): $classes"
 
     	return classes
     }
@@ -447,7 +445,7 @@ abstract class CoreGraph implements GremlinTrait {
 		
 		withTransactionIfSupported(graph) {
 			graphSchema.controlledInstances.each { ci ->
-				log.trace "creating controlled instance $ci"
+				log.trace "creating controlled instance ${ci.class.simpleName} $ci"
 				if (ci instanceof ControlledInstance) verts << ci.vertex(graph, g)
 				else verts << createControlledInstanceVertex(graph, g, ci)
 			}

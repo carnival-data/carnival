@@ -54,6 +54,7 @@ class CoreGraphTinker extends CoreGraph {
     /** */
     public static CoreGraphTinker create(Map args = [:]) {
 		log.info "CoreGraphTinker create args:$args"
+		log.info "CoreGraphTinker create controlledInstances(${args.controlledInstances?.size()}): ${args.controlledInstances}"
 
     	def graph = TinkerGraph.open()
 
@@ -79,7 +80,7 @@ class CoreGraphTinker extends CoreGraph {
 
     /** */
     public static CoreGraphTinker create(Collection<VertexInstanceDefinition> controlledInstances) {
-    	log.ingo "CoreGraphTinker create controlledInstances:$controlledInstances"
+    	log.ingo "CoreGraphTinker create controlledInstances(${controlledInstances?.size()}):$controlledInstances"
 		assert controlledInstances
     	assert controlledInstances.size() > 0
     	create(controlledInstances:controlledInstances)

@@ -47,22 +47,23 @@ class CoreGraphSpec extends Specification {
     
 
     def setup() {
-    	
+        coreGraph = CoreGraphTinker.create(controlledInstances:controlledInstances)
     }
 
     def setupSpec() {
-        CoreGraphNeo4j.clearGraph()
-        coreGraph = CoreGraphNeo4j.create(controlledInstances:controlledInstances)
+        //CoreGraphNeo4j.clearGraph()
+        //coreGraph = CoreGraphNeo4j.create(controlledInstances:controlledInstances)
     } 
 
 
     def cleanupSpec() {
-        if (coreGraph) coreGraph.graph.close()
+        //if (coreGraph) coreGraph.graph.close()
     }
 
 
     def cleanup() {
-        if (coreGraph) coreGraph.graph.tx().rollback()
+        //if (coreGraph) coreGraph.graph.tx().rollback()
+        if (coreGraph) coreGraph.close()
     }
 
 
@@ -71,17 +72,6 @@ class CoreGraphSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
     
-    def "test apoc"() {
-        when: 
-        def graph = coreGraph.graph
-        def apocVersion = graph.cypher('RETURN apoc.version()').toList().first()
-        println "apocVersion: $apocVersion"
-
-        then:
-        apocVersion != null
-    }
-
-
     /**
     * This will test graph initizilation once it's been moved to CoreGraph
     */
@@ -98,16 +88,6 @@ class CoreGraphSpec extends Specification {
     	graph != null
     }
 
-    def "test initializeGraph for uniqueness constraint existence"() {
-    	when:
-    	def graph = coreGraph.graph
-    	def constraints = graph.cypher("CALL db.constraints()").toList()
-
-    	then:
-    	//println constraints
-    	constraints != null
-    	constraints.size() >= 2
-    }
 
     def "test initializeGraph for ControlledInstance creation"() {
     	given:
@@ -126,21 +106,21 @@ class CoreGraphSpec extends Specification {
     	vs = g.V().hasLabel('Identifier').toList()
 
     	then:
-    	assert vs
+    	vs
     	vs.size() == 2
 
     	when:
     	vs = g.V().hasLabel('Identifier').has("value", "1").toList()
 
     	then:
-    	assert vs
+    	vs
     	vs.size() == 1
 
     	when:
     	vs = g.V().hasLabel('Identifier').has("value", "2").toList()
 
     	then:
-    	assert vs
+    	vs
     	vs.size() == 1
 
     	when:

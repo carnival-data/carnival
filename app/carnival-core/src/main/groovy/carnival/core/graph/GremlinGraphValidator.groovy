@@ -93,8 +93,10 @@ public class GremlinGraphValidator implements GraphValidator {
 	        	.hasLabel(lbl)
 	        	.has(Base.PX.NAME_SPACE.label, instance.vertexDef.nameSpace)
 
+			//log.debug "GraphValidator.checkConstraints instance.propertyValues: ${instance.propertyValues}"
+
 	        instance.propertyValues.each { PropertyDefTrait vp, Object val -> 
-	        	log.debug "GraphValidator ${vp.label} $val"
+	        	//log.debug "GraphValidator.checkConstraints instance.propertyValues.each ${vp.label} $val"
 	        	traversal.has(vp.label, val) 
 	        }
 
@@ -223,7 +225,7 @@ public class GremlinGraphValidator implements GraphValidator {
 		def dbPropertyKeys = graph.cypher("CALL db.propertyKeys()").toList()*.propertyKey
 		def unmodeledPropertyKeys = dbPropertyKeys - modeledPropertyKeys
 		unmodeledPropertyKeys = unmodeledPropertyKeys - ["~gremlin.neo4j.multiProperties", "~gremlin.neo4j.metaProperties"] // default properties
-		if (unmodeledPropertyKeys) warnings << "Unmodeled vertex labels: $unmodeledPropertyKeys"
+		if (unmodeledPropertyKeys) warnings << "Unmodeled property labels: $unmodeledPropertyKeys"
 		*/
 
 		return warnings
@@ -237,7 +239,7 @@ public class GremlinGraphValidator implements GraphValidator {
 		assert graphSchema
 
 		def warnings = []
-		
+
 		def unmodeledVertices = unmodeledElements(
 			g.V(), 
 			graphSchema.labelDefinitions

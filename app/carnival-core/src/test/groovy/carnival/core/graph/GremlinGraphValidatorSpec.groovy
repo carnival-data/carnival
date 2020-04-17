@@ -86,37 +86,14 @@ class GremlinGraphValidatorSpec extends Specification {
     @Shared g
     @Shared graphSchema
     
-    @Shared controlledInstances = [
-        Core.VX.IDENTIFIER.controlledInstance().withProperty(Core.PX.VALUE, "1"),
-        Core.VX.IDENTIFIER.controlledInstance().withProperty(Core.PX.VALUE, "2"),
-    ]
-
 
     ///////////////////////////////////////////////////////////////////////////
     // SET UP
     ///////////////////////////////////////////////////////////////////////////
     
-    /*def setupSpec() {
-        CoreGraphNeo4j.clearGraph()
-        coreGraph = CoreGraphNeo4j.create(controlledInstances:controlledInstances)
-        graph = coreGraph.graph
-        graphSchema = coreGraph.graphSchema
-        graphValidator = new GremlinGraphValidator()
-    } 
-    def setup() { 
-        g = graph.traversal()
-    }
-    def cleanup() {
-        if (g) g.close()
-        if (coreGraph) coreGraph.graph.tx().rollback()
-    }
-    def cleanupSpec() {
-        if (coreGraph) coreGraph.graph.close()
-    }*/
-
 
     def setup() { 
-        coreGraph = CoreGraphTinker.create(controlledInstances:controlledInstances)
+        coreGraph = CoreGraphTinker.create()
         graph = coreGraph.graph
         graphSchema = coreGraph.graphSchema
         graphValidator = new GremlinGraphValidator()
@@ -125,7 +102,7 @@ class GremlinGraphValidatorSpec extends Specification {
 
     def cleanup() {
         if (g) g.close()
-        if (coreGraph) coreGraph.graph.close()
+        if (coreGraph) coreGraph.close()
     }
 
 
@@ -134,7 +111,7 @@ class GremlinGraphValidatorSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
-    def "carnival package is modelled on demand overload"() {
+    def "test package is modelled on demand overload"() {
         def thing, anotherThing, suitcase
 
         expect:
@@ -151,7 +128,7 @@ class GremlinGraphValidatorSpec extends Specification {
     }
 
 
-    def "carnival package is not modelled by default overload"() {
+    def "test package is not modelled by default overload"() {
         def thing, anotherThing, suitcase
 
         expect:
@@ -167,7 +144,7 @@ class GremlinGraphValidatorSpec extends Specification {
     }
 
 
-    def "carnival package is modelled on demand"() {
+    def "test package is modelled on demand"() {
         def thing, anotherThing, suitcase
 
         expect:
@@ -184,7 +161,7 @@ class GremlinGraphValidatorSpec extends Specification {
     }
 
 
-    def "carnival package is not modelled by default"() {
+    def "test package is not modelled by default"() {
         def thing, anotherThing, suitcase
 
         expect:
@@ -420,7 +397,6 @@ class GremlinGraphValidatorSpec extends Specification {
         then:
         graphValidator.checkConstraints(g, graphSchema).size() == 1
     }
-    
 
 }
 

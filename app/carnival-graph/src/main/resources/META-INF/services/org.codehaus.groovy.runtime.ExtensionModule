@@ -1,4 +1,4 @@
 moduleName=Carnival Core Extension Module
 moduleVersion=1.0-test
-extensionClasses=carnival.util.FieldNameExtensions
+extensionClasses=carnival.util.FieldNameExtensions,carnival.graph.TinkerpopExtensions
 staticExtensionClasses=

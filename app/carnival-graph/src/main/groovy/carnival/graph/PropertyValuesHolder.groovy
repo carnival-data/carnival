@@ -31,6 +31,14 @@ class PropertyValuesHolder<T> {
 
 
     /** */
+    public T withProperty(PropertyDefTrait propDef, Enum propValue) {
+        assert propDef != null
+        assert propValue != null
+        withProperty(propDef, propValue.name())
+    }
+
+
+    /** */
     public T withProperty(PropertyDefTrait propDef, Object propValue) {
         assert this.respondsTo("getElementDef")
         WithPropertyDefsTrait eDef = getElementDef()

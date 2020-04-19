@@ -68,56 +68,11 @@ class ControlledInstance extends PropertyValuesHolder<ControlledInstance> {
         return str
     }
 
-    /*
-    public ControlledInstance withProperty(PropertyDefTrait propDef, Object propValue) {
-        boolean found = vertexDef.vertexProperties.find({it.label == propDef.label})
-        if (!found) throw new IllegalArgumentException("${propDef} is not a property of ${vertexDef.label}: ${vertexDef.vertexProperties}")
 
-        propertyValues.put(propDef, propValue)
-        return this
+    /** */
+    public Vertex ensure(Graph graph, GraphTraversalSource g) {
+        vertex(graph, g)
     }
-
-
-    public ControlledInstance withProperties(Object... args) {
-        withProperties(args.toList())
-    }
-
-
-    public ControlledInstance withProperties(List args) {
-        def numArgs = args.size()
-        assert numArgs >= 2
-        assert numArgs % 2 == 0
-
-        Map<PropertyDefTrait,Object> props = new HashMap<PropertyDefTrait,Object>()
-        def i = 0
-        while (i < numArgs) {
-            def propDef = args[i++]
-            def propVal = args[i++]
-            props.put(propDef, propVal)
-        }    
-        //log.trace "withProperties props: $props"
-
-        props.each { PropertyDefTrait vp, Object val ->
-            this.withProperty(vp, val)
-        }
-        return this
-    }
-
-
-    public Map<PropertyDefTrait,Object> allPropertyValues() {
-        def pvs = [:]
-        pvs.putAll(propertyValues)
-        vertexDef.defaultProperties.each { PropertyDefTrait defVp ->
-            def found = pvs.find({ vp, val -> vp.label == defVp.label})
-            //log.debug "found: $found"
-            
-            if (!found) {
-                pvs.put(defVp, defVp.defaultValue)                
-            }
-        }
-        return pvs
-    } 
-    */
 
 
     /** */
@@ -157,6 +112,12 @@ class ControlledInstance extends PropertyValuesHolder<ControlledInstance> {
         traversal.has(Base.PX.NAME_SPACE.label, ns)
 
         traversal
+    }
+
+
+    /** */
+    public Vertex create(Graph graph, GraphTraversalSource g) {
+        createVertex(graph, g)
     }
 
 

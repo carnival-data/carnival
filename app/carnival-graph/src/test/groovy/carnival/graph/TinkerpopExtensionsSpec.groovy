@@ -94,7 +94,7 @@ class TinkerpopExtensionsSpec extends Specification {
 
     def "has enum"() {
         when:
-        def vc = VX.THING.instance().withProperty(PX.ID, LOCAL_ID.ID1).create(graph, g)
+        def vc = VX.THING.instance().withProperty(PX.ID, LOCAL_ID.ID1).ensure(graph, g)
         def vf = g.V().isa(VX.THING).has(PX.ID, LOCAL_ID.ID1).tryNext()
 
         then:
@@ -105,9 +105,9 @@ class TinkerpopExtensionsSpec extends Specification {
 
     def "out basic"() {
         when:
-        def v1 = VX.THING.instance().withProperty(PX.ID, '58').create(graph, g)
-        def v2 = VX.THING.instance().withProperty(PX.ID, '59').create(graph, g)
-        EX.IS_NOT.instance().from(v1).to(v2).create(g)
+        def v1 = VX.THING.instance().withProperty(PX.ID, '58').ensure(graph, g)
+        def v2 = VX.THING.instance().withProperty(PX.ID, '59').ensure(graph, g)
+        EX.IS_NOT.instance().from(v1).to(v2).create()
 
         then:
         g.V(v1).out(EX.IS_NOT).tryNext().isPresent()
@@ -118,7 +118,7 @@ class TinkerpopExtensionsSpec extends Specification {
 
     def "isa has basic"() {
         when:
-        def vc = VX.THING.instance().withProperty(PX.ID, '58').create(graph, g)
+        def vc = VX.THING.instance().withProperty(PX.ID, '58').ensure(graph, g)
         def vf = g.V().isa(VX.THING).has(PX.ID, '58').tryNext()
 
         then:
@@ -126,7 +126,7 @@ class TinkerpopExtensionsSpec extends Specification {
         vf.get() == vc
 
         when:
-        def vc2 = VX2.THING.instance().withProperty(PX.ID, '58').create(graph, g)
+        def vc2 = VX2.THING.instance().withProperty(PX.ID, '58').ensure(graph, g)
         def vf2 = g.V().isa(VX2.THING).has(PX.ID, '58').tryNext()
 
         then:

@@ -44,17 +44,17 @@ import carnival.core.graph.query.QueryProcess
 
 
 /**
- * gradle test --tests "carnival.core.vine.CachingVineSpec"
+ * gradle test --tests "carnival.core.vine.VineSpec"
  *
  */
-class CachingVineSpec extends Specification {
+class VineSpec extends Specification {
 
 
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    //@Shared cachingVine
+    //@Shared vine
 
 
 
@@ -85,8 +85,7 @@ class CachingVineSpec extends Specification {
 
     def "vine metaData with vine args"() {
         given:
-        def cachingVine = new TestCachingVine()
-        cachingVine.cacheMode = CachingVine.CacheMode.IGNORE
+        def vine = new TestVine()
         def mdt
         def args
 
@@ -108,7 +107,7 @@ class CachingVineSpec extends Specification {
         def qp = new QueryProcess('qp1')
         args = [arg1:'val1', queryProcess:qp]
 
-        mdt = cachingVine.vineMethodWithQueryProcess(args)
+        mdt = vine.vineMethodWithQueryProcess(args)
 
         def files = mdt.writeFiles(buildDir)
         println "files: ${files}"
@@ -134,44 +133,26 @@ class CachingVineSpec extends Specification {
 
     def "vine metaData with no args"() {
         given:
-        def cachingVine = new TestCachingVine()
-        cachingVine.cacheMode = CachingVine.CacheMode.IGNORE
+        def vine = new TestVine()
 
         when:
-        def mdt0 = cachingVine.staticVineMethod()
+        def mdt0 = vine.staticVineMethod()
 
         then:
         matchStaticVineData(mdt0)
         matchStaticVineMetaData(mdt0)
-
-        when:
-        def cacheDataFile = mdt0.findDataFile(cachingVine.cacheDirectory)
-        println "cacheDataFile: ${cacheDataFile?.canonicalPath}"
-
-        then:
-        cacheDataFile
-
-        when:
-        def ant = new AntBuilder()
-        ant.replace(file: cacheDataFile, token: "v11", value: "v11_")
-        println cacheDataFile.text
-        def mdt1 = cachingVine.staticVineMethod()
-
-        then:
-        matchStaticVineData(mdt1)
-        matchStaticVineMetaData(mdt1)
     }
+    
 
     def "vine metaData with args"() {
         given:
-        def cachingVine = new TestCachingVine()
-        cachingVine.cacheMode = CachingVine.CacheMode.IGNORE
+        def vine = new TestVine()
         def mdt
 
         def args = [arg1:'val1']
 
         when:
-        mdt = cachingVine.staticVineMethod(args)
+        mdt = vine.staticVineMethod(args)
 
         then:
         matchStaticVineData(mdt)
@@ -179,7 +160,7 @@ class CachingVineSpec extends Specification {
 
         when:
         args = [arg1:'val1', arg2:'val2']
-        mdt = cachingVine.staticVineMethod(args)
+        mdt = vine.staticVineMethod(args)
 
         then:
         matchStaticVineData(mdt)
@@ -187,259 +168,11 @@ class CachingVineSpec extends Specification {
 
         when:
         args = [arg1:'val1', arg2:['lval1', 'lval2']]
-        mdt = cachingVine.staticVineMethod(args)
+        mdt = vine.staticVineMethod(args)
 
         then:
         matchStaticVineData(mdt)
         matchStaticVineMetaData(mdt, args)
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // TESTS - CACHE MODE 
-    ///////////////////////////////////////////////////////////////////////////
-
-    def "withCacheMode basic"() {
-        given:
-        def vine = new TestCachingVine(
-            cacheMode:CachingVine.CacheMode.REQUIRED
-        )
-        def vmc = vine.findVineMethodClass('StaticVineMethod')
-        def vm = vmc.newInstance()
-        def name = vm.meta([:]).name
-        def files = MappedDataTable.findFiles(vine.cacheDirectory, name)
-        files.each { k, f -> f.delete() }
-
-        // first verify that we get a failure due to cache mode REQUIRED
-        when:
-        def mdt0 = vine.staticVineMethod()
-
-        then:
-        Throwable e = thrown()
-
-        // run with cache mode OPTIONAL
-        when:
-        def cacheModePre = vine.cacheMode
-        def cacheModeDuring
-        def mdt1 = vine.withCacheMode(CachingVine.CacheMode.OPTIONAL) { CachingVine v ->
-            cacheModeDuring = v.cacheMode
-            v.staticVineMethod()
-        }
-        def cacheModePost = vine.cacheMode
-
-        then:
-        cacheModePre == CachingVine.CacheMode.REQUIRED
-        cacheModeDuring == CachingVine.CacheMode.OPTIONAL
-        cacheModePost == CachingVine.CacheMode.REQUIRED
-    }
-
-
-    ///////////////////////////////////////////////////////////////////////////
-    // TESTS - CACHE MODE REQUIRED
-    ///////////////////////////////////////////////////////////////////////////
-
-
-    def "required - work if cache files"() {
-        given:
-        def vine = new TestCachingVine(
-            cacheMode:CachingVine.CacheMode.REQUIRED
-        )
-        def vmc = vine.findVineMethodClass('StaticVineMethod')
-        def vm = vmc.newInstance()
-        def name = vm.meta([:]).name
-        def files = MappedDataTable.findFiles(vine.cacheDirectory, name)
-        files.each { k, f -> f.delete() }
-
-        when:
-        def mdt0 = vine.staticVineMethod()
-
-        then:
-        Throwable e = thrown()
-
-        when:
-        vine.cacheMode = CachingVine.CacheMode.IGNORE
-        def mdt1 = vine.staticVineMethod()
-
-        then:
-        matchStaticVineData(mdt1)        
-
-        when:
-        vine.cacheMode = CachingVine.CacheMode.REQUIRED
-        def mdt2 = vine.staticVineMethod()
-
-        then:
-        matchStaticVineData(mdt2)        
-    }    
-
-
-    def "required - fail if no cache files"() {
-        given:
-        def vine = new TestCachingVine(
-            cacheMode:CachingVine.CacheMode.REQUIRED
-        )
-        def vmc = vine.findVineMethodClass('StaticVineMethod')
-        def vm = vmc.newInstance()
-        def name = vm.meta([:]).name
-        def files = MappedDataTable.findFiles(vine.cacheDirectory, name)
-        files.each { k, f -> f.delete() }
-
-        when:
-        def mdt0 = vine.staticVineMethod()
-
-        then:
-        Throwable e = thrown()
-    }
-
-
-    ///////////////////////////////////////////////////////////////////////////
-    // TESTS - CACHE MODE OPTIONAL
-    ///////////////////////////////////////////////////////////////////////////
-
-
-
-    def "optional - use cache file if exists"() {
-        given:
-        def cachingVine = new TestCachingVine(
-            cacheMode:CachingVine.CacheMode.OPTIONAL
-        )
-
-        when:
-        def mdt0 = cachingVine.staticVineMethod()
-
-        then:
-        matchStaticVineData(mdt0)
-        matchStaticVineMetaData(mdt0)
-
-        when:
-        def cacheDataFile = mdt0.findDataFile(cachingVine.cacheDirectory)
-        println "cacheDataFile: ${cacheDataFile?.canonicalPath}"
-
-        then:
-        cacheDataFile
-
-        when:
-        def ant = new AntBuilder()
-        ant.replace(file: cacheDataFile, token: "v11", value: "v11_")
-        println cacheDataFile.text
-        def mdt1 = cachingVine.staticVineMethod()
-
-        then:
-        matchModifiedStaticData(mdt1)
-        matchStaticVineMetaData(mdt1)
-    }
-
-
-
-    ///////////////////////////////////////////////////////////////////////////
-    // TESTS - CACHE MODE NONE
-    ///////////////////////////////////////////////////////////////////////////
-
-    def "none - cache files are ignored"() {
-        given:
-        def cachingVine = new TestCachingVine()
-        cachingVine.cacheMode = CachingVine.CacheMode.IGNORE
-
-        when:
-        def mdt0 = cachingVine.staticVineMethod()
-
-        then:
-        matchStaticVineData(mdt0)
-
-        when:
-        def cacheDataFile = mdt0.findDataFile(cachingVine.cacheDirectory)
-        println "cacheDataFile: ${cacheDataFile?.canonicalPath}"
-
-        then:
-        cacheDataFile
-
-        when:
-        def ant = new AntBuilder()
-        ant.replace(file: cacheDataFile, token: "v11", value: "v11_")
-        println cacheDataFile.text
-        def mdt1 = cachingVine.staticVineMethod()
-
-        then:
-        matchStaticVineData(mdt1)
-    }
-
-
-
-    def "none - multiple cache files"() {
-        given:
-        def cachingVine = new TestCachingVine()
-
-        when:
-        cachingVine.cacheMode = CachingVine.CacheMode.IGNORE
-        def mdt = cachingVine.numArgsVineMethod(args)
-        List<File> files = mdt.writtenTo
-
-        then:
-        files != null
-        files.size() == 2
-        files.each { it.exists() }
-
-        when:
-        def mdtCache = MappedDataTable.createFromFiles(cachingVine.cacheDirectory, mdt.name)
-        //def mdtTarget = MappedDataTable.createFromFiles(cachingVine.targetDirectory, mdt.name)
-
-        then:
-        matchNumArgsVineData(mdtCache, numArgs)
-        //matchNumArgsVineData(mdtTarget, numArgs)
-
-        where:
-        args << [[:], [a:1], [a:1, b:2]]
-        numArgs << [0, 1, 2]
-    }
-
-
-
-    def "none - cache file data are correct"() {
-        given:
-        def cachingVine = new TestCachingVine()
-
-        when:
-        cachingVine.cacheMode = CachingVine.CacheMode.IGNORE
-        def mdt = cachingVine.call('StaticVineMethod')
-        println "$mdt"
-        println "${mdt?.data}"
-        List<File> files = mdt.writtenTo
-
-        then:
-        files != null
-        files.size() == 2
-        files.each { it.exists() }
-
-        when:
-        def mdtCache = MappedDataTable.createFromFiles(cachingVine.cacheDirectory, mdt.name)
-
-        then:
-        matchStaticVineData(mdtCache)
-
-        /*
-        when:
-        def mdtTarget = MappedDataTable.createFromFiles(cachingVine.targetDirectory, mdt.name)
-
-        then:
-        matchStaticVineData(mdtTarget)
-        */
-    }
-
-
-
-    def "none - cache files are written"() {
-        given:
-        def cachingVine = new TestCachingVine()
-
-        when:
-        cachingVine.cacheMode = CachingVine.CacheMode.IGNORE
-        def mdt = cachingVine.call('StaticVineMethod')
-        println "$mdt"
-        println "${mdt?.data}"
-        List<File> files = mdt.writtenTo
-
-        then:
-        files != null
-        files.size() == 2
-        files.each { it.exists() }
     }
 
 
@@ -450,13 +183,12 @@ class CachingVineSpec extends Specification {
 
     def "test data matches"() {
         given:
-        def cachingVine = new TestCachingVine()
-        cachingVine.cacheMode = CachingVine.CacheMode.IGNORE
+        def vine = new TestVine()
         def mdt
         def args
 
         when:
-        mdt = cachingVine.call('StaticVineMethod')
+        mdt = vine.call('StaticVineMethod')
 
         then:
         println "$mdt"
@@ -475,32 +207,31 @@ class CachingVineSpec extends Specification {
 
     def "call by vine method class name"() {
         given:
-        def cachingVine = new TestCachingVine()
-        cachingVine.cacheMode = CachingVine.CacheMode.IGNORE
+        def vine = new TestVine()
         def data
         def args
         Throwable e
 
         when:
-        data = cachingVine.call('StaticVineMethod')
+        data = vine.call('StaticVineMethod')
 
         then:
         data != null
 
         when:
-        data = cachingVine.call('StaticVineMethod', [:])
+        data = vine.call('StaticVineMethod', [:])
 
         then:
         data != null
 
         when:
-        data = cachingVine.call('StaticVineMethod', [arg1:'val1'])
+        data = vine.call('StaticVineMethod', [arg1:'val1'])
 
         then:
         data != null
 
         when:
-        data = cachingVine.call('NonExistentVineMethod')
+        data = vine.call('NonExistentVineMethod')
 
         then:
         e = thrown()
@@ -510,32 +241,31 @@ class CachingVineSpec extends Specification {
 
     def "method missing"() {
         given:
-        def cachingVine = new TestCachingVine()
-        cachingVine.cacheMode = CachingVine.CacheMode.IGNORE
+        def vine = new TestVine()
         def data
         def args
         Throwable e
 
         when:
-        data = cachingVine.staticVineMethod()
+        data = vine.staticVineMethod()
 
         then:
         data != null
 
         when:
-        data = cachingVine.staticVineMethod(arg1:'val1')
+        data = vine.staticVineMethod(arg1:'val1')
 
         then:
         data != null
 
         when:
-        data = cachingVine.nonExistentMethod()
+        data = vine.nonExistentMethod()
 
         then:
         e = thrown()
 
         when:
-        data = cachingVine.nonExistentMethod(arg1:'arg1')
+        data = vine.nonExistentMethod(arg1:'arg1')
 
         then:
         e = thrown()
@@ -552,7 +282,7 @@ class CachingVineSpec extends Specification {
         println "$mdt.vine"
 
         assert mdt.vine
-        assert mdt.vine.name == "carnival.core.vine.TestCachingVine"
+        assert mdt.vine.name == "carnival.core.vine.TestVine"
         assert mdt.vine.method == "StaticVineMethod"
         assert mdt.vine.args == args
     }
@@ -560,7 +290,7 @@ class CachingVineSpec extends Specification {
 
     void matchNumArgsVineMetaData(MappedDataTable mdt, Map args = [:]) {
         assert mdt.vine
-        assert mdt.vine.name == "carnival.core.vine.TestCachingVine"
+        assert mdt.vine.name == "carnival.core.vine.TestVine"
         assert mdt.vine.method == "NumArgsVineMethod"
         assert mdt.vine.args == args
     }
@@ -620,16 +350,10 @@ class CachingVineSpec extends Specification {
 
 
 
-/**
- * A caching vine used for testing.
- *
- */
-class TestCachingVine extends RelationalVineGeneric implements CachingVine {
+/** */
+class TestVine extends Vine {
 
-    public TestCachingVine(Map args = [:]) {
-        super({} as DatabaseConfig)
-        if (args.cacheMode) this.cacheMode = args.cacheMode
-    }
+    public TestVine(Map args = [:]) { }
 
 
     /**

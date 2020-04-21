@@ -35,7 +35,7 @@ import groovy.transform.InheritConstructors
  * Vine to pull data from a variety of file formats
  *
  */
-abstract class FileVine extends Vine implements CachingVine {
+abstract class FileVine extends Vine {
 
 
 	///////////////////////////////////////////////////////////////////////////
@@ -95,7 +95,7 @@ abstract class FileVine extends Vine implements CachingVine {
 	 *
 	 */
 	public FileVine() { 
-		cacheMode = CacheMode.IGNORE
+		//cacheMode = CacheMode.IGNORE
 	}
 
 	

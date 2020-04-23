@@ -98,14 +98,15 @@ class CoreGraphNeo4j extends CoreGraph {
    		config.setProperty('gremlin.neo4j.directory', Defaults.dataGraphDirectoryPath)
 
    		[
-   			'gremlin.neo4j.conf.dbms.security.auth_enabled',
-   			'gremlin.neo4j.conf.dbms.directories.plugins',
-   			'gremlin.neo4j.conf.dbms.security.procedures.unrestricted',
-   			'gremlin.neo4j.conf.dbms.security.procedures.whitelist',
-   			'gremlin.neo4j.conf.dbms.unmanaged_extension_classes'
-
+   			"carnival.gremlin.neo4j.conf.dbms.security.auth_enabled",
+   			"carnival.gremlin.neo4j.conf.dbms.directories.plugins",
+   			"carnival.gremlin.neo4j.conf.dbms.security.procedures.unrestricted",
+   			"carnival.gremlin.neo4j.conf.dbms.security.procedures.whitelist",
+   			"carnival.gremlin.neo4j.conf.dbms.unmanaged_extension_classes"
    		].each { p ->
-	   		config.setProperty(p, Defaults.getConfigValue(p))
+		    def k = p.split('\\.').drop(1).join('.')
+		    def v = Defaults.getConfigValue(p)
+	   		config.setProperty(k, v)
    		}
    		
    		return config

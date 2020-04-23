@@ -24,9 +24,9 @@ class RdfConfig extends DatabaseConfig {
 
 	static public RdfConfig getDatabaseConfigFromFile(String confFilePath, String prefix) {
         def conf = loadYamlFile(confFilePath)
-        if (!conf.get('dataSourcesRdf')) throw new RuntimeException("no dataSourcesRdf configurations in: $confFilePath")
-        if (!conf.dataSourcesRdf.get(prefix)) throw new RuntimeException("no configuration in $confFilePath for $prefix")
-        def db = new RdfConfig(conf.dataSourcesRdf.get(prefix))
+        if (!conf.get('carnival.dataSourcesRdf')) throw new RuntimeException("no dataSourcesRdf configurations in: $confFilePath")
+        if (!conf.carnival.dataSourcesRdf.get(prefix)) throw new RuntimeException("no configuration in $confFilePath for $prefix")
+        def db = new RdfConfig(conf.carnival.dataSourcesRdf.get(prefix))
 		return db
 	}
 

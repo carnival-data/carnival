@@ -27,11 +27,11 @@ public class Defaults {
 
     /** */
     final String[] requiredNeo4jConfigs = [
-        'gremlin.neo4j.conf.dbms.security.auth_enabled',
-        'gremlin.neo4j.conf.dbms.directories.plugins',
-        'gremlin.neo4j.conf.dbms.security.procedures.unrestricted',
-        'gremlin.neo4j.conf.dbms.security.procedures.whitelist',
-        'gremlin.neo4j.conf.dbms.unmanaged_extension_classes'
+        'carnival.gremlin.neo4j.conf.dbms.security.auth_enabled',
+        'carnival.gremlin.neo4j.conf.dbms.directories.plugins',
+        'carnival.gremlin.neo4j.conf.dbms.security.procedures.unrestricted',
+        'carnival.gremlin.neo4j.conf.dbms.security.procedures.whitelist',
+        'carnival.gremlin.neo4j.conf.dbms.unmanaged_extension_classes'
     ]
 
     /** */
@@ -301,7 +301,7 @@ public class Defaults {
     }
 
     static public String getTargetDirectoryPath() {
-        getDirectoryConfigValue('directories.execution.target', 'target') 
+        getDirectoryConfigValue('carnival.directories.execution.target', 'target') 
     }
 
     static public File getTargetDirectory() {
@@ -309,7 +309,7 @@ public class Defaults {
     }
 
     static public String getDataDirectoryPath() {
-        getDirectoryConfigValue('directories.data.root', 'data') 
+        getDirectoryConfigValue('carnival.directories.data.root', 'data') 
     }
 
     static public File getDataDirectory() {
@@ -317,7 +317,7 @@ public class Defaults {
     }
 
     static public String getDataCacheDirectoryPath() {
-        return getConfigValue('directories.data.cache') ?: "${dataDirectoryPath}/cache"
+        return getConfigValue('carnival.directories.data.cache') ?: "${dataDirectoryPath}/cache"
     }
 
     static public File getDataCacheDirectory() {
@@ -325,7 +325,7 @@ public class Defaults {
     }
 
     static public String getDataGraphDirectoryPath() {
-        return getConfigValue('directories.data.graph.app') ?: "${dataDirectoryPath}/graph/app"
+        return getConfigValue('carnival.directories.data.graph.app') ?: "${dataDirectoryPath}/graph/app"
     }
 
     static public File getDataGraphDirectory() {
@@ -333,7 +333,7 @@ public class Defaults {
     }
 
     static public String getDataGraphPublishBaseDirectoryPath() {
-        return getConfigValue('directories.data.graph.publish.base') ?: "${dataDirectoryPath}/graph/publish/base"
+        return getConfigValue('carnival.directories.data.graph.publish.base') ?: "${dataDirectoryPath}/graph/publish/base"
     }
 
     static public File getDataGraphPublishBaseDirectory() {
@@ -341,7 +341,7 @@ public class Defaults {
     }
 
     static public String getDataGraphPublishWorkspaceDirectoryPath() {
-        return getConfigValue('directories.data.graph.publish.workspace') ?: "${dataDirectoryPath}/graph/publish/workspace"
+        return getConfigValue('carnival.directories.data.graph.publish.workspace') ?: "${dataDirectoryPath}/graph/publish/workspace"
     }
 
     static public File getDataGraphPublishWorkspaceDirectory() {
@@ -376,42 +376,6 @@ public class Defaults {
         initDirectory(getDataGraphPublishBaseDirectory())
         initDirectory(getDataGraphPublishWorkspaceDirectory())
     }
-
-
-
-    /*
-    static private void setSystemProps(Map conf) {
-        log.trace "directories: ${conf.get('directories')}"
-        Map dconf = conf.get('directories').get('data')
-        if (!dconf) throw new RuntimeException('directories.data not configured')
-
-        ['root', 'graph', 'cache'].each {
-            def propKey = "directory-data-${it}"
-            if (dconf.get(it)) System.setProperty(propKey, dconf.get(it)) 
-            log.debug "$it $propKey " + System.getProperty(propKey) 
-        }
-
-        Map econf = conf.get('directories').get('execution')
-        if (!econf) throw new RuntimeException('directories.execution not configured')
-        ['target'].each {
-            def propKey = "directory-execution-${it}"
-            if (econf.get(it)) System.setProperty(propKey, econf.get(it)) 
-            log.debug "$it $propKey " + System.getProperty(propKey) 
-        }
-    }
-
-    static public void setConfigDir(File configDir) {
-        assert configDir
-        assert configDir.exists()
-        assert configDir.isDirectory()
-        System.setProperty('directory-config', configDir.canonicalPath)
-    }
-    */
-
-
-
-
-
 
 }
 

@@ -52,7 +52,7 @@ import carnival.core.graph.CoreGraphNeo4j
 class EncounterMatcherSpec extends Specification {
 
 
-    static Logger log = LoggerFactory.getLogger('carnival')
+    static Logger log = LoggerFactory.getLogger(EncounterMatcherSpec)
 
 
     // optional fixture methods

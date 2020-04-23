@@ -42,7 +42,7 @@ class CsvFileVine extends FileVine {
 	static Logger sqllog = LoggerFactory.getLogger('sql')
 
 	/** console log */
-	static Logger log = LoggerFactory.getLogger('carnival')
+	static Logger log = LoggerFactory.getLogger(CsvFileVine)
 
 
 

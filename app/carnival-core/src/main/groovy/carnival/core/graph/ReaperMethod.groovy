@@ -3,9 +3,7 @@ package carnival.core.graph
 
 
 import groovy.transform.Synchronized
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
@@ -58,14 +56,12 @@ public interface ReaperMethodInterface {
  * The ReaperMethod interface must be implemented by any reaper methods...
  *
  */
+@Slf4j
 abstract class ReaperMethod implements ReaperMethodInterface, TrackedProcessTrait {
 
     ///////////////////////////////////////////////////////////////////////////
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
 
     /** */
     static void assertPatientVertices(Map args) {

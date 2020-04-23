@@ -2,8 +2,7 @@ package carnival.core.vine
 
 
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 import java.util.concurrent.atomic.AtomicInteger
 import org.ho.yaml.Yaml
@@ -113,14 +112,12 @@ class HttpEndpointConfig extends HttpServerConfig {
  * specified by an HttpEndpointConfig. 
  *
  */
+@Slf4j
 class HttpEndpoint {
 
     ///////////////////////////////////////////////////////////////////////////
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
 
     /** */
     static public HttpEndpoint create(HttpServerConfig httpServerConfig, String urlPath, ContentType contentType = ContentType.JSON) {

@@ -4,9 +4,7 @@ package carnival.core.graph
 
 import groovy.util.AntBuilder
 import groovy.transform.ToString
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 import org.reflections.Reflections
 
@@ -41,20 +39,12 @@ import carnival.graph.ControlledInstance
  * The core graph.  See the documentation for model details.
  *
  */
+@Slf4j
 abstract class CoreGraph implements GremlinTrait {
-
-	///////////////////////////////////////////////////////////////////////////
-	// STATIC FIELDS
-	///////////////////////////////////////////////////////////////////////////
-
-	/** Carnival log */
-	static Logger log = LoggerFactory.getLogger('carnival')
-
 
 	///////////////////////////////////////////////////////////////////////////
 	// UTILITY
 	///////////////////////////////////////////////////////////////////////////
-
 
 	/** */
 	static public void withTransaction(Graph graph, Closure cl) {
@@ -80,7 +70,7 @@ abstract class CoreGraph implements GremlinTrait {
 	/** */
 	static public void withTransactionIfSupported(Graph graph, Closure cl) {
 		def transactionsAreSupported = graph.features().graph().supportsTransactions()
-		log.debug "transactionsAreSupported:${transactionsAreSupported}"
+		log.trace "transactionsAreSupported:${transactionsAreSupported}"
 
 		def tx
 		if (transactionsAreSupported) {

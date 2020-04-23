@@ -35,7 +35,7 @@ abstract public class Reasoner implements ReasonerInterface, GremlinTrait {
     static Logger elog = LoggerFactory.getLogger('db-entity-report')
 
     /** carnival log */
-    static Logger log = LoggerFactory.getLogger('carnival')
+    static Logger log = LoggerFactory.getLogger(Reasoner)
 
     /** */
     static enum VX implements VertexDefTrait {

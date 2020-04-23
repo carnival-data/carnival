@@ -5,9 +5,7 @@ package carnival.core.graph
 import groovy.util.AntBuilder
 import groovy.transform.ToString
 import groovy.transform.InheritConstructors
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 import org.reflections.Reflections
 
@@ -36,16 +34,8 @@ import carnival.util.Defaults
 
 /** */
 @InheritConstructors
+@Slf4j
 class CoreGraphTinker extends CoreGraph {
-
-	///////////////////////////////////////////////////////////////////////////
-	// STATIC
-	///////////////////////////////////////////////////////////////////////////
-
-	/** Carnival log*/
-	static Logger log = LoggerFactory.getLogger('carnival')
-
-
 
 	///////////////////////////////////////////////////////////////////////////
 	// FACTORY 

@@ -39,7 +39,7 @@ class H2 {
 	static Logger sqllog = LoggerFactory.getLogger('sql')
 
 	/** console log */
-	static Logger log = LoggerFactory.getLogger('carnival')
+	static Logger log = LoggerFactory.getLogger(H2)
 
 	/** strings that are considered to represent null values */
 	static def NULL_VALUES = ['na', 'null']

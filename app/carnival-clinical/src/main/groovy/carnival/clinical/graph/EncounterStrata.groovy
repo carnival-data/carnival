@@ -5,10 +5,8 @@ package carnival.clinical.graph
 import java.util.concurrent.atomic.AtomicInteger
 
 import groovy.util.AntBuilder
+import groovy.util.logging.Slf4j
 import groovy.transform.ToString
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 import org.apache.commons.configuration.Configuration
 import org.apache.commons.configuration.BaseConfiguration
@@ -51,10 +49,8 @@ import groovy.transform.*
  * (Encounter)-[:is_member_of]->(EncounterGroup)
  *
  */
+@Slf4j
 abstract class EncounterStrata {
-
-	/** a logger */
-	static Logger log = LoggerFactory.getLogger('carnival')
 
 	/** the core graph to use as the data source */
 	CoreGraph coreGraph
@@ -190,10 +186,8 @@ RETURN
  * Encounters whose current ages are 20-29 will be grouped in a EncounterStrataGroup.
  *
  */
+@Slf4j
 class EncounterStrataGroup {
-
-	/** a logger */
-	static Logger log = LoggerFactory.getLogger('carnival')
 
 	/** the data source */
 	CoreGraph coreGraph

@@ -49,7 +49,7 @@ import carnival.core.graph.CoreGraphNeo4j
  */
 class EncounterStrataSpec extends Specification {
 
-    static Logger log = LoggerFactory.getLogger('carnival')
+    static Logger log = LoggerFactory.getLogger(EncounterStrataSpec)
 
 
     // optional fixture methods

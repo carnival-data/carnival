@@ -3,9 +3,7 @@ package carnival.graph
 
 
 import groovy.transform.ToString
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
@@ -21,10 +19,8 @@ import org.apache.tinkerpop.gremlin.structure.Element
  *
  *
  */
+@Slf4j
 class PropertyValuesHolder<T> {
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
 
     /** */
     Map<PropertyDefTrait,Object> propertyValues = new HashMap<PropertyDefTrait,Object>()

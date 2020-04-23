@@ -2,8 +2,7 @@ package carnival.core.vine
 
 
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 import java.util.concurrent.atomic.AtomicInteger
 import org.ho.yaml.Yaml
@@ -41,14 +40,12 @@ import carnival.core.config.DatabaseConfig
  * Convenience class that offers useful utilities for interacting with Redcap.
  *
  */
+@Slf4j
 abstract class RedcapVine extends Vine {
 
     ///////////////////////////////////////////////////////////////////////////
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
 
     /** */
     static final List<String> POSITIVE_VALS = ["y", "yes", "1"]

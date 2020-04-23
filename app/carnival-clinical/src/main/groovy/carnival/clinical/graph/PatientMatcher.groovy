@@ -44,7 +44,7 @@ class PatientMatcher {
 	// STATIC
 	///////////////////////////////////////////////////////////////////////////
 
-    static Logger log = LoggerFactory.getLogger('carnival')
+    static Logger log = LoggerFactory.getLogger(PatientMatcher)
 	static Logger sqllog = LoggerFactory.getLogger('sql')    
 
 

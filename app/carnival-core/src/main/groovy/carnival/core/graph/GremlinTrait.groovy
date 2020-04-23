@@ -16,8 +16,7 @@ import org.apache.tinkerpop.gremlin.structure.Vertex
 /** */
 class GremlinTraitUtilities {
 
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
+    static Logger log = LoggerFactory.getLogger(GremlinTraitUtilities)
 
     /**
      * cl(graph, g)
@@ -66,8 +65,7 @@ trait GremlinTrait  {
     // STATIC FIELDS
     ///////////////////////////////////////////////////////////////////////////
     static Logger sqllog = LoggerFactory.getLogger('sql')
-    static Logger elog = LoggerFactory.getLogger('db-entity-report')
-    static Logger log = LoggerFactory.getLogger('carnival')
+    static Logger log = LoggerFactory.getLogger(GremlinTrait)
 
 
     ///////////////////////////////////////////////////////////////////////////

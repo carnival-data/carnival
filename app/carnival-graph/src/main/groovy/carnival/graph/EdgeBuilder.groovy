@@ -3,9 +3,7 @@ package carnival.graph
 
 
 import groovy.transform.ToString
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
@@ -20,15 +18,8 @@ import org.apache.tinkerpop.gremlin.structure.Edge
  *
  *
  */
+@Slf4j
 class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
-
 
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS

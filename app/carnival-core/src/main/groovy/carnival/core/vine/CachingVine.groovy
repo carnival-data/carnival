@@ -41,7 +41,7 @@ trait CachingVine {
     static enum CacheMode {IGNORE, OPTIONAL, REQUIRED}
 
     // loggers
-    static final Logger log = LoggerFactory.getLogger('carnival')
+    static final Logger log = LoggerFactory.getLogger(CachingVine)
     static final Logger qlog = LoggerFactory.getLogger('carnival-query-updates')
 
 

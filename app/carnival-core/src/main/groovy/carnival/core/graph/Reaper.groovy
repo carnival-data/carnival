@@ -71,7 +71,7 @@ abstract class Reaper {
 	///////////////////////////////////////////////////////////////////////////
 	static Logger sqllog = LoggerFactory.getLogger('sql')
 	static Logger elog = LoggerFactory.getLogger('db-entity-report')
-	static Logger log = LoggerFactory.getLogger('carnival')
+	static Logger log = LoggerFactory.getLogger(Reaper)
 
     /** */
     static enum VX implements VertexDefTrait {

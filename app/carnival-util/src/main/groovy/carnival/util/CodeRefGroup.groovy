@@ -4,6 +4,7 @@ package carnival.util
 
 import groovy.transform.ToString
 import groovy.transform.EqualsAndHashCode
+import groovy.util.logging.Slf4j
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -17,14 +18,12 @@ import org.slf4j.LoggerFactory
  */
 @ToString(excludes=['individualCodeRefs', 'wildcardRefs'])
 @EqualsAndHashCode
+@Slf4j
 class CodeRefGroup {
 
 	///////////////////////////////////////////////////////////////////////////
 	// STATIC
 	///////////////////////////////////////////////////////////////////////////
-
-    /** carnival log */
-    static final Logger log = LoggerFactory.getLogger('carnival')
 
     /**
      * Convenience factory method to create a CodeRefGroup object.

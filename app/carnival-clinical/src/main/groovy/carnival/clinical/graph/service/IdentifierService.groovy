@@ -56,7 +56,7 @@ class IdentifierService extends ReportService {
     static final Logger elog = LoggerFactory.getLogger('db-entity-report')
 
     /** */
-    static final Logger log = LoggerFactory.getLogger('carnival')
+    static final Logger log = LoggerFactory.getLogger(IdentifierService)
 
 
 

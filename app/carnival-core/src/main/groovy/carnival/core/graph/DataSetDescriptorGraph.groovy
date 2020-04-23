@@ -6,9 +6,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 
 import groovy.transform.Memoized
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 import groovy.transform.ToString
 import groovy.transform.Synchronized
@@ -444,14 +442,6 @@ class DataSetDescriptorGraph implements GremlinTrait {
 class FeatureSetRecipeStepVineMethod implements DescribedEntity {
 
     ///////////////////////////////////////////////////////////////////////////
-    // STATIC FIELDS
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
-
-
-    ///////////////////////////////////////////////////////////////////////////
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
@@ -467,14 +457,6 @@ class FeatureSetRecipeStepVineMethod implements DescribedEntity {
  */
 @ToString(includeNames=true)
 class FeatureSetRecipeStepGraphTraversal implements DescribedEntity {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC FIELDS
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
-
 
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS

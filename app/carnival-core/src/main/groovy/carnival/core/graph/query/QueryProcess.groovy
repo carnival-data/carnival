@@ -35,7 +35,7 @@ class QueryProcess {
     static final Logger elog = LoggerFactory.getLogger('db-entity-report')
 
     /** carnival log */
-    static final Logger log = LoggerFactory.getLogger('carnival')
+    static final Logger log = LoggerFactory.getLogger(QueryProcess)
 
     /** progress update log */
     static final Logger qlog = LoggerFactory.getLogger('carnival-query-updates')

@@ -1,8 +1,7 @@
 package carnival.core.vine
 
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 import org.eclipse.rdf4j.model.IRI
 import org.eclipse.rdf4j.model.impl.SimpleIRI
@@ -22,16 +21,13 @@ import org.eclipse.rdf4j.query.BooleanQuery
 import org.eclipse.rdf4j.query.TupleQuery
 import org.eclipse.rdf4j.query.TupleQueryResult
 
+
 /**
  * Convenience class that offers useful utilities for interacting with GraphDb RDF triplestores <http://graphdb.ontotext.com/>.
  *
  */
+@Slf4j
 abstract class GraphDbVine extends Vine {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC
-    ///////////////////////////////////////////////////////////////////////////
-    static Logger log = LoggerFactory.getLogger('carnival')
 
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS

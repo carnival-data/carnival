@@ -1,24 +1,21 @@
 package carnival.core.config
 
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
+import groovy.util.logging.Slf4j
 
 
 /**
  * A database configuration.
  *
  */
+@Slf4j
 class RelationalDatabaseConfig extends DatabaseConfig {
 
 
 	///////////////////////////////////////////////////////////////////////////
 	// STATIC
 	///////////////////////////////////////////////////////////////////////////
-	static final Logger log = LoggerFactory.getLogger('carnival')
 
-	
 	static public RelationalDatabaseConfig getDatabaseConfigFromFile(String fileName, String prefix) {
         File dsConfigFile = new File(fileName)
         assert dsConfigFile.exists()

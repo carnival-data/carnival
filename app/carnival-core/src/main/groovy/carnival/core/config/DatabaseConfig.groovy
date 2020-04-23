@@ -1,8 +1,7 @@
 package carnival.core.config
 
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 import org.yaml.snakeyaml.Yaml
 
 
@@ -12,9 +11,8 @@ import org.yaml.snakeyaml.Yaml
  * A database configuration.
  *
  */
+@Slf4j
 abstract class DatabaseConfig {
-
-	static final Logger log = LoggerFactory.getLogger('carnival')
 
 	static public Map loadYaml(String text) {
         Yaml yaml = new Yaml();

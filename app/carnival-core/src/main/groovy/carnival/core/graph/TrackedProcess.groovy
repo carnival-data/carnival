@@ -47,7 +47,7 @@ trait TrackedProcessTrait implements TrackedProcessInterface {
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
+    static Logger log = LoggerFactory.getLogger(TrackedProcessTrait)
 
     /** */
     static Logger elog = LoggerFactory.getLogger('db-entity-report')
@@ -209,7 +209,7 @@ public class TrackedProcess implements TrackedProcessTrait {
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
+    static Logger log = LoggerFactory.getLogger(TrackedProcess)
 
     /** */
     static Logger elog = LoggerFactory.getLogger('db-entity-report')

@@ -1,9 +1,7 @@
 package carnival.util
 
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
+import groovy.util.logging.Slf4j
 import static com.xlson.groovycsv.CsvParser.parseCsv
 import com.xlson.groovycsv.CsvIterator
 import com.xlson.groovycsv.PropertyMapper
@@ -20,16 +18,13 @@ import groovy.sql.*
  * with Vine.readFromCsvFile().
  *
  */
+@Slf4j
 class IterativeCsvWriter {
 
 
     ///////////////////////////////////////////////////////////////////////////
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
-
-    /** carnival log */
-	static Logger log = LoggerFactory.getLogger('carnival')
-
 
     /**
      * Factory: Create an IterativeCsvWriter for a provided file.

@@ -7,9 +7,7 @@ import java.text.SimpleDateFormat
 import static java.util.UUID.randomUUID
 
 import groovy.transform.Memoized
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 import static com.xlson.groovycsv.CsvParser.parseCsv
 import com.xlson.groovycsv.CsvIterator
@@ -33,15 +31,8 @@ import static groovy.json.JsonOutput.*
  *
  */
 @ToString(includeNames=true)
+@Slf4j
 class DataSetDescriptor extends MarkdownRenderer implements DescribedEntity {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC FIELDS
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
-
 
     ///////////////////////////////////////////////////////////////////////////
     // STATIC METHODS
@@ -189,15 +180,8 @@ class DataSetDescriptor extends MarkdownRenderer implements DescribedEntity {
  *
  */
 @ToString(includeNames=true)
+@Slf4j
 class FeatureSetDescriptor extends MarkdownRenderer implements DescribedEntity {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC FIELDS
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
-
 
     ///////////////////////////////////////////////////////////////////////////
     // STATIC METHODS
@@ -265,15 +249,8 @@ class FeatureSetDescriptor extends MarkdownRenderer implements DescribedEntity {
  *
  */
 @ToString(includeNames=true)
+@Slf4j
 class FeatureSetRecipe extends MarkdownRenderer implements DescribedEntity {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC FIELDS
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
-
 
     ///////////////////////////////////////////////////////////////////////////
     // STATIC METHODS
@@ -330,14 +307,8 @@ class FeatureSetRecipe extends MarkdownRenderer implements DescribedEntity {
  *
  */
 @ToString(includeNames=true)
+@Slf4j
 class FeatureSetRecipeStep extends MarkdownRenderer implements DescribedEntity {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC FIELDS
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -436,15 +407,8 @@ class FeatureSetRecipeStep extends MarkdownRenderer implements DescribedEntity {
  *
  */
 @ToString(includeNames=true)
+@Slf4j
 class FeatureSetRecipeIngredient extends MarkdownRenderer implements DescribedEntity {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC FIELDS
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
-
 
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS

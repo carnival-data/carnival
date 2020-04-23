@@ -36,7 +36,7 @@ class TimeToCompletionEstimator {
     ///////////////////////////////////////////////////////////////////////////
 
     /** carnival log */
-    static final Logger log = LoggerFactory.getLogger('carnival')
+    static final Logger log = LoggerFactory.getLogger(TimeToCompletionEstimator)
 
     /** log for completion updates */
     static final Logger qlog = LoggerFactory.getLogger('carnival-query-updates')

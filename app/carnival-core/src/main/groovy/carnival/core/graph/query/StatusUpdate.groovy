@@ -26,7 +26,7 @@ class StatusUpdate {
     static final Logger elog = LoggerFactory.getLogger('db-entity-report')
 
     /** carnival log */
-    static final Logger log = LoggerFactory.getLogger('carnival')
+    static final Logger log = LoggerFactory.getLogger(StatusUpdate)
 
 
     ///////////////////////////////////////////////////////////////////////////

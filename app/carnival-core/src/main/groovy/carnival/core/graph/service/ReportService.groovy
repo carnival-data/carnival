@@ -46,7 +46,7 @@ abstract class ReportService {
 
     static final Logger sqllog = LoggerFactory.getLogger('sql')
     static final Logger elog = LoggerFactory.getLogger('db-entity-report')
-    static final Logger log = LoggerFactory.getLogger('carnival')
+    static final Logger log = LoggerFactory.getLogger(ReportService)
 
 
     ///////////////////////////////////////////////////////////////////////////

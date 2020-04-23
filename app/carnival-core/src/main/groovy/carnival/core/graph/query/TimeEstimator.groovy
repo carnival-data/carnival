@@ -2,8 +2,7 @@ package carnival.core.graph.query
 
 
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
@@ -28,15 +27,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 
 /** */
 @ToString(includeNames=true, excludes=['statusUpdateChannel', 'queryProcess', 'timeToCompletion', 'timeToCompletionAsString', 'statusUpdates'])
+@Slf4j
 class TimeEstimator {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC 
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** carnival log */
-    static final Logger log = LoggerFactory.getLogger('carnival')
-
 
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS

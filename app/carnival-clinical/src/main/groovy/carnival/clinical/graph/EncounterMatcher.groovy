@@ -45,7 +45,7 @@ class EncounterMatcher {
 	///////////////////////////////////////////////////////////////////////////
 
 	/** carnival logger */
-    static Logger log = LoggerFactory.getLogger('carnival')
+    static Logger log = LoggerFactory.getLogger(EncounterMatcher)
 
     /** sql logger */
 	static Logger sqllog = LoggerFactory.getLogger('sql')   

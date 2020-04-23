@@ -2,7 +2,6 @@ package carnival.util
 
 
 import java.text.SimpleDateFormat
-
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -43,6 +42,15 @@ import org.yaml.snakeyaml.representer.Representer
  */
 @ToString(excludes=['data'], includeNames=true)
 class MappedDataTable extends DataTable implements MappedDataInterface {
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // STATIC
+    ///////////////////////////////////////////////////////////////////////////
+
+	/** carnival logger */
+    static Logger log = LoggerFactory.getLogger(GenericDataTable)
+
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -164,15 +172,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
             return data.dateFormatPattern
         }
     }
-
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC FIELDS
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** logger */
-	static Logger log = LoggerFactory.getLogger('carnival')
-
 
 
     ///////////////////////////////////////////////////////////////////////////

@@ -36,7 +36,7 @@ class FrequencyMatcher {
 	// STATIC
 	///////////////////////////////////////////////////////////////////////////
 	static Logger elog = LoggerFactory.getLogger('db-entity-report')
-	static Logger log = LoggerFactory.getLogger('carnival')
+	static Logger log = LoggerFactory.getLogger(FrequencyMatcher)
 
 	// -- input
 	String resultFeatureName = "fMatchControlSelection"

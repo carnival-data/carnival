@@ -3,6 +3,7 @@ package carnival.graph
 
 
 import groovy.transform.InheritConstructors
+import groovy.util.logging.Slf4j
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -17,14 +18,8 @@ import org.apache.tinkerpop.gremlin.structure.Edge
 
 
 /** */
+@Slf4j
 trait EdgeDefTrait extends WithPropertyDefsTrait {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
 
 
     ///////////////////////////////////////////////////////////////////////////

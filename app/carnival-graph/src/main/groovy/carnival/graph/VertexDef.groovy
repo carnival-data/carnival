@@ -3,9 +3,7 @@ package carnival.graph
 
 
 import groovy.transform.ToString
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
@@ -23,12 +21,9 @@ import carnival.graph.Base
  *
  *
  */
+@Slf4j
 class VertexDef {
 
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
-
- 
     /** */
     static public VertexDefTrait lookup(Vertex v) {
         assert v != null

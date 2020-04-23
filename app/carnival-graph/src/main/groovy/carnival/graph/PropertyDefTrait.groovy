@@ -2,8 +2,9 @@ package carnival.graph
 
 
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
+//import org.slf4j.Logger
+//import org.slf4j.LoggerFactory
 
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
@@ -18,16 +19,8 @@ import org.apache.tinkerpop.gremlin.structure.Property
 
 
 /** */
+@Slf4j
 trait PropertyDefTrait {
-
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
-
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -123,15 +116,8 @@ trait PropertyDefTrait {
 
 
 /** */
+@Slf4j
 trait ConstrainedPropertyDefTrait {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
-
 
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS

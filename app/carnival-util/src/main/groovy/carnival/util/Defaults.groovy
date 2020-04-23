@@ -3,8 +3,7 @@ package carnival.util
 
 
 import org.yaml.snakeyaml.Yaml
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 
 
@@ -12,15 +11,13 @@ import org.slf4j.LoggerFactory
  * Configuration utility -- to be re-written!!!!
  *
  */
+@Slf4j
 public class Defaults {
 
 
 	///////////////////////////////////////////////////////////////////////////
 	// STATIC FIELDS
 	///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
 
     /** */
     static final Random random = new Random()

@@ -2,8 +2,7 @@ package carnival.core.vine
 
 
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 import groovy.util.AntBuilder
 
@@ -23,10 +22,8 @@ import carnival.core.graph.query.QueryProcess
  * constructing a cache file name or naming a DataTable.
  *
  */
+@Slf4j
 trait VineMethod {
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
 
     /**
      * An optional QueryProcess to which updates can be sent.

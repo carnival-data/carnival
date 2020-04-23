@@ -78,7 +78,7 @@ class FeatureReport extends MappedDataTable {
     static Logger elog = LoggerFactory.getLogger('db-entity-report')
 
     /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
+    static Logger log = LoggerFactory.getLogger(FeatureReport)
 
     /** */
     static final String DATE_SHIFT_SUFFIX = '_SHIFTED'

@@ -52,7 +52,7 @@ abstract class MultiFileVine extends Vine /*implements CachingVine*/ {
 	static Logger sqllog = LoggerFactory.getLogger('sql')
 
 	/** console log */
-	static Logger log = LoggerFactory.getLogger('carnival')
+	static Logger log = LoggerFactory.getLogger(MultiFileVine)
 
 	/** strings that are considered to represent null values */
 	static def NULL_VALUES = ['na', 'null']

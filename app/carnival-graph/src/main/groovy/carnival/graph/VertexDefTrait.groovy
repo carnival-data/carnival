@@ -3,6 +3,8 @@ package carnival.graph
 
 
 import groovy.transform.ToString
+import groovy.util.logging.Slf4j
+
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -23,14 +25,12 @@ import carnival.graph.Base
  *
  *
  */
+@Slf4j
 trait VertexDefTrait extends WithPropertyDefsTrait {
 
     ///////////////////////////////////////////////////////////////////////////
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
 
     /** */
     public static final String GLOBAL = 'GlobalVertexDefinition'

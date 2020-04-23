@@ -16,7 +16,7 @@ public class Defaults {
 
 
 	///////////////////////////////////////////////////////////////////////////
-	// STATIC
+	// STATIC FIELDS
 	///////////////////////////////////////////////////////////////////////////
 
     /** */
@@ -24,6 +24,18 @@ public class Defaults {
 
     /** */
     static final Random random = new Random()
+
+    /** */
+    final String[] requiredNeo4jConfigs = [
+        'gremlin.neo4j.conf.dbms.security.auth_enabled',
+        'gremlin.neo4j.conf.dbms.directories.plugins',
+        'gremlin.neo4j.conf.dbms.security.procedures.unrestricted',
+        'gremlin.neo4j.conf.dbms.security.procedures.whitelist',
+        'gremlin.neo4j.conf.dbms.unmanaged_extension_classes'
+    ]
+
+    /** */
+    static Map configData = null
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -139,12 +151,15 @@ public class Defaults {
     ///////////////////////////////////////////////////////////////////////////
 
     static public Map loadApplicationConfiguration() {
+        if (Defaults.configData) return Defaults.configData
+
         def confFile = findApplicationConfigurationFile()
 
         // blow up if we have no configuration
         if (!confFile) throw new RuntimeException('could not locate configuration file')
 
         def conf = loadApplicationConfiguration(confFile)
+        this.configData = conf
         return conf
     }
 
@@ -177,6 +192,62 @@ public class Defaults {
     }
     */
 
+
+    ///////////////////////////////////////////////////////////////////////////
+    // CONFIGURATION SETTER
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    static public void setConfigData(Map m) {
+        assert m != null
+        if (Defaults.configData == null) Defaults.loadApplicationConfiguration()
+        m.entrySet().each { entry -> setConfigData(Defaults.configData, entry )}
+        log.trace "setConfigData final Defaults.configData: ${Defaults.configData}"
+    }
+
+
+    /** */
+    static public void setConfigData(Map dest, Map.Entry toSet) {
+        log.trace "setConfigData dest:${dest} toSet:${toSet}"
+
+        def toSetKey = toSet.getKey()
+        def toSetVal = toSet.getValue()
+
+        if (toSetVal instanceof Map) {
+
+            if (dest.containsKey(toSetKey)) {
+                
+                def destVal = dest.get(toSetKey)
+                if (destVal == null) {
+                    dest.put(toSetKey, toSetVal)
+                } else {
+                    if (!(destVal instanceof Map)) throw new IllegalArgumentException("trying to override existing scalar value with a map: ${destVal} ${toSetKey} ${toSetVal}")
+                    toSetVal.each { entry -> setConfigData(destVal, entry)}
+                }
+
+            } else {
+
+                dest.put(toSetKey, toSetVal)
+
+            }
+
+        } else {
+
+            if (dest.containsKey(toSetKey)) {
+
+                def destVal = dest.get(toSetKey)
+                if (destVal != null && destVal instanceof Map) throw new IllegalArgumentException("trying to replace a map with scalar value: ${destVal} ${toSetVal}")
+                dest.put(toSetKey, String.valueOf(toSetVal))
+
+            } else {
+
+                dest.put(toSetKey, String.valueOf(toSetVal))
+
+            }
+
+        }
+
+    }
 
 
     ///////////////////////////////////////////////////////////////////////////

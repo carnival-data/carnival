@@ -171,6 +171,7 @@ class HttpVineSpec extends Specification {
         http
     }
 
+    @IgnoreIf({ !Boolean.valueOf(properties['test.http']) })
     def "httpEndpoint handlePost good" () {
         given:
         def httpServerConfig = new HttpServerConfig(
@@ -193,6 +194,8 @@ class HttpVineSpec extends Specification {
         res.data == testPostExpectedResult
     }
 
+
+    @IgnoreIf({ !Boolean.valueOf(properties['test.http']) })
     def "httpEndpoint handlePost UnknownHostException" () {
         given:
         def httpServerConfig = new HttpServerConfig(

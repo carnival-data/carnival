@@ -109,11 +109,8 @@ trait CachingVine {
     /** the cache directory used by this vine */
     File cacheDirectory = Defaults.dataCacheDirectory
 
-    /** the target directory used by this vine */
-    File targetDirectory = Defaults.targetDirectory
-
     /** ant builder */
-    def ant = new AntBuilder()
+    AntBuilder ant = new AntBuilder()
 
 
 
@@ -396,7 +393,6 @@ trait CachingVine {
 
         // set up test data cache directory
         def tagd = args.tag.replaceAll(' ', '-').trim()
-        def ant = new AntBuilder()
         def testdir = new File("build/test/${tagd}")
         if (!testdir.exists()) ant.mkdir(dir:testdir)
 

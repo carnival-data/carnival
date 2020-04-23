@@ -14,7 +14,6 @@ import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.neo4j.structure.*
 
 import carnival.core.vine.Vine
-import carnival.core.vine.CachingVine.CacheMode
 
 
 

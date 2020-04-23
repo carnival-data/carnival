@@ -5,13 +5,20 @@ package carnival.util
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import java.text.ParseException
+
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.apache.poi.xssf.extractor.XSSFExcelExtractor
+import org.apache.poi.xssf.usermodel.XSSFSheet
+import org.apache.poi.xssf.usermodel.XSSFRow
+import org.apache.poi.xssf.usermodel.XSSFCell
+import org.apache.poi.xssf.usermodel.XSSFRichTextString
+import org.apache.poi.ss.usermodel.CellType
 
 
 
 /**
- * Utility class to read/write XML based Microsoft Excel files.
+ * Utility class to read XML based Microsoft Excel files.
  *
  */
 class ExcelUtil {
@@ -26,6 +33,10 @@ class ExcelUtil {
     /** */
     static Logger log = LoggerFactory.getLogger('carnival')
 
+
+	///////////////////////////////////////////////////////////////////////////
+	// READ ENTIRE FILE VIA XSSFExcelExtractor
+	///////////////////////////////////////////////////////////////////////////
 
     /**
      * Read an Excel file into a list of maps.
@@ -100,6 +111,229 @@ class ExcelUtil {
 
         return fileData    
     }
+
+
+	///////////////////////////////////////////////////////////////////////////
+	// READ AN INDIVIDUAL DATA SHEET
+	///////////////////////////////////////////////////////////////////////////
+
+    /** 
+     * Read an individual sheet from an Excel file.  
+     *
+     * Reading from an Excel is not straightforward or easy.
+     * These utility methods might might help you out if:
+     *    - The Excel sheet is formatted like a data table where the first
+     *      column contains the field names.
+     *    - There is only a single format for dates in the sheet.
+     *
+     * The default behavior is to be tolerant of read failures, writing warning
+     * messages to the log while ignoring the value. To fail on error, see the
+     * failOnError parameter.
+     *
+     * @param inputFile The Excel file to read.
+     * @param sheetName The name of the sheet.
+     * @param params.dates Optional map of data parsing params.
+     * @param params.dates.sourceFormat The format (DateFormat) used for dates
+     *        in the Excel file.
+     * @param params.dates.outputFormat The formatter (DateFormat) used to 
+     *        output dates as Strings.
+     * @param params.dates.fields A list of fields that should be parsed as dates.
+     * @param failOnError If there is an error reading the file, throw a 
+     *        ParseException.
+     *
+     */
+    static List<Map> readExcelSheet(File inputFile, String sheetName, Map params = [:]) {
+        assert inputFile
+        assert sheetName
+
+    	InputStream inp
+    	List<Map> data
+        try {
+            inp = new FileInputStream(inputFile)
+            data = readExcelSheet(inp, sheetName, params)
+        } finally {
+            if (inp) inp.close()
+        }
+        return data
+    }
+
+
+    /** */
+    static List<Map> readExcelSheet(InputStream input, String sheetName, Map params = [:]) {
+        assert input
+        assert sheetName
+
+        List<Map> data
+        XSSFWorkbook wb
+        try {
+            log.info "opening workbook..."
+            wb = new XSSFWorkbook(input)
+
+            log.info "reading sheet ${sheetName}..."
+            data = readSheet(wb, sheetName, params)
+        } finally {
+            if (wb) wb.close()
+        }
+        data
+    }
+
+
+    /** */
+    static List<Map> readSheet(XSSFWorkbook wb, String sheetName, Map params = [:]) {
+        assert wb
+        assert sheetName
+
+        XSSFSheet sheet = wb.getSheet(sheetName)
+        assert sheet
+
+        int firstRowNum = sheet.getFirstRowNum()
+        assert firstRowNum == 0
+
+        XSSFRow firstRow = sheet.getRow(0)
+        List<String> firstRowVals = readRow(firstRow)
+        //log.trace "firstRowVals: $firstRowVals"
+
+        Map idxToColName = indexMap(firstRowVals)
+        //log.trace "idxToColName: $idxToColName"
+
+        Map colNameToIdx = new HashMap<String,Integer>()
+        idxToColName.each { Integer k, String v ->
+            colNameToIdx.put(v, k)
+        }
+        //log.trace "colNameToIdx: $colNameToIdx"
+        params.colNameToIdx = colNameToIdx
+
+        List<Map> out = new ArrayList<Map>()
+
+        int lastRowNum = sheet.getLastRowNum()
+        (firstRowNum+1../*firstRowNum+10*/lastRowNum-1).each { rowIdx ->
+            XSSFRow row = sheet.getRow(rowIdx)
+            Map<String,String> rowValsMap = new HashMap<String,String>()
+
+            List<String> cellVals = readRow(row, params)
+            cellVals.eachWithIndex { cellVal, cellValIdx ->
+                String ck = idxToColName.get(cellValIdx)
+                if (ck == null) {
+                    if ("$cellVal".toString().trim().length() > 0) {
+                        def em = "could not get column name for column index ${cellValIdx} -- ${cellVal}"
+                        if (params.failOnError) {
+                            throw new ParseException(em)
+                        } else {
+                            log.warn em
+                        }
+                    }
+                    return
+                }
+                rowValsMap.put(ck, cellVal)
+            }
+
+            out << rowValsMap
+        }
+
+        return out
+    }
+
+
+    /** */
+    static List<String> readRow(XSSFRow row, Map params = [:]) {
+        assert row
+
+        List<String> out = new ArrayList<String>()
+
+        Set<Integer> dateIndexes = new HashSet<Integer>()
+        if (params.dates) {
+            assert params.colNameToIdx
+            assert params.dates.sourceFormat
+            assert params.dates.outputFormat
+            assert params.dates.fields
+
+            params.dates.fields.each { fn ->
+                assert params.colNameToIdx.containsKey(fn)
+                dateIndexes << params.colNameToIdx.get(fn)
+            }
+        }
+
+        short fcn = row.firstCellNum
+        short lcn = row.lastCellNum
+        (fcn..lcn-1).each { cn ->
+            XSSFCell cell = row.getCell(cn)
+            if (cell == null) {
+                //log.warn "null cell at index ${cn}. inserting blank value"
+                out << ""
+                return
+            }
+
+            String valAsString
+            CellType ct = cell.getCellType()
+            boolean isDateField = dateIndexes.contains(cn)
+
+            if (ct == CellType.NUMERIC && isDateField) {
+
+                try {
+                    Date d = cell.getDateCellValue()
+                    valAsString = params.dates.outputFormat.format(d)
+                } catch (IllegalArgumentException e) {
+                    def em = "count not parse numeric date ${valAsString}."
+                    if (params.failOnError) {
+                        throw new ParseException(em, e)
+                    } else {
+                        valAsString = ""
+                        log.warn "${em} inserting empty value. ${e.message}."
+                    }
+                }
+            
+            } else if (ct == CellType.NUMERIC && !isDateField) {
+
+                valAsString = String.valueOf(cell.getNumericCellValue())
+
+            } else if (isDateField) {
+
+                String cellStr = cell.richStringCellValue.toString()
+                if ("$cellStr".toString().length() > 0) {
+                    try {
+                        Date d = params.dates.sourceFormat.parse(cellStr)
+                        valAsString = params.dates.outputFormat.format(d)
+                    } catch (ParseException e) {
+                        def msg = "could not parse string date: ${cellStr}."
+                        if (params.failOnError) {
+                            log.error msg
+                            throw e
+                        } else {
+                            valAsString = ""
+                            log.warn "${msg} inserting empty value. ${e.message}"
+                        }
+                    }
+                } else {
+                    valAsString = ""
+                }
+
+            } else {
+
+                valAsString = cell.richStringCellValue.toString()
+
+            }
+
+            out << valAsString
+        }
+
+        return out
+    }
+
+
+    /** */
+    static Map indexMap(List<String> vals) {
+        assert vals
+        
+        Map<String,Integer> im = new HashMap<String,Integer>()
+        vals.eachWithIndex { val, valIdx ->
+            if (val == null || val.trim().length() == 0) return
+            im.put(valIdx, val)
+        }
+
+        im
+    }
+
+
 
 }
 

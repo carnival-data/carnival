@@ -24,7 +24,6 @@ import carnival.graph.PropertyDefTrait
 import carnival.graph.PropertyDefTrait
 import carnival.graph.EdgeDefTrait
 import carnival.core.vine.Vine
-import carnival.core.vine.CachingVine.CacheMode
 import carnival.core.graph.Core
 import carnival.core.graph.CoreGraph
 import carnival.core.graph.CoreGraphUtils

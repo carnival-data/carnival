@@ -36,8 +36,6 @@ import static carnival.util.AppUtil.sysPropFalse
 
 import carnival.core.*
 import carnival.core.matcher.*
-import carnival.core.vine.CachingVine
-import carnival.core.vine.CachingVine.CacheMode
 import carnival.util.CodeRefGroup
 import carnival.util.CodeRef
 import carnival.core.graph.CoreGraphNeo4j

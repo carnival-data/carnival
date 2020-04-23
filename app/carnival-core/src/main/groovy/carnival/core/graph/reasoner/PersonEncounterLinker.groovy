@@ -19,7 +19,6 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 import org.apache.tinkerpop.gremlin.neo4j.structure.*
 
 import carnival.core.vine.Vine
-import carnival.core.vine.CachingVine.CacheMode
 import carnival.core.graph.Reasoner
 
 

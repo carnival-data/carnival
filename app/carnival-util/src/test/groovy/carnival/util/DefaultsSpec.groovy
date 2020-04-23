@@ -88,9 +88,11 @@ class DefaultsSpec extends Specification {
         def existingDataDir = Defaults.getDataDirectoryPath()
         def existingTargetDir = Defaults.getTargetDirectoryPath()
         m = [
-            directories: [
-                data: [
-                    root: "${existingDataDir}_".toString()
+            carnival: [
+                directories: [
+                    data: [
+                        root: "${existingDataDir}_".toString()
+                    ]
                 ]
             ]
         ]

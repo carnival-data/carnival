@@ -143,6 +143,7 @@ task publishCore {
 task publishAll {
     dependsOn publishCore
     dependsOn 'carnival-clinical:publishToMavenLocal'
+    dependsOn 'carnival-gradle:publishToMavenLocal'
 }
 
 task deleteLocalRepos {

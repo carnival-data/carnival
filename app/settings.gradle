@@ -17,5 +17,5 @@ include 'services:webservice'
 
 rootProject.name = 'carnival'
 
-include 'carnival-gremlin-dsl', 'carnival-util', 'carnival-graph', 'carnival-core', 'carnival-clinical', 'carnival-website'
+include 'carnival-gradle', 'carnival-gremlin-dsl', 'carnival-util', 'carnival-graph', 'carnival-core', 'carnival-clinical', 'carnival-website'
 

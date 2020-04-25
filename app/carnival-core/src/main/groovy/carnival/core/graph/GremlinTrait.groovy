@@ -18,6 +18,28 @@ class GremlinTraitUtilities {
 
     static Logger log = LoggerFactory.getLogger(GremlinTraitUtilities)
 
+
+    /**
+     * cl(g)
+     *
+     */
+    static public Object withTraversal(Graph graph, GraphTraversalSource g, Closure cl) {
+        def maxClosureParams = cl.getMaximumNumberOfParameters()
+        assert maxClosureParams > 0 : "closure must accept at least one parameter"
+
+        try {
+            if (maxClosureParams == 1) {
+                cl(g)
+            } else {
+                cl(graph, g)
+            }
+        } finally {
+            if (g != null) g.close()
+        }
+    }
+
+
+
     /**
      * cl(graph, g)
      *
@@ -110,24 +132,13 @@ trait GremlinTrait  {
      *
      */
     public Object withTraversal(Closure cl) {
-        def maxClosureParams = cl.getMaximumNumberOfParameters()
-        assert maxClosureParams > 0 : "closure must accept at least one parameter"
-
         GraphTraversalSource g = traversal()
         assert g
 
         Graph graph = graph
         assert graph
 
-        try {
-            if (maxClosureParams == 1) {
-                cl(g)
-            } else {
-                cl(graph, g)
-            }
-        } finally {
-            if (g != null) g.close()
-        }
+        GremlinTraitUtilities.withTraversal(graph, g, cl)
     }
 
 

@@ -3,7 +3,9 @@ package carnival.core.graph
 
 
 import groovy.transform.Synchronized
-import groovy.util.logging.Slf4j
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
@@ -16,52 +18,19 @@ import carnival.graph.DynamicVertexDef
 
 
 
-/** */
-public interface ReaperMethodInterface {
-
-    /**
-     * Check that the pre-conditions to running this reaper method with
-     * the given args hold.
-     *
-     * @return Collection of GraphValidationError objects, each of which
-     * represents a validation failure.  If there are no failures, an
-     * empty collection is returned.
-     *
-     */
-    Collection<GraphValidationError> checkPreConditions(Map args)
-
-
-    /**
-     * Run the reaper method with the given arguments.
-     *
-     */
-    Map reap(Map args)
-
-
-    /**
-     * Check that the post-conditions to running this reaper method with
-     * the given args hold.
-     *
-     * @return Collection of GraphValidationError objects, each of which
-     * represents a validation failure.  If there are no failures, an
-     * empty collection is returned.
-     *
-     */
-    Collection<GraphValidationError> checkPostConditions(Map args, Map result)
-}
-
-
-
 /**
  * The ReaperMethod interface must be implemented by any reaper methods...
  *
  */
-@Slf4j
 abstract class ReaperMethod implements ReaperMethodInterface, TrackedProcessTrait {
 
     ///////////////////////////////////////////////////////////////////////////
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
+
+	/** carnival logger */
+    static Logger log = LoggerFactory.getLogger(ReaperMethod)
+
 
     /** */
     static void assertPatientVertices(Map args) {
@@ -225,33 +194,24 @@ abstract class ReaperMethod implements ReaperMethodInterface, TrackedProcessTrai
         enclosingReaper.traversal()
     }
 
-}
-
-
-
-
-
-/** */
-class DefaultReaperMethod extends ReaperMethod {
-
-
-    Collection<GraphValidationError> checkPreConditions(Map args) {
-        return []
+    /** */
+    protected Object withTraversal(Closure cl) {
+        def g = traversal()
+        GremlinTraitUtilities.withTraversal(graph, g, cl)
     }
 
-
-    Map reap(Map args) {
-        return [:]
-    }
-
-
-
-    Collection<GraphValidationError> checkPostConditions(Map args, Map result) {
-        return []
+    /** */
+    protected Object withGremlin(Closure cl) {
+        def g = traversal()
+        try {
+            GremlinTraitUtilities.withGremlin(graph, g, cl)
+        } finally {
+            try {
+                if (g != null) g.close()
+            } catch (Exception e) {
+                e.printStackTrace()
+            }
+        }
     }
 
 }
-
-
-
-

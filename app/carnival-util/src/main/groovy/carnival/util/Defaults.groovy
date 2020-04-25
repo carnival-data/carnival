@@ -90,21 +90,16 @@ public class Defaults {
             if (env.containsKey('CARNIVAL_HOME')) msg += " CARNIVAL_HOME(env): ${env.get('CARNIVAL_HOME')}"
             else msg += " CARNIVAL_HOME(env) is not set."
             
-            log.error msg
-            throw new RuntimeException(msg)
+            log.warn msg
         }
 
         log.trace "configFile: ${configFile}"
-
         return configFile
     }
 
 
     static private File findApplicationConfigurationFileInDirectoryPath(String dirPath) {
-        if (dirPath == null) {
-            throw new RuntimeException('dirPath is null')
-            return null
-        }
+        assert dirPath != null
         def dir = new File(dirPath)
         return findApplicationConfigurationFileInDirectory(dir)
     }
@@ -138,7 +133,10 @@ public class Defaults {
 
     static public File findApplicationConfigurationDirectory() {
         def configFile = findApplicationConfigurationFile()
-        if (!configFile) throw new RuntimeException('could not locate configuration file')
+        if (!configFile) {
+            log.warn 'findApplicationConfigurationDirectory - could not locate configuration file. returning null.'
+            return null
+        }
         return configFile.parentFile
     }
 
@@ -153,7 +151,11 @@ public class Defaults {
         def confFile = findApplicationConfigurationFile()
 
         // blow up if we have no configuration
-        if (!confFile) throw new RuntimeException('could not locate configuration file')
+        if (!confFile) {
+            log.warn "loadApplicationConfiguration - could not locate configuration file. using default configuration."
+            this.configData = [:]
+            return this.configData
+        }
 
         def conf = loadApplicationConfiguration(confFile)
         this.configData = conf
@@ -198,6 +200,7 @@ public class Defaults {
     static public void setConfigData(Map m) {
         assert m != null
         if (Defaults.configData == null) Defaults.loadApplicationConfiguration()
+        //if (Defaults.configData == null) Defaults.configData = [:]
         m.entrySet().each { entry -> setConfigData(Defaults.configData, entry )}
         log.trace "setConfigData final Defaults.configData: ${Defaults.configData}"
     }

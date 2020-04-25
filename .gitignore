@@ -111,3 +111,7 @@ docs/groovy/**/*.yml
 .sass-cache
 _site
 docs/*.lock
+
+# might be created by tests that write files
+app/carnival-clinical/data
+app/carnival-core/data

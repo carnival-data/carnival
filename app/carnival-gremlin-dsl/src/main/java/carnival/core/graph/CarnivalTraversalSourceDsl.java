@@ -33,9 +33,9 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.DefaultGraphTrav
 import org.apache.tinkerpop.gremlin.process.traversal.P;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__;
 import org.apache.tinkerpop.gremlin.structure.T;
-import org.apache.tinkerpop.gremlin.neo4j.structure.*;
+//import org.apache.tinkerpop.gremlin.neo4j.structure.*;
 
-import static org.apache.tinkerpop.gremlin.neo4j.process.traversal.LabelP.of;
+//import static org.apache.tinkerpop.gremlin.neo4j.process.traversal.LabelP.of;
 import static org.apache.tinkerpop.gremlin.process.traversal.P.within;
 
 

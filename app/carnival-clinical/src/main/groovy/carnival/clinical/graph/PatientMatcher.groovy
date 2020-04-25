@@ -21,9 +21,6 @@ import org.apache.tinkerpop.gremlin.structure.Transaction
 import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.structure.Edge
 
-import org.apache.tinkerpop.gremlin.neo4j.structure.Neo4jGraph
-import org.apache.tinkerpop.gremlin.neo4j.structure.Neo4jVertex
-
 import carnival.core.*
 import carnival.core.graph.*
 import carnival.pmbb.*

@@ -16,18 +16,13 @@ import org.slf4j.LoggerFactory
 
 import org.apache.commons.io.FileUtils
 
-import org.apache.tinkerpop.gremlin.*
-import org.apache.tinkerpop.gremlin.util.*
-import org.apache.tinkerpop.gremlin.structure.*
-import org.apache.tinkerpop.gremlin.groovy.loaders.*
-import org.apache.tinkerpop.gremlin.neo4j.structure.*
-
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 
 import com.google.common.collect.Range
 
 import static org.apache.tinkerpop.gremlin.neo4j.process.traversal.LabelP.of
+import org.apache.tinkerpop.gremlin.structure.T
 
 import static carnival.core.graph.CoreGraphUtils.printVerts
 import static carnival.core.graph.CoreGraphUtils.str

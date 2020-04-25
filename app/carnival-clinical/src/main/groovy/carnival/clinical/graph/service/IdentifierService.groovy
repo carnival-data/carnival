@@ -23,8 +23,6 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 import static org.apache.tinkerpop.gremlin.process.traversal.step.TraversalOptionParent.Pick.*
 import static org.apache.tinkerpop.gremlin.neo4j.process.traversal.LabelP.of
 
-import org.apache.tinkerpop.gremlin.neo4j.structure.*
-
 import carnival.core.graph.CoreGraph
 import carnival.core.graph.CarnivalTraversalSource
 import carnival.util.KeyType
@@ -236,13 +234,12 @@ class IdentifierService extends ReportService {
             rec.put(scopeKey, Core.PX.NAME.valueOf(newIdentifierScopeV))
             report.dataAdd(rec)
         }
-        def file = report.writeNeatDataFile(Defaults.targetDirectory, [appendDateSuffix:true])
 
         // close and return
         if (g) g.close()
         return [
             newIdVs:newIdVs,
-            file:file
+            report:report
         ]
     }
 

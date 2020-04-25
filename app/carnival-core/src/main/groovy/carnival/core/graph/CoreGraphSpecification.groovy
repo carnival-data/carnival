@@ -39,7 +39,8 @@ abstract class CoreGraphSpecification extends Specification {
         System.setProperty('log4j.configuration', 'log4j.properties')
 
         // get config
-        configFilePath = Defaults.findApplicationConfigurationFile().canonicalPath
+        configFilePath = Defaults.findApplicationConfigurationFile()
+        if (configFilePath != null) configFilePath = configFilePath.canonicalPath
 
         // create pmbb graph
         println "init neo4j graph..."

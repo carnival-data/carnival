@@ -2,9 +2,8 @@ package carnival.clinical.graph
 
 
 
-import groovy.util.logging.Slf4j
-//import org.slf4j.Logger
-//import org.slf4j.LoggerFactory
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
@@ -25,8 +24,10 @@ import carnival.graph.Base
  *
  *
  */
-@Slf4j
 trait ClinicalGraphTrait {
+
+	/** */
+	static Logger log = LoggerFactory.getLogger(ClinicalGraphTrait)
 
 	///////////////////////////////////////////////////////////////////////////
 	// REASONING

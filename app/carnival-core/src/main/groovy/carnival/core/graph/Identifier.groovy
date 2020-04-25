@@ -24,9 +24,6 @@ import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.structure.Edge
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 
-import org.apache.tinkerpop.gremlin.neo4j.structure.Neo4jGraph
-import org.apache.tinkerpop.gremlin.neo4j.structure.Neo4jVertex
-
 import carnival.util.Defaults
 
 

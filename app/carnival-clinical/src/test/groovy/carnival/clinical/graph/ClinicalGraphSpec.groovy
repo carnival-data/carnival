@@ -70,17 +70,6 @@ class ClinicalGraphSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
-    
-    def "apoc"() {
-        when: 
-        def apocVersion = graph.cypher('RETURN apoc.version()').toList().first()
-        println "apocVersion: $apocVersion"
-
-        then:
-        apocVersion != null
-    }
-
-
     /**
     * This will test graph initizilation once it's been moved to CoreGraph
     */

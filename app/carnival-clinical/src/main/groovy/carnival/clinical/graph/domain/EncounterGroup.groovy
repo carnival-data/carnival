@@ -21,8 +21,6 @@ import static org.apache.tinkerpop.gremlin.process.traversal.step.TraversalOptio
 import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.*
 import static org.apache.tinkerpop.gremlin.neo4j.process.traversal.LabelP.of
 
-import org.apache.tinkerpop.gremlin.neo4j.structure.*
-
 import carnival.core.*
 import carnival.core.graph.CarnivalTraversalSource
 import carnival.core.graph.*

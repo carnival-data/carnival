@@ -195,29 +195,20 @@ class IdentifierServiceSpec extends Specification {
         newIdVs[0].value(Core.PX.VALUE.label) == 'pre1'
 
         when:
-        def file = res.file
+        def report = res.report
 
         then:
-        file != null
+        report != null
 
 /*
 LOOKUP_IDENTIFIER_TYPE  LOOKUP_IDENTIFIER_VALUE NEW_IDENTIFIER_SCOPE    NEW_IDENTIFIER_TYPE NEW_IDENTIFIER_VALUE    SUBJECT_TYPE
 existingIdClass id1 scope1  scopedIdClass   pre1    Thing
 */
-        when:
-        CsvIterator csvIterator = parseCsv(file.text)
 
-        then:
-        csvIterator.hasNext()
+        report.data.size() == 1
 
         when:
-        def fileRows = csvIterator.toList()
-
-        then:
-        fileRows.size() == 1
-
-        when:
-        def rec = fileRows[0].toMap()
+        def rec = report.data[0]
 
         then:
         rec.get('LOOKUP_IDENTIFIER_TYPE') == 'existingIdClass'

@@ -2,10 +2,6 @@ package carnival.core.graph
 
 
 
-import java.lang.annotation.Retention
-import java.lang.annotation.RetentionPolicy
-import java.lang.annotation.Target
-import java.lang.annotation.ElementType
 import java.lang.reflect.Field
 
 import org.slf4j.Logger
@@ -17,49 +13,11 @@ import org.apache.tinkerpop.gremlin.structure.T
 import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.structure.Vertex
 
-import org.apache.tinkerpop.gremlin.neo4j.structure.*
-
 import carnival.core.vine.Vine
 import carnival.core.vine.CachingVine.CacheMode
 import carnival.graph.VertexDefTrait
 import carnival.graph.EdgeDefTrait
 import carnival.graph.PropertyDefTrait
-
-
-
-
-/** */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface ReaperMethodResource {
-    //public String value() default "";
-}
-
-
-
-/** */
-public class DefaultReaper extends Reaper {
-
-    //@ReaperMethodResource
-    //Graph graph
-
-    @ReaperMethodResource
-    CoreGraph coreGraph
-
-    public DefaultReaper(CoreGraph coreGraph) {
-        assert coreGraph
-        assert coreGraph.graph
-        this.coreGraph = coreGraph
-        //this.graph = coreGraph.graph
-    }
-
-    protected Graph getGraph() { this.coreGraph.graph }
-
-    protected GraphTraversalSource traversal() {
-        this.coreGraph.graph.traversal()
-    }
-
-}
 
 
 
@@ -300,7 +258,7 @@ abstract class Reaper {
         // reap
         res.reap = reaperMethodInstance.reap(methodArgs)
         assert res.reap != null, "${reaperMethodInstance.name}() with arguments ${methodArgs} returned a null result"
-        assert res.reap.get('graphModified') != null, "${reaperMethodInstance.name}() with arguments ${methodArgs} returned a null graphModified boolean value"
+        //assert res.reap.get('graphModified') != null, "${reaperMethodInstance.name}() with arguments ${methodArgs} returned a null graphModified boolean value"
 
         // post-condition check
         res.checkPostConditions = reaperMethodInstance.checkPostConditions(methodArgs, res)

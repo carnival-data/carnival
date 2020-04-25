@@ -225,6 +225,7 @@ class ReaperSpec extends Specification {
     }
 
 
+    /* relaxed this requirement
     def "call reap must have graphModified"() {
         given:
         def reaper = new SimpleReaper()
@@ -240,7 +241,7 @@ class ReaperSpec extends Specification {
 
         then:
         e = thrown()
-    }
+    }*/
 
 
     def "call reap"() {

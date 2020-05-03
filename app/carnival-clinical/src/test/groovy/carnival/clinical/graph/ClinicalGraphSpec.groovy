@@ -160,7 +160,7 @@ class ClinicalGraphSpec extends Specification {
 
         // duplicate id val of the same class
         when:
-        def id1Class1Dupe = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, 'id1').createVertex(graph, g)
+        def id1Class1Dupe = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, 'id1').createVertex(graph)
         id1Class1Dupe.addEdge('is_instance_of', idClass1)
 
         then:
@@ -176,7 +176,7 @@ class ClinicalGraphSpec extends Specification {
 
         //duplicate id val of the same class, same scope
         when:
-        def scopedId1Scope1Dupe = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, 'scopedId1').createVertex(graph, g)
+        def scopedId1Scope1Dupe = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, 'scopedId1').createVertex(graph)
         scopedId1Scope1Dupe.addEdge('is_instance_of', scopedIdClass)
         scopedId1Scope1Dupe.addEdge('is_scoped_by', scope1)
 
@@ -194,7 +194,7 @@ class ClinicalGraphSpec extends Specification {
 
         //duplicate id val of the same class, same facility
         when:
-        def facilityId1Facility1Dupe = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, 'facilityId1').createVertex(graph, g)
+        def facilityId1Facility1Dupe = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, 'facilityId1').createVertex(graph)
         facilityId1Facility1Dupe.addEdge('is_instance_of', facilityIdClass)
         facilityId1Facility1Dupe.addEdge('was_created_by', facility1)
 
@@ -276,9 +276,9 @@ class ClinicalGraphSpec extends Specification {
 
 
         (1..5).each { i ->
-            def patient = Clinical.VX.PATIENT.instance().createVertex(graph, g) 
+            def patient = Clinical.VX.PATIENT.instance().createVertex(graph) 
             //graph.addVertex(T.label, 'Patient')
-            def encounter = Clinical.VX.BIOBANK_ENCOUNTER.instance().createVertex(graph, g)
+            def encounter = Clinical.VX.BIOBANK_ENCOUNTER.instance().createVertex(graph)
             //def encounter = graph.addVertex(T.label, 'BiobankEncounter')
             def packetId = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, i+100).vertex(graph, g)
             //def packetId = graph.addVertex(T.label, 'Identifier', 'value', i+100)
@@ -377,9 +377,9 @@ class ClinicalGraphSpec extends Specification {
         // patient1 and encounter1 share an identifier
         def id1 = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, 'id1').vertex(graph, g)
         Core.EX.IS_INSTANCE_OF.relate(g, id1, idClass)
-        def encounter1 = Clinical.VX.BIOBANK_ENCOUNTER.createVertex(graph, g)
-        def patient1 = Clinical.VX.PATIENT.createVertex(graph, g)
-        def crf = Clinical.VX.CASE_REPORT_FORM.createVertex(graph, g)
+        def encounter1 = Clinical.VX.BIOBANK_ENCOUNTER.createVertex(graph)
+        def patient1 = Clinical.VX.PATIENT.createVertex(graph)
+        def crf = Clinical.VX.CASE_REPORT_FORM.createVertex(graph)
         Core.EX.IS_IDENTIFIED_BY.relate(g, encounter1, id1)
         Core.EX.IS_IDENTIFIED_BY.relate(g, patient1, id1)
         Clinical.EX.PARTICIPATED_IN_FORM_FILING.relate(g, encounter1, crf)
@@ -387,7 +387,7 @@ class ClinicalGraphSpec extends Specification {
         // encounter1 linked to encounter2 by being under the same consent
         def id2 = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, 'id2').vertex(graph, g)
         Core.EX.IS_INSTANCE_OF.relate(g, id2, idClass)
-        def encounter2 = Clinical.VX.BIOBANK_ENCOUNTER.createVertex(graph, g)
+        def encounter2 = Clinical.VX.BIOBANK_ENCOUNTER.createVertex(graph)
         Core.EX.IS_IDENTIFIED_BY.relate(g, encounter2, id2)
         Clinical.EX.IS_UNDER_CONSENT.relate(g, encounter2, crf)
 

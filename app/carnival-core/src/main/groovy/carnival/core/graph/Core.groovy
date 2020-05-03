@@ -132,7 +132,8 @@ class Core {
         HAS_SCOPE,
         HAS_CREATION_FACILITY,
         SUCCESS,
-        MESSAGE
+        MESSAGE,
+        EXCEL_ROW_NUM
     }
 
 }

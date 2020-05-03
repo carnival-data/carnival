@@ -292,7 +292,7 @@ class DataSetDescriptorGraph implements GremlinTrait {
 
         def dsdV = save(g, dsd)
 
-        def reportV = VX.FEATURE_REPORT.instance().withProperty(Core.PX.NAME, report.name).createVertex(graph, g)
+        def reportV = VX.FEATURE_REPORT.instance().withProperty(Core.PX.NAME, report.name).createVertex(graph)
         Core.EX.DESCRIBES.relate(g, dsdV, reportV)
 
         dsdV
@@ -304,7 +304,7 @@ class DataSetDescriptorGraph implements GremlinTrait {
         assert g
         assert dsd
         
-        def dsdV = VX.DATA_SET_DESCRIPTOR.instance().withProperty(Core.PX.NAME, dsd.name).createVertex(graph, g)
+        def dsdV = VX.DATA_SET_DESCRIPTOR.instance().withProperty(Core.PX.NAME, dsd.name).createVertex(graph)
         if (dsd.description) dsdV.property(Core.PX.DESCRIPTION.label, dsd.description)
 
         dsd.recipeIngredients.each { 
@@ -334,12 +334,12 @@ class DataSetDescriptorGraph implements GremlinTrait {
         }
 
         fsd.featureSetNames.each {
-            def fsnV = VX.FEATURE_SET_NAME.instance().withProperty(Core.PX.VALUE, it).createVertex(graph, g)
+            def fsnV = VX.FEATURE_SET_NAME.instance().withProperty(Core.PX.VALUE, it).createVertex(graph)
             Core.EX.DESCRIBES.relate(g, fsdV, fsnV)
         }
 
         fsd.dataTypes.each { FeatureDataType fdt ->
-            def fdtV = VX.FEATURE_DATA_TYPE.instance().withProperty(Core.PX.NAME, fdt.name()).createVertex(graph, g)
+            def fdtV = VX.FEATURE_DATA_TYPE.instance().withProperty(Core.PX.NAME, fdt.name()).createVertex(graph)
             Core.EX.DESCRIBES.relate(g, fdtV, fsdV)
         }
 
@@ -418,7 +418,7 @@ class DataSetDescriptorGraph implements GremlinTrait {
         assert vdt
         assert de
 
-        def v = vdt.instance().withProperty(Core.PX.NAME, de.name).createVertex(graph, g)
+        def v = vdt.instance().withProperty(Core.PX.NAME, de.name).createVertex(graph)
         if (de.description) v.property(Core.PX.DESCRIPTION.label, de.description)
 
         v

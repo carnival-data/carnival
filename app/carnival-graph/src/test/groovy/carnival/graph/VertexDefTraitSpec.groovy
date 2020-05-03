@@ -10,6 +10,7 @@ import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
 import org.apache.tinkerpop.gremlin.structure.T
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
+import org.apache.tinkerpop.gremlin.structure.VertexProperty
 //import static org.apache.tinkerpop.gremlin.neo4j.process.traversal.LabelP.of
 
 
@@ -21,23 +22,30 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 class VertexDefTraitSpec extends Specification {
 
     static enum VX implements VertexDefTrait {
-        VDTS_THING,
+        THING,
 
-        VDTS_THING_1(
+        THING_1(
             vertexProperties:[
-                PX.VDTS_PROP_A.withConstraints(required:true)
+                PX.PROP_A.withConstraints(required:true)
             ]
         ),
 
-        VDTS_THING_2(
+        THING_2(
             vertexProperties:[
-                PX.VDTS_PROP_A
+                PX.PROP_A
             ]
         ),
         
-        VDTS_THING_3(
+        THING_3(
             vertexProperties:[
-                PX.VDTS_PROP_A.defaultValue(1).withConstraints(required:true)
+                PX.PROP_A.defaultValue(1).withConstraints(required:true)
+            ]
+        ),
+
+        THING_4(
+            vertexProperties:[
+                PX.PROP_A.withConstraints(required:true),
+                PX.PROP_B
             ]
         ),
 
@@ -47,8 +55,8 @@ class VertexDefTraitSpec extends Specification {
 
 
     static enum PX implements PropertyDefTrait {
-        VDTS_PROP_A,
-        VDTS_PROP_B,
+        PROP_A,
+        PROP_B,
 
         public PX() {}
         public PX(Map m) {m.each { k,v -> this."$k" = v }}
@@ -92,14 +100,66 @@ class VertexDefTraitSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
+    def "two defined properties"() {
+        when:
+        def v1 = VX.THING_4.instance().withProperties(
+            PX.PROP_A, 'a',
+            PX.PROP_B, 'b'
+        ).create(graph)
+        v1.property('someOtherProp', 'qq')
+        def dps1 = VX.THING_4.definedPropertiesOf(v1)
+        println "dps1: $dps1"
+
+        then:
+        dps1 != null
+        dps1.size() == 2
+        dps1.find { it.label == PX.PROP_A.label }
+        dps1.find { it.label == PX.PROP_B.label }
+        
+        when:
+        def dp1 = dps1.find { it.label == PX.PROP_A.label }
+
+        then:
+        dp1.label() == PX.PROP_A.label
+        dp1.value() == 'a'
+
+        when:
+        def dp2 = dps1.find { it.label == PX.PROP_B.label }
+
+        then:
+        dp2.label() == PX.PROP_B.label
+        dp2.value() == 'b'
+    }
+
+
+    def "one defined property"() {
+        when:
+        def v1 = VX.THING_4.instance().withProperty(PX.PROP_A, 'a').create(graph)
+        v1.property('someOtherProp', 'qq')
+        def dps1 = VX.THING_4.definedPropertiesOf(v1)
+        println "dps1: $dps1"
+
+        then:
+        dps1 != null
+        dps1.size() == 1
+        
+        when:
+        def dp1 = dps1.first()
+
+        then:
+        dp1 instanceof VertexProperty
+        dp1.label() == PX.PROP_A.label
+        dp1.value() == 'a'
+    }
+
 
     def "property def constraints"() {
 
         expect:
-        !PX.VDTS_PROP_A.hasProperty('required')
-        VX.VDTS_THING_1.vertexProperties[0].hasProperty('required')
-        !VX.VDTS_THING_2.vertexProperties[0].hasProperty('required')
-        VX.VDTS_THING_3.vertexProperties[0].hasProperty('required')
+        !PX.PROP_A.hasProperty('required')
+        VX.THING_1.vertexProperties[0].hasProperty('required')
+        !VX.THING_2.vertexProperties[0].hasProperty('required')
+        VX.THING_3.vertexProperties[0].hasProperty('required')
 
     }
 
@@ -109,7 +169,7 @@ class VertexDefTraitSpec extends Specification {
         def v
 
         when:
-        v = VX.VDTS_THING.controlledInstance().vertex(graph, g)
+        v = VX.THING.controlledInstance().vertex(graph, g)
 
         then:
         v
@@ -125,7 +185,7 @@ class VertexDefTraitSpec extends Specification {
         def vDef
 
         when:
-        vDef = new DynamicVertexDef('VDTS_THING_2')
+        vDef = new DynamicVertexDef('THING_2')
 
         then:
         vDef instanceof DynamicVertexDef
@@ -153,10 +213,10 @@ class VertexDefTraitSpec extends Specification {
         def v
 
         expect:
-        VX.VDTS_THING.getNameSpace() == 'carnival.graph.VertexDefTraitSpec$VX'
+        VX.THING.getNameSpace() == 'carnival.graph.VertexDefTraitSpec$VX'
 
         when:
-        v = VX.VDTS_THING.instance().vertex(graph, g)
+        v = VX.THING.instance().vertex(graph, g)
 
         then:
         v
@@ -173,7 +233,7 @@ class VertexDefTraitSpec extends Specification {
         def vDef
 
         when:
-        vDef = new DynamicVertexDef('VDTS_THING_2')
+        vDef = new DynamicVertexDef('THING_2')
 
         then:
         vDef instanceof DynamicVertexDef

@@ -12,6 +12,7 @@ import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.structure.Element
 import org.apache.tinkerpop.gremlin.structure.Edge
+import org.apache.tinkerpop.gremlin.structure.Property
 
 import carnival.util.StringUtils
 import carnival.graph.Base
@@ -103,4 +104,15 @@ trait WithPropertyDefsTrait {
         }
     }
 
+    /** */
+    public Set<Property> definedPropertiesOf(Element e) {
+        Set<Property> eProps = new HashSet<Property>()
+        propertyDefs.each { pDef ->
+            def ep = e.property(pDef.label)
+            if (Property.empty().equals(ep)) return
+            if (!ep.isPresent()) return
+            eProps.add(ep)
+        }
+        eProps
+    }
 }

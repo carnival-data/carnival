@@ -80,7 +80,7 @@ class ControlledInstance extends PropertyValuesHolder<ControlledInstance> {
         }
 
         def vertex = traversal.tryNext().orElseGet {
-            createVertex(graph, g)
+            createVertex(graph)
         }
 
         return vertex
@@ -108,15 +108,15 @@ class ControlledInstance extends PropertyValuesHolder<ControlledInstance> {
 
 
     /** */
-    public Vertex create(Graph graph, GraphTraversalSource g) {
-        createVertex(graph, g)
+    public Vertex create(Graph graph) {
+        createVertex(graph)
     }
 
 
+
     /** */
-    public Vertex createVertex(Graph graph, GraphTraversalSource g) {
+    public Vertex createVertex(Graph graph) {
         assert graph
-        assert g
 
         assertRequiredProperties()
 

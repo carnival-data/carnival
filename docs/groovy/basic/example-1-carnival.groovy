@@ -98,9 +98,9 @@ class ExampleReaper extends DefaultReaper {
 
 			cohortVine.allRecords().dataIterator().each { rec ->
 				println "rec: $rec"
-				def pV = VX.PERSON.instance().withProperty(Core.PX.NAME, rec.NAME).createVertex(graph, g)
+				def pV = VX.PERSON.instance().withProperty(Core.PX.NAME, rec.NAME).createVertex(graph)
 				if (rec.COLOR_HAIR) {
-					def hV = VX.HAIR.instance().withProperty(PX.COLOR, rec.COLOR_HAIR).createVertex(graph, g)
+					def hV = VX.HAIR.instance().withProperty(PX.COLOR, rec.COLOR_HAIR).createVertex(graph)
 					Core.EX.HAS_PART.relate(g, pV, hV)
 				}
 			}

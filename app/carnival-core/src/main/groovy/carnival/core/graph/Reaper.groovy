@@ -197,11 +197,12 @@ abstract class Reaper {
         assert reaperMethodInstance
 
         def res = [:]
-        if (reaperMethodInstance.getAllSuccessfulTrackedProcesses(traversal()).size() == 0) {
+        def numRuns = reaperMethodInstance.getAllSuccessfulTrackedProcesses(traversal()).size()
+        if (numRuns == 0) {
             res = call(reaperMethodInstance, methodArgs)
             log.info "Reaper.optionallyRunSingletonProcess ${reaperMethodInstance.class.simpleName} res: $res"
         } else {
-            log.info "Reaper.optionallyRunSingletonProcess ${reaperMethodInstance.class.simpleName} already run"
+            log.info "Reaper.optionallyRunSingletonProcess ${reaperMethodInstance.class.simpleName} already run ${numRuns} times"
         }
 
         return res        

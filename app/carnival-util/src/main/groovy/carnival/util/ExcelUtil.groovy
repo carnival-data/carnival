@@ -33,6 +33,9 @@ class ExcelUtil {
     /** */
     static Logger log = LoggerFactory.getLogger(ExcelUtil)
 
+    /** */
+    static enum EXCEL { ROW_NUM }
+
 
 	///////////////////////////////////////////////////////////////////////////
 	// READ ENTIRE FILE VIA XSSFExcelExtractor
@@ -208,7 +211,9 @@ class ExcelUtil {
         int lastRowNum = sheet.getLastRowNum()
         (firstRowNum+1../*firstRowNum+10*/lastRowNum-1).each { rowIdx ->
             XSSFRow row = sheet.getRow(rowIdx)
+
             Map<String,String> rowValsMap = new HashMap<String,String>()
+            rowValsMap.put(EXCEL.ROW_NUM.name(), String.valueOf(row.getRowNum()+1))
 
             List<String> cellVals = readRow(row, params)
             cellVals.eachWithIndex { cellVal, cellValIdx ->

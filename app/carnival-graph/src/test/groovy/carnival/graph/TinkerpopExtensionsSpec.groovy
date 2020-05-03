@@ -17,6 +17,7 @@ import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 
 
 
@@ -91,6 +92,64 @@ class TinkerpopExtensionsSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+
+    def "all must be groupable"() {
+        when:
+        def v1 = VX.THING.instance().withProperty(PX.ID, '58').ensure(graph, g)
+        def v2 = VX.THING.instance().withProperty(PX.ID, '59').ensure(graph, g)
+        def v3 = VX.THING.instance().withProperty(PX.ID, '60').ensure(graph, g)
+        EX.IS_NOT.instance().from(v1).to(v2).create()
+        EX.IS_NOT.instance().from(v3).to(v2).create()
+        println "$v1 $v2 $v3"        
+        def op = g.V().isa(VX.THING).group().by(__.out(EX.IS_NOT.label)).tryNext()
+
+        then:
+        Exception e = thrown()
+        e instanceof java.lang.IllegalArgumentException
+    }
+
+
+    def "anonymous traversal isa"() {
+        when:
+        def v1 = VX.THING.instance().withProperty(PX.ID, '58').ensure(graph, g)
+        def v2 = VX.THING.instance().withProperty(PX.ID, '59').ensure(graph, g)
+        def v3 = VX.THING.instance().withProperty(PX.ID, '60').ensure(graph, g)
+        EX.IS_NOT.instance().from(v1).to(v2).create()
+        EX.IS_NOT.instance().from(v3).to(v2).create()
+        println "$v1 $v2 $v3"        
+        def op = g.V(v1).repeat(__.both()).until(__.isa(VX.THING)).tryNext()
+
+        then:
+        op.isPresent()
+    }
+
+
+
+    def "anonymous traversal out"() {
+        when:
+        def v1 = VX.THING.instance().withProperty(PX.ID, '58').ensure(graph, g)
+        def v2 = VX.THING.instance().withProperty(PX.ID, '59').ensure(graph, g)
+        def v3 = VX.THING.instance().withProperty(PX.ID, '60').ensure(graph, g)
+        EX.IS_NOT.instance().from(v1).to(v2).create()
+        EX.IS_NOT.instance().from(v3).to(v2).create()
+        println "$v1 $v2 $v3"        
+        def op = g.V(v1,v3).group().by(__.out(EX.IS_NOT)).tryNext()
+
+        then:
+        op.isPresent()
+
+        when:
+        def groups = op.get()
+        groups.each { m -> println "$m" }
+
+        then:
+        groups.size() == 1
+        groups.get(v2).size() == 2
+        groups.get(v2).contains(v1)
+        groups.get(v2).contains(v3)
+    }
+
 
     def "has enum"() {
         when:

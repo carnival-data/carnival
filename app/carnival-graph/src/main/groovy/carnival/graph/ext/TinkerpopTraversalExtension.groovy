@@ -1,4 +1,4 @@
-package carnival.graph
+package carnival.graph.ext
 
 
 
@@ -14,10 +14,15 @@ import groovy.transform.EqualsAndHashCode
 import org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal
 
+import carnival.graph.EdgeDefTrait
+import carnival.graph.VertexDefTrait
+import carnival.graph.PropertyDefTrait
+import carnival.graph.Base
+
 
 
 /** */
-class TinkerpopExtensions {
+class TinkerpopTraversalExtension {
 
 
     /** */
@@ -29,7 +34,21 @@ class TinkerpopExtensions {
     static GraphTraversal out(DefaultTraversal traversal, EdgeDefTrait edef) {
         traversal.outE(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace).inV()
     }
-    //out(String... edgeLabels)
+
+    /** */
+    static GraphTraversal outE(DefaultTraversal traversal, EdgeDefTrait edef) {
+        traversal.outE(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace)
+    }
+
+    /** */
+    static GraphTraversal "in"(DefaultTraversal traversal, EdgeDefTrait edef) {
+        traversal.inE(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace).outV()
+    }
+
+    /** */
+    static GraphTraversal inE(DefaultTraversal traversal, EdgeDefTrait edef) {
+        traversal.inE(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace)
+    }
 
     /** */
     static GraphTraversal has(DefaultTraversal traversal, PropertyDefTrait pdef) {

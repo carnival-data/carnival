@@ -85,8 +85,8 @@ class EdgeBuilderSpec extends Specification {
     def "properties simple"() {
         given:
         Exception e
-        def v1 = VX.EBS_THING_1.createVertex(graph, g)
-        def v2 = VX.EBS_THING_2.createVertex(graph, g)
+        def v1 = VX.EBS_THING_1.createVertex(graph)
+        def v2 = VX.EBS_THING_2.createVertex(graph)
 
         when:
         def e1 = EX.EBS_REL_2.instance()
@@ -116,8 +116,8 @@ class EdgeBuilderSpec extends Specification {
         given:
         Exception e
         def eb
-        def v1 = VX.EBS_THING_1.createVertex(graph, g)
-        def v2 = VX.EBS_THING_2.createVertex(graph, g)
+        def v1 = VX.EBS_THING_1.createVertex(graph)
+        def v2 = VX.EBS_THING_2.createVertex(graph)
 
         when:
         eb = EX.EBS_REL_1.instance().from(v2)
@@ -138,8 +138,8 @@ class EdgeBuilderSpec extends Specification {
         given:
         Exception e
         def eb
-        def v1 = VX.EBS_THING_1.createVertex(graph, g)
-        def v2 = VX.EBS_THING_2.createVertex(graph, g)
+        def v1 = VX.EBS_THING_1.createVertex(graph)
+        def v2 = VX.EBS_THING_2.createVertex(graph)
 
         when:
         eb = EX.EBS_REL_1.instance().to(v1)
@@ -159,8 +159,8 @@ class EdgeBuilderSpec extends Specification {
     def "create simple"() {
         given:
         Exception e
-        def v1 = VX.EBS_THING_1.createVertex(graph, g)
-        def v2 = VX.EBS_THING_2.createVertex(graph, g)
+        def v1 = VX.EBS_THING_1.createVertex(graph)
+        def v2 = VX.EBS_THING_2.createVertex(graph)
 
         when:
         def eb1 = EX.EBS_REL_1.instance().from(v1).to(v2).create()
@@ -178,8 +178,8 @@ class EdgeBuilderSpec extends Specification {
     def "edge simple"() {
         given:
         Exception e
-        def v1 = VX.EBS_THING_1.createVertex(graph, g)
-        def v2 = VX.EBS_THING_2.createVertex(graph, g)
+        def v1 = VX.EBS_THING_1.createVertex(graph)
+        def v2 = VX.EBS_THING_2.createVertex(graph)
 
         when:
         def eb1 = EX.EBS_REL_1.instance().from(v1).to(v2).ensure(g)

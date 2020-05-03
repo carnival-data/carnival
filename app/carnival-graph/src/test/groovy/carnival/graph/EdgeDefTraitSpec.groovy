@@ -11,6 +11,7 @@ import org.apache.tinkerpop.gremlin.structure.T
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 //import static org.apache.tinkerpop.gremlin.neo4j.process.traversal.LabelP.of
+import org.apache.tinkerpop.gremlin.structure.Property
 
 
 
@@ -27,22 +28,28 @@ class EdgeDefTraitSpec extends Specification {
     static final VertexDefTrait DYNAMIC_THING = new DynamicVertexDef('DYNAMIC_THING')
 
     static enum VX implements VertexDefTrait {
-        EDTS_THING,
-        EDTS_ANOTHER_THING
+        THING,
+        ANOTHER_THING
     }
 
     static enum VX2 implements VertexDefTrait {
-        EDTS_THING (global:true),
-        EDTS_ANOTHER_THING (global:true)
+        THING (global:true),
+        ANOTHER_THING (global:true)
 
         private VX2() {}
         private VX2(Map m) { m.each { k,v -> this."$k" = v } }
     }
 
     static enum EX1 implements EdgeDefTrait {
-        EDTS_RELATION(            
+        RELATION(            
             propertyDefs:[
-                PX.EDTS_PROP_A.withConstraints(required:true)
+                PX.PROP_A.withConstraints(required:true)
+            ]
+        ),
+        RELATION_2(            
+            propertyDefs:[
+                PX.PROP_A.withConstraints(required:true),
+                PX.PROP_B
             ]
         )
         private EX1() {}
@@ -50,12 +57,12 @@ class EdgeDefTraitSpec extends Specification {
     }
 
     static enum EX2 implements EdgeDefTrait {
-        EDTS_RELATION(
+        RELATION(
             propertyDefs:[
-                PX.EDTS_PROP_A
+                PX.PROP_A
             ],   
-            domain: [VX.EDTS_THING], 
-            range: [VX.EDTS_ANOTHER_THING]
+            domain: [VX.THING], 
+            range: [VX.ANOTHER_THING]
         )
 
         private EX2() {}
@@ -63,12 +70,12 @@ class EdgeDefTraitSpec extends Specification {
     }
 
     static enum EX3 implements EdgeDefTrait {
-        EDTS_RELATION(
+        RELATION(
             propertyDefs:[
-                PX.EDTS_PROP_A.defaultValue(1).withConstraints(required:true)
+                PX.PROP_A.defaultValue(1).withConstraints(required:true)
             ],
             domain: [DYNAMIC_THING], 
-            range: [VX.EDTS_ANOTHER_THING]
+            range: [VX.ANOTHER_THING]
         )
 
         private EX3() {}
@@ -76,8 +83,8 @@ class EdgeDefTraitSpec extends Specification {
     }
 
     static enum PX implements PropertyDefTrait {
-        EDTS_PROP_A,
-        EDTS_PROP_B,
+        PROP_A,
+        PROP_B,
 
         public PX() {}
         public PX(Map m) {m.each { k,v -> this."$k" = v }}
@@ -119,13 +126,72 @@ class EdgeDefTraitSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
+    def "two defined properties"() {
+        when:
+        def v1 = VX.THING.instance().create(graph)
+        def v2 = VX.THING.instance().create(graph)
+        def e1 = EX1.RELATION_2.instance().from(v1).to(v2).withProperties(
+            PX.PROP_A, 'a',
+            PX.PROP_B, 'b'
+        ).create()
+        e1.property('someOtherProp', 'qq')
+        def dps1 = EX1.RELATION_2.definedPropertiesOf(e1)
+        println "dps1: $dps1"
+
+        then:
+        dps1 != null
+        dps1.size() == 2
+        dps1.find { it.key() == PX.PROP_A.label }
+        dps1.find { it.key() == PX.PROP_B.label }
+        
+        when:
+        def dp1 = dps1.find { it.key() == PX.PROP_A.label }
+
+        then:
+        dp1 instanceof Property
+        dp1.key() == PX.PROP_A.label
+        dp1.value() == 'a'
+
+        when:
+        def dp2 = dps1.find { it.key() == PX.PROP_B.label }
+
+        then:
+        dp2 instanceof Property
+        dp2.key() == PX.PROP_B.label
+        dp2.value() == 'b'
+    }
+
+
+    def "one defined property"() {
+        when:
+        def v1 = VX.THING.instance().create(graph)
+        def v2 = VX.THING.instance().create(graph)
+        def e1 = EX1.RELATION_2.instance().from(v1).to(v2).withProperty(PX.PROP_A, 'a').create()
+        e1.property('someOtherProp', 'qq')
+        def dps1 = EX1.RELATION_2.definedPropertiesOf(e1)
+        println "dps1: $dps1"
+
+        then:
+        dps1 != null
+        dps1.size() == 1
+        
+        when:
+        def dp1 = dps1.first()
+
+        then:
+        dp1 instanceof Property
+        dp1.key() == PX.PROP_A.label
+        dp1.value() == 'a'
+    }
+
+
     def "property def constraints"() {
 
         expect:
-        !PX.EDTS_PROP_A.hasProperty('required')
-        EX1.EDTS_RELATION.propertyDefs[0].hasProperty('required')
-        !EX2.EDTS_RELATION.propertyDefs[0].hasProperty('required')
-        EX3.EDTS_RELATION.propertyDefs[0].hasProperty('required')
+        !PX.PROP_A.hasProperty('required')
+        EX1.RELATION.propertyDefs[0].hasProperty('required')
+        !EX2.RELATION.propertyDefs[0].hasProperty('required')
+        EX3.RELATION.propertyDefs[0].hasProperty('required')
     }
 
 
@@ -137,9 +203,9 @@ class EdgeDefTraitSpec extends Specification {
         Throwable t
 
         when:
-        v1 = VX.EDTS_THING.controlledInstance().vertex(graph, g)
-        v2 = VX2.EDTS_ANOTHER_THING.controlledInstance().vertex(graph, g)
-        e = EX2.EDTS_RELATION.setRelationship(g, v1, v2)
+        v1 = VX.THING.controlledInstance().vertex(graph, g)
+        v2 = VX2.ANOTHER_THING.controlledInstance().vertex(graph, g)
+        e = EX2.RELATION.setRelationship(g, v1, v2)
 
         println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
         println "v2: ${v2} ${v2.label()} ${v2.value('nameSpace')}"
@@ -148,7 +214,7 @@ class EdgeDefTraitSpec extends Specification {
         noExceptionThrown()
 
         when:
-        e = EX2.EDTS_RELATION.setRelationship(g, v1, v1)
+        e = EX2.RELATION.setRelationship(g, v1, v1)
 
         then:
         t = thrown()
@@ -163,9 +229,9 @@ class EdgeDefTraitSpec extends Specification {
         Throwable t
 
         when:
-        v1 = VX2.EDTS_THING.controlledInstance().vertex(graph, g)
-        v2 = VX.EDTS_ANOTHER_THING.controlledInstance().vertex(graph, g)
-        e = EX2.EDTS_RELATION.setRelationship(g, v1, v2)
+        v1 = VX2.THING.controlledInstance().vertex(graph, g)
+        v2 = VX.ANOTHER_THING.controlledInstance().vertex(graph, g)
+        e = EX2.RELATION.setRelationship(g, v1, v2)
 
         println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
         println "v2: ${v2} ${v2.label()} ${v2.value('nameSpace')}"
@@ -174,7 +240,7 @@ class EdgeDefTraitSpec extends Specification {
         noExceptionThrown()
 
         when:
-        e = EX2.EDTS_RELATION.setRelationship(g, v2, v2)
+        e = EX2.RELATION.setRelationship(g, v2, v2)
 
         then:
         t = thrown()
@@ -190,8 +256,8 @@ class EdgeDefTraitSpec extends Specification {
 
         when:
         v1 = DYNAMIC_THING.controlledInstance().vertex(graph, g)
-        v2 = VX.EDTS_ANOTHER_THING.controlledInstance().vertex(graph, g)
-        e = EX3.EDTS_RELATION.setRelationship(g, v1, v2)
+        v2 = VX.ANOTHER_THING.controlledInstance().vertex(graph, g)
+        e = EX3.RELATION.setRelationship(g, v1, v2)
 
         println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
         println "v2: ${v2} ${v2.label()} ${v2.value('nameSpace')}"
@@ -200,7 +266,7 @@ class EdgeDefTraitSpec extends Specification {
         noExceptionThrown()
 
         when:
-        e = EX3.EDTS_RELATION.setRelationship(g, v2, v2)
+        e = EX3.RELATION.setRelationship(g, v2, v2)
 
         then:
         t = thrown()
@@ -215,9 +281,9 @@ class EdgeDefTraitSpec extends Specification {
         Throwable t
 
         when:
-        v1 = VX.EDTS_THING.controlledInstance().vertex(graph, g)
-        v2 = VX.EDTS_ANOTHER_THING.controlledInstance().vertex(graph, g)
-        e = EX2.EDTS_RELATION.setRelationship(g, v1, v2)
+        v1 = VX.THING.controlledInstance().vertex(graph, g)
+        v2 = VX.ANOTHER_THING.controlledInstance().vertex(graph, g)
+        e = EX2.RELATION.setRelationship(g, v1, v2)
 
         println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
         println "v2: ${v2} ${v2.label()} ${v2.value('nameSpace')}"
@@ -226,7 +292,7 @@ class EdgeDefTraitSpec extends Specification {
         noExceptionThrown()
 
         when:
-        e = EX2.EDTS_RELATION.setRelationship(g, v1, v1)
+        e = EX2.RELATION.setRelationship(g, v1, v1)
 
         then:
         t = thrown()
@@ -241,9 +307,9 @@ class EdgeDefTraitSpec extends Specification {
         Throwable t
 
         when:
-        v1 = VX.EDTS_THING.controlledInstance().vertex(graph, g)
-        v2 = VX.EDTS_ANOTHER_THING.controlledInstance().vertex(graph, g)
-        e = EX2.EDTS_RELATION.setRelationship(g, v1, v2)
+        v1 = VX.THING.controlledInstance().vertex(graph, g)
+        v2 = VX.ANOTHER_THING.controlledInstance().vertex(graph, g)
+        e = EX2.RELATION.setRelationship(g, v1, v2)
 
         println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
         println "v2: ${v2} ${v2.label()} ${v2.value('nameSpace')}"
@@ -252,7 +318,7 @@ class EdgeDefTraitSpec extends Specification {
         noExceptionThrown()
 
         when:
-        e = EX2.EDTS_RELATION.setRelationship(g, v2, v2)
+        e = EX2.RELATION.setRelationship(g, v2, v2)
 
         then:
         t = thrown()
@@ -267,9 +333,9 @@ class EdgeDefTraitSpec extends Specification {
         def e
 
         when:
-        v1 = VX.EDTS_THING.controlledInstance().vertex(graph, g)
-        v2 = VX.EDTS_THING.controlledInstance().vertex(graph, g)
-        e = EX1.EDTS_RELATION.setRelationship(g, v1, v2)
+        v1 = VX.THING.controlledInstance().vertex(graph, g)
+        v2 = VX.THING.controlledInstance().vertex(graph, g)
+        e = EX1.RELATION.setRelationship(g, v1, v2)
 
         then:
         e

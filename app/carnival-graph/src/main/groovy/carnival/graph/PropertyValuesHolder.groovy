@@ -59,19 +59,43 @@ class PropertyValuesHolder<T> {
         assert numArgs >= 2
         assert numArgs % 2 == 0
 
-        Map<PropertyDefTrait,Object> props = new HashMap<PropertyDefTrait,Object>()
-        def i = 0
-        while (i < numArgs) {
-            def propDef = args[i++]
-            def propVal = args[i++]
-            props.put(propDef, propVal)
-        }    
-        //log.trace "withProperties props: $props"
+        def pairs = args.collate(2)
+        holdPropertyPairs(pairs)
 
+        return this
+    }
+
+
+    /** */
+    public T withNonNullProperties(Object... args) {
+        withNonNullProperties(args.toList())
+    }
+
+
+    /** */
+    public T withNonNullProperties(List args) {
+        def numArgs = args.size()
+        assert numArgs >= 2
+        assert numArgs % 2 == 0
+
+        def pairs = args.collate(2).findAll({ p -> p[1] != null })
+        holdPropertyPairs(pairs)
+
+        return this
+    }
+
+
+    /** */
+    private void holdPropertyPairs(List<List> pairs) {
+        Map<PropertyDefTrait,Object> props = new HashMap<PropertyDefTrait,Object>()
+        pairs.each { p ->
+            def propDef = p[0]
+            def propVal = p[1]
+            props.put(propDef, propVal)
+        }
         props.each { PropertyDefTrait vp, Object val ->
             withProperty(vp, val)
         }
-        return this
     }
 
 

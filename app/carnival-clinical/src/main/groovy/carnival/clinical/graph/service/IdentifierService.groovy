@@ -196,7 +196,7 @@ class IdentifierService extends ReportService {
         // create and associate new identifiers
         List<Vertex> newIdVs = new ArrayList<Vertex>()
         idVals.each { sV, idVal ->
-            def newIdV = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, idVal).createVertex(graph, g)
+            def newIdV = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, idVal).createVertex(graph)
             newIdVs << newIdV
             sV.addEdge(Core.EX.IS_IDENTIFIED_BY.label, newIdV)
             newIdV.addEdge(Core.EX.IS_SCOPED_BY.label, newIdentifierScopeV)

@@ -108,7 +108,8 @@ trait GremlinTrait  {
 
     /** */
     public GraphTraversalSource traversal() { 
-        def g = this.graph.traversal() 
+        assert graph
+        def g = graph.traversal() 
         return g
     }
 
@@ -116,6 +117,7 @@ trait GremlinTrait  {
     /** */
     public Object cypher(String q) {
         sqllog.info("GrelinTrait.cypher:\n$q")
+        assert graph
         return graph.cypher(q)
     }
 
@@ -123,6 +125,7 @@ trait GremlinTrait  {
     /** */
     public Object cypher(String q, Map args) {
         sqllog.info("GremlinTrait.cypher:\n$q\n$args")
+        assert graph
         return graph.cypher(q, args)
     }
 

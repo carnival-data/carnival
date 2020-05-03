@@ -71,18 +71,22 @@ trait PropertyDefTrait {
 
     /** */
     public Property of(Element el) {
+        assert el
         el.property(getLabel())
     }
 
 
     /** */
     public Object valueOf(Element el) {
+        assert el
         el.value(getLabel())
     }
 
 
     /** */
     public PropertyDefTrait set(Element el, Object value) {
+        assert el
+        assert value != null
         el.property(getLabel(), value)
         this
     }
@@ -90,6 +94,9 @@ trait PropertyDefTrait {
 
     /** */
     public PropertyDefTrait setIf(Element el, Object value, Closure cl) {
+        assert el
+        assert value != null
+        assert cl != null
         if (cl(value)) set(el, value)
         this
     }

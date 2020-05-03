@@ -20,17 +20,11 @@ import carnival.graph.VertexDefTrait
 
 
 /** */
-abstract public class Reasoner implements ReasonerInterface, GremlinTrait {
+abstract public class Reasoner implements ReasonerInterface, GremlinTrait, TrackedProcessDefaultTrait {
 	
     ///////////////////////////////////////////////////////////////////////////
     // STATIC FIELDS
     ///////////////////////////////////////////////////////////////////////////
-
-    /** sql log */
-    static Logger sqllog = LoggerFactory.getLogger('sql')
-
-    /** error log */
-    static Logger elog = LoggerFactory.getLogger('db-entity-report')
 
     /** carnival log */
     static Logger log = LoggerFactory.getLogger(Reasoner)
@@ -72,5 +66,25 @@ abstract public class Reasoner implements ReasonerInterface, GremlinTrait {
 
     /** */
     abstract public Map reason(Map args)
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // TRACKING
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    public Map ensure(Map args) {
+        def out = [:]
+        def numRuns = getAllSuccessfulTrackedProcesses(traversal()).size()
+        if (numRuns == 0) {
+            out.result = reason(args)
+            out.processVertex = createAndSetTrackedProcessVertex(graph)
+            if (out.result?.success) Core.PX.SUCCESS.set(out.processVertex, true)
+            log.info "${this.class.simpleName} ensure result: ${out.result}"
+        } else {
+            log.info "${this.class.simpleName} already run ${numRuns} times"
+        }
+        out
+    }
 
 }

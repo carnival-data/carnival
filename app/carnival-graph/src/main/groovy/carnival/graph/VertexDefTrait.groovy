@@ -15,6 +15,7 @@ import org.apache.tinkerpop.gremlin.structure.T
 import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.structure.Edge
+import org.apache.tinkerpop.gremlin.structure.VertexProperty
 
 import carnival.util.StringUtils
 import carnival.graph.Base
@@ -108,6 +109,19 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
     }
 
 
+    /** */
+    public Set<VertexProperty> definedPropertiesOf(Vertex v) {
+        Set<VertexProperty> vProps = new HashSet<VertexProperty>()
+        propertyDefs.each { pDef ->
+            def vp = v.property(pDef.label)
+            if (VertexProperty.empty().equals(vp)) return
+            if (!vp.isPresent()) return
+            vProps.add(vp)
+        }
+        vProps
+    }
+
+
 
     ///////////////////////////////////////////////////////////////////////////
     // SINGLETON VERTEX METHODS
@@ -142,15 +156,6 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
      */
     public ControlledInstance controlledInstance() {
         return new ControlledInstance(this)
-    }
-
-
-    /** 
-     *
-     *
-     */
-    public Vertex createVertex(Graph graph, GraphTraversalSource g) {
-        this.instance().createVertex(graph, g)
     }
 
 

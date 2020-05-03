@@ -29,7 +29,7 @@ class VertexDef {
         assert v != null
 
         def defName = StringUtils.toScreamingSnakeCase(v.label())
-        log.trace "defName: $defName"
+        //log.trace "defName: $defName"
 
         def defClassName
         if (Base.PX.VERTEX_DEFINITION_CLASS.of(v).isPresent()) {
@@ -37,13 +37,13 @@ class VertexDef {
         } else {
             defClassName = Base.PX.NAME_SPACE.valueOf(v)
         }
-        log.trace "defClassName: $defClassName"
+        //log.trace "defClassName: $defClassName"
 
         def defClass = Class.forName(defClassName)
-        log.trace "defClass: $defClass"
+        //log.trace "defClass: $defClass"
 
         def isEnum = Enum.isAssignableFrom(defClass)
-        log.trace "is enum ${isEnum}"
+        //log.trace "is enum ${isEnum}"
 
         def defInstance
         if (isEnum) {
@@ -52,7 +52,7 @@ class VertexDef {
             defInstance = defClass.newInstance()
             defInstance.name = defName
         }
-        log.trace "defInstance: $defInstance"
+        //log.trace "defInstance: $defInstance"
 
         return defInstance
     }

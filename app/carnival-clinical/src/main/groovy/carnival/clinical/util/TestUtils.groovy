@@ -109,7 +109,7 @@ class TestUtils {
 
         def patVs = []
         ids.collect({ String.valueOf(it) }).each { id ->
-            def patV = Clinical.VX.PATIENT.createVertex(graph, g)
+            def patV = Clinical.VX.PATIENT.createVertex(graph)
             def patIdV = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, id).vertex(graph, g)
             Core.EX.IS_INSTANCE_OF.relate(g, patIdV, idClassV)
             if (patIdScopeV) Core.EX.IS_SCOPED_BY.relate(g, patIdV, patIdScopeV)

@@ -65,24 +65,24 @@ assert g.V().count().next() == 0
 def v
 
 // create a THING_1 with no properties
-v = VX.THING_1.instance().createVertex(graph, g)
+v = VX.THING_1.instance().createVertex(graph)
 assert g.V().count().next() == 1
 printVert(v)
 
 // create a THING_2 with no properties
-v = VX.THING_2.instance().createVertex(graph, g)
+v = VX.THING_2.instance().createVertex(graph)
 assert g.V().count().next() == 2
 printVert(v)
 
 // create a THING_2 with a single optional property
-v = VX.THING_2.instance().withProperty(PX.PROP_A, 'a').createVertex(graph, g)
+v = VX.THING_2.instance().withProperty(PX.PROP_A, 'a').createVertex(graph)
 assert g.V().count().next() == 3
 printVert(v)
 
 // try to create a THING_3 with no properties
 // it will fail, because THING_3 has a required property
 try {
-    v = VX.THING_3.instance().createVertex(graph, g)
+    v = VX.THING_3.instance().createVertex(graph)
     fail 'an exception will be thrown before we reach this line of code'
 } catch (Exception e) {
     println e.message

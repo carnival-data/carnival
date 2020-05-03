@@ -150,7 +150,7 @@ class IdentifierServiceSpec extends Specification {
         Throwable e
 
         when:
-        def s1 = VX.THING.createVertex(graph, g)
+        def s1 = VX.THING.createVertex(graph)
 
         def id1V = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, 'id1').vertex(graph, g)
         Core.EX.IS_INSTANCE_OF.relate(g, id1V, existingIdClassV)
@@ -226,7 +226,7 @@ existingIdClass id1 scope1  scopedIdClass   pre1    Thing
         Throwable e
 
         when:
-        def s1 = VX.THING.createVertex(graph, g)
+        def s1 = VX.THING.createVertex(graph)
 
         def id1V = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, 'id1').vertex(graph, g)
         Core.EX.IS_INSTANCE_OF.relate(g, id1V, existingIdClassV)
@@ -257,13 +257,13 @@ existingIdClass id1 scope1  scopedIdClass   pre1    Thing
         Throwable e
 
         when:
-        def s1 = VX.THING.createVertex(graph, g)
+        def s1 = VX.THING.createVertex(graph)
 
         def id1V = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, 'id1').vertex(graph, g)
         Core.EX.IS_INSTANCE_OF.relate(g, id1V, existingIdClassV)
         Core.EX.IS_IDENTIFIED_BY.relate(g, s1, id1V)
 
-        def s2 = VX.THING.createVertex(graph, g)
+        def s2 = VX.THING.createVertex(graph)
         Core.EX.IS_IDENTIFIED_BY.relate(g, s2, id1V)
 
         res = IdentifierService.autoGenerateScopedIdentifiers(
@@ -286,7 +286,7 @@ existingIdClass id1 scope1  scopedIdClass   pre1    Thing
         Throwable e
 
         when:
-        def s1 = VX.THING.createVertex(graph, g)
+        def s1 = VX.THING.createVertex(graph)
         def id1V = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, 'id1').vertex(graph, g)
         Core.EX.IS_INSTANCE_OF.relate(g, id1V, existingIdClassV)
         Core.EX.IS_IDENTIFIED_BY.relate(g, s1, id1V)
@@ -336,7 +336,7 @@ existingIdClass id1 scope1  scopedIdClass   pre1    Thing
         Throwable e
 
         when:
-        def s1 = VX.THING.createVertex(graph, g)
+        def s1 = VX.THING.createVertex(graph)
         def id1V = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, 'id1').vertex(graph, g)
         Core.EX.IS_INSTANCE_OF.relate(g, id1V, existingIdClassV)
         Core.EX.IS_IDENTIFIED_BY.relate(g, s1, id1V)
@@ -362,7 +362,7 @@ existingIdClass id1 scope1  scopedIdClass   pre1    Thing
         Throwable e
 
         when:
-        def s1 = VX.THING.createVertex(graph, g)
+        def s1 = VX.THING.createVertex(graph)
         def id1V = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, 'id1').vertex(graph, g)
         Core.EX.IS_INSTANCE_OF.relate(g, id1V, existingIdClassV)
         Core.EX.IS_IDENTIFIED_BY.relate(g, s1, id1V)

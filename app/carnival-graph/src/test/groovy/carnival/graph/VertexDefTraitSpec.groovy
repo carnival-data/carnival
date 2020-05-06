@@ -56,10 +56,7 @@ class VertexDefTraitSpec extends Specification {
 
     static enum PX implements PropertyDefTrait {
         PROP_A,
-        PROP_B,
-
-        public PX() {}
-        public PX(Map m) {m.each { k,v -> this."$k" = v }}
+        PROP_B
     }
 
 

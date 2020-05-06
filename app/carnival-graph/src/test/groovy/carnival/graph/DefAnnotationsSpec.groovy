@@ -11,16 +11,18 @@ import org.apache.tinkerpop.gremlin.structure.T
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 import org.apache.tinkerpop.gremlin.structure.Vertex
+import org.apache.tinkerpop.gremlin.structure.Edge
 
 
 
 /**
- * gradle test --tests "carnival.graph.VertexDefSpec"
+ * gradle test --tests "carnival.graph.DefAnnotationsSpec"
  *
  */
-class VertexDefSpec extends Specification {
+class DefAnnotationsSpec extends Specification {
 
-    static enum VX implements VertexDefTrait {
+    @VertexDefinition
+    static enum VX {
         THING,
 
         THING_1(
@@ -28,16 +30,30 @@ class VertexDefSpec extends Specification {
                 PX.PROP_A.withConstraints(required:true),
                 PX.PROP_B
             ]
-        ),
-
-        private VX() {}
-        private VX(Map m) {m.each { k,v -> this."$k" = v }}
+        )
     }
 
 
-    static enum PX implements PropertyDefTrait {
+    @EdgeDefinition
+    static enum EX {
+    	IS_NOT(
+            domain:[VX.THING], 
+            range:[VX.THING_1]            
+        )
+    }
+
+
+    @PropertyDefinition
+    static enum PX {
         PROP_A,
-        PROP_B
+        PROP_B,
+        PROP_C
+    }
+
+
+    @PropertyDefinition
+    static enum PX_REDUNDANT_DEF_TRAIT implements PropertyDefTrait {
+        PROP_A
     }
 
 
@@ -78,13 +94,28 @@ class VertexDefSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
-    def "lookup"() {
+    def "edge domain"() {
         when:
-        Vertex v1 = VX.THING.instance().create(graph)
-        VertexDefTrait d1 = VertexDef.lookup(v1)
+        Vertex v1 = VX.THING_1.instance().withProperty(
+            PX.PROP_A, 'a'
+        ).create(graph)
 
         then:
-        d1 == VX.THING
+        v1 != null
+        PX.PROP_A.valueOf(v1) == 'a'
+    }
+
+
+    def "vertex props"() {
+        when:
+        Vertex v1 = VX.THING.instance().create(graph)
+        Vertex v2 = VX.THING_1.instance().withProperty(
+            PX.PROP_A, 'a'
+        ).create(graph)
+        Edge e1 = EX.IS_NOT.instance().from(v1).to(v2).create()
+
+        then:
+        e1 != null
     }
 
 }

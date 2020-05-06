@@ -34,9 +34,6 @@ class PropertyValuesHolderSpec extends Specification {
     static enum PX implements PropertyDefTrait {
         CIS_PROP_A,
         CIS_PROP_B
-
-        public PX() {}
-        public PX(Map m) {m.each { k,v -> this."$k" = v }}
     }
 
 

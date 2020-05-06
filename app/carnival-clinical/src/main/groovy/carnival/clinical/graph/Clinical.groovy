@@ -7,9 +7,9 @@ import groovy.transform.CompileStatic
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import carnival.graph.VertexDefTrait
-import carnival.graph.PropertyDefTrait
-import carnival.graph.EdgeDefTrait
+import carnival.graph.VertexDefinition
+import carnival.graph.PropertyDefinition
+import carnival.graph.EdgeDefinition
 import carnival.core.graph.Core
 
 
@@ -19,7 +19,8 @@ import carnival.core.graph.Core
 class Clinical {
 
     /** */
-    static enum VX implements VertexDefTrait {
+    @VertexDefinition
+    static enum VX {
         PATIENT,
         PATIENT_WITH_ID_PROBLEMS,
 
@@ -78,14 +79,12 @@ class Clinical {
                 Core.PX.NAME.withConstraints(required:true, unique:true)
             ]
         )
-
-        private VX() {}
-        private VX(Map m) { if (m.vertexProperties) this.vertexProperties = m.vertexProperties }
     }
 
 
     /** */
-    static enum EX implements EdgeDefTrait {
+    @EdgeDefinition
+    static enum EX {
         IS_SCOPED_BY (range:[VX.STUDY]),
 
         IS_UNDER_PROTOCOL (
@@ -191,14 +190,12 @@ class Clinical {
             domain:[VX.PATIENT],
             range:[VX.DATE_SHIFT_VALUE]
         )
-
-        private EX() {}
-        private EX(Map m) {m.each { k,v -> this."$k" = v } }
     }
 
 
     /** */
-    static enum PX implements PropertyDefTrait {
+    @PropertyDefinition
+    static enum PX {
         ENCOUNTER_DATE,
         SYSTEM,
         ROLLUP,

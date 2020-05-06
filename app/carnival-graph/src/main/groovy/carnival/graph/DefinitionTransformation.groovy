@@ -68,6 +68,7 @@ abstract class DefinitionTransformation extends AbstractASTTransformation {
         classNode.setInterfaces(finalInterfacesArray)
     }
 
+
     /** */
     static addNoArgConstructor(ClassNode classNode) {
         ConstructorNode noArgConstructor = 
@@ -79,6 +80,7 @@ abstract class DefinitionTransformation extends AbstractASTTransformation {
         ) 
         classNode.addConstructor(noArgConstructor)                        
     }
+    
     
     /** */
     static addMapConstructor(ClassNode classNode, BlockStatement stmt) {

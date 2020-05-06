@@ -35,19 +35,29 @@ trait PropertyDefTrait {
 	// FACTORY METHODS
 	///////////////////////////////////////////////////////////////////////////
 
+    /*
+    public ConstrainedPropertyDefTrait index() {
+        println "index() ${this instanceof ConstrainedPropertyDefTrait} $this"
+        def cpd = (this instanceof ConstrainedPropertyDefTrait) ? this : this as ConstrainedPropertyDefTrait
+        cpd.index = true
+        cpd
+    }
+
+    public ConstrainedPropertyDefTrait require() {
+        println "require() ${this instanceof ConstrainedPropertyDefTrait} $this"
+        def cpd = (this instanceof ConstrainedPropertyDefTrait) ? this : this as ConstrainedPropertyDefTrait
+        cpd.required = true
+        cpd
+    }
+    */
+
 	/** */
 	public ConstrainedPropertyDefTrait withConstraints(Map m) {
-        //log.debug "PropertyDefTrait.withConstraints"
-        //log.debug "this: ${this.class.name} ${this}"
-        //log.debug "this instanceof ConstrainedPropertyDefTrait ${this instanceof ConstrainedPropertyDefTrait}"
-
-		//def cpd = this.withTraits(ConstrainedPropertyDefTrait)
         def cpd = this as ConstrainedPropertyDefTrait
+
 		if (m.unique) cpd.unique = m.unique
 		if (m.required) cpd.required = m.required
 		if (m.index) cpd.index = m.index
-
-        //log.debug "cpd instanceof ConstrainedPropertyDefTrait ${cpd instanceof ConstrainedPropertyDefTrait}"
 
 		return cpd
 	}
@@ -135,12 +145,12 @@ trait ConstrainedPropertyDefTrait {
 
     /**
      * If true, then the values of this property must be unique across all
-     * vertices.
+     * elements.
      */
     Boolean unique = false
 
     /**
-     * If true, then this property must be present in all vertices.
+     * If true, then this property must be present in all elements.
      */
     Boolean required = false
 

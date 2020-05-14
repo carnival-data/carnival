@@ -45,7 +45,13 @@ class PropertyDefinitionTransformation extends DefinitionTransformation {
 
 }
 
-/** */
+/** 
+ * Superclass for definition transformations that add traits to enum
+ * definitions.  NOTE - the compile phase must be at least as early
+ * as SEMANTIC_ANALYSIS. Any later, and the groovy machinery will not
+ * apply the trait, only the interface.
+ *
+ */
 abstract class DefinitionTransformation extends AbstractASTTransformation {
 
     ///////////////////////////////////////////////////////////////////////////
@@ -80,7 +86,7 @@ abstract class DefinitionTransformation extends AbstractASTTransformation {
         ) 
         classNode.addConstructor(noArgConstructor)                        
     }
-    
+
     
     /** */
     static addMapConstructor(ClassNode classNode, BlockStatement stmt) {

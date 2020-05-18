@@ -43,8 +43,8 @@ Carnival’s property graph database:
 * Has a query engine capable of executing queries of arbitrary complexity
 
 <a name="package-overview"></a>
-### Package Overview
-## Functionality Packages
+## Package Overview
+### Functionality Packages
 * carnival-graph - Framework for defining carnival graph schemas (vertex and edge definitions).  Contains the basic vertex, edge, and property classes.
 * carnival-gremlin-dsl - Gremlin dsl support for traversing carnival property graphs.
 * carnival-util - Contains utility and helper classes such as MappedDataTable, FeatureReport and SqlUtils.
@@ -53,7 +53,7 @@ Carnival’s property graph database:
 	- [Reaper schema](https://github.com/pmbb-ibi/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/Reaper.groovy)
 	- [Reasoner schema](https://github.com/pmbb-ibi/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/Reasoner.groovy)
 
-## Application Packages
+### Application Packages
 * carnival-clinical - Extension of carnival-core for clinical data.  Contains graph schema extensions for concepts such as patients, patient cohorts and healthcare encounters. Implements methods for case-control matching for patient cohorts. 
 	- [Graph schema](https://github.com/pmbb-ibi/carnival/blob/master/app/carnival-clinical/src/main/groovy/carnival/clinical/graph/Clinical.groovy)
 

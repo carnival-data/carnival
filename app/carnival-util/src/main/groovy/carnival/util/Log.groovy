@@ -37,7 +37,13 @@ class Log {
      *
      */
     static void progress(Logger log, String logMethod, String msg, Integer total, Integer current) {
-        log."$logMethod"("$msg $current of $total (${ Math.round(Math.floor((current*100)/total)) }%)")
+        if (toal > 0) {
+            log."$logMethod"("$msg $current of $total (${ Math.round(Math.floor((current*100)/total)) }%)")
+        }
+        else {
+            log."$logMethod"("$msg $current of $total (-%)")   
+        }
+
     }
 
 

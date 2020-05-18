@@ -44,7 +44,7 @@ Carnival’s property graph database:
 
 <a name="package-overview"></a>
 ## Package Overview
-### Functionality Packages
+### Core Framework Packages
 * carnival-graph - Framework for defining carnival graph schemas (vertex and edge definitions).  Contains the basic vertex, edge, and property classes.
 * carnival-gremlin-dsl - Gremlin dsl support for traversing carnival property graphs.
 * carnival-util - Contains utility and helper classes such as MappedDataTable, FeatureReport and SqlUtils.

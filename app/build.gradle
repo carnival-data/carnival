@@ -55,7 +55,8 @@ subprojects {
 // Testing Tasks
 ///////////////////////////////////////////////////////////////////////////////
 subprojects {
-    test.ignoreFailures true
+    // see https://docs.gradle.org/current/userguide/command_line_interface.html#sec:continue_build_on_failure
+    //test.ignoreFailures true
 
     test {
         systemProperty 'vine.config.file.path', System.getProperty('vine.config.file.path')
@@ -93,7 +94,8 @@ subprojects {
     }
 }
 
-
+// to run all test suites even if a failure occurs use the flag '--continue'
+// https://docs.gradle.org/current/userguide/command_line_interface.html#sec:continue_build_on_failure
 task testReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/allTests")
 

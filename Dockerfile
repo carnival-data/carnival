@@ -27,6 +27,7 @@ RUN rename -v 's/-template//' *-template
 RUN dos2unix **
 
 RUN mkdir ${CARNIVAL_HOME}/target
+RUN mkdir ${CARNIVAL_HOME}/data
 RUN mkdir ${CARNIVAL_HOME}/data/cache
 
 # update APOC location in application.yml config file

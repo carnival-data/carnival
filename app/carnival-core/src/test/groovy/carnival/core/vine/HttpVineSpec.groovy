@@ -105,10 +105,6 @@ class HttpVineSpec extends Specification {
             trustAllSSLCertificates: false
             )
 
-
-        expect:
-        1 == 2
-
         when:
         def http = httpServerConfig.instantiateHttpBuilder()
 

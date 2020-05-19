@@ -54,8 +54,11 @@ subprojects {
 ///////////////////////////////////////////////////////////////////////////////
 // Testing Tasks
 ///////////////////////////////////////////////////////////////////////////////
+apply from: 'setupTestsReports.gradle'
+
 subprojects {
-    // see https://docs.gradle.org/current/userguide/command_line_interface.html#sec:continue_build_on_failure
+    // use --continue flag instead of setting test.ignoreFailures to true
+    // See https://docs.gradle.org/current/userguide/command_line_interface.html#sec:continue_build_on_failure
     //test.ignoreFailures true
 
     test {
@@ -103,6 +106,10 @@ task testReport(type: TestReport) {
     reportOn subprojects*.test
 
     ant.echo "TestReport - buildDir: $buildDir/reports/allTests"
+
+    doLast{
+       "open $buildDir/reports/allTests/index.html".execute()
+   }
 }
 
 

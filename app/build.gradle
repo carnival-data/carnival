@@ -65,7 +65,7 @@ subprojects {
         systemProperty 'vine.config.file.path', System.getProperty('vine.config.file.path')
         systemProperty 'cgis.use.cached.data.files', System.getProperty('cgis.use.cached.data.files')
         systemProperty 'cgis.use.cached.graph', System.getProperty('cgis.use.cached.graph')
-        systemProperty 'test.http', System.getProperty('test.http')
+        systemProperty 'test.http', System.getProperty('test.http') ?: true
         systemProperty 'test.graph.rollback', System.getProperty('test.graph.rollback')
         systemProperty 'allow.redcap.modification', System.getProperty('allow.redcap.modification')
         systemProperty 'disable.filevine.tests', System.getProperty('disable.filevine.tests')
@@ -108,10 +108,19 @@ task testReport(type: TestReport) {
     ant.echo "TestReport - buildDir: $buildDir/reports/allTests"
 
     doLast{
-       "open $buildDir/reports/allTests/index.html".execute()
+       browse "$buildDir/reports/allTests/index.html"
    }
 }
 
+
+def browse(path) {
+    def os = org.gradle.internal.os.OperatingSystem.current()
+    if (os.isWindows()) {
+        exec { commandLine 'cmd', '/c', "start $path" }
+    } else if (os.isMacOsX()) {
+        exec { commandLine 'open', "$path" }
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // convenience local publishing tasks

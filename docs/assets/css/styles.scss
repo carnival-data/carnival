@@ -1,8 +1,21 @@
 ---
 ---
+
+/* Front matter is necessary for Jekyll */
+
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+
+/* Write your styles below this line. */
+
+/* Write your styles above this line. */
+
+@tailwind utilities;
+
+/*
 @import "main";
 @import "simple-sidebar.css";
 @import "custom.css";
 @import "micro.css";
 @import "agate.css";
-
+*/

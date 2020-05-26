@@ -5,5 +5,7 @@ gem "jekyll"
 group :jekyll_plugins do
   # gem "jekyll-feed"
   # gem "jekyll-seo-tag"
-  gem 'jekyll-theme-midnight', '~> 0.1.1'
+  gem "jekyll-postcss"
+  gem "jekyll-purgecss"
+  # gem 'jekyll-theme-midnight', '~> 0.1.1'
 end

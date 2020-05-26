@@ -1,49 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Carnival documentation" />
+        <meta name="author" content="Team Carnival" />
 
-<head>
+        <title>{{ page.title }}</title>
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+        <!--link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.1/css/all.css" /-->
+        <link href="assets/vendor/fontawesome-free-5.13.0-web/css/all.css" rel="stylesheet" />
 
-  <title>{{ page.title }}</title>
+        <!--link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet" /-->
+        <link href="assets/vendor/emoji-css.afeld.me/emoji.css" rel="stylesheet" />
 
-  <!-- Bootstrap core CSS -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Syntax highlighting -->
+        <link rel="stylesheet" href="assets/vendor/highlight/styles/default.css" />
+        <link rel="stylesheet" href="assets/vendor/asciidoctor/css/asciidoctor.css" />
 
-  <!-- Syntax highlighting -->
-  <link rel="stylesheet" href="assets/vendor/highlight/styles/default.css">
-  <link rel="stylesheet" href="assets/vendor/asciidoctor/css/asciidoctor.css">
+        <!-- Custom styles for this template -->
+        <link href="assets/css/styles.css" rel="stylesheet" />
+    </head>
 
-  <!-- Custom styles for this template -->
-  <link href="assets/css/simple-sidebar.css" rel="stylesheet">
-  <link href="assets/css/styles.css" rel="stylesheet">  
+    <body class="bg-gray-900 font-sans leading-normal tracking-normal mt-12">
+        <noscript>
+            <strong>
+                We're sorry but this site doesn't work properly without JavaScript enabled. Please enable it to
+                continue.
+            </strong>
+        </noscript>
 
-</head>
+        {{ content }}
 
-<body class="body">
-
-  {{ content }}
-
-  <!-- Bootstrap core JavaScript -->
-  <script src="assets/vendor/jquery/jquery.min.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Syntax highlighting -->
-  <script src="assets/vendor/highlight/highlight.pack.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
-  <script src="assets/vendor/asciidoctor/js/asciidoctor.min.js"></script>
-
-  <!-- Menu Toggle Script -->
-  <script>
-    $("#menu-toggle").click(function(e) {
-      e.preventDefault();
-      $("#wrapper").toggleClass("toggled");
-    });
-  </script>
-
-</body>
-
+        <!-- Syntax highlighting -->
+        <script src="assets/vendor/highlight/highlight.pack.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <script src="assets/vendor/asciidoctor/js/asciidoctor.min.js"></script>
+    </body>
 </html>

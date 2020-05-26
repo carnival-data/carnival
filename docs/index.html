@@ -3,78 +3,137 @@ layout: simple-sidebar-layout
 title: Carnival
 ---
 
-<div class="d-flex" id="wrapper">
-
-  <!-- Sidebar -->
-  <div class="bg-light border-right" id="sidebar-wrapper">
-    <div class="sidebar-heading">Table of Contents </div>
-    <div class="list-group list-group-flush">
-      <a href="#Overview" class="list-group-item list-group-item-action bg-light">Overview</a>
-      <a href="#DeveloperSetup" class="list-group-item list-group-item-action bg-light">Developer Setup</a>
-      <a href="#ProductionBuilds" class="list-group-item list-group-item-action bg-light">Production Builds</a>
-      <a href="#Tutorials" class="list-group-item list-group-item-action bg-light">Tutorials</a>
-      <a href="#DataTables" class="list-group-item list-group-item-action bg-light"><span class="indent-1">Data Tables</span></a>
-    </div>
-  </div>
-  <!-- /#sidebar-wrapper -->
-
-  <!-- Page Content -->
-  <div id="page-content-wrapper">
-
-    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-      <img class="topnav" src="assets/images/carnival-text-header-80.png" alt="Carnival Text Header">
-      <!--span class="topnav">Carnival</span-->
-      <!--img class="topnav" src="assets/images/tent-50.png" alt="Carnival Tent" height="42" width="42"-->
-      <img class="topnav" src="assets/images/carnival-2.png" alt="Carnival Stuff">
-
-      <!--button class="btn btn-primary topnav" id="menu-toggle">Toggle Table of Contents</button-->
-
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://github.com/pmbb-ibi/carnival">GitHub</a>
-          </li>
-          <!--li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Dropdown
-            </a>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
+<div id="app" class="">
+    <!--
+    HEADER BAR
+    -->
+    <div class="bg-gray-900 pt-2 md:pt-1 pb-1 px-1 mt-0 h-16 fixed w-full z-20 top-0">
+        <div class="flex flex-wrap items-center">
+            <!-- smiley icon -->
+            <div class="flex flex-shrink md:w-1/3 justify-center md:justify-start text-white">
+                <a href="#">
+                    <img class="block h-10" src="assets/images/carnival-text-header-80.png" alt="" />
+                </a>
             </div>
-          </li-->
-        </ul>
-      </div>
-    </nav>
-
-    <div class="container-fluid" id="ToggleSideMenu">
-      <button class="btn btn-primary" id="menu-toggle">Toggle Table of Contents</button>
+            <!-- search bar -->
+            <div class="flex flex-1 md:w-1/3 justify-center md:justify-start text-white px-2">
+                <span class="relative w-full">
+                    <img class="block h-10" src="assets/images/carnival-2.png" alt="" />
+                </span>
+            </div>
+            <!-- top navigation -->
+            <div class="flex w-full pt-2 content-center justify-between md:w-1/3 md:justify-end">
+                <ul class="list-reset flex justify-between flex-1 md:flex-none items-center">
+                    <li class="flex-1 md:flex-none md:mr-3">
+                        <a href="http://github.com/pmbb-ibi/carnival" target="_blank">
+                            <img class="block h-10" src="assets/images/tent-50.png" alt="" />
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 
-    {% include_relative overview.html %}
-    {% include_relative developer-setup.html %}
-    {% include_relative production-builds.html %}
+    <!--
+    LEFT NAVIGATION + MAIN CONTENT
+    -->
+    <div id="lnav" class="flex flex-col md:flex-row">
+        <!-- 
+      LEFT NAVIGATION
+      -->
+        <div class="bg-gray-900 shadow-lg h-16 fixed bottom-0 mt-12 md:relative md:h-screen z-10 w-full md:w-48">
+            <div
+                class="md:mt-12 md:w-48 md:fixed md:left-0 md:top-0 content-center md:content-start text-left justify-between"
+            >
+                <ul class="list-reset flex flex-row md:flex-col py-0 md:py-3 px-1 md:px-2 text-center md:text-left">
+                    <li class="mr-3 flex-1">
+                        <div
+                            class="pb-1 md:pb-0 mt-2 w-full bg-gray-700 text-xs md:text-base text-white font-bold block md:inline-block rounded"
+                        >
+                            Contents
+                        </div>
+                    </li>
+                    <li class="mr-3 flex-1">
+                        <a
+                            href="#Overview"
+                            class="block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-white"
+                        >
+                            <span
+                                class="pb-1 md:pb-0 text-xs md:text-base text-gray-600 md:text-gray-400 block md:inline-block"
+                                >Overview</span
+                            >
+                        </a>
+                    </li>
+                    <li class="mr-3 flex-1">
+                        <a
+                            href="#DeveloperSetup"
+                            class="block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-white"
+                        >
+                            <span
+                                class="pb-1 md:pb-0 text-xs md:text-base text-gray-600 md:text-gray-400 block md:inline-block"
+                                >Developer Setup</span
+                            >
+                        </a>
+                    </li>
+                    <li class="mr-3 flex-1">
+                        <a
+                            href="#ProductionBuilds"
+                            class="block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-white"
+                        >
+                            <span
+                                class="pb-1 md:pb-0 text-xs md:text-base text-gray-600 md:text-gray-400 block md:inline-block"
+                                >Production Builds</span
+                            >
+                        </a>
+                    </li>
+                    <li class="mr-3 flex-1">
+                        <div
+                            class="pb-1 md:pb-0 w-full bg-gray-700 text-xs md:text-base text-white font-bold block md:inline-block rounded"
+                        >
+                            Tutorials
+                        </div>
+                    </li>
+                    <li class="mr-3 flex-1">
+                        <a
+                            href="#DataTables"
+                            class="block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-white"
+                        >
+                            <span
+                                class="pb-1 md:pb-0 text-xs md:text-base text-gray-600 md:text-gray-400 block md:inline-block"
+                                >Data Tables</span
+                            >
+                        </a>
+                    </li>
+                    <li class="mr-3 flex-1">
+                        <a
+                            href="#GraphModel"
+                            class="block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-white"
+                        >
+                            <span
+                                class="pb-1 md:pb-0 text-xs md:text-base text-gray-600 md:text-gray-400 block md:inline-block"
+                                >Graph Model</span
+                            >
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
-    <div class="container-fluid" id="Tutorials">
-      <h1 class="mt-4">Tutorials</h1>
-      {% include_relative data-tables.html %}
+        <!-- 
+          MAIN CONTENT
+        -->
+        <div class="main-content flex-1 bg-gray-100 mt-12 md:mt-2 pb-24 md:pb-5">
+            <div class="flex flex-col">
+                <img class="object-contain" src="assets/images/Carnival-clipart-mart.png" alt="Carnival" />
+            </div>
+
+            {% include_relative overview.html %} {% include_relative developer-setup.html %} {% include_relative
+            production-builds.html %} {% include_relative data-tables.html %} {% include_relative graph-model.html %}
+
+            <!--div class="container-fluid" id="Tutorials">
+                <h1 class="mt-4">Tutorials</h1>
+                {% include_relative data-tables.html %}
+            </div-->
+        </div>
     </div>
-
-    
-
-
-
-  </div>
-  <!-- /#page-content-wrapper -->
-
 </div>
-<!-- /#wrapper -->

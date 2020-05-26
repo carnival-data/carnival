@@ -395,7 +395,6 @@ abstract class CoreGraph implements GremlinTrait {
 	            	}
 	            	if (!found) {
 		    			def vld = VertexLabelDefinition.create(vdef)
-		                //def vld = new VertexLabelDefinition(label:vdef.label)
 		                log.trace "adding VertexLabelDefinition ${vdef.label} $vld"
 		                labelDefs << vld
 	            	}

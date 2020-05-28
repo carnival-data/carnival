@@ -119,9 +119,4 @@ public enum KeyType {
 	 * A patient identifier tied to genomic data
 	 */
 	GENO_ID,
-
-	/**
-	* AN OMOP Patient Identifier
-	*/
-	OMOP_PERSON_SOURCE_VALUE,
 }

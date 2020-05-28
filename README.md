@@ -9,22 +9,22 @@
 
 Inspired by Open Biological and Biomedical Ontology (OBO) Foundry ontologies, the **carnival-clinical** extension of the **Carnival** data model supports the execution of common investigatory tasks including harmonizing complex patient, specimen and healthcare information, patient cohort identification, case-control matching, and the production of data sets for scientific analysis.
 
+
 ## Quick Links
 
 * [Github Pages Website](https://pmbb-ibi.github.io/carnival/)
 * [Developer Guide](https://pmbb-ibi.github.io/carnival/#DeveloperSetup) - Installation and running instructions
-* [carnival-core](app/carnival-core/README.md) - Developer details on the core carnival module
-* [carnival-gremlin-dsl](app/carnival-gremlin-dsl/README.md) - Gremlin dsl patterns for the carnival schema
-* [graph specification](app/carnival-core/doc/graph.md)
 
 
 ## Contents
 
-1. [Overview](#overview)
+1. [Framework Overview](#overview)
+1. [Package Description](#package-overview)
+1. [Graph Schema](#graph-schema)
 1. [Getting Started](#getting-started)
 
 <a name="overview"></a>
-## Overview
+## Framework Overview
 Carnval uses objects called *vines* to connect to external data sources and *reapers* encode the domain knowledge specific to that data source.  Vines can connect to sources such as MySql or Oracle databases, RedCap projects, and CSV files.  Some vine features include:
 
 * Parameterized SQL queries
@@ -42,6 +42,25 @@ Carnival’s property graph database:
 * Follows data instantiation patterns built for computational efficiency and inspired by OBO Foundry ontologies
 * Has a query engine capable of executing queries of arbitrary complexity
 
-<a name="getting-started"></a>
+<a name="package-overview"></a>
+## Package Overview
+### Core Framework Packages
+* carnival-graph - Framework for defining carnival graph schemas (vertex and edge definitions).  Contains the basic vertex, edge, and property classes.
+* carnival-gremlin-dsl - Gremlin dsl support for traversing carnival property graphs.
+* carnival-util - Contains utility and helper classes such as MappedDataTable, FeatureReport and SqlUtils.
+* carnival-core	- Basic carnival framework.  Implements the basic carnival framework classes (vines, reapers, reasonsers, etc).  Defines the basic carnival graph schema (processes, databases).
+	- [Core graph schema](https://github.com/pmbb-ibi/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/Core.groovy)
+	- [Reaper schema](https://github.com/pmbb-ibi/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/Reaper.groovy)
+	- [Reasoner schema](https://github.com/pmbb-ibi/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/Reasoner.groovy)
+
+### Application Packages
+* carnival-clinical - Extension of carnival-core for clinical data.  Contains graph schema extensions for concepts such as patients, patient cohorts and healthcare encounters. Implements methods for case-control matching for patient cohorts. 
+	- [Graph schema](https://github.com/pmbb-ibi/carnival/blob/master/app/carnival-clinical/src/main/groovy/carnival/clinical/graph/Clinical.groovy)
+
+<a name="graph-schema"></a>
+## Graph Schema
+* [graph specification (deprecated)](app/carnival-core/doc/graph.md)
+  
+ <a name="getting-started"></a>
 ## Getting Started
-See [developer setup](https://pmbb-ibi.github.io/carnival/#DeveloperSetup) for full documentation on how to set up a development environment.
+See [developer setup](https://pmbb-ibi.github.io/carnival/#DeveloperSetup) for full documentation on how to set up a development environment, and a tutorial for getting started.

@@ -11,4 +11,4 @@ jobs:
         # Building Docker images
         - docker-compose -f ./docker-compose-test.yml build -m 8g
       script:
-        - docker run -v $(pwd):/appsrc -w /appsrc/app carnival_app gradle testReport --console=plain
+        - docker run -v $(pwd):/appsrc -w /appsrc/app carnival_app gradle test --console=plain --continue -Dtest.http=false

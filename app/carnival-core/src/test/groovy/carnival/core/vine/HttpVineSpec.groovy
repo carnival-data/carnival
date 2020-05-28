@@ -168,7 +168,7 @@ class HttpVineSpec extends Specification {
         http
     }
 
-
+    @IgnoreIf({ !Boolean.valueOf(properties['test.http']) })
     def "httpEndpoint handlePost good" () {
         given:
         def httpServerConfig = new HttpServerConfig(

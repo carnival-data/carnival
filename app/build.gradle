@@ -23,7 +23,7 @@ plugins {
 allprojects {
     group = 'edu.upenn.pmbb'
     sourceCompatibility = 1.8
-    version = '0.2.7'   // see https://semver.org/
+    version = '0.2.6'   // see https://semver.org/
 }
 
 
@@ -54,18 +54,14 @@ subprojects {
 ///////////////////////////////////////////////////////////////////////////////
 // Testing Tasks
 ///////////////////////////////////////////////////////////////////////////////
-apply from: 'setupTestsReports.gradle'
-
 subprojects {
-    // use --continue flag instead of setting test.ignoreFailures to true
-    // See https://docs.gradle.org/current/userguide/command_line_interface.html#sec:continue_build_on_failure
-    //test.ignoreFailures true
+    test.ignoreFailures true
 
     test {
         systemProperty 'vine.config.file.path', System.getProperty('vine.config.file.path')
         systemProperty 'cgis.use.cached.data.files', System.getProperty('cgis.use.cached.data.files')
         systemProperty 'cgis.use.cached.graph', System.getProperty('cgis.use.cached.graph')
-        systemProperty 'test.http', System.getProperty('test.http') ?: true
+        systemProperty 'test.http', System.getProperty('test.http')
         systemProperty 'test.graph.rollback', System.getProperty('test.graph.rollback')
         systemProperty 'allow.redcap.modification', System.getProperty('allow.redcap.modification')
         systemProperty 'disable.filevine.tests', System.getProperty('disable.filevine.tests')
@@ -97,8 +93,7 @@ subprojects {
     }
 }
 
-// to run all test suites even if a failure occurs use the flag '--continue'
-// https://docs.gradle.org/current/userguide/command_line_interface.html#sec:continue_build_on_failure
+
 task testReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/allTests")
 
@@ -106,21 +101,8 @@ task testReport(type: TestReport) {
     reportOn subprojects*.test
 
     ant.echo "TestReport - buildDir: $buildDir/reports/allTests"
-
-    doLast{
-       browse "$buildDir/reports/allTests/index.html"
-   }
 }
 
-
-def browse(path) {
-    def os = org.gradle.internal.os.OperatingSystem.current()
-    if (os.isWindows()) {
-        exec { commandLine 'cmd', '/c', "start $path" }
-    } else if (os.isMacOsX()) {
-        exec { commandLine 'open', "$path" }
-    }
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 // convenience local publishing tasks

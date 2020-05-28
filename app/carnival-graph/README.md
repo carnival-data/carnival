@@ -1,3 +1,5 @@
-# Carnival Graph
+# Carnival Util
 
-Graph schema framework.  Contains the basic vertex, edge, and property classes.
+carnival-util contains Carnival utility classes including the DataTable classes.
+
+

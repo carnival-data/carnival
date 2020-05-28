@@ -23,7 +23,7 @@ plugins {
 allprojects {
     group = 'edu.upenn.pmbb'
     sourceCompatibility = 1.8
-    version = '0.2.7'   // see https://semver.org/
+    version = '0.2.8'   // see https://semver.org/
 }
 
 

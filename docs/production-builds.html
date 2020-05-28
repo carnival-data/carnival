@@ -11,6 +11,7 @@
       <li>Merge changes into the production branch</li>
       <li>Build and publish changes to Github with the command <code class="language-bash" data-lang="bash">gradle publish</code>.  The build.grade file has been configured to use the authentication information in the environment variables <b>GITHUB_USER</b> and <b>GITHUB_TOKEN</b> when attempting to publish.</li>
       <li>Check that the packages with the updated version number are listed in <a href="https://github.com/pmbb-ibi/carnival/packages">Carnival Packages</a></li>
+      <li>Go back to the master branch, and `app/build.gradle` increment the version number and add the `-SNAPSHOT` suffix (i.e. `0.2.9-SNAPSHOT`)
     </ul>       
 
     <p>For further details, see <a href="https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-gradle-for-use-with-github-packages">Configuring Gradle for use with GitHub Packages</a>.</p>

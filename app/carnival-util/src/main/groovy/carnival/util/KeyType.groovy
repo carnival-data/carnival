@@ -120,4 +120,8 @@ public enum KeyType {
 	 */
 	GENO_ID,
 
+	/**
+	* AN OMOP Patient Identifier
+	*/
+	OMOP_PERSON_SOURCE_VALUE,
 }

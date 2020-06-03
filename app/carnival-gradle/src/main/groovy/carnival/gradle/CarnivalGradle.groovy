@@ -29,9 +29,11 @@ class CarnivalGradlePlugin implements Plugin<Project> {
         }        
         println "[CarnivalGradle] application home directory: $appHomeDirectory"
 
+        // set the carnival.home property in both the run and test environments
         project.test.systemProperty('carnival.home', appHomeDirectory)
         project.run.systemProperty('carnival.home', appHomeDirectory)
 
+        // set the logback configuation file in run and test
         def logbackConfig = "${appHomeDirectory}/config/logback.xml"
         File logbackConfigFile = new File(logbackConfig)
         if (!logbackConfigFile.exists()) {
@@ -40,5 +42,14 @@ class CarnivalGradlePlugin implements Plugin<Project> {
         }
         project.test.systemProperty('logback.configurationFile', logbackConfigFile)
         project.run.systemProperty('logback.configurationFile', logbackConfigFile)
+
+        // set the location of the external configuration files for run and test
+        def externalConfigYamlFile = new File(appHomeDirectoryDir, "config/application.yml")
+        if (externalConfigYamlFile.exists()) {
+            println "[CarnivalGradle] external configuration: $externalConfigYamlFile"
+            def pathStr = externalConfigYamlFile.canonicalPath
+            project.test.systemProperty('micronaut.config.files', externalConfigYamlFile)
+            project.run.systemProperty('micronaut.config.files', externalConfigYamlFile)
+        }
     }
 }

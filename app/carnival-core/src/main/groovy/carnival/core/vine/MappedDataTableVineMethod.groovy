@@ -11,14 +11,12 @@ import carnival.util.DataTable
 import carnival.util.MappedDataTable
 import carnival.util.GenericDataTable
 import carnival.util.Defaults
+import carnival.util.StringUtils
 import carnival.core.graph.query.QueryProcess
 
 
 
-/**
- *
- *
- */
+/** */
 trait MappedDataTableVineMethod extends VineMethod {
 
     public Class getReturnType() { return MappedDataTable }
@@ -36,6 +34,55 @@ trait MappedDataTableVineMethod extends VineMethod {
         return mdt
     }
 
+    public String computedName(Map args = [:]) {
+        String cn = this.class.name
+        //println "cn: $cn"
+
+        def name = cn.reverse()
+        if (name.contains('$')) name = name.substring(0, name.indexOf('$')) //name.takeBefore('$')
+        else if (name.contains('.')) name = name.substring(0, name.indexOf('.')) // name.takeBefore('.')
+        name = name.reverse()
+        name = StringUtils.toKebabCase(name)
+        //println "name: $name"
+
+        return name
+    }
+
 }
 
+
+/** A vine method with a default computed name */
+trait SimpleMappedDataTableVineMethod extends MappedDataTableVineMethod {
+
+    abstract String idFieldName()
+
+    MappedDataTable.MetaData meta(Map args = [:]) {
+        String name = computedName(args)
+        new MappedDataTable.MetaData(
+            name:name,
+            idFieldName:idFieldName()
+        ) 
+    } 
+
+}
+
+
+/** A vine method with a uniquified name based on the arguments. */
+trait UniquifiedMappedDataTableVineMethod extends MappedDataTableVineMethod {
+
+    abstract String idFieldName()
+    abstract String uniquifier(Map args)
+
+    MappedDataTable.MetaData meta(Map args = [:]) {
+        String name = computedName(args)
+        String uniq = uniquifier(args)
+
+        createUniqueMeta(
+            name:name,
+            idFieldName:idFieldName(),
+            uniquifier:uniq
+        ) 
+    } 
+
+}
 

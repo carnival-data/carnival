@@ -2,6 +2,8 @@ package carnival.core.vine
 
 
 
+import java.lang.reflect.Field
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -326,7 +328,39 @@ abstract class Vine {
         if (this.metaClass.respondsTo(this, "getRedcapRecords"))
             vm.metaClass.getRedcapRecords = { args -> getRedcapRecords(args) }
 
+        // add the vine method resource to the vine method instance
+        def classes = allClasses(this)
+        //log.debug "Vine classes: $classes"
+
+        //log.debug "this.class: ${this.class}"
+        List<Field> vineMethodResourceFields = []
+        classes.each { cl ->
+            for (Field field: cl.getDeclaredFields()) {
+                field.setAccessible(true);
+                if (field.isAnnotationPresent(VineMethodResource.class)) {
+                    vineMethodResourceFields << field
+                }
+            }
+        }
+        //log.debug "vineMethodResourceFields: $vineMethodResourceFields"
+
+        vineMethodResourceFields.each { vmrf ->
+            vm.metaClass."${vmrf.name}" = vmrf.get(this)
+        }
+
         return vm
+    }
+
+    /** */
+    Set<Class> allClasses(Object obj) {
+        Set<Class> classes = new HashSet<Class>()
+        Class cl = obj.class
+        classes << cl
+        while (cl != null) {
+            cl = cl.superclass
+            if (cl != null) classes << cl
+        }
+        return classes
     }
 
 

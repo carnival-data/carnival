@@ -3,8 +3,8 @@ package carnival.core.vine
 
 
 import groovy.util.logging.Slf4j
-
 import groovy.util.AntBuilder
+import org.apache.commons.codec.digest.DigestUtils
 
 import carnival.util.DataTable
 import carnival.util.MappedDataTable
@@ -98,6 +98,19 @@ trait VineMethod {
         //if (queryProcess) vine.put('queryProcess', queryProcess)
 
         return vine
+    }
+
+
+    public MappedDataTable.MetaData createUniqueMeta(Map args) {
+        assert args.name
+        assert args.idFieldName
+        assert args.uniquifier
+
+        String str = String.valueOf(args.uniquifier)
+        String inputHash = DigestUtils.md5(str.bytes).encodeHex().toString()
+        args.name = "${args.name}-${inputHash}"
+
+        new MappedDataTable.MetaData(args)
     }
 
 }

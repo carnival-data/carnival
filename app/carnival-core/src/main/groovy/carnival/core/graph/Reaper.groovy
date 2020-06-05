@@ -179,6 +179,7 @@ abstract class Reaper {
         assert methodName
 
         def rmi = createReaperMethodInstance(methodName)
+        if (rmi == null) throw new RuntimeException("Could not find reaper method '${methodName}' of ${this.class.name}")
         optionallyRunSingletonProcess(rmi, methodArgs)
     }
 

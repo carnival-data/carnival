@@ -192,7 +192,9 @@ class ExcelUtil {
         int firstRowNum = sheet.getFirstRowNum()
         assert firstRowNum == 0
 
-        XSSFRow firstRow = sheet.getRow(0)
+        if (params.containsKey('firstRowNum')) firstRowNum = Integer.valueOf(params.firstRowNum)
+
+        XSSFRow firstRow = sheet.getRow(firstRowNum)
         List<String> firstRowVals = readRow(firstRow)
         //log.trace "firstRowVals: $firstRowVals"
 
@@ -206,14 +208,23 @@ class ExcelUtil {
         //log.trace "colNameToIdx: $colNameToIdx"
         params.colNameToIdx = colNameToIdx
 
+        Set<Integer> rowNumsToSkip = new HashSet<Integer>()
+        if (params.skipRowNums) {
+            rowNumsToSkip = params.skipRowNums.toSet()
+        }
+
         List<Map> out = new ArrayList<Map>()
 
         int lastRowNum = sheet.getLastRowNum()
         (firstRowNum+1../*firstRowNum+10*/lastRowNum-1).each { rowIdx ->
+            if (rowNumsToSkip.contains(rowIdx)) {
+                log.trace "skipping row ${rowIdx}"
+                return
+            }
+
             XSSFRow row = sheet.getRow(rowIdx)
 
             Map<String,String> rowValsMap = new HashMap<String,String>()
-            rowValsMap.put(EXCEL.ROW_NUM.name(), String.valueOf(row.getRowNum()+1))
 
             List<String> cellVals = readRow(row, params)
             cellVals.eachWithIndex { cellVal, cellValIdx ->
@@ -232,6 +243,16 @@ class ExcelUtil {
                 rowValsMap.put(ck, cellVal)
             }
 
+            def datum = rowValsMap.find { k, v ->
+                String.valueOf(v).trim().length() > 0
+            }
+
+            if (params.skipBlankRows && datum == null) {
+                log.info "skipping blank row ${rowIdx}"
+                return
+            }
+
+            rowValsMap.put(EXCEL.ROW_NUM.name(), String.valueOf(row.getRowNum()+1))
             out << rowValsMap
         }
 

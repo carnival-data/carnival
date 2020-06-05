@@ -41,6 +41,15 @@ class StringUtils {
     	toSnakeCase(text).toUpperCase()
     }
 
+    /** 
+     * stringsLikeThis to strings-like-this
+     * stringsLikeThis1 to strings-like-this-1
+     *
+     */
+    static public String toKebabCase(String text) {
+        text.replaceAll( /([A-Z0-9])/, /-$1/ ).toLowerCase().replaceAll( /^-/, '' )
+    }
+
     /** */
     static public String toMarkdown(Enum en) {
         def text = en.name()
@@ -51,7 +60,7 @@ class StringUtils {
     /** */
     static public String escapeUnderscores(String text) {
         text.replaceAll('_', '\\_')
-    }    
+    }
 
 }
 

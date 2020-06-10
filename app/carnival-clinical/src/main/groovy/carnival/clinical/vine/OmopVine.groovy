@@ -127,7 +127,9 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 						"""+dbName+""".person.race_concept_id,
 						"""+dbName+""".person.gender_concept_id,
 						gender_concept.concept_name as gender_concept_name,
-						race_concept.concept_name as race_concept_name
+						race_concept.concept_name as race_concept_name,
+						race_concept.concept_code as race_concept_code,
+						gender_concept.concept_code as gender_concept_code
 
 						from """+dbName+""".person
 
@@ -206,13 +208,20 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 
 		def sqlQuery = """
 						select 
-						person_id,
-						visit_occurrence_id,
-						visit_source_value,
-						visit_start_datetime
+						person.person_id,
+						person.person_source_value,
+						visit_occurrence.visit_occurrence_id,
+						visit_occurrence.visit_source_value,
+						visit_occurrence.visit_start_datetime
+
 						from """+dbName+""".visit_occurrence 
+
+						inner join """+dbName+""".person
+						on """+dbName+""".visit_occurrence.person_id =
+						"""+dbName+""".person.person_id
+
 						where 
-						person_id is not null
+						person.person_id is not null
 						"""
 
 		/** validate arguments */
@@ -258,7 +267,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
             if (args.limit) sqlQuery += " LIMIT $args.limit "
             if (args.ids) 
             {
-            	sqlQuery += " AND person_id IN SUB_WHERE_CLAUSE "
+            	sqlQuery += " AND person.person_source_value IN SUB_WHERE_CLAUSE "
             	sqllog.info(sqlQuery)
             	gdt = enclosingVine.populateGenericDataTable(sqlQuery, gdt, args.ids)
             }
@@ -280,19 +289,25 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 
 		def sqlQuery = """
 
-						select 
+						select
 
-						"""+dbName+""".condition_occurrence.visit_occurrence_id,
+						"""+dbName+""".visit_occurrence.visit_occurrence_id,
+						"""+dbName+""".visit_occurrence.visit_source_value,
 						"""+dbName+""".concept.concept_name as condition_concept_name,
 						"""+dbName+""".concept.concept_code as condition_concept_code,
+						"""+dbName+""".condition_occurrence.condition_concept_id,
 						"""+dbName+""".concept.vocabulary_id as condition_vocabulary_id,
 						"""+dbName+""".condition_occurrence.condition_occurrence_id
 
 						from """+dbName+""".condition_occurrence
 
 						inner join """+dbName+""".concept on
-						"""+dbName+""".condition_occurrence.condition_source_concept_id = 
+						"""+dbName+""".condition_occurrence.condition_concept_id = 
 						"""+dbName+""".concept.concept_id
+
+						inner join """+dbName+""".visit_occurrence on
+						"""+dbName+""".condition_occurrence.visit_occurrence_id = 
+						"""+dbName+""".visit_occurrence.visit_occurrence_id
 
 						where 
 						
@@ -346,7 +361,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
             if (args.limit) sqlQuery += " LIMIT $args.limit "
             if (args.ids) 
             {
-            	sqlQuery += " AND visit_occurrence_id IN SUB_WHERE_CLAUSE "
+            	sqlQuery += " AND visit_occurrence.visit_source_value IN SUB_WHERE_CLAUSE "
             	sqllog.info(sqlQuery)
             	gdt = enclosingVine.populateGenericDataTable(sqlQuery, gdt, args.ids)
             }
@@ -370,19 +385,29 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 
 						select 
 
-						"""+dbName+""".drug_exposure.visit_occurrence_id,
+						"""+dbName+""".visit_occurrence.visit_occurrence_id,
+						"""+dbName+""".visit_occurrence.visit_source_value,
 						"""+dbName+""".concept.concept_name as drug_concept_name,
 						"""+dbName+""".concept.vocabulary_id as drug_vocabulary_id,
 						"""+dbName+""".concept.concept_code as drug_concept_code,
-						"""+dbName+""".drug_exposure.drug_exposure_id as drug_id
+						"""+dbName+""".drug_exposure.drug_exposure_id as drug_id,
+						"""+dbName+""".drug_exposure.drug_concept_id
 
 						from """+dbName+""".drug_exposure
 
 						inner join """+dbName+""".concept on
 						"""+dbName+""".drug_exposure.drug_concept_id = 
-						"""+dbName+""".concept.concept_id 
+						"""+dbName+""".concept.concept_id
+
+						inner join """+dbName+""".visit_occurrence on
+						"""+dbName+""".drug_exposure.visit_occurrence_id = 
+						"""+dbName+""".visit_occurrence.visit_occurrence_id
 
 						where """+dbName+""".drug_exposure.visit_occurrence_id is not null
+						
+						and 
+						
+						"""+dbName+""".concept.concept_code != 'No matching concept'
 
 						"""
 
@@ -426,9 +451,9 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
             validateArgs(args)
             def gdt = createEmptyDataTable(args)
             if (args.limit) sqlQuery += " LIMIT $args.limit "
-            if (args.ids) 
+            if (args.ids)
             {
-            	sqlQuery += " AND visit_occurrence_id IN SUB_WHERE_CLAUSE "
+            	sqlQuery += " AND visit_occurrence.visit_source_value IN SUB_WHERE_CLAUSE "
             	sqllog.info(sqlQuery)
             	gdt = enclosingVine.populateGenericDataTable(sqlQuery, gdt, args.ids)
             }
@@ -449,21 +474,29 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
     static class GetOmopMeasurementData implements GenericDataTableVineMethod {
 
 		def sqlQuery = """
-						select 
+						select
 
-						"""+dbName+""".measurement.visit_occurrence_id,
+						"""+dbName+""".visit_occurrence.visit_occurrence_id,
+						"""+dbName+""".visit_occurrence.visit_source_value,
 						"""+dbName+""".measurement.value_as_number,
-						meas_concept.concept_name as measurement_concept_name,
+						"""+dbName+""".measurement.measurement_id,
+						"""+dbName+""".measurement.measurement_concept_id,
 						unit_concept.concept_name as unit_concept_name,
-						"""+dbName+""".measurement.measurement_source_concept_id
+						"""+dbName+""".measurement.unit_concept_id,
+						meas_concept.concept_name as measurement_concept_name
 
 						from """+dbName+""".measurement 
 						inner join """+dbName+""".concept meas_concept on
-						"""+dbName+""".measurement.measurement_source_concept_id = 
-						meas_concept.concept_id  
+						"""+dbName+""".measurement.measurement_concept_id = 
+						meas_concept.concept_id
+
 						inner join """+dbName+""".concept unit_concept on
 						"""+dbName+""".measurement.unit_concept_id =
 						unit_concept.concept_id
+
+						inner join """+dbName+""".visit_occurrence on
+						"""+dbName+""".measurement.visit_occurrence_id = 
+						"""+dbName+""".visit_occurrence.visit_occurrence_id
 						
 						OMOP_CODE_WHERE_CLAUSE
 
@@ -540,7 +573,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
             if (args.limit) sqlToRun += " LIMIT $args.limit "
             if (args.ids) 
             {
-            	sqlToRun += " AND visit_occurrence_id IN SUB_WHERE_CLAUSE "
+            	sqlToRun += " AND visit_occurrence.visit_source_value IN SUB_WHERE_CLAUSE "
             	sqllog.info(sqlQuery)
             	gdt = enclosingVine.populateGenericDataTable(sqlToRun, gdt, args.ids)
             }

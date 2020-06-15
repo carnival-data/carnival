@@ -31,8 +31,8 @@ class Clinical {
 
         DATE_SHIFT_VALUE,
 
-        CODE_REF (vertexProperties:[Core.PX.VALUE, PX.SYSTEM]),
-        MEDICATION (vertexProperties:[Core.PX.VALUE, PX.SYSTEM]),
+        CODE_REF (vertexProperties:[Core.PX.VALUE, PX.SYSTEM, Core.PX.NAME]),
+        MEDICATION (vertexProperties:[Core.PX.VALUE, PX.SYSTEM, Core.PX.NAME]),
         MEASUREMENT (vertexProperties:[Core.PX.VALUE, PX.UNIT, Core.PX.NAME]),
         CODE_GROUP (
             vertexProperties:[

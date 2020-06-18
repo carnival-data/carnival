@@ -20,11 +20,11 @@ import com.xlson.groovycsv.PropertyMapper
 
 import groovy.sql.GroovyRowResult
 
-import carnival.core.config.DatabaseConfig
 import carnival.util.DataTable
 import carnival.util.MappedDataTable
 import carnival.util.GenericDataTable
 import carnival.core.graph.query.QueryProcess
+import carnival.core.util.CoreUtil
 
 
 
@@ -329,7 +329,7 @@ abstract class Vine {
             vm.metaClass.getRedcapRecords = { args -> getRedcapRecords(args) }
 
         // add the vine method resource to the vine method instance
-        def classes = allClasses(this)
+        def classes = CoreUtil.allClasses(this)
         //log.debug "Vine classes: $classes"
 
         //log.debug "this.class: ${this.class}"
@@ -351,17 +351,6 @@ abstract class Vine {
         return vm
     }
 
-    /** */
-    Set<Class> allClasses(Object obj) {
-        Set<Class> classes = new HashSet<Class>()
-        Class cl = obj.class
-        classes << cl
-        while (cl != null) {
-            cl = cl.superclass
-            if (cl != null) classes << cl
-        }
-        return classes
-    }
 
 
     ///////////////////////////////////////////////////////////////////////////

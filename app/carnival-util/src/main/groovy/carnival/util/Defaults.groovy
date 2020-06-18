@@ -251,7 +251,7 @@ public class Defaults {
 
 
     ///////////////////////////////////////////////////////////////////////////
-    // CONVENIENCE GETTERS
+    // GENERIC GETTERS
     ///////////////////////////////////////////////////////////////////////////
 
     static public String getConfigValue(String key) {
@@ -281,6 +281,11 @@ public class Defaults {
         return val
     }
 
+
+    ///////////////////////////////////////////////////////////////////////////
+    // HOME DIR
+    ///////////////////////////////////////////////////////////////////////////
+
     static private File getHomeDir() {
         def homeDir
         if (!homeDir) homeDir = findDirectoryFromSysProp('carnival.home')
@@ -299,6 +304,11 @@ public class Defaults {
         log.trace "getDirectoryConfigValue($key, $defaultRelativePath): $val"
         return val
     }
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // CARNIVAL CONFIG GETTERS
+    ///////////////////////////////////////////////////////////////////////////
 
     static public String getTargetDirectoryPath() {
         getDirectoryConfigValue('carnival.directories.execution.target', 'target') 
@@ -356,10 +366,10 @@ public class Defaults {
     static public void initDirectory(File dir) {
         assert dir != null
 
-        log.trace "\n\nDefaults.initDirectory dir: $dir\n\n\n"
+        log.info "Defaults.initDirectory dir: $dir"
 
         if (!dir.exists()) {
-            log.warn "${dir} does not exist. creating empty directory."
+            log.info "${dir} does not exist. creating empty directory."
             boolean success = dir.mkdirs()
             if (!success) throw new RuntimeException("failed create directory ${dir}")
             return
@@ -367,7 +377,6 @@ public class Defaults {
 
         if (!dir.isDirectory()) throw new RuntimeException("${dir} exists, but is not a directory")
     }
-
 
     static public void initDirectories() {
         initDirectory(getTargetDirectory())

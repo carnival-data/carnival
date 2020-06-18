@@ -15,6 +15,7 @@ import org.apache.tinkerpop.gremlin.structure.Vertex
 
 import carnival.core.vine.Vine
 import carnival.core.vine.CachingVine.CacheMode
+import carnival.core.util.CoreUtil
 import carnival.graph.VertexDefTrait
 import carnival.graph.EdgeDefTrait
 import carnival.graph.PropertyDefTrait
@@ -420,7 +421,7 @@ abstract class Reaper {
         def vm = rmc.newInstance()
         vm.metaClass.enclosingReaper = this   
 
-        def classes = allClasses(this)
+        def classes = CoreUtil.allClasses(this)
         //log.debug "Reaper classes: $classes"
 
         //log.debug "this.class: ${this.class}"
@@ -440,19 +441,6 @@ abstract class Reaper {
         }
 
         return vm
-    }
-
-
-    /** */
-    Set<Class> allClasses(Object obj) {
-        Set<Class> classes = new HashSet<Class>()
-        Class cl = obj.class
-        classes << cl
-        while (cl != null) {
-            cl = cl.superclass
-            if (cl != null) classes << cl
-        }
-        return classes
     }
 
 }

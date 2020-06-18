@@ -243,6 +243,10 @@ dependencies {
     //compile group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1'
     //compile group: 'commons-codec', name: 'commons-codec', version: '1.10'
 
+    // for to serialize objects as json (CachingJsonVine)
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.+'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.+'
+
     // Spock testing
     compile('cglib:cglib-nodep:3.2.12') 
 }

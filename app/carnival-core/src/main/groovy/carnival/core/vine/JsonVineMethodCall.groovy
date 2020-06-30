@@ -2,6 +2,8 @@ package carnival.core.vine
 
 
 
+import java.io.BufferedReader
+import java.io.StringReader
 import groovy.util.logging.Slf4j
 
 import com.fasterxml.jackson.core.JsonParseException
@@ -69,15 +71,34 @@ class JsonVineMethodCall<T> {
     // STATIC METHODS 
     ///////////////////////////////////////////////////////////////////////////
 
+
     static public <E extends JsonVineMethodCall> E createFromJson(String json) {
         ObjectMapper mapper = new ObjectMapper();
-        JsonVineMethodCall mc = mapper.readValue(json, JsonVineMethodCall.class)
+
+        BufferedReader bf = new BufferedReader(new StringReader(json))
+        String thisClassStr
+        String line = bf.readLine()
+        while (line != null && thisClassStr == null) {
+            def result = (line =~ /\s*"thisClass"\s+:\s+"(\S+)"/).findAll()
+            if (result) {
+                thisClassStr = result.first().last()
+            }
+
+            line = bf.readLine()
+        }
+        if (thisClassStr == null) {
+            throw new ParseException("could not find call class element: thisClassStr")
+        }
+
+        Class callClass = Class.forName(thisClassStr)
+        assert callClass
+        JsonVineMethodCall mc = mapper.readValue(json, callClass)
 
         mc
     }
 
 
-    static public <E extends JsonVineMethodCall> E createFromJson(String metaJson, resultJson) {
+    /*static public <E extends JsonVineMethodCall> E createFromJson(String metaJson, resultJson) {
         JsonVineMethodCall mc = new JsonVineMethodCall()
 
         Meta meta = Meta.createFromJson(metaJson)
@@ -90,10 +111,8 @@ class JsonVineMethodCall<T> {
         mc.result = resultWrapper.value
 
         mc
-    }
+    }*/
 
-
-    //static public <E> JsonVineMethodCall<E> createFromFiles(Files files) { }
 
     static public <E> JsonVineMethodCall<E> createFromFile(File file) { 
         assert file != null
@@ -174,7 +193,6 @@ class JsonVineMethodCall<T> {
     ///////////////////////////////////////////////////////////////////////////
 
     public T getResult() {
-        //return resultClass.cast(this.result)
         return this.result
     }
 
@@ -197,7 +215,7 @@ class JsonVineMethodCall<T> {
     // METHODS - JSON SERIALIZATION
     ///////////////////////////////////////////////////////////////////////////
 
-    public String metaJson() { 
+    /*public String metaJson() { 
         ObjectMapper mapper = new ObjectMapper()
         ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter()
         Meta meta = new Meta(
@@ -208,16 +226,16 @@ class JsonVineMethodCall<T> {
         )
         String out = writer.writeValueAsString(meta)
         out
-    }
+    }*/
 
 
-    public String resultJson() { 
+    /*public String resultJson() { 
         ObjectMapper mapper = new ObjectMapper()
         ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter()
         Result resultWrapper = new Result(value: this.result)
         String out = writer.writeValueAsString(resultWrapper)
         out
-    }
+    }*/
 
 
     public String toJson() { 

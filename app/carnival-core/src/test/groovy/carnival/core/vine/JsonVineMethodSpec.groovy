@@ -42,19 +42,44 @@ class JsonVineMethodSpec extends Specification {
         Person fetch(Map args) { new Person(name:args.p1) }
     }
 
+    static class VineMethodWithResource extends JsonVineMethod<Person> { 
+        @Override
+        File _cacheDirectory() { tmpDir() }
+
+        Person fetch(Map args) { 
+            String name = this.namePrefix + args.p1
+            new Person(name:name) 
+        }
+    }
+
 
 
     ///////////////////////////////////////////////////////////////////////////
     // tests
     ///////////////////////////////////////////////////////////////////////////
 
-    def "cachemode required fails if no cache file present"() {
+
+    def "mode method"() {
         when:
-        def pv = new PersonVineMethod()
-        def cf = pv.cacheFile(p1:"alice")
+        def pv = new PersonVineMethod().args(p1:"alice")
+        def cf = pv.cacheFile()
         println "cf: ${cf}"
         cf.delete()
-        def mc = pv.call(CacheMode.REQUIRED, [p1:"alice"])
+        def mc = pv.mode(CacheMode.REQUIRED).call()
+
+        then:
+        Exception e = thrown()
+        e.message.toLowerCase().contains('required')
+    }
+
+
+    def "cachemode required fails if no cache file present"() {
+        when:
+        def pv = new PersonVineMethod().args(p1:"alice")
+        def cf = pv.cacheFile()
+        println "cf: ${cf}"
+        cf.delete()
+        def mc = pv.call(CacheMode.REQUIRED)
 
         then:
         Exception e = thrown()
@@ -64,15 +89,15 @@ class JsonVineMethodSpec extends Specification {
 
     def "cachemode optional uses cache file if there"() {
         when:
-        def pv = new PersonVineMethod()
-        def cf = pv.cacheFile(p1:"alice")
+        def pv = new PersonVineMethod().args(p1:"alice").mode(CacheMode.OPTIONAL)
+        def cf = pv.cacheFile()
         println "cf: ${cf}"
         cf.delete()
-        def mc1 = pv.call(CacheMode.OPTIONAL, [p1:"alice"])
+        def mc1 = pv.call()
         def cft = cf.text
         cft = cft.replaceAll("alice", "bob")
         cf.write(cft)
-        def mc2 = pv.call(CacheMode.OPTIONAL, [p1:"alice"])
+        def mc2 = pv.call()
 
         then:
         noExceptionThrown()
@@ -83,15 +108,15 @@ class JsonVineMethodSpec extends Specification {
 
     def "cachemode optional fetches and writes if no cache file present"() {
         when:
-        def pv = new PersonVineMethod()
-        def cf = pv.cacheFile(p1:"alice")
+        def pv = new PersonVineMethod().args(p1:"alice")
+        def cf = pv.cacheFile()
         cf.delete()
 
         then:
         !cf.exists()
 
         when:
-        def mc = pv.call(CacheMode.OPTIONAL, [p1:"alice"])
+        def mc = pv.call(CacheMode.OPTIONAL)
 
         then:
         cf.exists()
@@ -100,15 +125,15 @@ class JsonVineMethodSpec extends Specification {
 
     def "cachemode ignore writes cache file"() {
         when:
-        def pv = new PersonVineMethod()
-        def cf = pv.cacheFile(p1:"alice")
+        def pv = new PersonVineMethod().args(p1:"alice")
+        def cf = pv.cacheFile()
         if (cf.exists()) cf.delete()
 
         then:
         !cf.exists()
 
         when:
-        def mc = pv.call(CacheMode.IGNORE, [p1:"alice"])
+        def mc = pv.call(CacheMode.IGNORE)
 
         then:
         cf.exists()
@@ -117,9 +142,9 @@ class JsonVineMethodSpec extends Specification {
 
     def "cachemode ignore ignores existing file"() {
         when:
-        def pv = new PersonVineMethod()
-        pv.cacheFile(p1:"alice").write(CRUD)
-        def mc = pv.call(CacheMode.IGNORE, [p1:"alice"])
+        def pv = new PersonVineMethod().args(p1:"alice")
+        pv.cacheFile().write(CRUD)
+        def mc = pv.call(CacheMode.IGNORE)
 
         then:
         noExceptionThrown()
@@ -138,14 +163,14 @@ class JsonVineMethodSpec extends Specification {
 
     def "invalid cache file causes an exception"() {
         when:
-        def pv = new PersonVineMethod()
-        pv.cacheFile(p1:"alice").write(CRUD)
-        def mc = pv.call(CacheMode.OPTIONAL, [p1:"alice"])
+        def pv = new PersonVineMethod().args(p1:"alice")
+        pv.cacheFile().write(CRUD)
+        def mc = pv.call(CacheMode.OPTIONAL)
 
         then:
         Exception e = thrown()
         //e.printStackTrace()
-        e instanceof JsonParseException
+        e instanceof JsonParseException || e instanceof ParseException
     }
 
 

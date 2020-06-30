@@ -17,6 +17,8 @@ trait JsonVine {
     /** */
     static Logger log = LoggerFactory.getLogger(JsonVine)
 
+    /** */
+    Map<String,Object> _dynamicVineMethodResources = new HashMap<String,Object>()
 
     /** */
     def methodMissing(String name, def args) {
@@ -24,8 +26,14 @@ trait JsonVine {
 
         // verify that there is only one argument and it is a map
         if (args != null) {
-            if (args.size() > 1) throw new IllegalArgumentException("there can only be a single map argument. args must be a list of length one. ${args}")
-            if (!(args[0] instanceof Map)) throw new IllegalArgumentException("args must be a map: ${args}")
+            if (args.size() > 2) throw new IllegalArgumentException("there can be at most two arguments to a JSON vine method call: ${args}")
+            if (args.size() == 1) {
+                if (!(args[0] instanceof Map)) throw new IllegalArgumentException("args must be a map: ${args}")
+            }
+            if (args.size() == 2) {
+                if (!(args[0] instanceof CachingVine.CacheMode)) throw new IllegalArgumentException("the first argument must be a cache mode: ${args[0]}")
+                if (!(args[1] instanceof Map)) throw new IllegalArgumentException("the second argument must be a map: ${args[1]}")
+            }
         }
 
         // find and create the vine method instance
@@ -33,20 +41,34 @@ trait JsonVine {
         if (vmi == null) throw new MissingMethodException(name, this.class, args)
 
         // call the method
-        Map methodArgs = (args != null) ? args[0] : null
         JsonVineMethodCall mc
-        if (methodArgs == null) mc = vmi.call()
-        else mc = vmi.call(methodArgs)
+        if (args == null) {
+            mc = vmi.call()
+        } else {
+            if (args.size() == 1) {
+                mc = vmi.call(args[0])
+            } else if (args.size() == 2) {
+                mc = vmi.call(args[0], args[1])
+            }
+        } 
 
         // return the result
         mc
     }
 
 
+    /** */
+    JsonVineMethod method(String name) {
+        assert name != null
+        assert name.trim().length() > 0
+        createVineMethodInstance(name)
+    }
+
+
 
     ///////////////////////////////////////////////////////////////////////////
     // UTILITY - VINE METHOD CLASSES
-    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////    
 
     /**
      * Get all vine method classes using introspection.
@@ -66,9 +88,18 @@ trait JsonVine {
      * Find a vine method class by case insensitive matching of the name.
      *
      */
-    public Class findVineMethodClass(String methodName) {
+    public Set<Class> findAllVineMethodClasses(String methodName) {
         def vmcs = allVineMethodClasses()
-        def matches = vmcs.findAll { it.simpleName.toLowerCase() == methodName.toLowerCase() }
+        vmcs.findAll { it.simpleName.toLowerCase() == methodName.toLowerCase() }
+    }
+
+
+    /**
+     * Find a vine method class by case insensitive matching of the name.
+     *
+     */
+    public Class findVineMethodClass(String methodName) {
+        def matches = findAllVineMethodClasses(methodName)
         if (matches.size() > 1) throw new RuntimeException("multiple matches for $methodName: ${matches}")
         if (matches.size() < 1) return null
 
@@ -104,11 +135,32 @@ trait JsonVine {
         }
 
         vineMethodResourceFields.each { vmrf ->
-            vm.metaClass."${vmrf.name}" = vmrf.get(this)
+            setResource(vm, vmrf.name, vmrf.get(this))
+        }
+
+        _dynamicVineMethodResources.each { String name, Object value ->
+            setResource(vm, name, value)
         }
 
         return vm
     }
 
+
+    /** */
+    void setResource(JsonVineMethod vm, String name, Object value) {
+        vm.metaClass."${name}" = value
+
+        // the following does not work, which seems pretty terrifying
+        //vm.metaClass.setProperty(vm, name, value)
+        // the weird looking uncommented code does work. I don't know
+        // why it works, but methods called directoy on the metaClass
+        // do not. this seems brittle and not good.
+    }
+
+
+    /** */
+    void vineMethodResource(String name, Object value) {
+        _dynamicVineMethodResources.put(name, value)
+    }
 
 }

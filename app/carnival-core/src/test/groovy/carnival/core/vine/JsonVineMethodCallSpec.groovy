@@ -14,6 +14,15 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.As
 import carnival.core.vine.CachingVine.CacheMode
 
 
+class JsonVineMethodCallSpecVine {
+    @ToString(includeNames=true)
+    static class Person { String name }
+
+    static class PersonVineMethod extends JsonVineMethod<Person> { 
+        Person fetch(Map args) { new Person(name:args.p1) }
+    }
+}
+
 
 class JsonVineMethodCallSpec extends Specification {
 
@@ -131,6 +140,23 @@ class JsonVineMethodCallSpec extends Specification {
         mct != null
     }
 
+    def "computed names differ by enclosing class"() {
+        when:
+        def pvm1 = new PersonVineMethod()
+        def mc1 = pvm1.call(CacheMode.IGNORE, [a:'a'])
+        def cn1 = mc1.computedName()
+
+        def pvm2 = new JsonVineMethodCallSpecVine.PersonVineMethod()
+        def mc2 = pvm2.call(CacheMode.IGNORE, [a:'a'])
+        def cn2 = mc2.computedName()
+
+        then:
+        cn1 != null
+        cn2 != null
+        cn1 != cn2
+        !cn1.equals(cn2)
+    }
+
 
     def "computed names with args differ"() {
         when:
@@ -155,7 +181,7 @@ class JsonVineMethodCallSpec extends Specification {
         def cn = mc.computedName()
 
         then:
-        cn.startsWith("persons-holder-vine-method")
+        cn.startsWith("carnival-core-vine-JsonVineMethodCallSpec-PersonsHolderVineMethod")
         cn.endsWith(".json")
         cn =~ /[0-9a-f]{32}/
     }
@@ -168,7 +194,7 @@ class JsonVineMethodCallSpec extends Specification {
         def cn = mc.computedName()
 
         then:
-        cn == "persons-holder-vine-method.json"
+        cn == "carnival-core-vine-JsonVineMethodCallSpec-PersonsHolderVineMethod.json"
     }
 
 
@@ -222,7 +248,7 @@ class JsonVineMethodCallSpec extends Specification {
     }
 
 
-    def "segmented json result is object with list field"() {
+    /*def "segmented json result is object with list field"() {
         when:
         def pvm = new PersonsHolderVineMethod()
         def mc1 = pvm.call(CacheMode.IGNORE, [:])
@@ -239,10 +265,10 @@ class JsonVineMethodCallSpec extends Specification {
         mc2.result instanceof PersonsHolder
         mc2.result.persons instanceof List<Person>
         mc2.result.persons[0] instanceof Person
-    }
+    }*/
 
 
-    def "segmented json result is object with sub-object"() {
+    /*def "segmented json result is object with sub-object"() {
         when:
         def pvm = new PersonHolderVineMethod()
         def mc1 = pvm.call(CacheMode.IGNORE, [p1:'alice'])
@@ -258,7 +284,7 @@ class JsonVineMethodCallSpec extends Specification {
         mc2.result != null
         mc2.result instanceof PersonHolder
         mc2.result.person instanceof Person
-    }
+    }*/
 
 
     /** 
@@ -267,7 +293,7 @@ class JsonVineMethodCallSpec extends Specification {
      * PersonsHolder.  There might be a better way.
      *
      */
-    def "segmented json result is list of objects"() {
+    /*def "segmented json result is list of objects"() {
         when:
         def pvm = new PersonsVineMethod()
         def mc1 = pvm.call(CacheMode.IGNORE, [:])
@@ -282,9 +308,9 @@ class JsonVineMethodCallSpec extends Specification {
         mc2 instanceof JsonVineMethodCall
         mc2.result != null
         mc2.result instanceof List<Person>
-        mc2.result[0] instanceof Map
+        mc2.result[0] instanceof Map //Person
         mc2.result[0].name == 'alice'
-        mc2.result[1] instanceof Map
+        mc2.result[1] instanceof Map //Person
         mc2.result[1].name == 'bob'
 
         when:
@@ -293,7 +319,7 @@ class JsonVineMethodCallSpec extends Specification {
         then:
         alice instanceof Person
         alice.name == 'alice'
-    }
+    }*/
 
 /*
     def "create from json"() {

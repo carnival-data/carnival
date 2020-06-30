@@ -37,9 +37,10 @@ abstract class JsonVineMethod<T> {
 
     static public CacheMode defaultCacheMode() {
         String str = Defaults.getConfigValue(DEFAULT_CACHE_MORE_CONFIG_KEY)
+        if (str == null) return CacheMode.IGNORE
         CacheMode cm = Enum.valueOf(CacheMode, str)
-        if (cm == null) cm = CacheMode.IGNORE
-        cm
+        if (cm) return cm
+        CacheMode.IGNORE
     }
 
 
@@ -54,20 +55,39 @@ abstract class JsonVineMethod<T> {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    CacheMode cacheMode
+    /** */
+    CacheMode cacheMode = defaultCacheMode()
+
+    /** */
+    Map arguments = [:]
 
 
     ///////////////////////////////////////////////////////////////////////////
     // METHODS CACHE MODE
     ///////////////////////////////////////////////////////////////////////////
 
-    CacheMode getCacheMode() {
-        if (this.cacheMode != null) return this.cacheMode 
-        else return defaultCacheMode()
+    JsonVineMethod<T> cacheMode(CacheMode cm) {
+        assert cm != null
+        this.cacheMode = cm
+        this
     }
 
-    CacheMode setCacheMode(CacheMode cm) {
-        this.cacheMode = cm
+    JsonVineMethod<T> mode(CacheMode cm) {
+        cacheMode(cm)
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // METHODS ARGUMENTS
+    ///////////////////////////////////////////////////////////////////////////
+
+    JsonVineMethod<T> arguments(Map args) {
+        this.arguments = args
+        this
+    }
+
+    JsonVineMethod<T> args(Map args) {
+        arguments(args)
     }
 
 
@@ -75,45 +95,65 @@ abstract class JsonVineMethod<T> {
     // METHODS CALL
     ///////////////////////////////////////////////////////////////////////////
 
+
     JsonVineMethodCall<T> call(Map args) {
-        CacheMode cm = getCacheMode()
-        assert cm != null
-        call(cm, args)
+        assert args != null
+        this.arguments = args
+        call()
+    }
+
+
+    JsonVineMethodCall<T> call(CacheMode cacheMode) {
+        assert cacheMode != null
+        this.cacheMode = cacheMode
+        call()
     }
 
 
     JsonVineMethodCall<T> call(CacheMode cacheMode, Map args) {
+        assert cacheMode != null
+        assert args != null
+        this.cacheMode = cacheMode
+        this.arguments = args
+        call()
+    }
+
+    JsonVineMethodCall<T> call() {
+        assert this.cacheMode != null
+        assert this.arguments != null
+
         JsonVineMethodCall<T> methodCall
-        switch (cacheMode) {
-            case CacheMode.IGNORE: methodCall = callCacheModeIgnore(args); break;
-            case CacheMode.OPTIONAL: methodCall = callCacheModeOptional(args); break;
-            case CacheMode.REQUIRED: methodCall = callCacheModeRequired(args); break;
+        switch (this.cacheMode) {
+            case CacheMode.IGNORE: methodCall = _callCacheModeIgnore(); break;
+            case CacheMode.OPTIONAL: methodCall = _callCacheModeOptional(); break;
+            case CacheMode.REQUIRED: methodCall = _callCacheModeRequired(); break;
 
             default:
-            throw new RuntimeException("unrecognized cache mode: $cacheMode")
+            throw new RuntimeException("unrecognized cache mode: ${this.cacheMode}")
         }
         assert methodCall != null
         methodCall
     }
 
-    JsonVineMethodCall<T> callCacheModeIgnore(Map args) {
-        _fetchAndCache(args)
+
+    JsonVineMethodCall<T> _callCacheModeIgnore() {
+        _fetchAndCache()
     }
 
 
-    JsonVineMethodCall<T> callCacheModeOptional(Map args) {
+    JsonVineMethodCall<T> _callCacheModeOptional() {
         JsonVineMethodCall<T> methodCall
-        File cacheFile = findCacheFile(args)
+        File cacheFile = findCacheFile()
         if (cacheFile) {
             methodCall = _readFromCache(cacheFile)
         } else {
-            methodCall = _fetchAndCache(args)
+            methodCall = _fetchAndCache()
         }
         methodCall
     }
 
 
-    JsonVineMethodCall<T> callCacheModeRequired(Map args) {
+    JsonVineMethodCall<T> _callCacheModeRequired() {
         final String EXT = "cache-mode 'required' requires an existing cache file."
 
         File cacheDir = _cacheDirectory()
@@ -122,7 +162,7 @@ abstract class JsonVineMethod<T> {
         if (!cacheDir.isDirectory()) throw new RuntimeException("cache directory is not a directory. ${EXT}")
         if (!cacheDir.canRead()) throw new RuntimeException("cache directory is not readable. ${EXT}")
 
-        File cacheFile = JsonVineMethodCall.findFile(cacheDir, this.class, args)
+        File cacheFile = JsonVineMethodCall.findFile(cacheDir, this.class, this.arguments)
         if (cacheFile == null) throw new RuntimeException("cache file does not exist. ${EXT}")        
         if (!cacheFile.exists()) throw new RuntimeException("cache file does not exist. ${EXT}")
         if (!cacheFile.isFile()) throw new RuntimeException("cache file is not a regular file. ${EXT}")
@@ -132,29 +172,29 @@ abstract class JsonVineMethod<T> {
     }
 
 
-    File findCacheFile(Map args) {
+    File findCacheFile() {
         File cacheDir = _cacheDirectory()
         if (cacheDir == null) {
             log.warn "cache directory is null. findCacheFile will return null."
             return null
         }
-        JsonVineMethodCall.findFile(cacheDir, this.class, args)
+        JsonVineMethodCall.findFile(cacheDir, this.class, this.arguments)
     }
 
 
-    File cacheFile(Map args) {
+    File cacheFile() {
         File cacheDir = _cacheDirectory()
         if (cacheDir == null) {
             log.warn "cache directory is null. cacheFile will return null."
             return null
         }
-        JsonVineMethodCall.file(cacheDir, this.class, args)
+        JsonVineMethodCall.file(cacheDir, this.class, this.arguments)
     }
 
 
-    JsonVineMethodCall<T> _fetchAndCache(Map args) {
-        T fetchResult = fetch(args)
-        JsonVineMethodCall<T> methodCall = _createCallObject(args, fetchResult)
+    JsonVineMethodCall<T> _fetchAndCache() {
+        T fetchResult = fetch(this.arguments)
+        JsonVineMethodCall<T> methodCall = _createCallObject(this.arguments, fetchResult)
         _writeCacheFile(methodCall)
         methodCall        
     }
@@ -180,7 +220,10 @@ abstract class JsonVineMethod<T> {
 
     JsonVineMethodCall<T> _createCallObject(Map arguments, T result) {
         assert result != null
-        JsonVineMethodCall<T> mc = new JsonVineMethodCall<T>()
+        JsonVineMethodCall<T> mc 
+        if (result instanceof List) mc = new JsonVineMethodListCall<T>()
+        else mc = new JsonVineMethodCall<T>()
+        //JsonVineMethodCall<T> mc = new JsonVineMethodCall<T>()
         mc.vineMethodClass = this.class
         mc.arguments = arguments
         mc.result = result

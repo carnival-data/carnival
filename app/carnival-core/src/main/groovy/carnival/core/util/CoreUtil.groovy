@@ -32,11 +32,13 @@ class CoreUtil {
         String cn = cl.name
         //println "cn: $cn"
 
-        def name = cn.reverse()
-        if (name.contains('$')) name = name.substring(0, name.indexOf('$')) //name.takeBefore('$')
-        else if (name.contains('.')) name = name.substring(0, name.indexOf('.')) // name.takeBefore('.')
-        name = name.reverse()
-        name = StringUtils.toKebabCase(name)
+        //def name = cn.reverse()
+        //if (name.contains('$')) name = name.substring(0, name.indexOf('$')) //name.takeBefore('$')
+        //else if (name.contains('.')) name = name.substring(0, name.indexOf('.')) // name.takeBefore('.')
+        //name = name.reverse()
+        //name = StringUtils.toKebabCase(name)
+
+        def name = cn.replaceAll('\\.', '-').replaceAll('\\$', '-')
         //println "name: $name"
 
         return name

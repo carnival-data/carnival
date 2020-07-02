@@ -13,7 +13,11 @@ plugins {
     id 'groovy'
     id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
     id ("maven-publish")
+    // code coverage
+    id 'jacoco'
+    id 'com.github.kt3k.coveralls' version '2.6.3'
 }
+
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -24,11 +28,19 @@ allprojects {
     group = 'edu.upenn.pmbb'
     sourceCompatibility = 1.8
     version = '0.3.0'   // see https://semver.org/
+
+    apply plugin: 'jacoco'
 }
 
 
 subprojects {
-    apply plugin: 'groovy'
+    apply plugin: 'groovy'  
+}
+
+// add to base project for jacoco plugin
+repositories {
+    jcenter()
+    mavenLocal()  
 }
 
 
@@ -151,3 +163,35 @@ task publishAll {
     dependsOn 'carnival-clinical:publishToMavenLocal'
 }
 
+//This JaCoCo coverage task for multi-module Gradle project was inspired by:
+//https://github.com/ben-manes/caffeine/blob/master/build.gradle
+def publishedProjects = subprojects.findAll()
+
+task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
+    description = 'Generates an aggregate report from all subprojects'
+
+    dependsOn(publishedProjects.test)
+
+    additionalSourceDirs = files(publishedProjects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories = files(publishedProjects.sourceSets.main.allSource.srcDirs)
+    classDirectories = files(publishedProjects.sourceSets.main.output)
+    executionData = files(publishedProjects.jacocoTestReport.executionData)
+
+    reports {
+        html.enabled = true // human readable
+        xml.enabled = true // required by coveralls
+    }
+
+    doFirst {
+        executionData = files(executionData.findAll { it.exists() })
+    }
+}
+
+coveralls {
+    sourceDirs = publishedProjects.sourceSets.main.allSource.srcDirs.flatten()
+    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
+}
+
+tasks.coveralls {
+    dependsOn jacocoRootReport
+}

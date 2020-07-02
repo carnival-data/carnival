@@ -1,4 +1,5 @@
-FROM gradle
+FROM gradle 5.6.4
+#FROM gradle
 
 ### Development Image
 

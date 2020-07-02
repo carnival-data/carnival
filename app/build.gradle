@@ -165,31 +165,42 @@ task publishAll {
 
 //This JaCoCo coverage task for multi-module Gradle project was inspired by:
 //https://github.com/ben-manes/caffeine/blob/master/build.gradle
+
+// Only report code coverage for projects that are distributed
+def publishedProjects = subprojects.findAll()
+
+task jacocoMerge(type: JacocoMerge) {
+  publishedProjects.each { subproject ->
+    executionData subproject.tasks.withType(Test)
+  }
+  doFirst {
+    executionData = files(executionData.findAll { it.exists() })
+  }
+}
+
 task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
-    description = 'Generates an aggregate report from all subprojects'
+  description = 'Generates an aggregate report from all subprojects'
+  dependsOn publishedProjects.test, jacocoMerge
 
-    dependsOn(subprojects.test)
+  additionalSourceDirs.from = files(publishedProjects.sourceSets.main.allSource.srcDirs)
+  sourceDirectories.from = files(publishedProjects.sourceSets.main.allSource.srcDirs)
+  classDirectories.from = files(publishedProjects.sourceSets.main.output)
+  executionData jacocoMerge.destinationFile
 
-    additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
-    sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
-    classDirectories = files(subprojects.sourceSets.main.output)
-    executionData = files(subprojects.jacocoTestReport.executionData)
-
-    reports {
-        html.enabled = true // human readable
-        xml.enabled = true // required by coveralls
-    }
-
-    doFirst {
-        executionData = files(executionData.findAll { it.exists() })
-    }
+  reports {
+    html.enabled = true // human readable
+    xml.enabled = true // required by coveralls
+  }
 }
 
 coveralls {
-    sourceDirs = subprojects.sourceSets.main.allSource.srcDirs.flatten()
-    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
+  sourceDirs = publishedProjects.sourceSets.main.allSource.srcDirs.flatten()
+  jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
 }
 
 tasks.coveralls {
-    dependsOn jacocoRootReport
+  group = 'Coverage reports'
+  description = 'Uploads the aggregated coverage report to Coveralls'
+
+  dependsOn jacocoRootReport
 }

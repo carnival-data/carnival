@@ -129,7 +129,11 @@ public enum KeyType {
 	*/
 	OMOP_VISIT_SOURCE_VALUE,
 	/**
-	* AN OMOP Healthcare Encounter Identifier
+	* AN OMOP Diagnosis Identifier
 	*/
 	OMOP_CONDITION_OCCURRENCE_ID,
+	/**
+	* AN OMOP Medication Identifier
+	*/
+	OMOP_DRUG_ID,
 }

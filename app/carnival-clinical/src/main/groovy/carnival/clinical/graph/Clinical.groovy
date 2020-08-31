@@ -24,7 +24,7 @@ class Clinical {
         PATIENT,
         PATIENT_WITH_ID_PROBLEMS,
 
-        HEALTHCARE_ENCOUNTER,
+        HEALTHCARE_ENCOUNTER (vertexProperties:[PX.ENCOUNTER_DATE]),
         BIOBANK_ENCOUNTER (vertexProperties:[PX.ENCOUNTER_DATE]),
         SPECIMEN_SUMMARY (vertexProperties:[Core.PX.NAME.withConstraints(index:true)]),
 
@@ -32,7 +32,9 @@ class Clinical {
 
         DATE_SHIFT_VALUE,
 
-        CODE_REF (vertexProperties:[Core.PX.VALUE, PX.SYSTEM]),
+        CODE_REF (vertexProperties:[Core.PX.VALUE, PX.SYSTEM, Core.PX.NAME]),
+        MEDICATION (vertexProperties:[Core.PX.VALUE, PX.SYSTEM, Core.PX.NAME]),
+        MEASUREMENT (vertexProperties:[Core.PX.VALUE, PX.UNIT, Core.PX.NAME]),
         CODE_GROUP (
             vertexProperties:[
                 Core.PX.NAME.withConstraints(index:true)
@@ -154,7 +156,7 @@ class Clinical {
 
         PARTICIPATED_IN_ENCOUNTER (
             domain:[VX.PATIENT, VX.PATIENT_WITH_ID_PROBLEMS],
-            range:[VX.BIOBANK_ENCOUNTER]
+            range:[VX.BIOBANK_ENCOUNTER, VX.HEALTHCARE_ENCOUNTER]
         ),
 
         PARTICIPATED_IN_FORM_FILING (
@@ -189,6 +191,21 @@ class Clinical {
         HAS_DEIDENTIFICATION_VALUE(
             domain:[VX.PATIENT],
             range:[VX.DATE_SHIFT_VALUE]
+        ),
+
+        HAS_ASSOCIATED_CODEREF(
+            domain:[VX.HEALTHCARE_ENCOUNTER],
+            range:[VX.CODE_REF]
+        ),
+
+        HAS_ASSOCIATED_MEDICATION(
+            domain:[VX.HEALTHCARE_ENCOUNTER],
+            range:[VX.MEDICATION]
+        ),
+
+        HAS_ASSOCIATED_MEASUREMENT(
+            domain:[VX.HEALTHCARE_ENCOUNTER],
+            range:[VX.MEASUREMENT]
         )
     }
 
@@ -205,7 +222,9 @@ class Clinical {
 
         HEIGHT_INCHES,
         WEIGHT_LBS,
-        CALCULATED_BMI
+        CALCULATED_BMI,
+
+        UNIT
     }
 
 }

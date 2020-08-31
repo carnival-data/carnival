@@ -11,4 +11,4 @@ jobs:
         # Building Docker images
         - docker-compose -f ./docker-compose-test.yml build -m 8g
       script:
-        - docker run -v $(pwd):/appsrc -w /appsrc/app carnival_app gradle test --console=plain --continue -Dtest.http=false
+        - docker run -e TRAVIS_JOB_ID="$TRAVIS_JOB_ID" -e TRAVIS_BRANCH="$TRAVIS_BRANCH" -v $(pwd):/appsrc -w /appsrc/app carnival_app gradle test coveralls --console=plain --continue -Dtest.http=false

@@ -67,7 +67,7 @@ class PatientGroup {
      *
      */
     static public Vertex createPatientGroupFromIdValues(Graph graph, KeyType keyType, Collection<String> idVals) {
-        if (![KeyType.ENCOUNTER_PACK_ID, KeyType.EMPI, KeyType.PK_PATIENT_ID, KeyType.GENERIC_PATIENT_ID, KeyType.MRN].contains(keyType))
+        if (![KeyType.ENCOUNTER_PACK_ID, KeyType.EMPI, KeyType.PK_PATIENT_ID, KeyType.GENERIC_PATIENT_ID, KeyType.MRN, KeyType.OMOP_PERSON_SOURCE_VALUE].contains(keyType))
             throw new IllegalArgumentException("unsupported key type: $keyType")
 
         def g = graph.traversal(CarnivalTraversalSource.class)

@@ -126,4 +126,20 @@ public enum KeyType {
 	 */
 	RELATIONAL_PRIMARY_KEY,
 
+	/*
+	* AN OMOP Patient Identifier
+	*/
+	OMOP_PERSON_SOURCE_VALUE,
+	/**
+	* AN OMOP Healthcare Encounter Identifier
+	*/
+	OMOP_VISIT_SOURCE_VALUE,
+	/**
+	* AN OMOP Diagnosis Identifier
+	*/
+	OMOP_CONDITION_OCCURRENCE_ID,
+	/**
+	* AN OMOP Medication Identifier
+	*/
+	OMOP_DRUG_ID,
 }

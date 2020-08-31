@@ -19,12 +19,17 @@ import carnival.util.SqlUtils
 
 import java.security.MessageDigest
 
+// For mocking with testing
+interface OmopVineInterface {	
+
+}
+
 /**
  * Vine is the superclass of objects that interact read and write data to
  * data sources.
  *
  */
-class OmopVine extends RelationalVinePostgres implements CachingVine {
+class OmopVine extends RelationalVinePostgres implements CachingVine, OmopVineInterface {
 
 	///////////////////////////////////////////////////////////////////////////
 	// STATIC
@@ -348,7 +353,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 
             new GenericDataTable.MetaData(
                 name:"omop-diagnoses-${inputHash}",
-                idFieldName:'visit_occurrence_id',
+                idFieldName:'condition_occurrence_id',
                 idKeyType:KeyType.ENCOUNTER_ID
             ) 
 
@@ -440,7 +445,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 
             new GenericDataTable.MetaData(
                 name:"omop-medications-${inputHash}",
-                idFieldName:'visit_occurrence_id',
+                idFieldName:'drug_id',
                 idKeyType:KeyType.ENCOUNTER_ID
             ) 
 
@@ -542,7 +547,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
 
             new GenericDataTable.MetaData(
                 name:"omop-measurements-${inputHash}",
-                idFieldName:'visit_occurrence_id',
+                idFieldName:'measurement_id',
                 idKeyType:KeyType.ENCOUNTER_ID
             ) 
 
@@ -613,6 +618,3 @@ class OmopVine extends RelationalVinePostgres implements CachingVine {
         return outputDataTable
 	}
 }
-
-
-

@@ -221,6 +221,9 @@ class JsonVineSpec extends Specification {
         def pv = new JvsTestVine()
         def res = pv.personVineMethod(CachingVine.CacheMode.IGNORE, [p1:"alice"])
 
+        // this would call the same method with the default cache mode
+        //def res = pv.personVineMethod(p1:"alice")
+
         then:
         noExceptionThrown()
         res != null

@@ -1,6 +1,6 @@
 <div id="GraphModel" class="bg-white pt-16">
-    <div class="bg-blue-700 p-2 rounded shadow text-xl text-white">
-        <span class="font-bold pl-2">Graph Model</span>
+    <div class="p-2 mt-3 text-4xl text-white bg-orange-500 shadow rounded">
+        <span class="pl-2">Graph Model</span>
     </div>
 
     <div class="md:mx-2 lg:mx-4 p-2 text-left text-black">
@@ -11,13 +11,12 @@
 
         <span class="text-3xl text-bold text-black mt-2">Graph Model</span>
 
-        <div class="bg-orange-100 border-solid rounded-lg shadow-lg px-4 my-4">
-            <div class="listingblock">
-                <div class="title">Graph Model</div>
-                <div class="content">
-                    <pre
-                        class="highlightjs highlight"
-                    ><code class="language-groovy" data-lang="groovy">@VertexDefinition <i class="conum" data-value="1"></i><b>(1)</b>
+        <div class="listingblock my-3">
+            <div class="mb-1 text-bold italic font-serif text-sm">Example: Vertex definition</div>
+            <div class="content">
+                <pre
+                    class="highlightjs highlight"
+                ><code class="language-groovy" data-lang="groovy">@VertexDefinition <i class="conum" data-value="1"></i><b>(1)</b>
 static enum VX { <i class="conum" data-value="2"></i><b>(2)</b>
     PERSON (
         propertyDefs:[
@@ -26,31 +25,30 @@ static enum VX { <i class="conum" data-value="2"></i><b>(2)</b>
     )
 }</code></pre>
 
-                    <div class="colist arabic">
-                        <table>
-                            <tr>
-                                <td><i class="conum" data-value="1"></i><b>1</b></td>
-                                <td>
-                                    <code>@VertexDefinition</code> tells Carnival that <code>VX</code> is a vertex
-                                    definition.
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><i class="conum" data-value="2"></i><b>2</b></td>
-                                <td>
-                                    There are no rules governing the naming of definition enums. VX, EX, and PX are
-                                    merely conventions.
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><i class="conum" data-value="3"></i><b>3</b></td>
-                                <td>
-                                    The <code>PERSON</code> vertex has a single allowed property, which is not required,
-                                    nor must it be unique, but is indexed.
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
+                <div class="colist arabic">
+                    <table>
+                        <tr>
+                            <td><i class="conum" data-value="1"></i><b>1</b></td>
+                            <td>
+                                <code>@VertexDefinition</code> tells Carnival that <code>VX</code> is a vertex
+                                definition.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><i class="conum" data-value="2"></i><b>2</b></td>
+                            <td>
+                                There are no rules governing the naming of definition enums. VX, EX, and PX are merely
+                                conventions.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><i class="conum" data-value="3"></i><b>3</b></td>
+                            <td>
+                                The <code>PERSON</code> vertex has a single allowed property, which is not required, nor
+                                must it be unique, but is indexed.
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>

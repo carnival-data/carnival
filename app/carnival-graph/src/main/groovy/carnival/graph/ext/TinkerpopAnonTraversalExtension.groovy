@@ -35,4 +35,19 @@ class TinkerpopAnonTraversalExtension {
         __.hasLabel(vdef.label).has(Base.PX.NAME_SPACE.label, vdef.nameSpace)
     }
 
+    /** */
+    static GraphTraversal has(__ traversal, PropertyDefTrait pdef) {
+        traversal.has(pdef.label)
+    }
+
+    /** */
+    static GraphTraversal has(__ traversal, PropertyDefTrait pdef, Enum value) {
+        traversal.has(pdef.label, value.name())
+    }
+
+    /** */
+    static GraphTraversal has(__ traversal, PropertyDefTrait pdef, Object value) {
+        traversal.has(pdef.label, value)
+    }
+
 }

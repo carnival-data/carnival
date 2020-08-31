@@ -77,8 +77,8 @@ abstract public class Reasoner implements ReasonerInterface, GremlinTrait, Track
         def out = [:]
         def numRuns = getAllSuccessfulTrackedProcesses(traversal()).size()
         if (numRuns == 0) {
-            out.result = reason(args)
-            out.processVertex = createAndSetTrackedProcessVertex(graph)
+            out.result = this.reason(args)
+            out.processVertex = this.createAndSetTrackedProcessVertex(graph)
             if (out.result?.success) Core.PX.SUCCESS.set(out.processVertex, true)
             log.info "${this.class.simpleName} ensure result: ${out.result}"
         } else {

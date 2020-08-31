@@ -141,28 +141,19 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
     }
 
 
-    /** 
-     *
-     *
-     */
+    /** */
     public ControlledInstance instance() {
         controlledInstance()
     }
 
 
-    /** 
-     *
-     *
-     */
+    /** */
     public ControlledInstance controlledInstance() {
         return new ControlledInstance(this)
     }
 
 
-    /** 
-     *
-     *
-     */
+    /** */
     public Vertex createVertex(Graph graph) {
         assert graph
         if (isClass()) throw new RuntimeException("cannot create instance vertex of class ${this}")
@@ -179,6 +170,16 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
     }
 
 
+
+    ///////////////////////////////////////////////////////////////////////////
+    // SIMPLE VALIDATION
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    public boolean isa(Vertex v) {
+        assert v != null
+        (v.label() == getLabel() && Base.PX.NAME_SPACE.valueOf(v) == getNameSpace())
+    }
 
 
     ///////////////////////////////////////////////////////////////////////////

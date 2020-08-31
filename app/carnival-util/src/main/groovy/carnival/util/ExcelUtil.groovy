@@ -282,6 +282,11 @@ class ExcelUtil {
         short fcn = row.firstCellNum
         short lcn = row.lastCellNum
         (fcn..lcn-1).each { cn ->
+            if (cn < 0) {
+                log.warn "cell number is less than 0: $cn"
+                return
+            }
+
             XSSFCell cell = row.getCell(cn)
             if (cell == null) {
                 //log.warn "null cell at index ${cn}. inserting blank value"

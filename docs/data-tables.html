@@ -1,6 +1,6 @@
 <div id="DataTables" class="bg-white pt-16">
-    <div class="bg-blue-700 p-2 rounded shadow text-xl text-white">
-        <span class="font-bold pl-2">Data Tables</span>
+    <div class="p-2 mt-3 text-4xl text-white bg-orange-500 shadow rounded">
+        <span class="pl-2">Data Tables</span>
     </div>
 
     <div class="md:mx-2 lg:mx-4 p-2 text-left text-black">
@@ -12,14 +12,14 @@
             primary key. If there is no primary key, use GenericDataTable.
         </p>
 
-        <span class="text-3xl text-bold text-black mt-2">MappedDataTable</span>
-        <div class="bg-orange-100 border-solid rounded-lg shadow-lg px-4 my-4">
-            <div class="listingblock">
-                <div class="title">docs/groovy/basic/mapped-data-table-1.groovy</div>
-                <div class="content">
-                    <pre
-                        class="highlightjs highlight"
-                    ><code class="language-groovy" data-lang="groovy">@Grab(group='edu.upenn.pmbb', module='carnival-util', version='0.2.6') <i class="conum" data-value="1"></i><b>(1)</b>
+        <div class="text-3xl text-bold text-black my-3">MappedDataTable</div>
+
+        <div class="listingblock my-3">
+            <div class="mb-1 text-bold italic font-serif text-sm">Example: Mapped data table</div>
+            <div class="content">
+                <pre
+                    class="highlightjs highlight"
+                ><code class="language-groovy" data-lang="groovy">@Grab(group='edu.upenn.pmbb', module='carnival-util', version='0.2.6') <i class="conum" data-value="1"></i><b>(1)</b>
 
 import carnival.util.MappedDataTable
 
@@ -32,30 +32,29 @@ mdt.dataAdd(ID:'1A', NAME:'alex') <i class="conum" data-value="4"></i><b>(4)</b>
 def currentDir = new File(System.getProperty("user.dir"))
 mdt.writeFiles(currentDir)<i class="conum" data-value="5"></i><b>(5)</b></code></pre>
 
-                    <div class="colist arabic">
-                        <table>
-                            <tr>
-                                <td><i class="conum" data-value="1"></i><b>1</b></td>
-                                <td>Use <code>@Grab</code> to incorporate the carnival-util dependency.</td>
-                            </tr>
-                            <tr>
-                                <td><i class="conum" data-value="2"></i><b>2</b></td>
-                                <td>All data tables have a name, which will be used to name file representations.</td>
-                            </tr>
-                            <tr>
-                                <td><i class="conum" data-value="3"></i><b>3</b></td>
-                                <td>Set the name of the identifier field of this data table to 'ID'</td>
-                            </tr>
-                            <tr>
-                                <td><i class="conum" data-value="4"></i><b>4</b></td>
-                                <td>Add a record to the data table.</td>
-                            </tr>
-                            <tr>
-                                <td><i class="conum" data-value="5"></i><b>5</b></td>
-                                <td>Write the file representation of this data table to the current directory.</td>
-                            </tr>
-                        </table>
-                    </div>
+                <div class="colist arabic">
+                    <table>
+                        <tr>
+                            <td><i class="conum" data-value="1"></i><b>1</b></td>
+                            <td>Use <code>@Grab</code> to incorporate the carnival-util dependency.</td>
+                        </tr>
+                        <tr>
+                            <td><i class="conum" data-value="2"></i><b>2</b></td>
+                            <td>All data tables have a name, which will be used to name file representations.</td>
+                        </tr>
+                        <tr>
+                            <td><i class="conum" data-value="3"></i><b>3</b></td>
+                            <td>Set the name of the identifier field of this data table to 'ID'</td>
+                        </tr>
+                        <tr>
+                            <td><i class="conum" data-value="4"></i><b>4</b></td>
+                            <td>Add a record to the data table.</td>
+                        </tr>
+                        <tr>
+                            <td><i class="conum" data-value="5"></i><b>5</b></td>
+                            <td>Write the file representation of this data table to the current directory.</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
@@ -66,17 +65,14 @@ mdt.writeFiles(currentDir)<i class="conum" data-value="5"></i><b>(5)</b></code><
             <li>myMappedDataTable.csv - the data in comma separated value format</li>
         </ul>
 
-        <p>
-            As noted above, mapped data tables have a primary key, which is enforced to be unique.
-        </p>
+        <p>As noted above, mapped data tables have a primary key, which is enforced to be unique.</p>
 
-        <div class="bg-orange-100 border-solid rounded-lg shadow-lg px-4 my-4">
-            <div class="listingblock">
-                <div class="title">docs/groovy/basic/mapped-data-table-2.groovy</div>
-                <div class="content">
-                    <pre
-                        class="highlightjs highlight"
-                    ><code class="language-groovy" data-lang="groovy">@Grab(group='edu.upenn.pmbb', module='carnival-util', version='0.2.6')
+        <div class="listingblock my-3">
+            <div class="mb-1 text-bold italic font-serif text-sm">Example: Non-unique identifiers</div>
+            <div class="content">
+                <pre
+                    class="highlightjs highlight"
+                ><code class="language-groovy" data-lang="groovy">@Grab(group='edu.upenn.pmbb', module='carnival-util', version='0.2.6')
 
 import carnival.util.MappedDataTable
 
@@ -87,29 +83,26 @@ def mdt = new MappedDataTable(
 mdt.dataAdd(ID:'1A', NAME:'alex')
 mdt.dataAdd(ID:'1A', NAME:'bob') <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 
-                    <div class="colist arabic">
-                        <table>
-                            <tr>
-                                <td><i class="conum" data-value="1"></i><b>1</b></td>
-                                <td>
-                                    This line will cause an exception, since the ID '1A' was already added to the data
-                                    table.
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
+                <div class="colist arabic">
+                    <table>
+                        <tr>
+                            <td><i class="conum" data-value="1"></i><b>1</b></td>
+                            <td>
+                                This line will cause an exception, since the ID '1A' was already added to the data
+                                table.
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
 
         <span class="text-3xl text-bold text-black mt-2">GenericDataTable</span>
 
-        <p>
-            Generic data tables can hold arbitrary tabular data.
-        </p>
+        <p>Generic data tables can hold arbitrary tabular data.</p>
 
-        <div class="listingblock">
-            <div class="title">docs/groovy/basic/generic-data-table-1.groovy</div>
+        <div class="listingblock my-3">
+            <div class="mb-1 text-bold italic font-serif text-sm">docs/groovy/basic/generic-data-table-1.groovy</div>
             <div class="content">
                 <pre
                     class="highlightjs highlight"

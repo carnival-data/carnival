@@ -24,7 +24,7 @@ trait JsonVine {
     def methodMissing(String name, def args) {
         log.trace "JsonVine invoke method via methodMissing name:$name args:${args?.class?.name}"
 
-        // verify that there is only one argument and it is a map
+        // verify arguments
         if (args != null) {
             if (args.size() > 2) throw new IllegalArgumentException("there can be at most two arguments to a JSON vine method call: ${args}")
             if (args.size() == 1) {

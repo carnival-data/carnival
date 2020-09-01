@@ -110,7 +110,6 @@ docs/groovy/**/*.yml
 .jekyll-cache
 .sass-cache
 _site
-docs/*.lock
 docs/node_modules
 
 # might be created by tests that write files

@@ -1,0 +1,143 @@
+---
+layout: simple-sidebar-layout
+title: Carnival API Documentation
+---
+
+<div id="app" class="">
+    <!--
+    HEADER BAR
+    -->
+    <div class="bg-gray-700 pt-2 md:pt-1 pb-1 px-1 mt-0 h-16 fixed w-full z-20 top-0 flex flex-col justify-center">
+        <div class="w-full flex flex-row justify-center">
+            <a href="#">
+                <img class="block h-10" src="assets/images/carnival-banner-2-transparent.png" alt="" />
+            </a>
+        </div>
+        <!--
+            <div class="flex flex-1 md:w-1/3 justify-center md:justify-start text-white px-2">
+                <span class="relative w-full">
+                    <img class="block h-10" src="assets/images/carnival-2.png" alt="" />
+                </span>
+            </div>
+
+            <div class="flex w-full pt-2 content-center justify-between md:w-1/3 md:justify-end">
+                <ul class="list-reset flex justify-between flex-1 md:flex-none items-center">
+                    <li class="flex-1 md:flex-none md:mr-3">
+                        <a href="http://github.com/pmbb-ibi/carnival" target="_blank">
+                            <img class="block h-10" src="assets/images/tent-50.png" alt="" />
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            -->
+    </div>
+
+    <!--
+    LEFT NAVIGATION + MAIN CONTENT
+    -->
+    <div id="lnav" class="flex flex-col md:flex-row">
+        <!-- 
+        LEFT NAVIGATION
+        -->
+        <div class="bg-white h-16 fixed bottom-0 mt-12 md:relative md:h-screen z-10 w-full md:w-48">
+            <div
+                class="md:mt-12 md:w-48 md:fixed md:left-0 md:top-0 content-center md:content-start text-left justify-between"
+            >
+                <ul
+                    class="list-reset flex flex-row md:flex-col py-0 md:py-3 px-1 md:px-2 mt-4 text-center md:text-left"
+                >
+                    <li class="mr-3 flex-1">
+                        <div
+                            class="pb-1 md:pb-0 mt-2 w-full md:text-base text-black text-lg font-bold block md:inline-block uppercase"
+                        >
+                            Contents
+                        </div>
+                    </li>
+                    <li class="mr-3 flex-1">
+                        <a
+                            href="#Overview"
+                            class="block py-1 md:py-3 pl-1 align-middle text-black no-underline hover:font-bold hover:text-yellow-500"
+                        >
+                            Overview
+                        </a>
+                    </li>
+                    <li class="mr-3 flex-1">
+                        <a
+                            href="#DeveloperSetup"
+                            class="block py-1 md:py-3 pl-1 align-middle text-black no-underline hover:font-bold hover:text-yellow-500"
+                        >
+                            Developer Setup
+                        </a>
+                    </li>
+                    <li class="mr-3 flex-1">
+                        <a
+                            href="#ProductionBuilds"
+                            class="block py-1 md:py-3 pl-1 align-middle text-black no-underline hover:font-bold hover:text-yellow-500"
+                        >
+                            Production Builds
+                        </a>
+                    </li>
+                    <li class="mr-3 flex-1">
+                        <div
+                            class="pb-1 md:pb-0 mt-2 w-full md:text-base text-black text-lg font-bold block md:inline-block uppercase"
+                        >
+                            Data
+                        </div>
+                    </li>
+                    <li class="mr-3 flex-1">
+                        <a
+                            href="#DataTables"
+                            class="block py-1 md:py-3 pl-1 align-middle text-black no-underline hover:font-bold hover:text-yellow-500"
+                        >
+                            Data Tables
+                        </a>
+                    </li>
+                    <li class="mr-3 flex-1">
+                        <div
+                            class="pb-1 md:pb-0 mt-2 w-full md:text-base text-black text-lg font-bold block md:inline-block uppercase"
+                        >
+                            Vines
+                        </div>
+                    </li>
+                    <li class="mr-3 flex-1">
+                        <a
+                            href="#Vines"
+                            class="block py-1 md:py-3 pl-1 align-middle text-black no-underline hover:font-bold hover:text-yellow-500"
+                        >
+                            Vines
+                        </a>
+                    </li>
+                    <li class="mr-3 flex-1">
+                        <div
+                            class="pb-1 md:pb-0 mt-2 w-full md:text-base text-black text-lg font-bold block md:inline-block uppercase"
+                        >
+                            Graph
+                        </div>
+                    </li>
+                    <li class="mr-3 flex-1">
+                        <a
+                            href="#GraphModel"
+                            class="block py-1 md:py-3 pl-1 align-middle text-black no-underline hover:font-bold hover:text-yellow-500"
+                        >
+                            Graph Model
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 
+        MAIN CONTENT
+        -->
+        <div class="flex-1 bg-white mr-2">
+            {% include_relative overview.html %} {% include_relative developer-setup.html %} {% include_relative
+            production-builds.html %} {% include_relative data-tables.html %} {% include_relative vines.html %} {%
+            include_relative graph-model.html %}
+
+            <!--div class="container-fluid" id="Tutorials">
+                <h1 class="mt-4">Tutorials</h1>
+                {% include_relative data-tables.html %}
+            </div-->
+        </div>
+    </div>
+</div>

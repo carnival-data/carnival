@@ -11,8 +11,8 @@ Inspired by Open Biological and Biomedical Ontology (OBO) Foundry ontologies, th
 
 ## Quick Links
 
-- [Github Pages Website](https://pmbb-ibi.github.io/carnival/)
-- [Developer Guide](https://pmbb-ibi.github.io/carnival/#DeveloperSetup) - Installation and running instructions
+- [Documentation](docs/index.md)
+- [Documentation Website](https://pmbb-ibi.github.io/carnival/)
 
 ## Contents
 

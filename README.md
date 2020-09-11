@@ -11,7 +11,7 @@ Inspired by Open Biological and Biomedical Ontology (OBO) Foundry ontologies, th
 
 ## Quick Links
 
-- [Documentation](docs/index.md)
+- [Documentation](docs/index.markdown)
 - [Documentation Website](https://pmbb-ibi.github.io/carnival/)
 
 ## Contents

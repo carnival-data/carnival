@@ -44,6 +44,9 @@ build
 # Avoid ignoring Gradle wrapper properties file
 !app/gradle/wrapper/gradle-wrapper.properties
 
+# coveralls file
+!.coveralls.yml
+
 # this file contains connection parameters including usernames and passwords
 dbconfig.yaml
 

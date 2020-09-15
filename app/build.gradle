@@ -81,6 +81,10 @@ subprojects {
 ///////////////////////////////////////////////////////////////////////////////
 apply from: 'setupTestsReports.gradle'
 
+project('carnival-clinical') {
+    test.dependsOn(':carnival-core:carnivalLocalDirInit')
+}
+
 subprojects {
     // use --continue flag instead of setting test.ignoreFailures to true
     // See https://docs.gradle.org/current/userguide/command_line_interface.html#sec:continue_build_on_failure

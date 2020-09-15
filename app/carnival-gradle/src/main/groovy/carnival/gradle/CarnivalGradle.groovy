@@ -31,6 +31,8 @@ class CarnivalGradlePlugin implements Plugin<Project> {
         }        
         println "[CarnivalGradle] application home directory: $appHomeDirectory"
 
+        project.ext.set("appHomeDirectory", appHomeDirectory)
+
         // set the carnival.home property in both the run and test environments
         project.test.systemProperty('carnival.home', appHomeDirectory)
         project.run.systemProperty('carnival.home', appHomeDirectory)

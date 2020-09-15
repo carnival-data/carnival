@@ -11,6 +11,8 @@ parent: Home
 
 # Developer Setup
 
+*This documentation is applicable for developing the core Carnival framework, not developing an application that uses Carnival.*
+
 **Carnival** is a [Groovy](https://groovy-lang.org) multi-project that uses [Gradle](https://gradle.org) as the build engine. The main project is in the app directory. Folders within app contain the sub-projects (eg. app/carnival-core). Every sub-project has a build.gradle configuration file that defines its dependencies and the gradle tasks that it can execute. The build.gradle file in the app directory defines project-wide configuration. Gradle task commands executed from the root project filter down to the sub-projects. Gradle commands referenced in this documentation are assumed to be called from the root project directory carnival/app unless otherwise noted. This project also includes a Docker image configuration that can be built to run the Carnival test suite.
 
 ## Installation

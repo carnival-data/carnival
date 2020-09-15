@@ -66,35 +66,54 @@ public class Defaults {
         String configDirPath
         File configFile
 
-        // look for config in -DconfigDir
-        if (!configFile && System.getProperty('carnival.home')) {
+        // if the system property carnival.home is set, then it is expected
+        // that the directory exists and the configuration file is found there.
+        // carnival.home is set automatically by the Carnival Gradle Plugin.
+        // it is expected that applications that rely on Carnival as a library
+        // will set this value.
+        if (System.getProperty('carnival.home')) {
             configDirPath = System.getProperty('carnival.home') + "/config"
             configFile = findApplicationConfigurationFileInDirectoryPath(configDirPath)
+            if (configFile != null && configFile.exists()) {
+                log.info "config file from carnival.home: ${configFile}"
+                return configFile
+            } else {
+                log.warn "configuration not found in config.home: ${configDirPath}"
+                return null
+            } 
+        } else {
+            log.info "carnival.home is not set"
         }
-        
-        // look for config in CARNIVAL_HOME/config
-        if (!configFile && env.containsKey('CARNIVAL_HOME')) {
+
+        // running outside an application context implies core framework
+        // development.  in this case, the environment variable CARNIVAL_HOME
+        // is expected to be set.  a home directory is required for a place to
+        // put graph data and also provides the opportunity to override default
+        // logging and carnival configuration during the development process.
+        if (System.getProperty('CARNIVAL_HOME')) {
             configDirPath = env.get('CARNIVAL_HOME') + "/config"
             configFile = findApplicationConfigurationFileInDirectoryPath(configDirPath)
+            if (configFile != null && configFile.exists()) {
+                log.info "config file from CARNIVAL_HOME: ${configFile}"
+                return configFile
+            } else {
+                log.warn "configuration not found in CONFIG_HOME: ${configDirPath}"
+                return null
+            }             
+        } else {
+            log.info "CARNIVAL_HOME is not set"
         }
 
         // look for config in ./config
-        if (!configFile) {
-            configFile = findApplicationConfigurationFileInDirectoryPath('config')
+        configFile = findApplicationConfigurationFileInDirectoryPath('config')
+        if (configFile != null && configFile.exists()) {
+            log.info "config file from current directory: ${configFile}"
+            return configFile
         }
 
-        // if we don't have a config file by now, it's an error.
-        if (!configFile) {
-            def msg = "Could not find application config file in 'config' directory. See documentation."
-            msg += " carnival.home(sys prop): ${System.getProperty('carnival.home')}."
-            if (env.containsKey('CARNIVAL_HOME')) msg += " CARNIVAL_HOME(env): ${env.get('CARNIVAL_HOME')}"
-            else msg += " CARNIVAL_HOME(env) is not set."
-            
-            log.warn msg
-        }
-
-        log.trace "configFile: ${configFile}"
-        return configFile
+        // if we have made it this far, it's a warning
+        log.warn "could not find a configuration file in carnival.home, CARNIVAL_HOME, or ./config/"
+        return null
     }
 
 
@@ -378,12 +397,19 @@ public class Defaults {
         if (!dir.isDirectory()) throw new RuntimeException("${dir} exists, but is not a directory")
     }
 
+
     static public void initDirectories() {
         initDirectory(getTargetDirectory())
         initDirectory(getDataCacheDirectory())
         initDirectory(getDataGraphDirectory())
         initDirectory(getDataGraphPublishBaseDirectory())
         initDirectory(getDataGraphPublishWorkspaceDirectory())
+
+        def configFile = findApplicationConfigurationFile()
+        if (configFile == null) {
+            def configDirectory = new File(getHomeDir(), 'config')
+            initDirectory(configDirectory)
+        }
     }
 
 }

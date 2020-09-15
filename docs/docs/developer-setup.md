@@ -33,7 +33,39 @@ Set up a Carnival home directory, which will be used to contain data files and o
 4. Copy `application.yml-template` and `logback.yml-template` from `carnival/config` to `carnival_home/config`.
 5. Remove the `-template` file name suffix from each file.
 
-### Neo4j APOC
+**Note** - In the config files windows paths should be specified using double forward-slashes (i.e. `C://Users//myuser//somedirectory`).
+
+#### Configuration Files
+Name | Description
+--- | ---
+application.yaml | Contains data source information (i.e. credentals to relational dbs, RDF dbs, REDCap, etc.), the default vine cache-mode, local directory configuration and the gremlin configuration.
+logback.xml | Can be modified to change the log levels.
+
+
+### Neo4j APOC 
+
+*(optional)*
+
+Awesome Procedures on Cypher (APOC) is a library of Neo4j procedures.  While Carnival does not depend on any of these procedures, it may be useful to install the library.
+
+1. Download the most recent 3.5+ release from the [Neo4j Github](https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases).
+
+2. Add the path to that directory in gremlin section of the application.yaml config file in the entry gremlin:neo4j:conf:dbms:directories:plugins:
+
+```yaml
+# gremlin
+gremlin:
+    neo4j:
+        conf:
+            dbms:
+                directories:
+                    plugins: /Users/myuser/Documents/Neo4j/default.graphdb/plugins
+                security:
+                    auth_enabled: "false"
+                    procedures:
+                        unrestricted: apoc.*
+                        whitelist: apoc.*
+```
 
 
 ### Testing

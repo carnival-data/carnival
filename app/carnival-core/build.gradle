@@ -290,18 +290,11 @@ task carnivalLocalDirInit (dependsOn: ['classes'], type: JavaExec) {
         }
     }
 
-    jvmArgs '-Xms4g'
-    jvmArgs '-Xmx12g'
-    jvmArgs '-XX:+UnlockExperimentalVMOptions'
-    jvmArgs '-XX:+UseG1GC'
-    jvmArgs '-XX:G1MaxNewSizePercent=80'
-    jvmArgs '-XX:G1NewSizePercent=80'
-    jvmArgs '-XX:G1HeapWastePercent=5'
-    jvmArgs '-XX:G1MixedGCLiveThresholdPercent=50'
-    jvmArgs '-XX:-PrintGC'
-    jvmArgs '-XX:-PrintGCTimeStamps'
+    jvmArgs '-Xms512m'
+    jvmArgs '-Xmx512m'
 }
 
+test.dependsOn 'carnivalLocalDirInit'
 
 
 

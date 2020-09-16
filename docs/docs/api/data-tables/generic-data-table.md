@@ -7,7 +7,7 @@ title: Generic Data Table
 nav_order: 3
 has_children: false
 parent: Data Tables
-grand_parent: API Documentation
+grand_parent: Application Programmer Interface
 ---
 
 # GenericDataTable

@@ -6,7 +6,7 @@ layout: default
 title: Data Tables
 nav_order: 1
 has_children: true
-parent: API Documentation
+parent: Application Programmer Interface
 ---
 
 # Data Tables

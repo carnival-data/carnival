@@ -6,7 +6,7 @@ layout: default
 title: Vines
 nav_order: 2
 has_children: false
-parent: API Documentation
+parent: Application Programmer Interface
 ---
 
 # Vines

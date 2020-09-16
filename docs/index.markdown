@@ -7,10 +7,7 @@ has_children: true
 
 # Carnival
 
-**Carnival** is a data unification technology that aggregates disparate data into a unified property
-graph resource. Inspired by Open Biological and Biomedical Ontology (OBO) Foundry ontologies, the
-**Carnival** data model supports the execution of common investigatory tasks including patient cohort
-identification, case-control matching, and the production of data sets for scientific analysis.
+**Carnival** is a data unification technology that enables the aggregation of data from disparate sources into a unified property graph and provides tools to reason over and interact with graph data using bounded operations. **Carnival** has a robust architecture for tracking the provenance of data and providing evidence chains for conclusions or reasoning made on those data.
 
 ## Key Facts
 

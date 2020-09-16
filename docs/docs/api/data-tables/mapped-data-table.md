@@ -7,7 +7,7 @@ title: Mapped Data Table
 nav_order: 2
 has_children: false
 parent: Data Tables
-grand_parent: API Documentation
+grand_parent: Application Programmer Interface
 ---
 
 # MappedDataTable

@@ -6,7 +6,7 @@ layout: default
 title: Graph Model
 nav_order: 3
 has_children: false
-parent: API Documentation
+parent: Application Programmer Interface
 ---
 
 # Graph Model

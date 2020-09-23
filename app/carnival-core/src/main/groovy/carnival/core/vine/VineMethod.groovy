@@ -46,13 +46,8 @@ trait VineMethod {
 
 
     /**
-     * Return a the meta-data for this vine method, which must contain the 
-     * following:
-     *   name - a name that is guaranteed to be unique to this vine method if
-     *          called with the given args.  This name can be used to name the
-     *          output of the fetch() method and to name cache files.
-     *   idFieldName - the idFieldName (name of id field) used by this fine method.
-     *   idKeyType - the KeyType of the idFieldName field.
+     * Return a the meta-data for this vine method.  See MappedDataTable and
+     * GenericDataTable for implementations of DataTable.MetaData.
      *
      */
     abstract DataTable.MetaData meta(Map args)

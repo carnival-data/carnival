@@ -107,6 +107,7 @@ subprojects {
             systemProperty('logback.configurationFile', System.getProperty('carnival.home') + '/config/logback.xml')
         }
         if (System.env.CARNIVAL_HOME) {
+            systemProperty('carnival.home', System.env.CARNIVAL_HOME)
             systemProperty('logback.configurationFile', System.env.CARNIVAL_HOME + '/config/logback.xml')
         }
         if (System.getProperty('logback.configurationFile')) {

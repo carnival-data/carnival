@@ -17,7 +17,6 @@ import carnival.util.SummaryDateComparator
 import carnival.util.MappedDataTable
 import carnival.util.GenericDataTable
 import carnival.util.SqlUtils
-import carnival.util.KeyType
 import carnival.core.vine.Vine
 import carnival.core.vine.VineMethod
 import carnival.core.vine.MappedDataTableVineMethod

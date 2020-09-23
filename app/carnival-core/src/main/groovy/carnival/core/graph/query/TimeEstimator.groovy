@@ -18,7 +18,6 @@ import groovy.transform.ToString
 import groovy.transform.Synchronized
 import static groovyx.gpars.dataflow.Dataflow.task
 import groovyx.gpars.dataflow.DataflowReadChannel
-import groovyx.gpars.dataflow.DataflowWriteChannel
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonIgnore

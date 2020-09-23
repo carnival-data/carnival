@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory
 
 import groovyx.gpars.dataflow.DataflowBroadcast
 import groovyx.gpars.dataflow.DataflowReadChannel
-import groovyx.gpars.dataflow.DataflowWriteChannel
 import static groovyx.gpars.dataflow.Dataflow.task
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties

@@ -25,7 +25,6 @@ import static org.apache.tinkerpop.gremlin.neo4j.process.traversal.LabelP.of
 
 import carnival.core.graph.CoreGraph
 import carnival.core.graph.CarnivalTraversalSource
-import carnival.util.KeyType
 import carnival.util.DataTable
 import carnival.util.GenericDataTable
 import carnival.util.TabularReport

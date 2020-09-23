@@ -103,7 +103,6 @@ abstract class Reaper {
         m
     }
 
-
     /** */
     static Map<PropertyDefTrait,PropertyDefTrait> pxMap(Class enumFrom, Class enumTo) {
         Map<PropertyDefTrait,PropertyDefTrait> m = new HashMap<PropertyDefTrait,PropertyDefTrait>()
@@ -113,7 +112,6 @@ abstract class Reaper {
         }
         m
     }
-
 
 
 	///////////////////////////////////////////////////////////////////////////

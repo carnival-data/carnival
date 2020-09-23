@@ -33,7 +33,6 @@ import carnival.pmbb.vine.*
 import carnival.util.Defaults
 import carnival.core.config.DatabaseConfig
 import carnival.util.MappedDataTable
-import carnival.util.KeyType
 import carnival.core.vine.MappedDataTableVineMethod
 import carnival.core.graph.query.QueryProcess
 

@@ -9,10 +9,6 @@ import org.slf4j.LoggerFactory
 
 import static groovyx.gpars.dataflow.Dataflow.task
 import groovyx.gpars.dataflow.Promise
-import groovyx.gpars.dataflow.DataflowQueue
-import groovyx.gpars.dataflow.DataflowWriteChannel
-import groovyx.gpars.dataflow.DataflowReadChannel
-import groovyx.gpars.dataflow.DataflowBroadcast
 
 import static com.xlson.groovycsv.CsvParser.parseCsv
 import com.xlson.groovycsv.CsvIterator

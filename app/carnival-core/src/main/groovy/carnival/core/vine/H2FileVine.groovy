@@ -35,7 +35,6 @@ import carnival.util.GenericDataTable
 import carnival.util.MappedDataTable
 import carnival.util.DataTable
 import carnival.util.SqlUtils
-import carnival.util.KeyType
 
 
 

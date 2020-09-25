@@ -36,9 +36,6 @@ class GenericDataTableSpec extends Specification {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    static EMPI = KeyType.EMPI
-    static MRN = KeyType.MRN
-
     @Shared testDate
 
 

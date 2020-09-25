@@ -29,13 +29,9 @@ import org.yaml.snakeyaml.representer.Representer
  * GenericDataTable is a semi-generalized structure storing key/value data
  * associated with a single entity that has a unique identifier.  
  *
- * The core data structure of GenericDataTable is a Map from a unique identifier
- * to a Map of key/value data.  The unique identifier is described by the
- * keyType field, which is of type KeyType.
- *
  * GenericDataTables can be written to and read from files.  A single
  * GenericDataTable is represented by two files, a .csv file for the data and a
- * .yaml file for the other bits of information including keyType. The
+ * .yaml file for the other bits of information. The
  * GenericDataTable object itself keeps track of which files to which it has
  * been written and from which it has been read.
  *
@@ -346,7 +342,6 @@ class GenericDataTable extends DataTable {
         if (obj == null) return false
         if (!(obj instanceof MappedDataTable)) return false
         if (!areEqual(this.idFieldName, obj.idFieldName)) return false
-        if (!areEqual(this.idKeyType, obj.idKeyType)) return false
         if (!areEqual(this.queryDate, obj.queryDate)) return false
         if (!areEqual(this.vine, obj.vine)) return false
         if (!areEqual(this.dataSourceDateOfUpdate, obj.dataSourceDateOfUpdate)) return false

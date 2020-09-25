@@ -81,9 +81,7 @@ class GenericDataTable extends DataTable {
                 name: mdt.name,
                 queryDate:mdt.queryDate,
                 dataSourceDateOfUpdate:mdt.dataSourceDateOfUpdate,
-                secondaryIdFieldMap: mdt.secondaryIdFieldMap,
                 vine:mdt.vine,
-                idKeysCompleted:mdt.idKeysCompleted
             )
         }
 
@@ -108,30 +106,8 @@ class GenericDataTable extends DataTable {
             this.meta.queryDate = computeDataSetDate(args, 'queryDate')
             this.meta.dataSourceDateOfUpdate = computeDataSourceDate(args, 'dataSourceDateOfUpdate')
 
-            if (args.containsKey("secondaryIdFieldMap")) {
-                if (args.secondaryIdFieldMap) assert args.secondaryIdFieldMap instanceof Map : "Error in GenericDataTable.MetaData.setMeta(): could not parse secondaryIdFieldMap, expected to be of type 'Map', got ${args.secondaryIdFieldMap?.class}.  args: $args"
-
-                this.meta.secondaryIdFieldMap = [:]
-
-                args.secondaryIdFieldMap.each { k, v ->
-                    assert k instanceof String || k instanceof GString : "Error in GenericDataTable.MetaData.setMeta(): could not parse secondaryIdFieldMap, keys expected to be of type 'String' or 'GString'.  args: $args"
-                    assert v instanceof KeyType : "Error in GenericDataTable.MetaData.setMeta(): could not parse secondaryIdFieldMap, values expected to be of type 'KeyType'.  args: $args"
-                    this.meta.secondaryIdFieldMap[toFieldName(k)] = v
-                }
-
-                if (this.meta.secondaryIdFieldMap.keySet().contains(this.meta.idFieldName))
-                    throw new IllegalArgumentException("key defined as both a primary and secondary id field: ${this.meta.idFieldName}")
-            }
-            else {
-                this.meta.secondaryIdFieldMap = [:]
-            }
-
             if (args.containsKey('vine')) {
                 this.meta.vine = args.vine
-            }
-
-            if (args.containsKey('idKeysCompleted')) {
-                this.meta.idKeysCompleted = args.idKeysCompleted
             }
         }
 
@@ -147,16 +123,8 @@ class GenericDataTable extends DataTable {
             return meta.dataSourceDateOfUpdate
         }
 
-        public Map getSecondaryIdFieldMap() {
-            return meta.secondaryIdFieldMap
-        }
-
         public Map getVine() {
             return meta.vine
-        }
-
-        public Map getIdKeysCompleted() {
-            return meta.idKeysCompleted
         }
 
     }
@@ -176,7 +144,6 @@ class GenericDataTable extends DataTable {
         def cypherReturn = args.cypherReturn
 
         def baseName = (args.name) ?: "cypher"
-        def secondaryIdFieldMap = (args.secondaryIdFieldMap) ?: [:]
         def chunkLimit = (args.chunkLimit) ?: 0
 
         // get total records
@@ -193,7 +160,6 @@ class GenericDataTable extends DataTable {
 
         def now = DataTable.FILE_NAME_DATE_FORMAT.format(new java.util.Date())
         def dtArgs = [name:"${baseName}-${now}"]
-        if (secondaryIdFieldMap) dtArgs.secondaryIdFieldMap = secondaryIdFieldMap
         def dt = new GenericDataTable(dtArgs)
 
         // append SKIP and LIMIT clauses to cypher
@@ -281,12 +247,6 @@ class GenericDataTable extends DataTable {
         assert meta.name
         assert meta.queryDate
 
-        if (meta.secondaryIdFieldMap) assert meta.secondaryIdFieldMap instanceof Map : "Error in GenericDataTable.createFromFiles($dir, $name): could not parse secondaryIdFieldMap, expected to be of type 'Map', was of type ${meta.secondaryIdFieldMap.class}.  meta: $meta"
-        meta.secondaryIdFieldMap.each {k, v ->
-            assert k instanceof String : "Error in GenericDataTable.createFromFiles($dir, $name): could not parse secondaryIdFieldMap, keys expected to be of type 'String'.  meta: $meta"
-            assert v instanceof KeyType : "Error in GenericDataTable.createFromFiles($dir, $name): could not parse secondaryIdFieldMap, values expected to be of type 'KeyType'.  meta: $meta"
-        }
-
         def mdt = new GenericDataTable(meta)
 
         def dataFileText = dataFile.text
@@ -319,9 +279,6 @@ class GenericDataTable extends DataTable {
     /** list of recs */
     List<Map<String,String>> data = new ArrayList<Map<String,String>>()
 
-    /** a map from secondary id field names to their key types */
-    Map<String,KeyType> secondaryIdFieldMap = [:]
-
     /** date of the query **/
     Date queryDate
 
@@ -330,15 +287,6 @@ class GenericDataTable extends DataTable {
 
     /** if a query, the date the dataSource was last updated.  Default is null as set in metadata.setMeta **/
     Date dataSourceDateOfUpdate 
-
-    /** 
-     * map if identifiery field to a set of identifiers that have been
-     * completed for that identifier field. since this is a generic data table
-     * and not a mapped data table, there can be several identifier fields.
-     * track them independently.
-     */
-    Map<String,Set<String>> idKeysCompleted = new HashMap<String,Set<String>>()
-
 
     ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTOR
@@ -353,7 +301,7 @@ class GenericDataTable extends DataTable {
         setKeySetComparator(
             new OrderBy(
                 [
-                    { !secondaryIdFieldMap.containsKey(it) }, 
+                    //{ !secondaryIdFieldMap.containsKey(it) }, 
                     { it }
                 ]
             )
@@ -369,8 +317,6 @@ class GenericDataTable extends DataTable {
         this.name = args.name
         this.queryDate = args.queryDate
         this.dataSourceDateOfUpdate = args.dataSourceDateOfUpdate
-        if (args.secondaryIdFieldMap) this.secondaryIdFieldMap = args.secondaryIdFieldMap
-        if (args.idKeysCompleted) this.idKeysCompleted = args.idKeysCompleted
         if (args.vine) this.vine = args.vine
     }
 
@@ -402,8 +348,6 @@ class GenericDataTable extends DataTable {
         if (!(obj instanceof MappedDataTable)) return false
         if (!areEqual(this.idFieldName, obj.idFieldName)) return false
         if (!areEqual(this.idKeyType, obj.idKeyType)) return false
-        if (!areEqual(this.secondaryIdFieldMap, obj.secondaryIdFieldMap)) return false
-        if (!areEqual(this.idKeysCompleted, obj.idKeysCompleted)) return false
         if (!areEqual(this.queryDate, obj.queryDate)) return false
         if (!areEqual(this.vine, obj.vine)) return false
         if (!areEqual(this.dataSourceDateOfUpdate, obj.dataSourceDateOfUpdate)) return false
@@ -419,8 +363,6 @@ class GenericDataTable extends DataTable {
     public MetaData getMetaData() {
         new MetaData(
             name:name, 
-            secondaryIdFieldMap:secondaryIdFieldMap, 
-            idKeysCompleted:idKeysCompleted,
             dataSourceDateOfUpdate:dataSourceDateOfUpdate,
             queryDate:queryDate)
     }
@@ -457,74 +399,6 @@ class GenericDataTable extends DataTable {
         markIdKeysAsCompleted(idFieldName, idKeys.toSet())
     }
 
-
-    /** 
-     * Mark as completed the provided identifiers for the provided identifier
-     * field.
-     *
-     * @param idFieldName The name of the identifier field.
-     * @param idKeys The identifier values that have been completed.
-     *
-     */
-    public void markIdKeysAsCompleted(String idFieldName, Set<String> idKeys) {
-        assert idFieldName != null
-        assert idKeys != null
-        assert idKeys.size() > 0
-
-        idFieldName = toFieldName(idFieldName)
-
-        def keyType = secondaryIdFieldMap.get(idFieldName)
-        if (!keyType) throw new IllegalArgumentException("$idFieldName is not a specified ID field in $secondaryIdFieldMap")
-
-        Set<String> completed = idKeysCompleted.get(idFieldName)
-        if (completed == null) {
-            completed = new HashSet<String>()
-            idKeysCompleted.put(idFieldName, completed)
-        }
-
-        completed.addAll(idKeys)
-    }
-
-
-    /** 
-     * Return the set of completed identifier values for the given identifier
-     * field. Calls completedKeys(String, Set<String>).
-     *
-     * @see completedKeys(String, Set<String>)
-     * @param idFieldName The name of the identifier field.
-     * @param idKeys A list of identifier values.
-     *
-     */
-    public Set<String> completedKeys(String idFieldName, List<String> idKeys) {
-        assert idKeys != null
-        assert idKeys.size() > 0
-        return completedKeys(idFieldName, idKeys.toSet())
-    }
-
-
-    /** 
-     * Return the set of completed identifier values for the given identifier
-     * field.
-     *
-     * @param idFieldName The name of the identifier field.
-     * @param idKeys A set of identifier values.
-     *
-     */
-    public Set<String> completedKeys(String idFieldName, Set<String> idKeys) {
-        assert idFieldName != null
-        assert idKeys != null
-        assert idKeys.size() > 0
-
-        idFieldName = toFieldName(idFieldName)
-
-        Set<String> completed = idKeysCompleted.get(idFieldName)
-
-        if (completed == null) return new HashSet<String>()
-
-        Set<String> intersection = completed.intersect(idKeys)
-
-        return intersection
-    }
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -675,8 +549,6 @@ class GenericDataTable extends DataTable {
             name:name,
             queryDate:queryDate,
             dataSourceDateOfUpdate:dataSourceDateOfUpdate,
-            secondaryIdFieldMap:secondaryIdFieldMap,
-            idKeysCompleted:idKeysCompleted,
             vine:vine
         ]
 

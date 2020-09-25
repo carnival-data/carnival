@@ -629,11 +629,6 @@ abstract class DataTable {
             cv = null
         }
 
-        // special case the secondary id fields
-        else if (fn in secondaryIdFieldMap.keySet()) {
-            cv = formatIdValue(v)
-        }
-
         // special cased types
         else if (v instanceof Date) {
             cv = SqlUtils.timestampAsString(v) 

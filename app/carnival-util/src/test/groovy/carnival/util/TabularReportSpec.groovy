@@ -69,7 +69,7 @@ class TabularReportSpec extends Specification {
         def rec
         
         when:
-        mdt = new TabularReport(name:'mdt-test', secondaryIdFieldMap:[id:EMPI])
+        mdt = new TabularReport(name:'mdt-test')
 
         then:
         mdt.keySet.size() == 0
@@ -120,7 +120,7 @@ class TabularReportSpec extends Specification {
         given:
         Exception e
         def rec
-        def mdt = new TabularReport(name:'mdt-test', secondaryIdFieldMap:[id:EMPI])
+        def mdt = new TabularReport(name:'mdt-test')
 
         when:
         mdt.dataAdd(ID:'id1', V1:'v11')
@@ -149,7 +149,7 @@ class TabularReportSpec extends Specification {
         given:
         Exception e
         def rec
-        def mdt = new TabularReport(name:'mdt-test', secondaryIdFieldMap:[id:EMPI])
+        def mdt = new TabularReport(name:'mdt-test')
 
         when:
         mdt.dataAdd(ID:'id1', V1:'v11')
@@ -178,7 +178,7 @@ class TabularReportSpec extends Specification {
         given:
         Exception e
         def rec
-        def mdt = new TabularReport(name:'mdt-test', secondaryIdFieldMap:[id:EMPI])
+        def mdt = new TabularReport(name:'mdt-test')
 
         when:
         mdt.dataAdd(ID:'id1', V1:'v11')

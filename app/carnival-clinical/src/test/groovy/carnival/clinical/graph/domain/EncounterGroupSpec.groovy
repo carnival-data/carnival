@@ -30,7 +30,7 @@ import static carnival.util.AppUtil.sysPropFalse
 import carnival.core.graph.Core
 import carnival.core.graph.CoreGraph
 import carnival.core.graph.CoreGraphNeo4j
-import carnival.util.KeyType
+import carnival.clinical.util.KeyType
 
 
 /**

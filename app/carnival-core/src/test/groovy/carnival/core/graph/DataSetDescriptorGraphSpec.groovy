@@ -14,7 +14,6 @@ import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.structure.Edge
 
-import carnival.util.KeyType
 import carnival.util.FeatureReport
 import carnival.util.DataSetDescriptor
 import carnival.util.FeatureSetDescriptor
@@ -97,8 +96,7 @@ class DataSetDescriptorGraphSpec extends Specification {
         when:
         report = new FeatureReport(
             name:'test report 1',
-            idFieldName:'ID',
-            idKeyType:KeyType.GENERIC_STRING_ID
+            idFieldName:'ID'
         )
         dsd = new DataSetDescriptor(name:'dsd 1', description:'description for dsd 1')
         def ing1 = new FeatureSetRecipeIngredient(name:'ingredient 1', description:'the first ingredient')
@@ -217,8 +215,7 @@ class DataSetDescriptorGraphSpec extends Specification {
     	when:
         report = new FeatureReport(
             name:'test report 1',
-            idFieldName:'ID',
-            idKeyType:KeyType.GENERIC_STRING_ID
+            idFieldName:'ID'
         )
         dsd = new DataSetDescriptor(name:'dsd 1', description:'description for dsd 1')
         

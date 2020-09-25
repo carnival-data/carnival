@@ -431,8 +431,7 @@ class FeatureReport extends MappedDataTable {
 
         def dd = new FeatureReport(
             name:"${this.name}-dd", 
-            idFieldName:'FEATURE_NAME', 
-            idKeyType:KeyType.GENERIC_STRING_ID
+            idFieldName:'FEATURE_NAME'
         )
         dd.setOrderedKeysMappedDataTableDefault()
 
@@ -727,7 +726,6 @@ class FeatureReport extends MappedDataTable {
     @WithWriteLock
     public void addFeatureSets(FeatureReport source, Closure shouldIncludeField) {
         assert this.idFieldName == source.idFieldName
-        assert this.idKeyType == source.idKeyType
 
         //log.debug "source.keySet: ${source.keySet}"
         source.keySet.each { fieldName ->

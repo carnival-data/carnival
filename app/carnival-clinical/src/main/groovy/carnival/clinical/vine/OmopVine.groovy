@@ -14,7 +14,6 @@ import carnival.core.vine.GenericDataTableVineMethod
 import carnival.core.vine.CachingVine
 import carnival.core.vine.RelationalVinePostgres
 
-import carnival.util.KeyType
 import carnival.util.SqlUtils
 
 import java.security.MessageDigest
@@ -83,8 +82,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine, OmopVineIn
 
             new GenericDataTable.MetaData(
                 name:"omop-patient-all_ids-${inputHash}",
-                idFieldName:'person_id',
-                idKeyType:KeyType.GENERIC_PATIENT_ID
+                idFieldName:'person_id'
             ) 
 
         }
@@ -178,8 +176,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine, OmopVineIn
 
             new GenericDataTable.MetaData(
                 name:"omop-patient-demographics-${inputHash}",
-                idFieldName:'person_source_value',
-                idKeyType:KeyType.GENERIC_PATIENT_ID
+                idFieldName:'person_source_value'
             ) 
 
         }
@@ -259,8 +256,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine, OmopVineIn
 
             new GenericDataTable.MetaData(
                 name:"omop-healthcare-encounters-${inputHash}",
-                idFieldName:'visit_occurrence_id',
-                idKeyType:KeyType.ENCOUNTER_ID
+                idFieldName:'visit_occurrence_id'
             ) 
 
         }
@@ -353,8 +349,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine, OmopVineIn
 
             new GenericDataTable.MetaData(
                 name:"omop-diagnoses-${inputHash}",
-                idFieldName:'condition_occurrence_id',
-                idKeyType:KeyType.ENCOUNTER_ID
+                idFieldName:'condition_occurrence_id'
             ) 
 
         }
@@ -445,8 +440,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine, OmopVineIn
 
             new GenericDataTable.MetaData(
                 name:"omop-medications-${inputHash}",
-                idFieldName:'drug_id',
-                idKeyType:KeyType.ENCOUNTER_ID
+                idFieldName:'drug_id'
             ) 
 
         }
@@ -547,8 +541,7 @@ class OmopVine extends RelationalVinePostgres implements CachingVine, OmopVineIn
 
             new GenericDataTable.MetaData(
                 name:"omop-measurements-${inputHash}",
-                idFieldName:'measurement_id',
-                idKeyType:KeyType.ENCOUNTER_ID
+                idFieldName:'measurement_id'
             ) 
 
         }

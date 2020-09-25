@@ -6,7 +6,6 @@ import spock.lang.Unroll
 import org.apache.commons.math3.util.CombinatoricsUtils
 
 import carnival.core.*
-import carnival.util.KeyType
 
 import carnival.util.*
 
@@ -58,15 +57,13 @@ class FrequencyMatcherSpec extends Specification {
     	when:
     	def caseFeature = new MappedDataTable(
             name:"testCase",
-            idFieldName:'EMPI',
-            idKeyType:KeyType.EMPI)
+            idFieldName:'EMPI')
     	caseFeatureData.eachWithIndex { data, i ->
     		caseFeature.dataAdd(data)
     	}
 
     	def controlFeature = new MappedDataTable(name:"testControl",
-            idFieldName:'EMPI',
-            idKeyType:KeyType.EMPI)
+            idFieldName:'EMPI')
     	controlFeatureData.eachWithIndex { data, i ->
     		controlFeature.dataAdd(data)
     	}
@@ -93,15 +90,13 @@ class FrequencyMatcherSpec extends Specification {
     def "initilization and generateFeatureMatrix test" () {
     	when:
     	def caseFeature = new MappedDataTable(name:"testCase",
-            idFieldName:'EMPI',
-            idKeyType:KeyType.EMPI)
+            idFieldName:'EMPI')
     	caseFeatureData.eachWithIndex { data, i ->
     		caseFeature.add("case$i", data)
     	}
 
     	def controlFeature = new MappedDataTable(name:"testControl",
-            idFieldName:'EMPI',
-            idKeyType:KeyType.EMPI)
+            idFieldName:'EMPI')
     	controlFeatureData.eachWithIndex { data, i ->
     		controlFeature.dataAdd(data)
     	}
@@ -146,15 +141,13 @@ class FrequencyMatcherSpec extends Specification {
     def "generateFrequencyPercentageVector test" () {
     	when:
     	def caseFeature = new MappedDataTable(name:"testCase",
-                    idFieldName:'EMPI',
-                idKeyType:KeyType.EMPI)
+                    idFieldName:'EMPI')
     	caseFeatureData.eachWithIndex { data, i ->
     		caseFeature.add("case$i", data)
     	}
 
     	def controlFeature = new MappedDataTable(name:"testControl",
-                    idFieldName:'EMPI',
-                idKeyType:KeyType.EMPI)
+                    idFieldName:'EMPI')
     	controlFeatureData.eachWithIndex { data, i ->
     		controlFeature.dataAdd(data)
     	}
@@ -206,11 +199,9 @@ class FrequencyMatcherSpec extends Specification {
     def "generatePossibleFrequencyCountVectors test" () {
     	when:
     	def caseFeature = new MappedDataTable(name:"testCase",
-                    idFieldName:'EMPI',
-                idKeyType:KeyType.EMPI)
+                    idFieldName:'EMPI')
     	def controlFeature = new MappedDataTable(name:"testControl",
-                    idFieldName:'EMPI',
-                idKeyType:KeyType.EMPI)
+                    idFieldName:'EMPI')
 
     	double[] dFPercent  = fPercent
 
@@ -255,11 +246,9 @@ class FrequencyMatcherSpec extends Specification {
     def "calculatePossibleCombinationsPerFeature test" () {
     	when:
     	def caseFeature = new MappedDataTable(name:"testCase",
-                    idFieldName:'EMPI',
-                idKeyType:KeyType.EMPI)
+                    idFieldName:'EMPI')
     	def controlFeature = new MappedDataTable(name:"testControl",
-                    idFieldName:'EMPI',
-                idKeyType:KeyType.EMPI)
+                    idFieldName:'EMPI')
 
     	int[] requiredCountVector = new int[requiredCountData.size()]
     	requiredCountData.eachWithIndex {val, i -> requiredCountVector[i] = val}
@@ -313,11 +302,9 @@ class FrequencyMatcherSpec extends Specification {
     def "calculatePossibleHitCombinationsPerFeature test" () {
     	when:
     	def caseFeature = new MappedDataTable(name:"testCase",
-                    idFieldName:'EMPI',
-                idKeyType:KeyType.EMPI)
+                    idFieldName:'EMPI')
     	def controlFeature = new MappedDataTable(name:"testControl",
-                    idFieldName:'EMPI',
-                idKeyType:KeyType.EMPI)
+                    idFieldName:'EMPI')
 
     	int[] requiredCountVector = new int[requiredCountData.size()]
     	requiredCountData.eachWithIndex {val, i -> requiredCountVector[i] = val}
@@ -395,11 +382,9 @@ class FrequencyMatcherSpec extends Specification {
     	when:
     	println "---determinsitic---expected:$expectedResult"
     	def caseFeature = new MappedDataTable(name:"testCase",
-                    idFieldName:'EMPI',
-                idKeyType:KeyType.EMPI)
+                    idFieldName:'EMPI')
     	def controlFeature = new MappedDataTable(name:"testControl",
-                    idFieldName:'EMPI',
-                idKeyType:KeyType.EMPI)
+                    idFieldName:'EMPI')
 
     	int[] requiredCountVector = new int[requiredCountData.size()]
     	requiredCountData.eachWithIndex {val, i -> requiredCountVector[i] = val}
@@ -582,11 +567,9 @@ class FrequencyMatcherSpec extends Specification {
         when:
         println "---random---$expectedResult"
         def caseFeature = new MappedDataTable(name:"testCase",
-                    idFieldName:'EMPI',
-                idKeyType:KeyType.EMPI)
+                    idFieldName:'EMPI')
         def controlFeature = new MappedDataTable(name:"testControl",
-                    idFieldName:'EMPI',
-                idKeyType:KeyType.EMPI)
+                    idFieldName:'EMPI')
 
         int[] requiredCountVector = new int[requiredCountData.size()]
         requiredCountData.eachWithIndex {val, i -> requiredCountVector[i] = val}
@@ -767,195 +750,4 @@ class FrequencyMatcherSpec extends Specification {
         ]
     }
 
-    /*
-    @Unroll
-    def "dynamic doFeatureMatching test" () {
-        when:
-        println "---random---$expectedResult"
-        def caseFeature = new MappedDataTable(name:"testCase",
-                idFieldName:'EMPI',
-                idKeyType:KeyType.EMPI)
-        def controlFeature = new MappedDataTable(name:"testControl",
-                idFieldName:'EMPI',
-                idKeyType:KeyType.EMPI)
-
-        int[] requiredCountVector = new int[requiredCountData.size()]
-        requiredCountData.eachWithIndex {val, i -> requiredCountVector[i] = val}
-
-        int[][] populationFeatureMatrix = new int[populationFeatureData.size()][populationFeatureData[0].size]
-        populationFeatureData.eachWithIndex {row, i ->
-            row.eachWithIndex {val, j ->
-                populationFeatureMatrix[i][j] = val
-            }
-        }
-
-        def fMatch = new FrequencyMatcher(caseFeature, controlFeature, featureStrata)
-        fMatch.GENERAL_STRATEGY = RowSelectionStrategy.DYNAMIC
-
-        // hardcode these for the tests
-        fMatch.numRequestedControls = numControls
-        fMatch.controlPopulationFeatureMatrix = populationFeatureMatrix
-        def result = fMatch.doFeatureMatching(requiredCountVector) 
-
-        then:
-        println "----actual:$result"
-        def combos = fMatch.calculatePossibleHitCombinationsPerFeature(populationFeatureMatrix, requiredCountVector)
-        combos == expectedComboVector
-
-        //fMatch.featureIndexRanking == expectedFeatureIndexRanking
-        result.success == expectedResult.success
-        result.message == expectedResult.message
-        result.rowIds as Set == expectedResult.rowIds as Set
-
-
-        where:
-        featureStrata << [
-            [MappedDataTableStratum.generateStandardGenderMappedDataTableStratum("sex"), 
-            MappedDataTableStratum.generateStandardRaceMappedDataTableStratum("race")],
-            [MappedDataTableStratum.generateStandardGenderMappedDataTableStratum("sex"), 
-            MappedDataTableStratum.generateStandardRaceMappedDataTableStratum("race")],
-            [MappedDataTableStratum.generateStandardGenderMappedDataTableStratum("sex"), 
-            MappedDataTableStratum.generateStandardRaceMappedDataTableStratum("race")],
-            [MappedDataTableStratum.generateStandardGenderMappedDataTableStratum("sex"), 
-            MappedDataTableStratum.generateStandardRaceMappedDataTableStratum("race")],
-            [MappedDataTableStratum.generateStandardGenderMappedDataTableStratum("sex"), 
-            MappedDataTableStratum.generateStandardRaceMappedDataTableStratum("race")]
-        ]
-
-        requiredCountData << [
-                [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                [ 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [ 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                [ 6, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        ]
-        populationFeatureData << [
-            [   [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
-            ],
-            [   [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
-            ],
-            [   [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
-            ],
-            [   [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0 ]
-            ],
-             [  [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-            ]
-        ]
-        numControls << [3, 3, 3, 3, 6]
-
-        //TODO: update for new ranking scheme
-        expectedFeatureIndexRanking << [
-            [   
-                ["index":1, "rank":-1],
-                ["index":2, "rank":-1],
-                ["index":3, "rank":-1],
-                ["index":4, "rank":-1],
-                ["index":5, "rank":-1],
-                ["index":6, "rank":-1],
-                ["index":7, "rank":-1],
-                ["index":8, "rank":-1],
-                ["index":9, "rank":-1],
-                ["index":10, "rank":-1],
-                ["index":0, "rank":2],
-            ],
-            [   
-                ["index":2, "rank":0],
-                ["index":3, "rank":0],
-                ["index":4, "rank":0],
-                ["index":5, "rank":0],
-                ["index":6, "rank":0],
-                ["index":7, "rank":0],
-                ["index":8, "rank":0],
-                ["index":9, "rank":0],
-                ["index":10, "rank":0],
-                ["index":0, "rank":2],
-                ["index":1, "rank":3],
-            ],
-            [   
-                ["index":1, "rank":0],
-                ["index":2, "rank":0],
-                ["index":3, "rank":0],
-                ["index":4, "rank":0],
-                ["index":5, "rank":0],
-                ["index":6, "rank":0],
-                ["index":7, "rank":0],
-                ["index":8, "rank":0],
-                ["index":9, "rank":0],
-                ["index":10, "rank":0],
-                ["index":0, "rank":2],
-            ],
-            [   
-                ["index":2, "rank":0],
-                ["index":3, "rank":0],
-                ["index":4, "rank":0],
-                ["index":5, "rank":0],
-                ["index":6, "rank":0],
-                ["index":7, "rank":0],
-                ["index":8, "rank":0],
-                ["index":9, "rank":0],
-                ["index":10, "rank":0],
-                ["index":0, "rank":2],
-                ["index":1, "rank":3],
-            ],
-            [   
-                ["index":2, "rank":0],
-                ["index":3, "rank":0],
-                ["index":4, "rank":0],
-                ["index":5, "rank":0],
-                ["index":6, "rank":0],
-                ["index":7, "rank":0],
-                ["index":8, "rank":0],
-                ["index":9, "rank":0],
-                ["index":10, "rank":0],
-                ["index":0, "rank":1],
-                ["index":1, "rank":5],
-            ],
-        ]
-
-        // becomes 'rank' in expectedFeatureindexRanking
-        expectedComboVector << [
-            [2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-            [2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [1716, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        ]
-
-        expectedResult << [
-            [success:false, message:"no exact solution exists"],
-            [success:true, message:"solution found", rowIds:[1,3,4]],
-            [success:true, message:"solution found", rowIds:[0,2,3]],
-            [success:false, message:"no selection found"],
-            [success:true, message:"solution found", rowIds:[6,7,8,9,10,11]],
-        ]
-    }
-    */
 }

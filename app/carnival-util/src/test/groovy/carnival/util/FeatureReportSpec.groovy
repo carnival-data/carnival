@@ -38,9 +38,6 @@ class FeatureReportSpec extends Specification {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    static EMPI = KeyType.EMPI
-    static MRN = KeyType.MRN
-
     @Shared testDate
 
 
@@ -77,7 +74,7 @@ class FeatureReportSpec extends Specification {
     def "shift date time"() {
         given:
         def res
-        def frp = new FeatureReport(name:'frp-test', idFieldName:'EMPI', idKeyType:KeyType.EMPI)
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'EMPI')
         frp.dataModes([
             FeatureReport.DataMode.ADD_SUBJECT, 
             FeatureReport.DataMode.ADD_FEATURE, 
@@ -138,7 +135,7 @@ class FeatureReportSpec extends Specification {
     def "shift dates basic"() {
         given:
         def res
-        def frp = new FeatureReport(name:'frp-test', idFieldName:'EMPI', idKeyType:KeyType.EMPI)
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'EMPI')
         frp.dataModes([
             FeatureReport.DataMode.ADD_SUBJECT, 
             FeatureReport.DataMode.ADD_FEATURE, 
@@ -222,7 +219,7 @@ class FeatureReportSpec extends Specification {
         given:
         def res
 
-        def frp = new FeatureReport(name:'frp-test', idFieldName:'EMPI', idKeyType:KeyType.EMPI)
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'EMPI')
         frp.dataModes([FeatureReport.DataMode.ADD_SUBJECT, FeatureReport.DataMode.ADD_FEATURE])
         (1..3).each { frp.addSubject("$it") }
 
@@ -281,7 +278,7 @@ class FeatureReportSpec extends Specification {
         given:
         def res
 
-        def frp = new FeatureReport(name:'frp-test', idFieldName:'EMPI', idKeyType:KeyType.EMPI)
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'EMPI')
         frp.dataModes([FeatureReport.DataMode.ADD_SUBJECT, FeatureReport.DataMode.ADD_FEATURE])
         (1..3).each { frp.addSubject("$it") }
 
@@ -331,7 +328,7 @@ class FeatureReportSpec extends Specification {
         given:
         def res
 
-        def frp = new FeatureReport(name:'frp-test', idFieldName:'EMPI', idKeyType:KeyType.EMPI)
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'EMPI')
         frp.dataModes([FeatureReport.DataMode.ADD_SUBJECT, FeatureReport.DataMode.ADD_FEATURE])
         (1..4).each { frp.addSubject("$it") }
 
@@ -379,7 +376,7 @@ class FeatureReportSpec extends Specification {
         given:
         def res
 
-        def frp = new FeatureReport(name:'frp-test', idFieldName:'EMPI', idKeyType:KeyType.EMPI)
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'EMPI')
         frp.dataModes([FeatureReport.DataMode.ADD_SUBJECT, FeatureReport.DataMode.ADD_FEATURE])
         (1..3).each { frp.addSubject("$it") }
 
@@ -416,7 +413,7 @@ class FeatureReportSpec extends Specification {
         given:
         def res
 
-        def frp = new FeatureReport(name:'frp-test', idFieldName:'EMPI', idKeyType:KeyType.EMPI)
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'EMPI')
         frp.dataModes([FeatureReport.DataMode.ADD_SUBJECT, FeatureReport.DataMode.ADD_FEATURE])
         (1..3).each { frp.addSubject("$it") }
 
@@ -464,7 +461,7 @@ class FeatureReportSpec extends Specification {
         given:
         def res
 
-        def frp = new FeatureReport(name:'frp-test', idFieldName:'EMPI', idKeyType:KeyType.EMPI)
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'EMPI')
         frp.dataModes([FeatureReport.DataMode.ADD_SUBJECT, FeatureReport.DataMode.ADD_FEATURE])
         (1..3).each { frp.addSubject("$it") }
 
@@ -506,7 +503,7 @@ class FeatureReportSpec extends Specification {
         given:
         def res
 
-        def frp = new FeatureReport(name:'frp-test', idFieldName:'EMPI', idKeyType:KeyType.EMPI)
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'EMPI')
         frp.dataModes([FeatureReport.DataMode.ADD_SUBJECT, FeatureReport.DataMode.ADD_FEATURE])
         (1..3).each { frp.addSubject("$it") }
 
@@ -540,7 +537,7 @@ class FeatureReportSpec extends Specification {
 
     def "multiFeatureNames"() {
         given:
-        def frp = new FeatureReport(name:'frp-test', idFieldName:'EMPI', idKeyType:KeyType.EMPI)
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'EMPI')
         def res
         List<Map<String,String>> data = new ArrayList<Map>()
 
@@ -571,7 +568,7 @@ class FeatureReportSpec extends Specification {
     def "extract boolean features"() {
         given:
         Exception e
-        def frp = new FeatureReport(name:'frp-test', idFieldName:'ID', idKeyType:KeyType.GENERIC_STRING_ID)
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'ID')
         frp.dataModes([FeatureReport.DataMode.ADD_SUBJECT, FeatureReport.DataMode.ADD_FEATURE])
         frp.addSubject('id1')
         def data
@@ -598,7 +595,7 @@ class FeatureReportSpec extends Specification {
     def "mode extract boolean features"() {
         given:
         Exception e
-        def frp = new FeatureReport(name:'frp-test', idFieldName:'ID', idKeyType:KeyType.GENERIC_STRING_ID)
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'ID')
         frp.dataMode(FeatureReport.DataMode.ADD_SUBJECT)
         frp.addSubject('id1')
         
@@ -625,7 +622,7 @@ class FeatureReportSpec extends Specification {
     def "remove feature set"() {
         given:
         Exception e
-        def frp = new FeatureReport(name:'frp-test', idFieldName:'ID', idKeyType:KeyType.GENERIC_STRING_ID)
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'ID')
         frp.dataModes([FeatureReport.DataMode.ADD_SUBJECT, FeatureReport.DataMode.ADD_FEATURE])
 
         when:
@@ -665,7 +662,7 @@ class FeatureReportSpec extends Specification {
     def "add features"() {
         given:
         Exception e
-        def frp = new FeatureReport(name:'frp-test', idFieldName:'ID', idKeyType:KeyType.GENERIC_STRING_ID)
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'ID')
         frp.dataModes([FeatureReport.DataMode.ADD_SUBJECT, FeatureReport.DataMode.ADD_FEATURE])
         frp.addSubject('id1')
 
@@ -688,7 +685,7 @@ class FeatureReportSpec extends Specification {
     def "mode add features"() {
         given:
         Exception e
-        def frp = new FeatureReport(name:'frp-test', idFieldName:'ID', idKeyType:KeyType.GENERIC_STRING_ID)
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'ID')
         frp.dataMode(FeatureReport.DataMode.ADD_SUBJECT)
         frp.addSubject('id1')
 
@@ -711,7 +708,7 @@ class FeatureReportSpec extends Specification {
     def "add feature"() {
         given:
         Exception e
-        def frp = new FeatureReport(name:'frp-test', idFieldName:'ID', idKeyType:KeyType.GENERIC_STRING_ID)
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'ID')
         frp.dataModes([FeatureReport.DataMode.ADD_SUBJECT, FeatureReport.DataMode.ADD_FEATURE])
 
         frp.addSubject('id1')
@@ -734,7 +731,7 @@ class FeatureReportSpec extends Specification {
     def "mode add feature"() {
         given:
         Exception e
-        def frp = new FeatureReport(name:'frp-test', idFieldName:'ID', idKeyType:KeyType.GENERIC_STRING_ID)
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'ID')
         frp.dataMode(FeatureReport.DataMode.ADD_SUBJECT)
         frp.addSubject('id1')
 
@@ -758,7 +755,7 @@ class FeatureReportSpec extends Specification {
         given:
         Exception e
         def features
-        def frp = new FeatureReport(name:'frp-test', idFieldName:'ID', idKeyType:KeyType.GENERIC_STRING_ID)
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'ID')
 
         when:
         frp.dataModes << FeatureReport.DataMode.ADD_SUBJECT
@@ -775,7 +772,7 @@ class FeatureReportSpec extends Specification {
     def "add subject"() {
         given:
         Exception e
-        def frp = new FeatureReport(name:'frp-test', idFieldName:'ID', idKeyType:KeyType.GENERIC_STRING_ID)
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'ID')
 
         when:
         frp.dataModes << FeatureReport.DataMode.ADD_SUBJECT
@@ -789,7 +786,7 @@ class FeatureReportSpec extends Specification {
     def "mode add subject"() {
         given:
         Exception e
-        def frp = new FeatureReport(name:'frp-test', idFieldName:'ID', idKeyType:KeyType.GENERIC_STRING_ID)
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'ID')
 
         when:
         frp.addSubject('id1')

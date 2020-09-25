@@ -41,7 +41,6 @@ class FrequencyMatcher {
 	// -- input
 	String resultFeatureName = "fMatchControlSelection"
 	def resultFeatureIdFieldName
-	def resultFeatureIdKeyType
 
 	int numRequestedControls  // number of requested controls
 
@@ -100,7 +99,6 @@ class FrequencyMatcher {
 		assert controlFeature
 		assert featureStrata
 		assert caseFeature.idFieldName == controlFeature.idFieldName
-		assert caseFeature.idKeyType == controlFeature.idKeyType
 
 		this.caseData = caseFeature
 		this.controlData = controlFeature
@@ -108,7 +106,6 @@ class FrequencyMatcher {
 
 		if(name) this.resultFeatureName = resultFeatureName
 		this.resultFeatureIdFieldName = caseFeature.idFieldName
-		this.resultFeatureIdKeyType = caseFeature.idKeyType
 
 		initilizeFeatures()
 		initilizeControlPopulationFeatureMatrix()
@@ -415,8 +412,7 @@ class FrequencyMatcher {
 
 	private generateControlSelectionFeature(def selectedRows, def potentialRows) {
 		controlSelectionFeature = new MappedDataTable(name:resultFeatureName,
-			idFieldName: resultFeatureIdFieldName,
-			idKeyType: resultFeatureIdKeyType)
+			idFieldName: resultFeatureIdFieldName)
 
 		(0..<controlPopulationRowKeyLookup.size()).each { i ->
 			def val = [:]

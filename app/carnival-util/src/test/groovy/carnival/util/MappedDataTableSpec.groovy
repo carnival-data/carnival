@@ -86,31 +86,6 @@ class MappedDataTableSpec extends Specification {
 
 
     ///////////////////////////////////////////////////////////////////////////
-    // KEY TYPE
-    ///////////////////////////////////////////////////////////////////////////
-
-    def "default idKeyType"() {
-        given:
-        def mdt
-        Throwable e
-
-        when:        
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
-
-        then:
-        mdt.idKeyType == KeyType.GENERIC_STRING_ID
-
-        when:
-        mdt.dataAddWithModifications(id:'id1', v1:'v11')
-
-        then:
-        mdt.dataGet('id1').size() == 2
-        mdt.dataGet('id1').get(DataTable.toFieldName('id')) == 'id1'
-        mdt.dataGet('id1').get(DataTable.toFieldName('v1')) == 'v11'
-    }
-
-
-    ///////////////////////////////////////////////////////////////////////////
     // MAPPEDDATAINTERFACE - MAPPED DATA INTERFACE
     ///////////////////////////////////////////////////////////////////////////
 
@@ -120,7 +95,7 @@ class MappedDataTableSpec extends Specification {
         def mdt
         def res
         Throwable e
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
 
         when:
         res = [
@@ -179,7 +154,7 @@ class MappedDataTableSpec extends Specification {
         given:
         def mdt
         Throwable e
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
 
         when:
         mdt.dataAddWithModifications([id:'id1', v1:'v11'], [dataFieldPrefix:'pre_'])
@@ -227,7 +202,7 @@ class MappedDataTableSpec extends Specification {
     def "dataAppend(id,map) data cannot contain id field"() {
         given:
         def mdt
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID')
         def mdtData
         Throwable e
 
@@ -244,7 +219,7 @@ class MappedDataTableSpec extends Specification {
     def "dataAppend(id,map) cannot add conflicting"() {
         given:
         def mdt
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID')
         def mdtData
         Throwable e
 
@@ -268,7 +243,7 @@ class MappedDataTableSpec extends Specification {
     def "dataAppend(id,map) uses toIdValue"() {
         given:
         def mdt
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID')
         def mdtData
 
         when:
@@ -291,7 +266,7 @@ class MappedDataTableSpec extends Specification {
     def "dataAppend(id,map) secondary id field"() {
         given:
         def mdt
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID')
         def mdtData
 
         when:
@@ -332,7 +307,7 @@ class MappedDataTableSpec extends Specification {
     def "dataAppend(id,map) field name formatting"() {
         given:
         def mdt
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID')
         def mdtData
 
         when:
@@ -355,7 +330,7 @@ class MappedDataTableSpec extends Specification {
     def "dataAppend(id,map)"() {
         given:
         def mdt
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID')
         def mdtData
 
         when:
@@ -378,7 +353,7 @@ class MappedDataTableSpec extends Specification {
     def "dataAppend individual vals uses toIdValue"() {
         given:
         def mdt
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID')
         def mdtData
 
         when:
@@ -400,7 +375,7 @@ class MappedDataTableSpec extends Specification {
     def "dataAppend individual vals secondary id field"() {
         given:
         def mdt
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID')
         def mdtData
 
         when:
@@ -472,7 +447,7 @@ class MappedDataTableSpec extends Specification {
     def "dataAppend individual vals field name formatting"() {
         given:
         def mdt
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID')
         def mdtData
 
         when:
@@ -510,7 +485,7 @@ class MappedDataTableSpec extends Specification {
     def "dataAppend individual vals"() {
         given:
         def mdt
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID')
         def mdtData
 
         when:
@@ -556,7 +531,7 @@ class MappedDataTableSpec extends Specification {
         def res
         def rec
         Throwable e
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
 
         when:
         res = mockResultSet(id:'id1', d1:null)
@@ -585,7 +560,7 @@ class MappedDataTableSpec extends Specification {
         def res
         def rec
         Throwable e
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
 
         when:
         res = [id:'id1', d1:null] as GroovyRowResult
@@ -608,7 +583,7 @@ class MappedDataTableSpec extends Specification {
 
     def "createFromFiles empty strings are maintained"() {
         given:
-        def mdt = new MappedDataTable(name: 'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        def mdt = new MappedDataTable(name: 'mdt-test', idFieldName:'id')
         def rec
         def file
         def buildDir = new File('build')
@@ -645,7 +620,7 @@ class MappedDataTableSpec extends Specification {
 
     def "createFromFiles canonical nulls are explicitly mapped to null"() {
         given:
-        def mdt = new MappedDataTable(name: 'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        def mdt = new MappedDataTable(name: 'mdt-test', idFieldName:'id')
         def rec
         def file
         def buildDir = new File('build')
@@ -681,7 +656,7 @@ class MappedDataTableSpec extends Specification {
 
     def "createFromFiles missing values are not added to the row map"() {
         given:
-        def mdt = new MappedDataTable(name: 'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        def mdt = new MappedDataTable(name: 'mdt-test', idFieldName:'id')
         def rec
         def file
         def buildDir = new File('build')
@@ -716,7 +691,7 @@ class MappedDataTableSpec extends Specification {
 
     def "writeDataFile write missing values as canonical string"() {
         given:
-        def mdt = new MappedDataTable(name: 'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        def mdt = new MappedDataTable(name: 'mdt-test', idFieldName:'id')
         def d
         def file
 
@@ -750,7 +725,7 @@ class MappedDataTableSpec extends Specification {
 
     def "writeDataFile write null values as canonical string"() {
         given:
-        def mdt = new MappedDataTable(name: 'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        def mdt = new MappedDataTable(name: 'mdt-test', idFieldName:'id')
         def d
         def file
 
@@ -778,7 +753,7 @@ class MappedDataTableSpec extends Specification {
         given:
         def res
         def d
-        def mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        def mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
 
         when:
         mdt.dataAdd(id:'id1', v1:null)
@@ -823,48 +798,44 @@ class MappedDataTableSpec extends Specification {
         def now = new Date()
 
         when:
-        mdt = new MappedDataTable(name:"some-name", idFieldName:"id-key", idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:"some-name", idFieldName:"id-key")
 
         then:
         mdt != null
         mdt.name == "some-name"
         mdt.idFieldName == DataTable.toFieldName("id-key")
-        mdt.idKeyType == KeyType.EMPI
         mdt.queryDate.getTime() - now.getTime() <= 1000
         mdt.dataSourceDateOfUpdate == null
 
         when:
-        mdt = new MappedDataTable(name:"some-name", idFieldName:"id-key", idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:"some-name", idFieldName:"id-key")
 
         then:
         mdt != null
         mdt.name == "some-name"
         mdt.idFieldName == DataTable.toFieldName("id-key")
-        mdt.idKeyType == KeyType.EMPI
         mdt.queryDate.getTime() - now.getTime() <= 1000
 
         when:
-        mdt = new MappedDataTable(name:"some-name", idFieldName:"id-key", idKeyType:KeyType.EMPI, queryDate:testDate)
+        mdt = new MappedDataTable(name:"some-name", idFieldName:"id-key", queryDate:testDate)
 
         then:
         mdt != null
         mdt.name == "some-name"
         mdt.idFieldName == DataTable.toFieldName("id-key")
-        mdt.idKeyType == KeyType.EMPI
         mdt.queryDate.equals(testDate)
 
         when:
-        mdt = new MappedDataTable(name:"some-name", idFieldName:"id-key", idKeyType:KeyType.EMPI, queryDate:DataTable.dataSetDateToString(testDate))
+        mdt = new MappedDataTable(name:"some-name", idFieldName:"id-key", queryDate:DataTable.dataSetDateToString(testDate))
 
         then:
         mdt != null
         mdt.name == "some-name"
         mdt.idFieldName == DataTable.toFieldName("id-key")
-        mdt.idKeyType == KeyType.EMPI
         mdt.queryDate.equals(testDate)
 
         when:
-        mdt = new MappedDataTable(name:"some-name", idFieldName:"id-key", idKeyType:KeyType.EMPI, queryDate:"bad dates")
+        mdt = new MappedDataTable(name:"some-name", idFieldName:"id-key", queryDate:"bad dates")
 
         then:
         e = thrown()
@@ -892,7 +863,7 @@ class MappedDataTableSpec extends Specification {
         !emf.exists()
 
         when:
-        def mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        def mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
         def files = mdt.writeFiles(buildDir)
         println "files: ${files}"
         def df = files.find { it.canonicalPath.endsWith('.csv') }
@@ -955,7 +926,7 @@ class MappedDataTableSpec extends Specification {
         !emf.exists()
 
         when:
-        def mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        def mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
         def files = mdt.writeFiles(buildDir)
         println "files: ${files}"
         def df = files.find { it.canonicalPath.endsWith('.csv') }
@@ -984,7 +955,6 @@ class MappedDataTableSpec extends Specification {
         mdtFromFile.data.size() == 0
         mdtFromFile.name == "mdt-test"
         mdtFromFile.idFieldName == DataTable.toFieldName("id")
-        mdtFromFile.idKeyType == KeyType.EMPI
     }
 
 
@@ -1046,7 +1016,7 @@ class MappedDataTableSpec extends Specification {
 
 
 
-        def mdt = new MappedDataTable(name:'mdt-test-vine', idFieldName:'id', idKeyType:KeyType.EMPI, vine:vine)
+        def mdt = new MappedDataTable(name:'mdt-test-vine', idFieldName:'id', vine:vine)
         def files = mdt.writeFiles(buildDir)
         println "files: ${files}"
         def df = files.find { it.canonicalPath.endsWith('.csv') }
@@ -1078,7 +1048,6 @@ class MappedDataTableSpec extends Specification {
         mdtFromFile.data.size() == 0
         mdtFromFile.name == "mdt-test-vine"
         mdtFromFile.idFieldName == DataTable.toFieldName("id")
-        mdtFromFile.idKeyType == KeyType.EMPI
         mdtFromFile.vine
         mdtFromFile.vine.name.equals(vine.name)
         mdtFromFile.vine.method.equals(vine.method)
@@ -1103,7 +1072,7 @@ class MappedDataTableSpec extends Specification {
         def emf = new File('build/md-test.yaml')
         if (edf.exists()) edf.delete()
         if (emf.exists()) emf.delete()
-        def mdt0 = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI, queryDate:testDate)
+        def mdt0 = new MappedDataTable(name:'mdt-test', idFieldName:'id', queryDate:testDate)
         mdt0.dataAddAllListList([
             ['id', 'v1']
             , ['id1', 'v11']
@@ -1120,7 +1089,6 @@ class MappedDataTableSpec extends Specification {
         mdt.name == 'mdt-test'
         mdt.queryDate == testDate
         mdt.idFieldName == DataTable.toFieldName('id')
-        mdt.idKeyType == KeyType.EMPI
 
         when:
         def data = mdt.data
@@ -1163,7 +1131,7 @@ class MappedDataTableSpec extends Specification {
         !emf.exists()
 
         when:
-        def mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        def mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
         mdt.dataAddAllListList([
             ['id', 'v1']
             , ['id1', 'v11']
@@ -1222,7 +1190,7 @@ class MappedDataTableSpec extends Specification {
             ]
         ]
 
-        def mdt = new MappedDataTable(name:'mdt-test-vine', idFieldName:'id', idKeyType:KeyType.EMPI, vine:vine)
+        def mdt = new MappedDataTable(name:'mdt-test-vine', idFieldName:'id', vine:vine)
         def files = mdt.writeFiles(buildDir)
         println "files: ${files}"
         def df = files.find { it.canonicalPath.endsWith('.csv') }
@@ -1265,7 +1233,7 @@ class MappedDataTableSpec extends Specification {
         def yaml = new org.yaml.snakeyaml.Yaml(new DataTableRepresenter())
 
         when:
-        mdt = new MappedDataTable(name:'mdt-test-file', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test-file', idFieldName:'id')
         file = mdt.writeMetaFile(new File('build'))
         println "${file.name} ${file.canonicalPath}"
 
@@ -1280,11 +1248,10 @@ class MappedDataTableSpec extends Specification {
         then:
         meta.name == 'mdt-test-file'
         meta.idFieldName == DataTable.toFieldName('id')
-        "${meta.idKeyType}" == "EMPI"
         meta.queryDate.getTime() - now.getTime() <= 1000
 
         when:
-        mdt = new MappedDataTable(name:'mdt-test-file', idFieldName:'id', idKeyType:KeyType.EMPI, queryDate:testDate)
+        mdt = new MappedDataTable(name:'mdt-test-file', idFieldName:'id', queryDate:testDate)
         mdt.dataSourceDateOfUpdate = yesterday
         file = mdt.writeMetaFile(new File('build'))
         println "${file.name} ${file.canonicalPath}"
@@ -1305,7 +1272,6 @@ class MappedDataTableSpec extends Specification {
         //metaDataSourceDateOfUpdate.getTime().equals(yesterday.getTime())
         metaDataSourceDateOfUpdate.getTime() - yesterday.getTime() <= 1000 // milliseconds truncated during yaml conversion
         meta.idFieldName == DataTable.toFieldName('id')
-        "${meta.idKeyType}" == "EMPI"
     }
 
 
@@ -1320,8 +1286,7 @@ class MappedDataTableSpec extends Specification {
         when:
         mdt = new MappedDataTable(
             name:'mdt-test', 
-            idFieldName:'id', 
-            idKeyType:KeyType.EMPI
+            idFieldName:'id'
         )
         file = mdt.writeMetaFile(new File('build'))
         println "${file.name} ${file.canonicalPath}"
@@ -1337,7 +1302,6 @@ class MappedDataTableSpec extends Specification {
         then:
         meta.name == 'mdt-test'
         meta.idFieldName == DataTable.toFieldName('id')
-        "${meta.idKeyType}" == "EMPI"
     }
 
 
@@ -1350,7 +1314,7 @@ class MappedDataTableSpec extends Specification {
         Throwable e
 
         when:
-        mdt = new MappedDataTable(name: 'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name: 'mdt-test', idFieldName:'id')
         mdt.dataAddAllListList([
             ['id', 'v1']
             , ['id1', 'v11']
@@ -1387,7 +1351,7 @@ class MappedDataTableSpec extends Specification {
         Throwable e
 
         when:
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
         mdt.dataAddAllListList([
             ['id', 'v1']
             , ['id1', 'v11']
@@ -1428,7 +1392,7 @@ class MappedDataTableSpec extends Specification {
         //def outMetaFile = new File('build/mdt-test.yaml')
 
         when:
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
         mdt.writeMetaFile(new File('build'))
         mdt.dataAdd(id:'id1', v1:d1)
         mdt.dataAdd(id:'id2', v1:d2)
@@ -1475,7 +1439,7 @@ class MappedDataTableSpec extends Specification {
         final String mdtName = 'wfdfp-test'
 
         when:
-        mdt = new MappedDataTable(name:mdtName, idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:mdtName, idFieldName:'id')
         files = mdt.writeFiles(buildDir)
         mdt = MappedDataTable.createFromFiles(buildDir, mdtName)
 
@@ -1502,7 +1466,7 @@ class MappedDataTableSpec extends Specification {
         Collection<GroovyRowResult> res
         def d
         Throwable e
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
 
         when:
         def dl = [
@@ -1556,7 +1520,7 @@ class MappedDataTableSpec extends Specification {
         def res
         def d
         Throwable e
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
 
         when:
         res = new TestCsvIterator(id:0, d1:1)
@@ -1585,7 +1549,7 @@ class MappedDataTableSpec extends Specification {
         Throwable e
 
         when:
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
         mdt.dataAddAllListList([
             ['id', 'd1']
             , ['id1', 'd11']
@@ -1603,7 +1567,7 @@ class MappedDataTableSpec extends Specification {
         Throwable e
 
         when:
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
         mdt.dataAddAllListList([
             ['id', 'd1']
             , ['id1']
@@ -1620,7 +1584,7 @@ class MappedDataTableSpec extends Specification {
         Throwable e
 
         when:
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
         mdt.dataAddAllListList([
             ['idx', 'd1']
             , ['id1', 'd11']
@@ -1638,7 +1602,7 @@ class MappedDataTableSpec extends Specification {
         Throwable e
 
         when:
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
         mdt.dataAddAllListList([
             ['Id', 'id']
             , ['id1', 'd11']
@@ -1657,7 +1621,7 @@ class MappedDataTableSpec extends Specification {
         Throwable e
 
         when:
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
         mdt.dataAddAllListList([
             ['id', 'd1']
             , ['id1', 'd11']
@@ -1670,7 +1634,7 @@ class MappedDataTableSpec extends Specification {
         mdt.data.size() == 1
 
         when:
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
         mdt.dataAddAllListList([
             ['Id', 'd1']
             , ['id1', 'd11']
@@ -1683,7 +1647,7 @@ class MappedDataTableSpec extends Specification {
         mdt.data.size() == 1
 
         when:
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
         mdt.dataAddAllListList([
             ['ID', 'd1']
             , ['id1', 'd11']
@@ -1711,7 +1675,7 @@ class MappedDataTableSpec extends Specification {
         def mdt
         def res
         Throwable e
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
 
         when:
         res = [
@@ -1769,7 +1733,7 @@ class MappedDataTableSpec extends Specification {
         def mdt
         def res
         Throwable e
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
 
         when:
         res = new PropertyMapper(
@@ -1818,7 +1782,7 @@ class MappedDataTableSpec extends Specification {
         def mdt
         def res
         Throwable e
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
 
         when:
         res = [id:'id1', d1:'d11'] as GroovyRowResult
@@ -1853,7 +1817,7 @@ class MappedDataTableSpec extends Specification {
     def "dataAdd Map date values"() {
         given:
         def mdt
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
 
         when:
         def cal = Calendar.getInstance()
@@ -1881,7 +1845,7 @@ class MappedDataTableSpec extends Specification {
     def "dataAdd Map values multiple ids"() {
         given:
         def mdt
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
 
         when:
         def data1 = [ID:'id1', v1:'v11']
@@ -1905,7 +1869,7 @@ class MappedDataTableSpec extends Specification {
     def "dataAdd Map values single id"() {
         given:
         def mdt
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
 
         when:
         def m = [ID:id]
@@ -1943,7 +1907,7 @@ class MappedDataTableSpec extends Specification {
     def "dataAdd Map field names are cleaned up"() {
         given:
         def mdt
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
 
         when:
         def m = [id:'1']
@@ -1963,7 +1927,7 @@ class MappedDataTableSpec extends Specification {
     def "dataAdd Map id values are cleaned up"() {
         given:
         def mdt
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
 
         when:
         mdt.dataAdd(id:idVal, v1:'v11')
@@ -1982,7 +1946,7 @@ class MappedDataTableSpec extends Specification {
         given:
         def mdt
         Throwable e
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
 
         when:
         def m = [:]
@@ -2004,7 +1968,7 @@ class MappedDataTableSpec extends Specification {
         given:
         def mdt
         Throwable e
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
 
         when:
         def m = [:]
@@ -2025,7 +1989,7 @@ class MappedDataTableSpec extends Specification {
         given:
         def mdt
         Throwable e
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
         mdt.dataAdd(id:'id1', v1:'v11')
 
         when:
@@ -2043,7 +2007,7 @@ class MappedDataTableSpec extends Specification {
         given:
         def mdt
         Throwable e
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
 
         when:
         mdt.dataAdd(id:'id1', v1:'v11')
@@ -2085,7 +2049,7 @@ class MappedDataTableSpec extends Specification {
         def mdt
 
         when:
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:fn, idKeyType:KeyType.EMPI)
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:fn)
 
         then:
         mdt.idFieldName == 'ID'

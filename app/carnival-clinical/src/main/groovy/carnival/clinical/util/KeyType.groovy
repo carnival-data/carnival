@@ -1,15 +1,9 @@
-package carnival.util
+package carnival.clinical.util
 
 
 
 /**
  * An enumeration of key types.
- *
- * KeyType is used throughout Carnival.  However, its inception and primary
- * utility was for interoperability between data matrices.  With the move to a 
- * central graph representation of data, KeyType seems less relevant. This enum
- * will likely be factored out of the code at some point in the future.
- * 
  *
  */
 public enum KeyType {

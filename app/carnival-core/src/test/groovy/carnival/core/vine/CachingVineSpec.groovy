@@ -33,7 +33,6 @@ import carnival.pmbb.vine.*
 import carnival.util.Defaults
 import carnival.core.config.DatabaseConfig
 import carnival.util.MappedDataTable
-import carnival.util.KeyType
 import carnival.core.vine.MappedDataTableVineMethod
 import carnival.core.graph.query.QueryProcess
 
@@ -640,8 +639,7 @@ class TestCachingVine extends RelationalVineGeneric implements CachingVine {
         MappedDataTable.MetaData meta(Map args = [:]) {
             new MappedDataTable.MetaData(
                 name:'static-vine-method',
-                idFieldName:'id',
-                idKeyType:KeyType.EMPI
+                idFieldName:'id'
             ) 
         }
 
@@ -671,8 +669,7 @@ class TestCachingVine extends RelationalVineGeneric implements CachingVine {
         MappedDataTable.MetaData meta(Map args = [:]) {
             new MappedDataTable.MetaData(
                 name:"num-args-vine-method-${args.size()}",
-                idFieldName:'id',
-                idKeyType:KeyType.EMPI
+                idFieldName:'id'
             ) 
         }
 
@@ -693,8 +690,7 @@ class TestCachingVine extends RelationalVineGeneric implements CachingVine {
         MappedDataTable.MetaData meta(Map args = [:]) {
             new MappedDataTable.MetaData(
                 name:'vine-method-with-query-process',
-                idFieldName:'id',
-                idKeyType:KeyType.EMPI
+                idFieldName:'id'
             ) 
         }
 

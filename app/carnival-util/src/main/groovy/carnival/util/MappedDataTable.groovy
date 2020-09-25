@@ -30,12 +30,11 @@ import org.yaml.snakeyaml.representer.Representer
  * associated with a single entity that has a unique identifier.  
  *
  * The core data structure of MappedDataTable is a Map from a unique identifier
- * to a Map of key/value data.  The unique identifier is described by the
- * keyType field, which is of type KeyType.
+ * to a Map of key/value data
  *
  * MappedDataTables can be written to and read from files.  A single
  * MappedDataTable is represented by two files, a .csv file for the data and a
- * .yaml file for the other bits of information including keyType. The
+ * .yaml file for the other bits of information. The
  * MappedDataTable object itself keeps track of which files to which it has
  * been written and from which it has been read.
  *
@@ -77,7 +76,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
                 queryDate : mdt.queryDate,
                 dataSourceDateOfUpdate : mdt.dataSourceDateOfUpdate,
                 idFieldName: mdt.idFieldName,
-                idKeyType: mdt.idKeyType,
                 vine:mdt.vine,
                 dateFormat:mdt.dateFormat,
                 dateFormatPattern:mdt.dateFormat.toPattern()
@@ -93,8 +91,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
 
             this.data.name = args.name
             this.data.idFieldName = toFieldName(args.idFieldName)
-
-            if (args.containsKey('idKeyType')) this.data.idKeyType = args.idKeyType
 
             if (args.get('queryDate') != null) {
                 assert ((args.queryDate instanceof String) || (args.queryDate instanceof Date)) 
@@ -132,10 +128,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
 
         public String getIdFieldName() {
             return data.idFieldName
-        }
-
-        public KeyType getIdKeyType() {
-            return data.idKeyType
         }
 
         public Map getVine() {
@@ -180,7 +172,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
         assert meta.name
         assert meta.queryDate
         assert meta.idFieldName
-        assert meta.idKeyType
 
         return meta
     }
@@ -247,9 +238,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
     /** the name of the id field */
     String idFieldName
 
-    /** the type of the id key */
-    KeyType idKeyType = KeyType.GENERIC_STRING_ID
-
     /** id -> map of vals */
     SortedMap<String,Map<String,String>> data = new TreeMap<String, Map<String,String>>()
 
@@ -292,7 +280,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
         this.queryDate = args.queryDate
         this.dataSourceDateOfUpdate = args.dataSourceDateOfUpdate
 
-        if (args.idKeyType) this.idKeyType = args.idKeyType
         if (args.vine) this.vine = args.vine
 
         if (args.dateFormat) this.dateFormat = args.dateFormat
@@ -347,7 +334,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
             queryDate:queryDate,
             idFieldName:idFieldName
         ]
-        if (idKeyType != null) m.idKeyType = idKeyType
         if (dataSourceDateOfUpdate != null) m.dataSourceDateOfUpdate = dataSourceDateOfUpdate
         
         new MetaData(m)
@@ -366,7 +352,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
         if (obj == null) return false
         if (!(obj instanceof MappedDataTable)) return false
         if (!areEqual(this.idFieldName, obj.idFieldName)) return false
-        if (!areEqual(this.idKeyType, obj.idKeyType)) return false
         if (!areEqual(this.queryDate, obj.queryDate)) return false
         if (!areEqual(this.vine, obj.vine)) return false
         if (!areEqual(this.dataSourceDateOfUpdate, obj.dataSourceDateOfUpdate)) return false
@@ -766,7 +751,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
             queryDate:queryDate,
             dataSourceDateOfUpdate:dataSourceDateOfUpdate,
             idFieldName:idFieldName,
-            idKeyType:idKeyType,
             vine:vine,
             dateFormatPattern:dateFormat.toPattern(),
             //dateFormat:dateFormat

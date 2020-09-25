@@ -291,7 +291,7 @@ class MappedDataTableSpec extends Specification {
     def "dataAppend(id,map) secondary id field"() {
         given:
         def mdt
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID', idKeyType:KeyType.EMPI, secondaryIdFieldMap:[ID2:KeyType.MRN])
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID', idKeyType:KeyType.EMPI)
         def mdtData
 
         when:
@@ -307,7 +307,7 @@ class MappedDataTableSpec extends Specification {
         then:
         mdtData.size() == 3
         mdtData.get('ID') == '1'
-        mdtData.get('ID2') == 'id2val'
+        mdtData.get('ID2') == 'ID2VAL'
         mdtData.get('V1') == 'v11'
 
         when:
@@ -400,7 +400,7 @@ class MappedDataTableSpec extends Specification {
     def "dataAppend individual vals secondary id field"() {
         given:
         def mdt
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID', idKeyType:KeyType.EMPI, secondaryIdFieldMap:[ID2:KeyType.MRN])
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'ID', idKeyType:KeyType.EMPI)
         def mdtData
 
         when:
@@ -447,7 +447,7 @@ class MappedDataTableSpec extends Specification {
         mdtData.get('ID') == '1'
         mdtData.get('V1') == 'v11'
         mdtData.get('V2') == 'v21'
-        mdtData.get('ID2') == 'id2val'
+        mdtData.get('ID2') == 'ID2VAL'
 
         /*
         // currently not allowing null values
@@ -834,21 +834,14 @@ class MappedDataTableSpec extends Specification {
         mdt.dataSourceDateOfUpdate == null
 
         when:
-        mdt = new MappedDataTable(name:"some-name", idFieldName:"id-key", idKeyType:KeyType.EMPI, secondaryIdFieldMap:["key2":KeyType.MRN, "key3":KeyType.PK_PATIENT_ID])
+        mdt = new MappedDataTable(name:"some-name", idFieldName:"id-key", idKeyType:KeyType.EMPI)
 
         then:
         mdt != null
         mdt.name == "some-name"
         mdt.idFieldName == DataTable.toFieldName("id-key")
         mdt.idKeyType == KeyType.EMPI
-        mdt.secondaryIdFieldMap.equals([KEY2:KeyType.MRN, KEY3:KeyType.PK_PATIENT_ID])
         mdt.queryDate.getTime() - now.getTime() <= 1000
-
-        when:
-        mdt = new MappedDataTable(name:"some-name", idFieldName:"id-key", idKeyType:KeyType.EMPI, secondaryIdFieldMap:["id-key":KeyType.MRN, "key3":KeyType.PK_PATIENT_ID])
-
-        then:
-        e = thrown()
 
         when:
         mdt = new MappedDataTable(name:"some-name", idFieldName:"id-key", idKeyType:KeyType.EMPI, queryDate:testDate)
@@ -962,7 +955,7 @@ class MappedDataTableSpec extends Specification {
         !emf.exists()
 
         when:
-        def mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI, secondaryIdFieldMap:["key2":KeyType.MRN, "key3":KeyType.PK_PATIENT_ID])
+        def mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', idKeyType:KeyType.EMPI)
         def files = mdt.writeFiles(buildDir)
         println "files: ${files}"
         def df = files.find { it.canonicalPath.endsWith('.csv') }
@@ -992,7 +985,6 @@ class MappedDataTableSpec extends Specification {
         mdtFromFile.name == "mdt-test"
         mdtFromFile.idFieldName == DataTable.toFieldName("id")
         mdtFromFile.idKeyType == KeyType.EMPI
-        mdtFromFile.secondaryIdFieldMap.equals([KEY2:KeyType.MRN, KEY3:KeyType.PK_PATIENT_ID])
     }
 
 
@@ -1329,11 +1321,7 @@ class MappedDataTableSpec extends Specification {
         mdt = new MappedDataTable(
             name:'mdt-test', 
             idFieldName:'id', 
-            idKeyType:KeyType.EMPI, 
-            secondaryIdFieldMap:[
-                key2:KeyType.MRN, 
-                key3:KeyType.PK_PATIENT_ID
-            ]
+            idKeyType:KeyType.EMPI
         )
         file = mdt.writeMetaFile(new File('build'))
         println "${file.name} ${file.canonicalPath}"
@@ -1350,12 +1338,6 @@ class MappedDataTableSpec extends Specification {
         meta.name == 'mdt-test'
         meta.idFieldName == DataTable.toFieldName('id')
         "${meta.idKeyType}" == "EMPI"
-        meta.secondaryIdFieldMap
-        meta.secondaryIdFieldMap.size() == 2
-        meta.secondaryIdFieldMap.get('KEY2') == KeyType.MRN
-        meta.secondaryIdFieldMap.get('KEY3') == KeyType.PK_PATIENT_ID
-
-        meta.secondaryIdFieldMap.equals([KEY2:KeyType.MRN, KEY3:KeyType.PK_PATIENT_ID])
     }
 
 
@@ -1917,28 +1899,6 @@ class MappedDataTableSpec extends Specification {
         mdt.data.size() == 2
         matchData(mdt, 'id1', data1)
         matchData(mdt, 'id2', data2)
-    }
-
-
-    def "dataAdd secondary id fields"() {
-        given:
-        def mdt = new MappedDataTable(name:"mdt-test", idFieldName:"id", idKeyType:KeyType.EMPI, secondaryIdFieldMap:["id2":KeyType.MRN, "id3":KeyType.PK_PATIENT_ID])
-       
-        when:
-        mdt.dataAdd(data)
-
-        then:
-        matchData(mdt, idVal, expectedData)
-
-        where:
-        expectedData                                  | data                                          | idVal
-        [ID:"id1val1", ID2:"id2val", ID3:"id3val"]    | [ID:"id1val1", ID2:"id2val", ID3:"id3val"]    | "id1val1"
-        [ID:"id1val2", ID2:"id2val", ID3:"id3val"]    | [id:"id1val2", id2:"id2val", id3:"id3val"]    | "id1val2"
-        [ID:"id1val3", ID2:"id2val", ID3:"id3val"]    | [ID:"ID1val3", ID2:"id2val", ID3:"id3val"]    | "id1val3"
-        [ID:"id1val4", ID2:"id2val", ID3:"id3val"]    | [ID:"id1val4", ID2:"ID2val", ID3:"id3val"]    | "id1val4"
-        [ID:"id1val5", ID2:"id2val", ID3:"id3val"]    | [ID:"id1val5", ID2:"id2val", ID3:"ID3val"]    | "id1val5"
-        [ID:"id1val6", ID2:"id2val"]                  | [ID:"id1val6", ID2:"id2val"]                  | "id1val6"
-        [ID:"id1val7", ID2:"id2val", ID3:null]        | [ID:"id1val7", ID2:"id2val", ID3:null]        | "id1val7"
     }
 
 

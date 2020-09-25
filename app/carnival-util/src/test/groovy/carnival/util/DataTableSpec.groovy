@@ -61,8 +61,6 @@ class DataTableSpec extends Specification {
         public void dataAdd(GroovyRowResult row) { }
         public void dataAdd(Map<String,Object> vals) { }
         public File writeMetaFile(File destDir, Map args) { return new File('test') }
-
-        Map secondaryIdFieldMap = [:]
     }
 
     class ReverseStringComp implements Comparator<String> {
@@ -109,12 +107,10 @@ class DataTableSpec extends Specification {
     def "setKeySetComparator(List<Closure>) valid"() {
         given:
         def dt = new DataTablePlus()
-        dt.secondaryIdFieldMap.put('B', 1)
 
         expect:
         dt.keySet instanceof TreeSet
         dt.keySet.size() == 0
-        dt.secondaryIdFieldMap.size() == 1
         
         when:
         dt.keySet << 'B'
@@ -133,15 +129,6 @@ class DataTableSpec extends Specification {
 
         then:
         assertExpectedKeys(dt, ['A', 'B', 'C'])
-
-        when:
-        dt.keySetComparator = [
-            { !secondaryIdFieldMap.containsKey(it) }, 
-            { it }
-        ]
-
-        then:
-        assertExpectedKeys(dt, ['B', 'A', 'C'])
     }
 
 

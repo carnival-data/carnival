@@ -103,7 +103,6 @@ class FeatureReport extends MappedDataTable {
             assert mdt
             setMeta (
                 name: mdt.name,
-                secondaryIdFieldMap: mdt.secondaryIdFieldMap,
                 reportDescriptor: mdt.reportDescriptor
             )
         }

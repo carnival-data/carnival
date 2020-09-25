@@ -301,7 +301,6 @@ class GenericDataTable extends DataTable {
         setKeySetComparator(
             new OrderBy(
                 [
-                    //{ !secondaryIdFieldMap.containsKey(it) }, 
                     { it }
                 ]
             )

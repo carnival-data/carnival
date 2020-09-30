@@ -178,7 +178,7 @@ abstract class CoreGraph implements GremlinTrait {
 		assert g
 		assert packageName
 
-		List<VertexLabelDefinition> newDefinitions = findNewVertexLabelDefinitions(graph, g, packageName)
+		List<VertexLabelDefinition> newDefinitions = findNewVertexLabelDefinitions(packageName)
 
 		withTransactionIfSupported(graph) {
 	        newDefinitions.each { vld ->
@@ -219,22 +219,20 @@ abstract class CoreGraph implements GremlinTrait {
 
 
     /** */
-    public Collection<VertexLabelDefinition> findNewVertexLabelDefinitions(Graph graph, GraphTraversalSource g, String packageName) {
-		log.info "CoreGraph findNewVertexLabelDefinitions graph:$graph g:$g packageName:$packageName"
+    public Collection<VertexLabelDefinition> findNewVertexLabelDefinitions(String packageName) {
+		log.info "CoreGraph findNewVertexLabelDefinitions packageName:$packageName"
 
-		assert graph
-		assert g
 		assert packageName
 
-    	def vertexDefClasses = findVertexDefClases(packageName)
+    	Set<Class<VertexDefTrait>> vertexDefClasses = findVertexDefClases(packageName)
     	
 		List<VertexLabelDefinition> existingDefinitions = graphSchema.getLabelDefinitions()
 		List<VertexLabelDefinition> newDefinitions = new ArrayList<VertexLabelDefinition>()
 
-        vertexDefClasses.each { vdc ->
+        vertexDefClasses.each { Class vdc ->
         	log.trace "findNewVertexLabelDefinitions vdc: $vdc"
 
-            vdc.values().each { vdef ->
+            vdc.values().each { VertexDefTrait vdef ->
             	log.trace "findNewVertexLabelDefinitions vdef: $vdef"
 
             	// check if already defined

@@ -51,9 +51,12 @@ abstract public class Reasoner implements ReasonerInterface, GremlinTrait, Track
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    public Reasoner(Graph graph) {
-        assert graph
-        this.graph = graph
+    public Reasoner() { }
+
+    /** */
+    public Reasoner(Graph theGraph) {
+        assert theGraph
+        setGraph(theGraph)
     }
 
 

@@ -752,6 +752,15 @@ abstract class DataTable {
     }
 
 
+    /** 
+     * Convenience method to order keys by alphabetical order.
+     *
+     */
+    public void setOrderedKeysAlphabetical() {
+        setKeySetComparator([{it}])
+    }
+
+
     /** */
     public void setOrderKeysByInsertion() {
         def existingKeys = this.keySet

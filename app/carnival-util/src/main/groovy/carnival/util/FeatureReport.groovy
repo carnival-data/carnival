@@ -906,6 +906,7 @@ class FeatureReport extends MappedDataTable {
      * @param featureName String name of feature
      * @param featureIdKey String data key for field that identifies the linked entity
      * @param featureValueKey String data key for the feature value pertaining to the linked entity
+     * @param includeNum Boolean if true, add an _COUNT feature
      *
      * Data example:
      *   EMPI   STAGE
@@ -1015,6 +1016,11 @@ class FeatureReport extends MappedDataTable {
      *
      * Results:
      *   ['SEVERITY_1', 'SEVERITY_2']
+     *
+     * Explanation:
+     *   EMPI 1 has two TUMOR_ID values.  All other EMPIs have 0 or 1 vaues.
+     *   So, the max number of severities in these data is 2 and we have
+     *   fields SEVERITY_1 and SEVERITY_2 to contain  them.
      *
      */
     public List<String> multiFeatureNames(Map args) {

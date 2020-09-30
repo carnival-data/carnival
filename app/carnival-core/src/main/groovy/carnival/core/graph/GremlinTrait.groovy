@@ -105,11 +105,15 @@ trait GremlinTrait  {
     /** */
     public Graph getGraph() { this.graph }
 
+    /** */
+    public void setGraph(Graph theGraph) { this.graph = theGraph }
+
 
     /** */
     public GraphTraversalSource traversal() { 
-        assert graph
-        def g = graph.traversal() 
+        Graph theGraph = getGraph()
+        assert theGraph
+        def g = theGraph.traversal() 
         return g
     }
 

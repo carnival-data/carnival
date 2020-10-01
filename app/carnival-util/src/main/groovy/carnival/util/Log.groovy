@@ -58,6 +58,26 @@ class Log {
     	progress(log, 'info', msg, total, current)
     }
 
+
+    /**
+     *
+     *
+     */
+    static void interval(Logger log, String msg, Collection items, Integer current, Integer interval) {
+        if (current++%interval != 0) return 
+        Log.progress(log, 'info', msg, items.size(), current)
+    }
+
+
+    /**
+     *
+     *
+     */
+    static void interval(Logger log, String msg, Collection items, Integer current) {
+        final int LOG_INTERVAL = Math.floorDiv(items.size(), 10) ?: 1
+        interval(log, msg, items, current, LOG_INTERVAL)
+    }
+
 }
 
 

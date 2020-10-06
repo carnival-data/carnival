@@ -143,6 +143,11 @@ class ExcelUtil {
      * @param params.dates.fields A list of fields that should be parsed as dates.
      * @param failOnError If there is an error reading the file, throw a 
      *        ParseException.
+     * @param firstRowNum Integer The first row to read. Use this parameter to skip 
+     *        one or more rows at the start of the document.
+     * @param skipRowNums Set<Integer> Rownums to skip. Use this parameter to  skip
+     *        rows that are buried within valid rows.
+     * @param skipBlankRows Boolean If true, skip over rows that contain no data.
      *
      */
     static List<Map> readExcelSheet(File inputFile, String sheetName, Map params = [:]) {

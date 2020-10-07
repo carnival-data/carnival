@@ -11,7 +11,6 @@ import carnival.util.DataTable
 import carnival.util.MappedDataTable
 import carnival.util.GenericDataTable
 import carnival.util.Defaults
-import carnival.core.graph.query.QueryProcess
 
 
 

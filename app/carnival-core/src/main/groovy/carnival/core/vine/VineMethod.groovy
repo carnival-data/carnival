@@ -10,7 +10,6 @@ import carnival.util.DataTable
 import carnival.util.MappedDataTable
 import carnival.util.GenericDataTable
 import carnival.util.Defaults
-import carnival.core.graph.query.QueryProcess
 
 
 
@@ -24,19 +23,6 @@ import carnival.core.graph.query.QueryProcess
  */
 @Slf4j
 trait VineMethod {
-
-    /**
-     * An optional QueryProcess to which updates can be sent.
-     *
-     */
-    QueryProcess vineMethodQueryProcess
-
-    /** 
-     * If true, it is expected that a monitor thread will be started for
-     * vineMethodQueryProcess when appropriate.
-     *
-     */
-    boolean useMonitorThread = false
 
     /** */
     Closure withSql
@@ -90,7 +76,6 @@ trait VineMethod {
             method:methodName,
             args:methodArgs
         ]
-        //if (queryProcess) vine.put('queryProcess', queryProcess)
 
         return vine
     }

@@ -7,9 +7,6 @@ import java.lang.reflect.Field
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import static groovyx.gpars.dataflow.Dataflow.task
-import groovyx.gpars.dataflow.Promise
-
 import static com.xlson.groovycsv.CsvParser.parseCsv
 import com.xlson.groovycsv.CsvIterator
 import com.xlson.groovycsv.PropertyMapper
@@ -19,7 +16,6 @@ import groovy.sql.GroovyRowResult
 import carnival.util.DataTable
 import carnival.util.MappedDataTable
 import carnival.util.GenericDataTable
-import carnival.core.graph.query.QueryProcess
 import carnival.core.util.CoreUtil
 
 
@@ -123,45 +119,10 @@ abstract class Vine {
     }
 
 
-    ///////////////////////////////////////////////////////////////////////////
-    // CALL METHODS -- ASYNC
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    public Promise callAsync(String methodName, Map methodArgs, Map asyncMap) {
-        assert methodName
-        assert methodArgs != null
-        assert asyncMap != null
-
-        Vine vine = this
-        if (asyncMap.queryProcess) methodArgs.queryProcess = asyncMap.queryProcess
-
-        task {
-            try {
-                asyncMap.dataTable = vine.call(methodName, methodArgs)
-            } catch (Throwable t) {
-                log.error("Vine.callAsync $methodName", t)
-                if (asyncMap.queryProcess) asyncMap.queryProcess.fail(t)
-            }
-        }
-    }
-
-
 
     ///////////////////////////////////////////////////////////////////////////
     // CALL METHODS
     ///////////////////////////////////////////////////////////////////////////
-
-
-    /** */
-    public DataTable callWithMonitorThread(String methodName, Map methodArgs = [:]) {
-        log.trace "Vine.callWithMonitorThread methodName:${methodName}"
-        def vm = createVineMethodInstance(methodName)
-        QueryProcess qp = new QueryProcess(methodName)
-        vm.vineMethodQueryProcess = qp
-        vm.useMonitorThread = true
-        return call(vm, methodArgs)
-    }
 
 
     /**
@@ -179,12 +140,6 @@ abstract class Vine {
     public DataTable call(VineMethod vm, Map methodArgs = [:]) {
         log.trace "Vine.call vm:${vm}"
 
-        // strip out the queryProcess argument, if present
-        if (methodArgs.containsKey('queryProcess')) {
-            vm.vineMethodQueryProcess = methodArgs.queryProcess
-            methodArgs.remove('queryProcess')
-        }
-
         return fetchVineMethodData(vm, methodArgs)
     }
 
@@ -196,17 +151,8 @@ abstract class Vine {
     DataTable fetchVineMethodData(VineMethod vm, Map methodArgs = [:]) {
         log.trace "fetchVineMethodData vm: ${vm.meta(methodArgs).name}"
 
-        // if there is a query process, start it
-        if (vm.vineMethodQueryProcess) vm.vineMethodQueryProcess.start()
-
         // fetch the data
-        def dataTable
-        try {
-            if (vm.vineMethodQueryProcess && vm.useMonitorThread) vm.vineMethodQueryProcess.startMonitorThread()
-            dataTable = vm.fetch(methodArgs)
-        } finally {
-            if (vm.vineMethodQueryProcess) vm.vineMethodQueryProcess.stop()
-        }
+        def dataTable = vm.fetch(methodArgs)
         log.trace "fetchVineMethodData dataTable: ${dataTable.name}"
         
         // make sure vine data have been set

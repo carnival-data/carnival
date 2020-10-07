@@ -111,16 +111,10 @@ repositories {
     maven { url "https://repo1.maven.org/maven2" }
     maven { url "https://jitpack.io" }
     maven { url "http://download.java.net/maven/2/" }
-
-    //https://mvnrepository.com/
     maven { url "http://central.maven.org/maven2"}
 
-    // Use 'jcenter' for resolving your dependencies.
     jcenter()
-
     mavenLocal()
-
-    flatDir(dir: 'libs', name: 'Local libs')    
 }
 
 

@@ -34,7 +34,6 @@ import carnival.util.Defaults
 import carnival.core.config.DatabaseConfig
 import carnival.util.MappedDataTable
 import carnival.core.vine.MappedDataTableVineMethod
-import carnival.core.graph.query.QueryProcess
 
 
 
@@ -100,32 +99,6 @@ class CachingVineSpec extends Specification {
         buildDir.isDirectory()
         !edf.exists()
         !emf.exists()
-
-        when:
-        def qp = new QueryProcess('qp1')
-        args = [arg1:'val1', queryProcess:qp]
-
-        mdt = cachingVine.vineMethodWithQueryProcess(args)
-
-        def files = mdt.writeFiles(buildDir)
-        println "files: ${files}"
-        def df = files.find { it.canonicalPath.endsWith('.csv') }
-        def mf = files.find { it.canonicalPath.endsWith('.yaml') }
-
-        then:
-        df.exists()
-        df.name == 'vine-method-with-query-process.csv'
-        df.length() > 0
-        mf.exists()
-        mf.name == 'vine-method-with-query-process.yaml'
-        //mf.length() > 0
-
-        when:
-        def mfText = mf.text
-
-        then:
-        mfText
-        !mfText.contains('queryProcess')
     }
 
 
@@ -682,34 +655,6 @@ class TestCachingVine extends RelationalVineGeneric implements CachingVine {
             return mdt
         }
     }
-
-
-
-    static class VineMethodWithQueryProcess implements MappedDataTableVineMethod {
-
-        MappedDataTable.MetaData meta(Map args = [:]) {
-            new MappedDataTable.MetaData(
-                name:'vine-method-with-query-process',
-                idFieldName:'id'
-            ) 
-        }
-
-
-        MappedDataTable fetch(Map args = [:]) {
-            def mdt = createEmptyDataTable(args)
-
-            assert vineMethodQueryProcess
-
-            mdt.dataAddAllListList(
-                [
-                    ['id', 'v1']
-                    , ['id1', 'v11']
-                    , ['id2', 'v12']
-                ]
-            )
-            return mdt
-        }
-    }    
 
 }
 

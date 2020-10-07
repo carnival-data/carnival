@@ -16,7 +16,6 @@ import carnival.util.DataTable
 import carnival.util.MappedDataTable
 import carnival.util.GenericDataTable
 import carnival.util.Defaults
-import carnival.core.graph.query.QueryProcess
 
 
 
@@ -43,57 +42,6 @@ trait CachingVine {
     // loggers
     static final Logger log = LoggerFactory.getLogger(CachingVine)
     static final Logger qlog = LoggerFactory.getLogger('carnival-query-updates')
-
-
-    ///////////////////////////////////////////////////////////////////////////
-    // UTILITY - TIME TO COMPLETION
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static public void logTimeToCompletion(QueryProcess qp) {
-        log.trace "logTimeToCompletion qp:${qp.name}"
-
-        StringWriter sw = new StringWriter()
-        PrintWriter pw = new PrintWriter(sw)
-
-        pw.println ""
-        logTimeToCompletion(qp, pw, 0)
-
-        def str = sw.toString()
-        qlog.info(str)
-    }
-
-
-    /** */
-    static public void logTimeToCompletion(QueryProcess qp, PrintWriter pw, int indent) {
-        // print indent
-        def istr = ""
-        (0..indent).each { istr += "    " }
-        pw.print istr
-
-        // all sub processes
-        def subs = qp.subProcesses
-
-        // special case the fully complete situation
-        /*if (!subs.find({!it.completed})) pw.println "${qp.name}: completed"
-        else pw.println "${qp.name}: ${completionMsg(qp)}"*/
-        
-        // message for this process
-        pw.println "${qp.name}: ${completionMsg(qp)}"
-
-        // increase the indend and print sub proc times
-        indent++
-        subs.each { logTimeToCompletion(it, pw, indent) }
-    }
-
-
-    /** */
-    static public String completionMsg(QueryProcess qp) {
-        if (qp.completed && qp.success) return "completed"
-        else if (qp.completed && !qp.success) return "completed unsuccessful"
-        else if (qp.timeEstimator.timeToCompletion) return "${qp.timeEstimator.timeToCompletionAsString}"
-        else return "unknown"
-    } 
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -158,12 +106,6 @@ trait CachingVine {
     public DataTable call(VineMethod vm, Map methodArgs = [:]) {
         log.trace "CachingVine.call vm:${vm}"
 
-        // strip out the queryProcess argument, if present
-        if (methodArgs.containsKey('queryProcess')) {
-            vm.vineMethodQueryProcess = methodArgs.queryProcess
-            methodArgs.remove('queryProcess')
-        }
-
         // switch on cache mode
         def mdt
         switch (cacheMode) {
@@ -222,9 +164,6 @@ trait CachingVine {
             log.trace "callCacheModeOptional vm: ${name} - using cached data"
             def mdt = vm.returnType.createFromFiles(cacheDirectory, name)
             if (checkCacheValidity(files, mdt, vm, methodArgs)) {
-                if (vm.vineMethodQueryProcess) {
-                    vm.vineMethodQueryProcess.stop()
-                }
                 return mdt
             }
         }

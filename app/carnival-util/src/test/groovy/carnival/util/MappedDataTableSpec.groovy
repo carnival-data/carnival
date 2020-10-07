@@ -1173,11 +1173,9 @@ class MappedDataTableSpec extends Specification {
         def icdGroup = CodeRefGroup.create(name:'A', icd:['1.1', '1.2', '2.1', '2.11'])
         def testString1 = "foo1"
         def testString2 = "foo2"
-        def qp = [class:'QueryProcess']
         def vine = [
             name:"vineName",
             method:"vineMethod",
-            queryProcess:qp,
             args:[
                 int1:1,
                 string1:"testString", 
@@ -1216,7 +1214,6 @@ class MappedDataTableSpec extends Specification {
 
         then:
         mfText
-        mfText.contains('queryProcess')
     }
 
 

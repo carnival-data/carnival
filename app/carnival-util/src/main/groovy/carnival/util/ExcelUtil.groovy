@@ -303,6 +303,10 @@ class ExcelUtil {
             CellType ct = cell.getCellType()
             boolean isDateField = dateIndexes.contains(cn)
 
+            //log.debug "cell: $cell"
+            //log.debug "ct: ${ct}"
+            //log.debug "isDateField: ${isDateField}"
+
             if (ct == CellType.NUMERIC && isDateField) {
 
                 try {
@@ -342,6 +346,12 @@ class ExcelUtil {
                 } else {
                     valAsString = ""
                 }
+
+            } else if (ct == CellType.FORMULA) {
+
+                // assume the result will be numeric?
+                // no perfect solution. not named POI for nothing.
+                valAsString = String.valueOf(cell.getNumericCellValue())
 
             } else {
 

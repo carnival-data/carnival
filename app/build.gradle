@@ -27,7 +27,7 @@ plugins {
 allprojects {
     group = 'edu.upenn.pmbb'
     sourceCompatibility = 1.8
-    version = '1.0.0'   // see https://semver.org/
+    version = '1.0.1-SNAPSHOT'   // see https://semver.org/
 
     apply plugin: 'jacoco'
 }

@@ -4,9 +4,6 @@ package carnival.core.vine
 
 import groovy.util.logging.Slf4j
 
-import java.util.concurrent.atomic.AtomicInteger
-import org.ho.yaml.Yaml
-
 import groovy.sql.*
 
 import groovyx.net.http.*

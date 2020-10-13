@@ -1,8 +1,6 @@
 package carnival.util
 
 
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import static java.lang.System.err
 
 import java.util.concurrent.atomic.AtomicInteger
 

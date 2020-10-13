@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 
-import groovy.sql.GroovyRowResult
 import groovy.transform.EqualsAndHashCode
 
 import org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal

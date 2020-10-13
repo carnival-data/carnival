@@ -1,18 +1,13 @@
 package carnival.util
 
 
-import groovy.mock.interceptor.StubFor
+import java.time.LocalDate
 import groovy.sql.*
 import groovy.transform.InheritConstructors
 
 import spock.lang.Specification
 import spock.lang.Unroll
 import spock.lang.Shared
-
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
-
 
 
 
@@ -234,7 +229,7 @@ class GenericDataTableSpec extends Specification {
         def meta
         Throwable e
         def now = new Date()
-        def yesterday = now.plus(-1)
+        Date yesterday = new Date(LocalDate.now().minusDays(1).toEpochDay())
         def yaml = new org.yaml.snakeyaml.Yaml(new DataTableRepresenter())
 
         when:
@@ -324,34 +319,6 @@ class GenericDataTableSpec extends Specification {
         mdt.data[1].size() == 2
     }
 
-
-    def "dataAdd PropertyMapper"() {
-        given:
-        def mdt
-        def res
-        Throwable e
-        mdt = new GenericDataTable(name:'mdt-test')
-
-        when:
-        res = new PropertyMapper(
-            values: ['id1', 'd11'],
-            columns: [id:0, d1:1]
-        )
-        mdt.dataAdd(res)
-
-        then:
-        mdt.data[0].size() == 2
-
-        when:
-        res = new PropertyMapper(
-            values: ['id2', 'd12'],
-            columns: [ID:0, d1:1]
-        )
-        mdt.dataAdd(res)
-
-        then:
-        mdt.data[1].size() == 2
-    }
 
 
     def "dataAdd GroovyRowResult"() {

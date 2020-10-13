@@ -6,13 +6,29 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
+// build script settings
+///////////////////////////////////////////////////////////////////////////////
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath group: 'org.yaml', name: 'snakeyaml', version: '1.27'
+        classpath group: 'org.kordamp.gradle', name: 'stats-gradle-plugin', version: '0.2.2'
+    }    
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
 // plugins
 ///////////////////////////////////////////////////////////////////////////////
 
 plugins {
     id 'groovy'
+    id 'maven-publish'
     id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
-    id ("maven-publish")
+    
     // code coverage
     id 'jacoco'
     id 'com.github.kt3k.coveralls' version '2.6.3'
@@ -27,15 +43,54 @@ plugins {
 allprojects {
     group = 'edu.upenn.pmbb'
     sourceCompatibility = 1.8
-    version = '0.3.1-SNAPSHOT'   // see https://semver.org/
+    version = '0.4.0-SNAPSHOT'   // see https://semver.org/
 
     apply plugin: 'jacoco'
+    apply plugin: 'project-report'
+    apply plugin: 'org.kordamp.gradle.stats'
 }
 
 
 subprojects {
     apply plugin: 'groovy'
 
+    repositories {
+        mavenCentral()
+        jcenter()
+        mavenLocal()
+    }
+
+    dependencies {
+        // see gradle.properties for versions
+
+        // Groovy
+        implementation "org.codehaus.groovy:groovy-all:${groovyVersion}"
+
+        // Tinkerpop
+        implementation "org.apache.tinkerpop:gremlin-core:${gremlinVersion}"
+        implementation "org.apache.tinkerpop:gremlin-groovy:${gremlinVersion}"
+        implementation "org.apache.tinkerpop:tinkergraph-gremlin:${gremlinVersion}"
+
+        // Neo4J
+        implementation "org.apache.tinkerpop:neo4j-gremlin:${gremlinVersion}"
+        implementation "org.neo4j:neo4j-tinkerpop-api-impl:${neo4jTinkerpopVersion}"
+        implementation "org.neo4j.driver:neo4j-java-driver:${neo4JavaDriverVersion}"
+
+        // Testing
+        testImplementation "org.spockframework:spock-core:1.3-groovy-2.5"
+
+        // Logging
+        implementation 'org.slf4j:slf4j-api:1.7.30'
+        implementation 'ch.qos.logback:logback-classic:1.2.3'
+
+        // Data formats
+        implementation group: 'org.yaml', name: 'snakeyaml', version: '1.27'
+        implementation "com.opencsv:opencsv:5.2"
+    }
+}
+
+
+subprojects {
     // compile in debug modes
     tasks.withType(GroovyCompile) {
       //options.debug = true
@@ -49,6 +104,7 @@ subprojects {
       //options.listFiles = true
     }
 }
+
 
 // add to base project for jacoco plugin
 repositories {
@@ -76,14 +132,11 @@ subprojects {
     }
 }
 
+
 ///////////////////////////////////////////////////////////////////////////////
 // Testing Tasks
 ///////////////////////////////////////////////////////////////////////////////
 apply from: 'setupTestsReports.gradle'
-
-project('carnival-clinical') {
-    test.dependsOn(':carnival-core:carnivalLocalDirInit')
-}
 
 subprojects {
     // use --continue flag instead of setting test.ignoreFailures to true
@@ -91,13 +144,8 @@ subprojects {
     //test.ignoreFailures true
 
     test {
-        systemProperty 'vine.config.file.path', System.getProperty('vine.config.file.path')
-        systemProperty 'cgis.use.cached.data.files', System.getProperty('cgis.use.cached.data.files')
-        systemProperty 'cgis.use.cached.graph', System.getProperty('cgis.use.cached.graph')
         systemProperty 'test.http', System.getProperty('test.http') ?: true
         systemProperty 'test.graph.rollback', System.getProperty('test.graph.rollback')
-        systemProperty 'allow.redcap.modification', System.getProperty('allow.redcap.modification')
-        systemProperty 'disable.filevine.tests', System.getProperty('disable.filevine.tests')
         testLogging {
             events 'standard_out'
         }
@@ -106,18 +154,18 @@ subprojects {
             systemProperty('carnival.home', System.getProperty('carnival.home'))
             systemProperty('logback.configurationFile', System.getProperty('carnival.home') + '/config/logback.xml')
         }
-        if (System.env.CARNIVAL_HOME) {
-            systemProperty('carnival.home', System.env.CARNIVAL_HOME)
-            systemProperty('logback.configurationFile', System.env.CARNIVAL_HOME + '/config/logback.xml')
+        if (System.getenv('CARNIVAL_HOME')) {
+            systemProperty('carnival.home', System.getenv('CARNIVAL_HOME'))
+            systemProperty('logback.configurationFile', System.getenv('CARNIVAL_HOME') + '/config/logback.xml')
         }
         if (System.getProperty('logback.configurationFile')) {
             systemProperty("logback.configurationFile", System.getProperty('logback.configurationFile'))
-        } else if (System.env.CARNIVAL_LOGBACK_CONFIG) {
-            systemProperty("logback.configurationFile", System.env.CARNIVAL_LOGBACK_CONFIG)
+        } else if (System.getenv('CARNIVAL_LOGBACK_CONFIG')) {
+            systemProperty("logback.configurationFile", System.getenv('CARNIVAL_LOGBACK_CONFIG'))
         }
-        if (!(System.getProperty('carnival.home') || System.env.CARNIVAL_HOME)) {
+        if (!(System.getProperty('carnival.home') || System.getenv('CARNIVAL_HOME'))) {
             ant.echo "WARNING: Carnival home is not set. Use command line argument -Dcarnival.home= or environment variable CARNIVAL_HOME. See documentation."
-            if (!(System.getProperty('logback.configurationFile') || System.env.CARNIVAL_LOGBACK_CONFIG)) {
+            if (!(System.getProperty('logback.configurationFile') || System.getenv('CARNIVAL_LOGBACK_CONFIG'))) {
                 ant.echo "WARNING: Logback configuration file not set. Use the -D command line argument like -Dlogback.configurationFile=/path/to/file.xml.  Or, set the environment variable CARNIVAL_LOGBACK_CONFIG to /path/to/file.xml. See documentation."
             }
         }
@@ -126,6 +174,7 @@ subprojects {
         jvmArgs '-Xmx6g'
     }
 }
+
 
 // to run all test suites even if a failure occurs use the flag '--continue'
 // https://docs.gradle.org/current/userguide/command_line_interface.html#sec:continue_build_on_failure
@@ -152,23 +201,18 @@ def browse(path) {
     }
 }
 
+
 ///////////////////////////////////////////////////////////////////////////////
 // convenience local publishing tasks
 ///////////////////////////////////////////////////////////////////////////////
 
-task refreshGremlinDsl {
-    dependsOn 'carnival-gremlin-dsl:publishToMavenLocal'
-}
-
 task refreshUtil {
-    dependsOn refreshGremlinDsl
     dependsOn 'carnival-util:publishToMavenLocal'
 }
 
 task publishGraph {
     dependsOn refreshUtil
     dependsOn 'carnival-graph:publishToMavenLocal'
-    dependsOn 'carnival-gremlin-dsl:publishToMavenLocal'
 }
 
 task publishCore {
@@ -178,7 +222,6 @@ task publishCore {
 
 task publishAll {
     dependsOn publishCore
-    dependsOn 'carnival-clinical:publishToMavenLocal'
     dependsOn 'carnival-gradle:publishToMavenLocal'
 }
 

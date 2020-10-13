@@ -5,12 +5,6 @@ import java.text.SimpleDateFormat
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
-import au.com.bytecode.opencsv.CSVWriter
-import au.com.bytecode.opencsv.CSVReader
-
 import groovy.sql.*
 import groovy.transform.ToString
 import groovy.transform.Synchronized
@@ -194,11 +188,11 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
         def dataFileText = dataFile.text
 
         if (dataFileText) {
-            CsvIterator dataIterator = parseCsv(dataFileText)
-            // TODO fix: this doesn't seem to work; hasNext() is returning true for a bad test file
-            //log.trace "hasNext: ${dataIterator.hasNext()} "
-            if (!dataIterator.hasNext()) log.warn "loadDataFromFile for file $dataFile: no data found."
-            mdt.dataAddAll(dataIterator)
+            def csvReader = CsvUtil.createReaderHeaderAware(dataFileText)
+            if (!CsvUtil.hasNext(csvReader)) {
+                log.warn "error in loadDataFromFile for file $dataFile. no data found."
+            }
+            mdt.dataAddAll(csvReader)
             mdt.readFrom = dataFile
         }
     }
@@ -493,18 +487,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
         }
 
         return vals
-    }
-
-
-    /**
-     * Add the data from a single PropertyMapper (from CSVIterator.each).
-     *
-     * @param rec A PropertyMapper that must contain the idFieldName field.
-     *
-     */
-    public void dataAdd(PropertyMapper rec) {
-        //log.debug "dataAdd(PropertyMapper) rec:$rec"
-        dataAdd(rec.toMap())
     }
 
 

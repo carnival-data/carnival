@@ -2,14 +2,10 @@ package carnival.util
 
 
 import groovy.sql.*
-import groovy.mock.interceptor.StubFor
-import groovy.util.AntBuilder
 
 import spock.lang.Specification
 import spock.lang.Unroll
 import spock.lang.Shared
-
-import org.apache.commons.io.FileUtils
 
 
 

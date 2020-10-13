@@ -2,14 +2,9 @@ package carnival.graph
 
 
 
-import groovy.mock.interceptor.StubFor
-import groovy.util.AntBuilder
-
 import spock.lang.Specification
 import spock.lang.Unroll
 import spock.lang.Shared
-
-import org.apache.commons.io.FileUtils
 
 import org.apache.tinkerpop.gremlin.structure.T
 
@@ -201,7 +196,7 @@ class TinkerpopExtensionsSpec extends Specification {
     }
 
 
-    def "nextOne"() {
+    /*def "nextOne"() {
         given:
         def res
         Throwable e
@@ -228,7 +223,7 @@ class TinkerpopExtensionsSpec extends Specification {
         //e.printStackTrace()
         e instanceof RuntimeException
         e.message.startsWith('nextOne')
-    }
+    }*/
 
 }
 

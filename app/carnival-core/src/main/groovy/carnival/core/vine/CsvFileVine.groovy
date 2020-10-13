@@ -9,10 +9,7 @@ import org.slf4j.LoggerFactory
 
 import org.apache.commons.codec.digest.DigestUtils
 
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
-
+import carnival.util.CsvUtil
 import carnival.util.GenericDataTable
 import carnival.core.vine.Vine
 import carnival.core.vine.VineMethod
@@ -133,7 +130,7 @@ class CsvFileVine extends FileVine {
         GenericDataTable.MetaData meta(Map args = [:]) {
         	if (args) throw new IllegalArgumentException("AllRecords does not accept any arguments")
 
-            def hstr = "${enclosingVine.file.canonicalPath}"
+            def hstr = "${getEnclosingVine().file.canonicalPath}"
             def inputHash = DigestUtils.md5(hstr.bytes).encodeHex().toString()
 
             new GenericDataTable.MetaData(
@@ -142,20 +139,16 @@ class CsvFileVine extends FileVine {
         }
 
 		GenericDataTable fetch(Map args) {
-			log.trace "CsvFileVine ${enclosingVine.file.canonicalPath} AllRecords.fetch()"
+			log.trace "CsvFileVine ${getEnclosingVine().file.canonicalPath} AllRecords.fetch()"
 
-        	CsvIterator csvIterator = parseCsv(enclosingVine.file.text)
-        	assert csvIterator.hasNext() : "no data: ${enclosingVine.file.canonicalPath}"
+			def csvReader = CsvUtil.createReaderHeaderAware(getEnclosingVine().file.text)
+			assert CsvUtil.hasNext(csvReader) : "no data: ${getEnclosingVine().file.canonicalPath}"
 
 			def mdt = createEmptyDataTable(args)
-        	csvIterator.each { row ->
-        		def rm = row.toMap()
-
-        		// (cv in DataTable.WARNINGS)
-        		// consider optionally removing warning values such as NULL ahead of time?
-
+			while (CsvUtil.hasNext(csvReader)) {
+				def rm = csvReader.readMap()
         		mdt.dataAdd(rm)
-        	} 
+			}
 
 			return mdt
 		}

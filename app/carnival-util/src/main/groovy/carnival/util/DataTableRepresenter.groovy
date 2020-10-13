@@ -8,13 +8,6 @@ import org.slf4j.LoggerFactory
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
-import au.com.bytecode.opencsv.CSVWriter
-import au.com.bytecode.opencsv.CSVReader
-
-import groovy.sql.GroovyRowResult
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.Synchronized
 

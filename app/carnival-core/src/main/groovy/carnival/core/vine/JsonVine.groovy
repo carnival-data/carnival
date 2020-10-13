@@ -77,6 +77,7 @@ trait JsonVine {
     public Set<Class> allVineMethodClasses() {
         Set<Class> subClasses = new HashSet<Class>()
         subClasses.addAll(Arrays.asList(this.class.getDeclaredClasses()));
+        //log.debug "subClasses: ${subClasses}"
         
         Set<Class> vineMethodClasses = subClasses.findAll { cl -> JsonVineMethod.isAssignableFrom(cl) }
 
@@ -118,25 +119,10 @@ trait JsonVine {
         log.trace "json-vine method class: ${vmc.name}"
 
         // create a vine method instance
-        def vm = vmc.newInstance()
+        def vm = vmc.newInstance(this)
 
         // add the vine method resource to the vine method instance
         def classes = CoreUtil.allClasses(this)
-
-        //log.debug "this.class: ${this.class}"
-        List<Field> vineMethodResourceFields = []
-        classes.each { cl ->
-            for (Field field: cl.getDeclaredFields()) {
-                field.setAccessible(true);
-                if (field.isAnnotationPresent(VineMethodResource.class)) {
-                    vineMethodResourceFields << field
-                }
-            }
-        }
-
-        vineMethodResourceFields.each { vmrf ->
-            setResource(vm, vmrf.name, vmrf.get(this))
-        }
 
         _dynamicVineMethodResources.each { String name, Object value ->
             setResource(vm, name, value)
@@ -149,12 +135,6 @@ trait JsonVine {
     /** */
     void setResource(JsonVineMethod vm, String name, Object value) {
         vm.metaClass."${name}" = value
-
-        // the following does not work, which seems pretty terrifying
-        //vm.metaClass.setProperty(vm, name, value)
-        // the weird looking uncommented code does work. I don't know
-        // why it works, but methods called directoy on the metaClass
-        // do not. this seems brittle and not good.
     }
 
 

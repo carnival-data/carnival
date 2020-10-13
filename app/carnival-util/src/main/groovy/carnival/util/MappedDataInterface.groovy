@@ -5,12 +5,6 @@ package carnival.util
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
-import au.com.bytecode.opencsv.CSVWriter
-import au.com.bytecode.opencsv.CSVReader
-
 import groovy.sql.*
 import groovy.transform.ToString
 import groovy.transform.Synchronized
@@ -54,13 +48,6 @@ interface MappedDataInterface {
      *
      */
     public void dataAdd(java.sql.ResultSet row)
-
-
-    /**
-     * Matches DataTable method.
-     *
-     */
-    public void dataAdd(PropertyMapper rec)
 
 
     /**

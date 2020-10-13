@@ -2,7 +2,6 @@ package carnival.core.vine
 
 
 
-import static com.xlson.groovycsv.CsvParser.parseCsv
 import static java.lang.System.err
 
 import java.sql.PreparedStatement
@@ -12,15 +11,10 @@ import java.text.SimpleDateFormat
 import groovy.transform.InheritConstructors
 import groovy.sql.Sql
 
-import org.ho.yaml.Yaml
 import groovy.sql.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.apache.http.impl.client.DefaultHttpClient
-
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
 
 import carnival.core.*
 import carnival.core.config.RedcapConfig

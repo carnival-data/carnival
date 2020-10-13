@@ -169,7 +169,7 @@ class DataSetDescriptorGraph implements GremlinTrait {
                 __.outE(Core.EX.DEPENDS_ON.label).count().is(0)
             )
         .toSet().each {
-            log.debug "${it} ${it.label()}"
+            //log.debug "${it} ${it.label()}"
             dsd.recipeSteps << loadFeatureSetRecipeStep(g, it)
         }
 

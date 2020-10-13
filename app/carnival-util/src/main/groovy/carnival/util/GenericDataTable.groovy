@@ -4,12 +4,6 @@ package carnival.util
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
-import au.com.bytecode.opencsv.CSVWriter
-import au.com.bytecode.opencsv.CSVReader
-
 import groovy.sql.*
 import groovy.transform.ToString
 import groovy.transform.Synchronized
@@ -243,7 +237,7 @@ class GenericDataTable extends DataTable {
         assert meta.name
         assert meta.queryDate
 
-        def mdt = new GenericDataTable(meta)
+        def dataTable = new GenericDataTable(meta)
 
         def dataFileText = dataFile.text
         if (dataFileText) dataFileText = dataFileText.trim()
@@ -252,19 +246,15 @@ class GenericDataTable extends DataTable {
         log.trace "numNewlines: ${numNewlines}"
 
         if (dataFileText) {
-            log.trace "GenericDataTable.createFromFiles parseCsv"
-            CsvIterator csvIterator = parseCsv(dataFileText)
-            // TODO fix: this doesn't seem to work; hasNext() is returning true for a bad test file
-            //log.trace "hasNext: ${csvIterator.hasNext()} "
-            if (!csvIterator.hasNext()) {
-                elog.warn "error in createFromFiles for file $dataFile. no data found."
-                return
+            def csvReader = CsvUtil.createReaderHeaderAware(dataFileText)
+            if (!CsvUtil.hasNext(csvReader)) {
+                log.warn "error in createFromFiles for file $dataFile. no data found."
             }
-            log.trace "GenericDataTable.createFromFiles add all data"
-            mdt.dataAddAll(csvIterator)
+            dataTable.dataAddAll(csvReader)
+            dataTable.readFrom = dataFile
         }
 
-        return mdt
+        return dataTable
     }
 
 
@@ -427,17 +417,6 @@ class GenericDataTable extends DataTable {
         }
 
         this.dataAdd(vals)
-    }
-
-
-    /**
-     * Add the data from a single PropertyMapper (from CSVIterator.each).
-     *
-     * @param rec A PropertyMapper that must contain the idFieldName field.
-     *
-     */
-    protected void dataAdd(PropertyMapper rec) {
-        dataAdd(rec.toMap())
     }
 
 

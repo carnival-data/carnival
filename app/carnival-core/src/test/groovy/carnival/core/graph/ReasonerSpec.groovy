@@ -4,8 +4,6 @@ package carnival.core.graph
 
 import groovy.transform.InheritConstructors
 import groovy.sql.*
-import groovy.mock.interceptor.StubFor
-import groovy.util.AntBuilder
 import groovy.transform.InheritConstructors
 
 import spock.lang.Specification
@@ -15,8 +13,6 @@ import spock.lang.Shared
 import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
-
-import org.apache.commons.io.FileUtils
 
 import carnival.graph.*
 

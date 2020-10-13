@@ -24,7 +24,7 @@ class JvsTestVine implements JsonVine {
     @ToString(includeNames=true)
     static class Person { String name }
 
-    static File tmpDir() {
+    public File tmpDir() {
         String tmpDirStr = System.getProperty("java.io.tmpdir")
         File tmpDir = new File(tmpDirStr)
         println "tmpDir: ${tmpDir}"
@@ -33,15 +33,16 @@ class JvsTestVine implements JsonVine {
         tmpDir
     }
 
-    static class PersonVineMethod extends JsonVineMethod<Person> { 
+    class PersonVineMethod extends JsonVineMethod<Person> { 
         @Override
         File _cacheDirectory() { 
-            def td = tmpDir() 
-            //def cd = new File(td, 'JvsTestVine')
-            //cd.list().each { fn ->
-            //    def f = new File(cd, fn)
-            //    f.delete()
-            //}
+            def td
+            try {
+                td = tmpDir() 
+            } catch (Exception e) {
+                e.printStackTrace()
+                throw e
+            }
             td
         }
 
@@ -53,12 +54,10 @@ class JvsTestVine implements JsonVine {
 
 class JvsTestVineWithResource extends JvsTestVine { 
 
-    @VineMethodResource
     String sharedResource = 'blah-'
 
-    String unannotatedResource = 'boo-'
 
-    static class PersonVineMethod extends JsonVineMethod<JvsTestVine.Person> { 
+    class PersonVineMethod extends JsonVineMethod<JvsTestVine.Person> { 
         @Override
         File _cacheDirectory() { tmpDir() }
 
@@ -68,17 +67,7 @@ class JvsTestVineWithResource extends JvsTestVine {
         }
     }
 
-    static class VineMethodThatRefsUnannotatedResource extends JsonVineMethod<JvsTestVine.Person> { 
-        @Override
-        File _cacheDirectory() { tmpDir() }
-
-        JvsTestVine.Person fetch(Map args) { 
-            String name = "" + unannotatedResource + args.p1
-            new JvsTestVine.Person(name:name) 
-        }
-    }
-
-    static class VineMethodThatRefsNonexistentResource extends JsonVineMethod<JvsTestVine.Person> { 
+    class VineMethodThatRefsNonexistentResource extends JsonVineMethod<JvsTestVine.Person> { 
         @Override
         File _cacheDirectory() { tmpDir() }
 
@@ -126,7 +115,7 @@ class JsonVineSpec extends Specification {
     }
 
 
-    def "vine method resource"() {
+    def "shared resource"() {
         when:
         def vine = new JvsTestVineWithResource()
         def res = vine
@@ -139,19 +128,6 @@ class JsonVineSpec extends Specification {
         then:
         res != null
         res.name == 'blah-alice'
-
-        when:
-        vine
-            .method('VineMethodThatRefsUnannotatedResource')
-            .args(p1:'alice')
-            .mode(CacheMode.IGNORE)
-            .call()
-        .getResult()
-
-        then:
-        Exception e = thrown()
-        e instanceof groovy.lang.MissingPropertyException
-        //e.printStackTrace()
     }
 
 

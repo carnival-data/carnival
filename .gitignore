@@ -119,5 +119,7 @@ _site
 docs/node_modules
 
 # might be created by tests that write files
-app/carnival-clinical/data
 app/carnival-core/data
+
+# scratch code
+*.groovy_

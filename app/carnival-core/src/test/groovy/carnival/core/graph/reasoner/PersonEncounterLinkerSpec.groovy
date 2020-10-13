@@ -3,8 +3,6 @@ package carnival.core.graph.reasoner
 
 
 import groovy.sql.*
-import groovy.mock.interceptor.StubFor
-import groovy.util.AntBuilder
 
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -14,8 +12,6 @@ import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 import org.apache.tinkerpop.gremlin.structure.T
-
-import org.apache.commons.io.FileUtils
 
 import carnival.core.graph.CoreGraphSpecification
 

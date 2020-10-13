@@ -7,11 +7,6 @@ import groovy.transform.InheritConstructors
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
-import au.com.bytecode.opencsv.CSVWriter
-
 import carnival.util.DataTable
 import carnival.util.MappedDataTable
 import carnival.util.GenericDataTable

@@ -23,8 +23,7 @@ import carnival.core.vine.MappedDataTableVineMethod
 import carnival.core.vine.GenericDataTableVineMethod
 import carnival.core.vine.CachingVine
 
-import org.ccil.cowan.tagsoup.*
-import groovy.util.XmlSlurper
+//import org.ccil.cowan.tagsoup.*
 
 import groovy.transform.InheritConstructors
 

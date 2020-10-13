@@ -7,12 +7,9 @@ import java.lang.reflect.Field
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
-
 import groovy.sql.GroovyRowResult
 
+import carnival.util.CsvUtil
 import carnival.util.DataTable
 import carnival.util.MappedDataTable
 import carnival.util.GenericDataTable
@@ -80,32 +77,6 @@ abstract class Vine {
 
         return file
     }
-
-
-
-    /**
-     * Generic read from CSV file.
-     *
-     */
-    static List<Map> readFromCsvFile(String filename) {
-        File df = new File(filename)
-        return readFromCsvFile(df)
-    }
-
-
-    /**
-     * Generic read from CSV file.
-     *
-     */
-    static List<Map> readFromCsvFile(File file) {
-        CsvIterator csvIterator = parseCsv(file.text)
-        List<Map> data = []
-        csvIterator.each { PropertyMapper csvVals ->
-            data << csvVals.toMap()
-        }
-        return data
-    }
-
 
 
 
@@ -213,21 +184,7 @@ abstract class Vine {
     public Collection<Class> getAllVineMethodClasses() {
         def allSubClasses = []
 
-        // getDeclaredClasses returns all the classes and interfaces that are members of the
-        // given class. see: https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html#getDeclaredClasses--
         allSubClasses.addAll(Arrays.asList(this.class.getDeclaredClasses()));
-
-        //log.debug "${this.class?.name} allSubClasses:"
-        //allSubClasses.each { cl ->
-        //    log.debug "cl: $cl ${cl.name}"
-        //    if (VineMethod.isAssignableFrom(cl)) log.debug "VineMethod.isAssignableFrom(cl)"
-        //    if (cl.isAssignableFrom(VineMethod)) log.debug "cl.isAssignableFrom(VineMethod)"
-        //    cl.interfaces.each { ifc ->
-        //        log.debug "ifc: $ifc ${ifc.name}"
-        //    }
-        //}
-
-        // get all member classes that are sub-classes of VineMethod
         def allVineMethodClasses = allSubClasses.findAll { cl -> VineMethod.isAssignableFrom(cl) }
 
         return allVineMethodClasses

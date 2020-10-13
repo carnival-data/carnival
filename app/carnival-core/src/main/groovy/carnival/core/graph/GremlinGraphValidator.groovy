@@ -296,7 +296,7 @@ public class GremlinGraphValidator implements GraphValidator {
 			}
 			mds.get(edef.label) << edef
 		}
-		mds.each { log.debug "${it}" }
+		//mds.each { log.debug "${it}" }
 		return mds
 	}
 
@@ -320,59 +320,9 @@ public class GremlinGraphValidator implements GraphValidator {
 			if (globalDef) filteredModels << globalDef
 			else filteredModels.addAll(edefs)
 		}
-		filteredModels.each { log.debug "${it}" }
+		//filteredModels.each { log.debug "${it}" }
 		return filteredModels
 	}
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-// GRAVEYARD
-
-
-		/*Map<String,List<RelationshipDefinition>> modelsByLabel = new HashMap<String,List<RelationshipDefinition>>()
-		modeledRelationships.each { RelationshipDefinition rd ->
-			if (!modelsByLabel.containsKey(rd.label)) {
-				modelsByLabel.put(rd.label, [rd])
-				return
-			}
-			modelsByLabel.get(rd.label) << rd
-		}
-		modelsByLabel.each { log.debug "${it}" }*/
-
-		/*List<RelationshipDefinition> filteredModels = new ArrayList<RelationshipDefinition>()
-		modelsByLabel.each { lbl, rds ->
-			if (rds.size() == 1) {
-				filteredModels << rds.first()
-				return
-			}
-			def globalDef = rds.find { it.isGlobal() }
-			if (globalDef) filteredModels << globalDef
-			else filteredModels.addAll(rds)
-		}
-		filteredModels.each { log.debug "${it}" }
-
-		Set<String> modeledFullNames = new HashSet<String>()
-		filteredModels.each { rd ->
-			if (rd.isGlobal()) modeledFullNames << "${GLOBAL_NAME_SPACE}.${rd.label}"
-			else modeledFullNames << "${rd.nameSpace}.${rd.label}"
-		}
-
-		Set<String> dbFullNames = new HashSet<String>()
-		g.E().each { e ->
-			def lbl = e.label()
-			def ns = e.property(Base.PX.NAME_SPACE.label).orElse(GLOBAL_NAME_SPACE)
-			dbFullNames << "${ns}.${lbl}"
-		}
-		log.trace "dbFullNames: $dbFullNames"*/
-

@@ -342,21 +342,7 @@ abstract class Reaper {
     public Collection<Class> getAllReaperMethodClasses() {
         def allSubClasses = []
         allSubClasses.addAll(Arrays.asList(this.class.getDeclaredClasses()));
-        
-        //log.debug "${this.class?.name} allSubClasses:"
-        allSubClasses.each { cl ->
-            //log.debug "cl: $cl ${cl.name}"
-            //if (ReaperMethod.isAssignableFrom(cl)) log.debug "ReaperMethod.isAssignableFrom(cl)"
-            //if (cl.isAssignableFrom(ReaperMethod)) log.debug "cl.isAssignableFrom(ReaperMethod)"
-            cl.interfaces.each { ifc ->
-                //log.debug "ifc: $ifc ${ifc.name}"
-            }
-        }
-
         def allReaperMethodClasses = allSubClasses.findAll { cl -> ReaperMethod.isAssignableFrom(cl) }
-        //log.debug "allReaperMethodClasses"
-        //allReaperMethodClasses.each { cl -> log.debug "log. $cl ${cl.name} ${cl.simpleName}" }
-
         return allReaperMethodClasses
     }
 

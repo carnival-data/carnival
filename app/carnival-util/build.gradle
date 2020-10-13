@@ -11,30 +11,6 @@
  */
 
 
-///////////////////////////////////////////////////////////////////////////////
-// build script settings
-///////////////////////////////////////////////////////////////////////////////
-buildscript {
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-    dependencies {
-        classpath group: 'org.yaml', name: 'snakeyaml', version: '1.21'
-        classpath group: 'org.kordamp.gradle', name: 'stats-gradle-plugin', version: '0.2.2'
-    }    
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-// plugins
-///////////////////////////////////////////////////////////////////////////////
-plugins {
-    id 'groovy'
-    id 'maven-publish'
-}
-apply plugin: 'org.kordamp.gradle.stats'
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // maven publishing
@@ -109,18 +85,6 @@ publishing {
 // dependencies
 ///////////////////////////////////////////////////////////////////////////////
 
-repositories {
-    maven { url "https://repo1.maven.org/maven2" }
-    maven { url "https://jitpack.io" }
-    maven { url "http://download.java.net/maven/2/" }
-    maven { url "http://central.maven.org/maven2"}
-
-    // Use 'jcenter' for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
-    jcenter()
-}
-
-
 configurations {
     providedRuntime
     apt
@@ -129,37 +93,11 @@ configurations {
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
-
-    // Groovy
-    //compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.5.8', ext: 'pom'
-    compile group: 'org.codehaus.groovy', name: 'groovy', version: '2.5.8'
-    compile group: 'org.codehaus.groovy', name: 'groovy-macro', version: '2.5.8'
-    compile group: 'org.codehaus.groovy', name: 'groovy-ant', version: '2.5.8'
-    compile group: 'org.codehaus.groovy', name: 'groovy-sql', version: '2.5.8'
-    compile group: 'org.codehaus.groovy', name: 'groovy-dateutil', version: '2.5.8'
-    compile group: 'org.codehaus.groovy', name: 'groovy-json', version: '2.5.8'
-    compile group: 'org.codehaus.groovy', name: 'groovy-templates', version: '2.5.8'
-
-    //compile group: 'net.sf.opencsvopencsv', name: 'opencsv', version: '2.3'
-    compile 'com.xlson.groovycsv:groovycsv:1.3'
-
-    // https://mvnrepository.com/artifact/au.com.bytecode/opencsv
-    compile group: 'au.com.bytecode', name: 'opencsv', version: '2.4'
-
-    compile group: 'org.yaml', name: 'snakeyaml', version: '1.23'
-    
-    // We use the awesome Spock testing and specification framework
-    testCompile 'org.spockframework:spock-core:1.2-groovy-2.5'
-
-    // Logging
-    compile 'org.slf4j:slf4j-api:1.7.25'
-    compile 'ch.qos.logback:logback-classic:1.2.3'
-
     // Apache commons
-    compile group: 'commons-io', name: 'commons-io', version: '2.5'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.5'
 
     // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
-    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'
 }
 
 

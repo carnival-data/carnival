@@ -5,12 +5,6 @@ package carnival.util
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
-import au.com.bytecode.opencsv.CSVWriter
-import au.com.bytecode.opencsv.CSVReader
-
 import org.yaml.snakeyaml.Yaml
 
 import groovy.sql.*
@@ -67,24 +61,20 @@ class TabularReport extends GenericDataTable {
         def meta = yaml.load(metaFile.text)
         assert meta.name
 
-        def mdt = new TabularReport(
+        def dataTable = new TabularReport(
             name:meta.name, 
         )
 
         if (dataFileText) {
-            log.trace "parseCsv"
-            CsvIterator csvIterator = parseCsv(dataFileText)
-            // TODO fix: this doesn't seem to work; hasNext() is returning true for a bad test file
-            //log.trace "hasNext: ${csvIterator.hasNext()} "
-            if (!csvIterator.hasNext()) {
-                elog.warn "error in createFromFiles for file $dataFile. no data found"
-                return
+            def csvReader = CsvUtil.createReaderHeaderAware(dataFileText)
+            if (!CsvUtil.hasNext(csvReader)) {
+                log.warn "error in createFromFiles for file $dataFile. no data found."
             }
-            log.trace "dataAddAll(csvIterator)"
-            mdt.dataAddAll(csvIterator)
+            dataTable.dataAddAll(csvReader)
+            dataTable.readFrom = dataFile
         }
 
-        return mdt
+        return dataTable
     }
 
 

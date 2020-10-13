@@ -6,12 +6,6 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import spock.lang.Shared
 
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
-
-import org.apache.commons.io.FileUtils
-
 import org.apache.tinkerpop.gremlin.structure.T
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource

@@ -1,8 +1,6 @@
 package carnival.util
 
 
-
-import static com.xlson.groovycsv.CsvParser.parseCsv
 import static java.lang.System.err
 
 
@@ -29,7 +27,7 @@ class WhereClauseChunker {
 
 		// load data file
         File dataFile = new File(args[1])
-      	def dataParsed = parseCsv(dataFile.text)
+      	def dataParsed = CsvUtil.readFromCsvFile(dataFile)
       	def rows = []
       	rows.addAll(dataParsed)
 

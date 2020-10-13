@@ -3,7 +3,6 @@ package carnival.core.vine
 
 
 import groovy.util.logging.Slf4j
-import groovy.util.AntBuilder
 import org.apache.commons.codec.digest.DigestUtils
 
 import carnival.util.DataTable
@@ -29,6 +28,11 @@ trait VineMethod {
 
     /** */
     Vine enclosingVine
+
+    /** */
+    public getEnclosingVine() {
+        return this.enclosingVine
+    }
 
 
     /**

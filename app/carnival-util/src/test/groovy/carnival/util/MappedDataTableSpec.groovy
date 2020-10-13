@@ -2,19 +2,15 @@ package carnival.util
 
 
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 
-import groovy.mock.interceptor.StubFor
 import groovy.sql.*
 import groovy.transform.InheritConstructors
 
 import spock.lang.Specification
 import spock.lang.Unroll
 import spock.lang.Shared
-
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
-
+import com.opencsv.CSVReaderHeaderAware
 
 
 /**
@@ -1225,8 +1221,8 @@ class MappedDataTableSpec extends Specification {
         def meta
         def metaDataSourceDateOfUpdate
         Throwable e
-        def now = new Date()
-        def yesterday = now.plus(-1)
+        Date now = new Date()
+        Date yesterday = new Date(LocalDate.now().minusDays(1).toEpochDay())
         def yaml = new org.yaml.snakeyaml.Yaml(new DataTableRepresenter())
 
         when:
@@ -1485,57 +1481,38 @@ class MappedDataTableSpec extends Specification {
     }
 
 
-    @InheritConstructors
-    static class TestCsvIterator extends CsvIterator {
-        Map cols = [:]
-        List pms = []
-        TestCsvIterator() {
-            super([], null)
-        }
-        TestCsvIterator(Map cols) {
-            super([], null)
-            this.cols = cols
-        }
-        void add(PropertyMapper pm) {
-            pms << pm
-        }
-        void add(List vals, Map cols) {
-            pms << new PropertyMapper(values: vals, columns: cols)
-        }
-        void add(List vals) {
-            pms << new PropertyMapper(values: vals, columns: cols)
-        }
-        Collection each(Closure cl) {
-            pms.each(cl)
-        }
-    }
 
-
-    def "dataAddAll CsvIterator"() {
-        given:
-        def mdt
-        def res
-        def d
-        Throwable e
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
-
-        when:
-        res = new TestCsvIterator(id:0, d1:1)
-        res.with {
-            add(['id1', 'd11'])
-            add(['id2', 'd12'])
-        }
-        mdt.dataAddAll(res)
-        d = mdt.data
+    def "dataAddAll CsvReader"() {
+        when:   
+        def csvText = """\
+"id","d1"
+"id1","d11"
+"id2","d12"
+"""        
+        CSVReaderHeaderAware csvReader = CsvUtil.createReaderHeaderAware(csvText)
+        def mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
+        mdt.dataAddAll(csvReader)
 
         then:
-        d.size() == 2
-        d['id1'].size() == 2
-        d['id2'].size() == 2
-        d['id1']['ID'] == 'id1'
-        d['id1']['D1'] == 'd11'
-        d['id2']['ID'] == 'id2'
-        d['id2']['D1'] == 'd12'
+        mdt.keySet.size() == 2
+        mdt.data.size() == 2
+
+        when:
+        def rec1 = mdt.dataGet('id1')
+
+        then:
+        rec1 != null
+        rec1.get('ID') == 'id1'
+        rec1.get('D1') == 'd11'
+
+        when:
+        def rec2 = mdt.dataGet('id2')
+
+        then:
+        rec2 != null
+        rec2.get('ID') == 'id2'
+        rec2.get('D1') == 'd12'
+
     }
 
 
@@ -1717,56 +1694,6 @@ class MappedDataTableSpec extends Specification {
 
         when:
         res = mockResultSet(ID:'id2', d1:'d12')
-        mdt.dataAdd(res)
-
-        then:
-        mdt.data['id2'].size() == 2
-    }
-
-
-
-    def "dataAdd PropertyMapper"() {
-        given:
-        def mdt
-        def res
-        Throwable e
-        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
-
-        when:
-        res = new PropertyMapper(
-            values: ['id1', 'd11'],
-            columns: [id:0, d1:1]
-        )
-        mdt.dataAdd(res)
-
-        then:
-        mdt.data['id1'].size() == 2
-
-        when:
-        res = new PropertyMapper(
-            values: ['id1', 'd11'],
-            columns: [id:0, d1:1]
-        )
-        mdt.dataAdd(pm)
-
-        then:
-        e = thrown()
-
-        when:
-        res = new PropertyMapper(
-            values: ['id2', 'd12'],
-            columns: [id_:0, d1:1]
-        )
-        mdt.dataAdd(res)
-
-        then:
-        e = thrown()
-
-        when:
-        res = new PropertyMapper(
-            values: ['id2', 'd12'],
-            columns: [ID:0, d1:1]
-        )
         mdt.dataAdd(res)
 
         then:

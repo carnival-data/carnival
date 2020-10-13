@@ -55,5 +55,41 @@ class CarnivalGradlePlugin implements Plugin<Project> {
             project.test.systemProperty('micronaut.config.files', externalConfigYamlFile)
             project.run.systemProperty('micronaut.config.files', externalConfigYamlFile)
         }
+
+        // dependency versions
+        Locale locale = new Locale("en", "US");
+        ResourceBundle versions = ResourceBundle.getBundle("carnival.gradle.Version", locale);        
+        def groovyVersion = versions.getString("groovyVersion")
+        def gremlinVersion = versions.getString("gremlinVersion")
+        def neo4jTinkerpopVersion = versions.getString("neo4jTinkerpopVersion")
+        def neo4JavaDriverVersion = versions.getString("neo4JavaDriverVersion")
+        def carnivalVersion = versions.getString("carnivalVersion")
+
+        println "[CarnivalGradle] groovyVersion: ${groovyVersion}"
+        println "[CarnivalGradle] gremlinVersion: ${gremlinVersion}"
+        println "[CarnivalGradle] neo4jTinkerpopVersion: ${neo4jTinkerpopVersion}"
+        println "[CarnivalGradle] neo4JavaDriverVersion: ${neo4JavaDriverVersion}"
+        println "[CarnivalGradle] carnivalVersion: ${carnivalVersion}"
+
+        // apply dependencies
+        project.dependencies {
+            // Groovy
+            implementation "org.codehaus.groovy:groovy-all:${groovyVersion}"
+
+            // Tinkerpop
+            implementation "org.apache.tinkerpop:gremlin-core:${gremlinVersion}"
+            implementation "org.apache.tinkerpop:gremlin-groovy:${gremlinVersion}"
+            implementation "org.apache.tinkerpop:tinkergraph-gremlin:${gremlinVersion}"
+
+            // Neo4J
+            implementation "org.apache.tinkerpop:neo4j-gremlin:${gremlinVersion}"
+            implementation "org.neo4j:neo4j-tinkerpop-api-impl:${neo4jTinkerpopVersion}"
+            implementation "org.neo4j.driver:neo4j-java-driver:${neo4JavaDriverVersion}"
+
+            // Carnival
+            implementation("edu.upenn.pmbb:carnival-util:${carnivalVersion}")
+            implementation("edu.upenn.pmbb:carnival-graph:${carnivalVersion}")
+            implementation("edu.upenn.pmbb:carnival-core:${carnivalVersion}")
+        }
     }
 }

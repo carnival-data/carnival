@@ -8,17 +8,14 @@ import org.slf4j.LoggerFactory
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
-import au.com.bytecode.opencsv.CSVWriter
-import au.com.bytecode.opencsv.CSVReader
-
 import groovy.sql.GroovyRowResult
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.Synchronized
 import groovy.transform.WithReadLock
 import groovy.transform.WithWriteLock
+
+import com.opencsv.CSVReaderHeaderAware
+import com.opencsv.CSVWriter
 
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.introspector.Property
@@ -242,8 +239,7 @@ abstract class DataTable {
      *
      */
     static public List<Map> readDataFromCsvFile(String filename) {
-        File df = new File(filename)
-        return readDataFromCsvFile(df)
+        CsvUtil.readFromCsvFile(filename)
     }
 
 
@@ -255,12 +251,7 @@ abstract class DataTable {
      *
      */
     static public List<Map> readDataFromCsvFile(File file) {
-        CsvIterator csvIterator = parseCsv(file.text)
-        List<Map> data = []
-        csvIterator.each { PropertyMapper csvVals ->
-            data << csvVals.toMap()
-        }
-        return data
+        CsvUtil.readFromCsvFile(file)
     }
 
 
@@ -1055,12 +1046,15 @@ abstract class DataTable {
      * @param dataToAdd Data in a CSVIterator.
      *
      */
-    public void dataAddAll(CsvIterator csvIterator) {
+    public void dataAddAll(CSVReaderHeaderAware csvReader) {
+        assert csvReader != null
+
         def firstRec = true
-        csvIterator.each { rec ->
+        while (CsvUtil.hasNext(csvReader)) {
+            def rec = csvReader.readMap()
             if (firstRec) {
-                //log.debug "dataAddAll(CsvIterator): ${rec.columns}"
-                rec.columns.each { colName, colIndex -> this.keySet.add(colName) }
+                def fieldNames = rec.keySet().collect { toFieldName(it) }
+                this.keySet.addAll(fieldNames)
                 firstRec = false
             }
             dataAdd(rec) 

@@ -38,8 +38,8 @@ apply plugin: 'org.kordamp.gradle.stats'
 repositories {
     maven { url "https://repo1.maven.org/maven2" }
     maven { url "https://jitpack.io" }
-    maven { url "http://download.java.net/maven/2/" }
-    maven { url "http://central.maven.org/maven2"}
+    //maven { url "http://download.java.net/maven/2/" }
+    mavenCentral()
 
     // Use 'jcenter' for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
@@ -56,24 +56,14 @@ configurations {
 // In this section you declare the dependencies for your production and test code
 dependencies {
 
-    // Groovy
-    compile group: 'org.codehaus.groovy', name: 'groovy', version: '2.5.7'
-
     // ASCII Doctor
-    compile group: 'org.asciidoctor', name: 'asciidoctorj', version: '2.1.0'
-
-    // YAML
-    compile group: 'org.yaml', name: 'snakeyaml', version: '1.23'
+    implementation group: 'org.asciidoctor', name: 'asciidoctorj', version: '2.1.0'
     
     // We use the awesome Spock testing and specification framework
-    testCompile 'org.spockframework:spock-core:1.2-groovy-2.5'
-
-    // Logging
-    compile 'org.slf4j:slf4j-api:1.7.25'
-    compile 'ch.qos.logback:logback-classic:1.2.3'
+    //testImplementation 'org.spockframework:spock-core:1.2-groovy-2.5'
 
     // Apache commons
-    compile group: 'commons-io', name: 'commons-io', version: '2.5'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.5'
 }
 
 
@@ -97,17 +87,17 @@ task main (dependsOn: ['classes'], type: JavaExec) {
         systemProperty('carnival.home', System.getProperty('carnival.home'))
         systemProperty('logback.configurationFile', System.getProperty('carnival.home') + '/config/logback.xml')
     }
-    if (System.env.CARNIVAL_HOME) {
-        systemProperty('logback.configurationFile', System.env.CARNIVAL_HOME + '/config/logback.xml')
+    if (System.getenv('CARNIVAL_HOME')) {
+        systemProperty('logback.configurationFile', System.getenv('CARNIVAL_HOME') + '/config/logback.xml')
     }
     if (System.getProperty('logback.configurationFile')) {
         systemProperty("logback.configurationFile", System.getProperty('logback.configurationFile'))
-    } else if (System.env.CARNIVAL_LOGBACK_CONFIG) {
-        systemProperty("logback.configurationFile", System.env.CARNIVAL_LOGBACK_CONFIG)
+    } else if (System.getenv('CARNIVAL_LOGBACK_CONFIG')) {
+        systemProperty("logback.configurationFile", System.getenv('CARNIVAL_LOGBACK_CONFIG'))
     }
-    if (!(System.getProperty('carnival.home') || System.env.CARNIVAL_HOME)) {
+    if (!(System.getProperty('carnival.home') || System.getenv('CARNIVAL_HOME'))) {
         ant.echo "Carnival home is not set. Use command line argument -Dcarnival.home= or environment variable CARNIVAL_HOME. See documentation."
-        if (!(System.getProperty('logback.configurationFile') || System.env.CARNIVAL_LOGBACK_CONFIG)) {
+        if (!(System.getProperty('logback.configurationFile') || System.getenv('CARNIVAL_LOGBACK_CONFIG'))) {
             ant.echo "Logback configuration file not set. Use the -D command line argument like -Dlogback.configurationFile=/path/to/file.xml.  Or, set the environment variable CARNIVAL_LOGBACK_CONFIG to /path/to/file.xml. See documentation."
         }
     }

@@ -4,50 +4,48 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 // See <https://medium.com/@wasyl/pretty-tests-summary-in-gradle-744804dd676c>
 
-//rootProject {
-    ext.testsResults = [] // Container for tests summaries
+ext.testsResults = [] // Container for tests summaries
 
-    allprojects { project ->
-        tasks.withType(Test) { testTask ->
+allprojects { project ->
+    tasks.withType(Test) { testTask ->
 
-            testTask.testLogging { logging ->
-                events  TestLogEvent.FAILED,
-                        TestLogEvent.SKIPPED,
-                        //TestLogEvent.PASSED,
-                        TestLogEvent.STANDARD_OUT,
-                        TestLogEvent.STANDARD_ERROR
+        testTask.testLogging { logging ->
+            events  TestLogEvent.FAILED,
+                    TestLogEvent.SKIPPED,
+                    //TestLogEvent.PASSED,
+                    TestLogEvent.STANDARD_OUT,
+                    TestLogEvent.STANDARD_ERROR
 
-                exceptionFormat TestExceptionFormat.FULL
-                showExceptions true
-                showCauses true
-                showStackTraces true
-            }
+            exceptionFormat TestExceptionFormat.FULL
+            showExceptions true
+            showCauses true
+            showStackTraces true
+        }
 
-            afterSuite { desc, result ->
+        afterSuite { desc, result ->
+            if (desc.parent) return // Only summarize results for whole modules
 
-                if (desc.parent) return // Only summarize results for whole modules
+            String summary = "${testTask.project.name}:${testTask.name} results: ${result.resultType} " +
+                    "(" +
+                    "${result.testCount} tests, " +
+                    "${result.successfulTestCount} successes, " +
+                    "${result.failedTestCount} failures, " +
+                    "${result.skippedTestCount} skipped" +
+                    ") " +
+                    "in ${TimeCategory.minus(new Date(result.endTime), new Date(result.startTime))}" +
+                    "\n" +
+                    "Report file: ${testTask.reports.html.entryPoint}"
 
-                String summary = "${testTask.project.name}:${testTask.name} results: ${result.resultType} " +
-                        "(" +
-                        "${result.testCount} tests, " +
-                        "${result.successfulTestCount} successes, " +
-                        "${result.failedTestCount} failures, " +
-                        "${result.skippedTestCount} skipped" +
-                        ") " +
-                        "in ${TimeCategory.minus(new Date(result.endTime), new Date(result.startTime))}" +
-                        "\n" +
-                        "Report file: ${testTask.reports.html.entryPoint}"
-
-                // Add reports in `testsResults`, keep failed suites at the end
-                if (result.resultType == TestResult.ResultType.SUCCESS) {
-                    rootProject.testsResults.add(0, summary)
-                } else {
-                    rootProject.testsResults += summary
-                }
+            // Add reports in `testsResults`, keep failed suites at the end
+            if (result.resultType == TestResult.ResultType.SUCCESS) {
+                rootProject.testsResults.add(0, summary)
+            } else {
+                rootProject.testsResults += summary
             }
         }
     }
-//}
+}
+
 
 gradle.buildFinished {
     def allResults = rootProject.ext.testsResults
@@ -56,6 +54,7 @@ gradle.buildFinished {
         printResults allResults
     }
 }
+
 
 private static void printResults(allResults) {
     def maxLength = allResults*.readLines().flatten().collect { it.length() }.max()

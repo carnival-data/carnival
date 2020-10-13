@@ -1,4 +1,0 @@
-moduleName=Carnival Clinical Extension Module
-moduleVersion=1.0-test
-extensionClasses=carnival.util.FieldNameExtensions,carnival.graph.ext.TinkerpopTraversalExtension
-staticExtensionClasses=carnival.graph.ext.TinkerpopAnonTraversalExtension

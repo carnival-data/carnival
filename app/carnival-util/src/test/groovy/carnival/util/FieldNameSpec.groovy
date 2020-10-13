@@ -7,11 +7,6 @@ import spock.lang.Shared
 
 import groovy.sql.*
 
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
-
-
 
 
 /**

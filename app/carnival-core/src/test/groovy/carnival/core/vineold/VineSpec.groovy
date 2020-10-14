@@ -1,4 +1,4 @@
-package carnival.core.vine
+package carnival.core.vineold
 
 
 import spock.lang.Specification
@@ -27,14 +27,13 @@ import carnival.pmbb.vine.*
 import carnival.util.Defaults
 import carnival.core.config.DatabaseConfig
 import carnival.util.MappedDataTable
-import carnival.core.vine.MappedDataTableVineMethod
 
 
 
 
 
 /**
- * gradle test --tests "carnival.core.vine.VineSpec"
+ * gradle test --tests "carnival.core.vineold.VineSpec"
  *
  */
 class VineSpec extends Specification {
@@ -246,7 +245,7 @@ class VineSpec extends Specification {
         println "$mdt.vine"
 
         assert mdt.vine
-        assert mdt.vine.name == "carnival.core.vine.TestVine"
+        assert mdt.vine.name == "carnival.core.vineold.TestVine"
         assert mdt.vine.method == "StaticVineMethod"
         assert mdt.vine.args == args
     }
@@ -254,7 +253,7 @@ class VineSpec extends Specification {
 
     void matchNumArgsVineMetaData(MappedDataTable mdt, Map args = [:]) {
         assert mdt.vine
-        assert mdt.vine.name == "carnival.core.vine.TestVine"
+        assert mdt.vine.name == "carnival.core.vineold.TestVine"
         assert mdt.vine.method == "NumArgsVineMethod"
         assert mdt.vine.args == args
     }

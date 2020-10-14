@@ -4,8 +4,6 @@ package carnival.core.vine
 import groovy.transform.ToString
 import spock.lang.Specification
 import spock.lang.Shared
-import carnival.core.vine.CachingVine.CacheMode
-import carnival.core.vine.VineMethodResource
 
 
 /**
@@ -195,7 +193,7 @@ class JsonVineSpec extends Specification {
     def "convenience vine method by name"() {
         when:
         def pv = new JvsTestVine()
-        def res = pv.personVineMethod(CachingVine.CacheMode.IGNORE, [p1:"alice"])
+        def res = pv.personVineMethod(CacheMode.IGNORE, [p1:"alice"])
 
         // this would call the same method with the default cache mode
         //def res = pv.personVineMethod(p1:"alice")

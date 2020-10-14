@@ -1,4 +1,4 @@
-package carnival.core.vine
+package carnival.core.vineold
 
 
 
@@ -18,13 +18,6 @@ import org.apache.http.impl.client.DefaultHttpClient
 
 import carnival.core.*
 import carnival.core.config.RedcapConfig
-import carnival.core.vine.RedcapVine
-import carnival.core.vine.CachingVine
-import carnival.core.vine.CachingVine.CacheMode
-import carnival.core.vine.FileVine
-import carnival.core.vine.VineMethod
-import carnival.core.vine.GenericDataTableVineMethod
-import carnival.core.vine.MappedDataTableVineMethod
 import carnival.util.GenericDataTable
 import carnival.util.MappedDataTable
 import carnival.util.DataTable

@@ -1,4 +1,4 @@
-package carnival.core.vine
+package carnival.core.vineold
 
 
 
@@ -11,10 +11,6 @@ import org.apache.commons.codec.digest.DigestUtils
 
 import carnival.util.CsvUtil
 import carnival.util.GenericDataTable
-import carnival.core.vine.Vine
-import carnival.core.vine.VineMethod
-import carnival.core.vine.GenericDataTableVineMethod
-import carnival.core.vine.CachingVine
 import carnival.util.DataTable
 
 import groovy.transform.InheritConstructors

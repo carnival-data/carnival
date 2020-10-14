@@ -7,7 +7,6 @@ import org.apache.commons.codec.digest.DigestUtils
 
 import carnival.util.Defaults
 import carnival.core.util.CoreUtil
-import carnival.core.vine.CachingVine.CacheMode
 
 
 

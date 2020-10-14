@@ -31,7 +31,7 @@ trait JsonVine {
                 if (!(args[0] instanceof Map)) throw new IllegalArgumentException("args must be a map: ${args}")
             }
             if (args.size() == 2) {
-                if (!(args[0] instanceof CachingVine.CacheMode)) throw new IllegalArgumentException("the first argument must be a cache mode: ${args[0]}")
+                if (!(args[0] instanceof CacheMode)) throw new IllegalArgumentException("the first argument must be a cache mode: ${args[0]}")
                 if (!(args[1] instanceof Map)) throw new IllegalArgumentException("the second argument must be a map: ${args[1]}")
             }
         }

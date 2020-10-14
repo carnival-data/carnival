@@ -5,7 +5,6 @@ package carnival.core.vine
 import groovy.transform.ToString
 import spock.lang.Specification
 import spock.lang.Shared
-import carnival.core.vine.CachingVine.CacheMode
 import com.fasterxml.jackson.core.JsonParseException
 
 

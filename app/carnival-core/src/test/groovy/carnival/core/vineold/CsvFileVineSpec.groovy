@@ -1,4 +1,4 @@
-package carnival.core.vine
+package carnival.core.vineold
 
 
 import spock.lang.Specification
@@ -26,14 +26,13 @@ import carnival.pmbb.vine.*
 import carnival.util.Defaults
 import carnival.core.config.DatabaseConfig
 import carnival.util.MappedDataTable
-import carnival.core.vine.MappedDataTableVineMethod
 
 
 
 
 
 /**
- * gradle test --tests "carnival.core.vine.CsvFileVineSpec"
+ * gradle test --tests "carnival.core.vineold.CsvFileVineSpec"
  *
  */
 class CsvFileVineSpec extends Specification {

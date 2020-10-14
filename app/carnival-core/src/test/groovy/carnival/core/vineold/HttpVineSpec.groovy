@@ -1,4 +1,4 @@
-package carnival.core.vine
+package carnival.core.vineold
 
 
 import spock.lang.Specification
@@ -13,7 +13,7 @@ import static groovyx.net.http.util.SslUtils.ignoreSslIssues
 
 
 /**
- * gradle :carnival-core:test --tests "carnival.core.vine.HttpVineSpec"
+ * gradle :carnival-core:test --tests "carnival.core.vineold.HttpVineSpec"
  *
  */
 class HttpVineSpec extends Specification {

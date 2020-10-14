@@ -65,11 +65,12 @@ class CarnivalGradlePlugin implements Plugin<Project> {
         def neo4JavaDriverVersion = versions.getString("neo4JavaDriverVersion")
         def carnivalVersion = versions.getString("carnivalVersion")
 
-        println "[CarnivalGradle] groovyVersion: ${groovyVersion}"
-        println "[CarnivalGradle] gremlinVersion: ${gremlinVersion}"
-        println "[CarnivalGradle] neo4jTinkerpopVersion: ${neo4jTinkerpopVersion}"
-        println "[CarnivalGradle] neo4JavaDriverVersion: ${neo4JavaDriverVersion}"
-        println "[CarnivalGradle] carnivalVersion: ${carnivalVersion}"
+        println "[CarnivalGradle] Java version: ${System.getProperty('java.version')}"
+        println "[CarnivalGradle] Groovy version: ${groovyVersion}"
+        println "[CarnivalGradle] Gremlin version: ${gremlinVersion}"
+        println "[CarnivalGradle] Neo4j Tinkerpop version: ${neo4jTinkerpopVersion}"
+        println "[CarnivalGradle] Neo4 Java Driver version: ${neo4JavaDriverVersion}"
+        println "[CarnivalGradle] Carnival version: ${carnivalVersion}"
 
         // apply dependencies
         project.dependencies {

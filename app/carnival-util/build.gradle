@@ -7,7 +7,6 @@
  *  - interaction with data sources
  *  - code groups
  *
- *
  */
 
 
@@ -92,11 +91,7 @@ configurations {
 
 
 // In this section you declare the dependencies for your production and test code
-dependencies {
-    // Apache commons
-    implementation group: 'commons-io', name: 'commons-io', version: '2.5'
-
-    // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
+dependencies {    // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
     implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'
 }
 

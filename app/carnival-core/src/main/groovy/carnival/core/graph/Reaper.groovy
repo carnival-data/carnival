@@ -398,31 +398,8 @@ abstract class Reaper {
         def allReaperMethodClasses = getAllReaperMethodClasses()
         assert allReaperMethodClasses.contains(rmc)
 
-        // initialize graph structure
-        //initializeGraphStructure(rmc)
-    	
         // create reaper method instance
-        def vm = rmc.newInstance()
-        vm.metaClass.enclosingReaper = this   
-
-        def classes = CoreUtil.allClasses(this)
-        //log.debug "Reaper classes: $classes"
-
-        //log.debug "this.class: ${this.class}"
-        List<Field> reaperMethodResourceFields = []
-        classes.each { cl ->
-            for (Field field: cl.getDeclaredFields()) {
-                field.setAccessible(true);
-                if (field.isAnnotationPresent(ReaperMethodResource.class)) {
-                    reaperMethodResourceFields << field
-                }
-            }
-        }
-        //log.debug "reaperMethodResourceFields: $reaperMethodResourceFields"
-
-        reaperMethodResourceFields.each { vmrf ->
-            vm.metaClass."${vmrf.name}" = vmrf.get(this)
-        }
+        def vm = rmc.newInstance(this)
 
         return vm
     }

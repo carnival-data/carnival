@@ -70,8 +70,7 @@ abstract class ReaperMethod implements ReaperMethodInterface, TrackedProcessTrai
 
     /** */
     public Map ensure(Map args = [:]) {
-        assert enclosingReaper != null
-        enclosingReaper.optionallyRunSingletonProcess(this, args)
+        optionallyRunSingletonProcess(this, args)
     }
 
 
@@ -184,15 +183,6 @@ abstract class ReaperMethod implements ReaperMethodInterface, TrackedProcessTrai
         return hash
     }    
 
-    /** */
-    protected Graph getGraph() {
-        enclosingReaper.graph
-    }
-
-    /** */
-    protected GraphTraversalSource traversal() {
-        enclosingReaper.traversal()
-    }
 
     /** */
     protected Object withTraversal(Closure cl) {

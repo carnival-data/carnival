@@ -55,15 +55,7 @@ configurations {
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
-
-    // ASCII Doctor
-    implementation group: 'org.asciidoctor', name: 'asciidoctorj', version: '2.1.0'
-    
-    // We use the awesome Spock testing and specification framework
-    //testImplementation 'org.spockframework:spock-core:1.2-groovy-2.5'
-
-    // Apache commons
-    implementation group: 'commons-io', name: 'commons-io', version: '2.5'
+    implementation group: 'org.asciidoctor', name: 'asciidoctorj', version: '2.4.1'
 }
 
 

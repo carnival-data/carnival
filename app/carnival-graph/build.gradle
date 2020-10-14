@@ -83,28 +83,19 @@ publishing {
 ///////////////////////////////////////////////////////////////////////////////
 // dependencies
 ///////////////////////////////////////////////////////////////////////////////
-
-
 configurations {
     providedRuntime
     apt
 }
-
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
     implementation project(":carnival-util")
 }
 
-
 compileGroovy {
     options.annotationProcessorPath = configurations.apt
 }
-
-
-
-
-
 
 
 

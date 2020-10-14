@@ -48,6 +48,26 @@ Carnival’s property graph database:
 
 The Github pages site is stored in the `docs` directory and makes use of [jekyll](https://jekyllrb.com). See the [jekyll docs](https://jekyllrb.com/docs/) for jekyll installation and usage instructions.
 
+### Prerequisites
+- Install [Ruby](https://www.ruby-lang.org/en/)
+- Install [Jekyll](https://jekyllrb.com)
+
+### Building
+To build the documentation:
+
+```
+cd docs
+bundle exec jekyll clean
+bundle exec jekyll build
+```
+
+### Local Jekyll Server
+
+To run the Jekyll server locally:
+
+```
+bundle exec jekyll serve
+```
 
 
 ## <a name="package-overview"></a> Packages

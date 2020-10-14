@@ -11,8 +11,6 @@ import org.apache.tinkerpop.gremlin.structure.T
 import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.structure.Vertex
 
-import carnival.core.vine.Vine
-
 
 
 /** */

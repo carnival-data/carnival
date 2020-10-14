@@ -11,9 +11,7 @@ import org.apache.tinkerpop.gremlin.structure.T
 import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.structure.Vertex
 
-import carnival.core.vine.Vine
 import carnival.core.graph.GremlinTrait
-
 import carnival.graph.EdgeDefTrait
 import carnival.graph.VertexDefTrait
 

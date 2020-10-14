@@ -13,8 +13,6 @@ import org.apache.tinkerpop.gremlin.structure.T
 import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.structure.Vertex
 
-import carnival.core.vine.Vine
-import carnival.core.vine.CachingVine.CacheMode
 import carnival.core.util.CoreUtil
 import carnival.graph.VertexDefTrait
 import carnival.graph.EdgeDefTrait
@@ -112,29 +110,6 @@ abstract class Reaper {
         }
         m
     }
-
-
-	///////////////////////////////////////////////////////////////////////////
-	// FIELDS
-	///////////////////////////////////////////////////////////////////////////
-	
-	/** data cache mode setting */
-	CacheMode forcedCacheMode = null
-
-
-	/////////////////////////////////////////////////////////////////////////
-	// CONSTRUCTOR
-	/////////////////////////////////////////////////////////////////////////
-	
-    /**
-     * Constructor.
-     *
-     */
-    public Reaper(Map args = [:]) {
-		// configuration
-		if (args.forcedCacheMode) this.forcedCacheMode = args.forcedCacheMode
-        //args.each { k,v -> this."$k" = v }
-	}
 
 
 

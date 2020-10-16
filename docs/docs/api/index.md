@@ -4,7 +4,7 @@
 
 layout: default
 title: Application Programmer Interface
-nav_order: 1
+nav_order: 2
 has_children: true
 ---
 
@@ -16,7 +16,7 @@ has_children: true
 
 ### Data Tables
 
-**Carnival** has two implementations of data tables for tabular data.  The **MappedDataTable** class supports data tables that have a unique primary key.  The **GenericDataTable** class supports tabular that does not have a primary key.
+**Carnival** has two implementations of data tables for tabular data. The **MappedDataTable** class supports data tables that have a unique primary key. The **GenericDataTable** class supports tabular that does not have a primary key.
 
 ## Vines
 

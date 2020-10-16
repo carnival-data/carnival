@@ -1,11 +1,11 @@
-FROM gradle:5.6.4
+FROM gradle:6.6.1
 #FROM gradle
 
 ### Development Image
 
 ENV CARNIVAL_HOME /usr/carnival_home
-ENV APOC_HOME /usr/Neo4j/plugins
-ENV APOC_VERSION 3.4.0.7
+#ENV APOC_HOME /usr/Neo4j/plugins
+#ENV APOC_VERSION 3.4.0.7
 
 # Install linux utils
 RUN apt-get update --fix-missing && apt-get install -y \
@@ -15,8 +15,8 @@ RUN apt-get update --fix-missing && apt-get install -y \
     rm -rf /var/lib/apt/lists/*
 
 # install APOC
-RUN mkdir -p ${APOC_HOME}
-ADD "https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/download/${APOC_VERSION}/apoc-${APOC_VERSION}-all.jar" $APOC_HOME
+#RUN mkdir -p ${APOC_HOME}
+#ADD "https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/download/${APOC_VERSION}/apoc-${APOC_VERSION}-all.jar" $APOC_HOME
 
 
 # set up CARNIVAL_HOME directory
@@ -32,4 +32,4 @@ RUN mkdir ${CARNIVAL_HOME}/data
 RUN mkdir ${CARNIVAL_HOME}/data/cache
 
 # update APOC location in application.yml config file
-RUN sed -i "s#/path/to/neo4j/plugins#${APOC_HOME}#" application.yml
+# RUN sed -i "s#/path/to/neo4j/plugins#${APOC_HOME}#" application.yml

@@ -32,4 +32,4 @@ RUN mkdir ${CARNIVAL_HOME}/data
 RUN mkdir ${CARNIVAL_HOME}/data/cache
 
 # update APOC location in application.yml config file
-RUN sed -i "s#/path/to/neo4j/plugins#${APOC_HOME}#" application.yml
+# RUN sed -i "s#/path/to/neo4j/plugins#${APOC_HOME}#" application.yml

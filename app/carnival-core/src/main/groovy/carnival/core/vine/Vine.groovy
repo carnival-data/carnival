@@ -2,8 +2,6 @@ package carnival.core.vine
 
 
 
-import java.lang.reflect.Field
-
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -12,21 +10,21 @@ import carnival.core.util.CoreUtil
 
 
 /** */
-trait JsonVine {
+trait Vine {
 
     /** */
-    static Logger log = LoggerFactory.getLogger(JsonVine)
+    static Logger log = LoggerFactory.getLogger(Vine)
 
     /** */
     Map<String,Object> _dynamicVineMethodResources = new HashMap<String,Object>()
 
     /** */
     def methodMissing(String name, def args) {
-        log.trace "JsonVine invoke method via methodMissing name:$name args:${args?.class?.name}"
+        log.trace "Vine invoke method via methodMissing name:$name args:${args?.class?.name}"
 
         // verify arguments
         if (args != null) {
-            if (args.size() > 2) throw new IllegalArgumentException("there can be at most two arguments to a JSON vine method call: ${args}")
+            if (args.size() > 2) throw new IllegalArgumentException("there can be at most two arguments to a vine method call: ${args}")
             if (args.size() == 1) {
                 if (!(args[0] instanceof Map)) throw new IllegalArgumentException("args must be a map: ${args}")
             }
@@ -37,11 +35,11 @@ trait JsonVine {
         }
 
         // find and create the vine method instance
-        JsonVineMethod vmi = createVineMethodInstance(name)
+        VineMethod vmi = createVineMethodInstance(name)
         if (vmi == null) throw new MissingMethodException(name, this.class, args)
 
         // call the method
-        JsonVineMethodCall mc
+        VineMethodCall mc
         if (args == null) {
             mc = vmi.call()
         } else {
@@ -58,7 +56,7 @@ trait JsonVine {
 
 
     /** */
-    JsonVineMethod method(String name) {
+    VineMethod method(String name) {
         assert name != null
         assert name.trim().length() > 0
         createVineMethodInstance(name)
@@ -79,7 +77,7 @@ trait JsonVine {
         subClasses.addAll(Arrays.asList(this.class.getDeclaredClasses()));
         //log.debug "subClasses: ${subClasses}"
         
-        Set<Class> vineMethodClasses = subClasses.findAll { cl -> JsonVineMethod.isAssignableFrom(cl) }
+        Set<Class> vineMethodClasses = subClasses.findAll { cl -> VineMethod.isAssignableFrom(cl) }
 
         return vineMethodClasses
     }
@@ -110,20 +108,18 @@ trait JsonVine {
 
 
     /** */
-    public JsonVineMethod createVineMethodInstance(String methodName) {
-        log.trace "JsonVine.createVineMethodInstance methodName:${methodName}"
+    public VineMethod createVineMethodInstance(String methodName) {
+        log.trace "Vine.createVineMethodInstance methodName:${methodName}"
 
         // find the vine method class
         def vmc = findVineMethodClass(methodName)
         if (!vmc) throw new MissingMethodException(methodName, this.class)
-        log.trace "json-vine method class: ${vmc.name}"
+        log.trace "vine method class: ${vmc.name}"
 
         // create a vine method instance
         def vm = vmc.newInstance(this)
 
-        // add the vine method resource to the vine method instance
-        def classes = CoreUtil.allClasses(this)
-
+        // should probably get rid of this
         _dynamicVineMethodResources.each { String name, Object value ->
             setResource(vm, name, value)
         }
@@ -133,7 +129,7 @@ trait JsonVine {
 
 
     /** */
-    void setResource(JsonVineMethod vm, String name, Object value) {
+    void setResource(VineMethod vm, String name, Object value) {
         vm.metaClass."${name}" = value
     }
 

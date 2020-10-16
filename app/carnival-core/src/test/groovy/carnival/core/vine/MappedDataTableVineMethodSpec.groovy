@@ -5,11 +5,13 @@ package carnival.core.vine
 import groovy.transform.ToString
 import spock.lang.Specification
 import spock.lang.Shared
-import com.fasterxml.jackson.core.JsonParseException
+import carnival.util.MappedDataTable
+import carnival.util.DataTableFiles
+import org.yaml.snakeyaml.composer.ComposerException
 
 
 
-class JsonVineMethodSpec extends Specification {
+class MappedDataTableVineMethodSpec extends Specification {
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -34,25 +36,30 @@ class JsonVineMethodSpec extends Specification {
     @ToString(includeNames=true)
     static class Person { String name }
 
-    static class PersonVineMethod extends JsonVineMethod<Person> { 
+    static class PersonVineMethod extends MappedDataTableVineMethod { 
         @Override
         File _cacheDirectory() { tmpDir() }
 
-        Person fetch(Map args) { new Person(name:args.p1) }
+        MappedDataTable fetch(Map args) {
+            def mdt = createMappedDataTable('ID')
+            mdt.dataAdd(id:'1', name:args.p1)
+            mdt
+        }
     }
+
+
 
 
     ///////////////////////////////////////////////////////////////////////////
     // tests
     ///////////////////////////////////////////////////////////////////////////
 
-
     def "mode method"() {
         when:
         def pv = new PersonVineMethod().args(p1:"alice")
-        def cf = pv.cacheFile()
-        println "cf: ${cf}"
-        cf.delete()
+        def cfs = pv.cacheFiles()
+        println "cfs: ${cfs}"
+        cfs.delete()
         def mc = pv.mode(CacheMode.REQUIRED).call()
 
         then:
@@ -64,9 +71,9 @@ class JsonVineMethodSpec extends Specification {
     def "cachemode required fails if no cache file present"() {
         when:
         def pv = new PersonVineMethod().args(p1:"alice")
-        def cf = pv.cacheFile()
-        println "cf: ${cf}"
-        cf.delete()
+        def cfs = pv.cacheFiles()
+        println "cfs: ${cfs}"
+        cfs.delete()
         def mc = pv.call(CacheMode.REQUIRED)
 
         then:
@@ -78,87 +85,89 @@ class JsonVineMethodSpec extends Specification {
     def "cachemode optional uses cache file if there"() {
         when:
         def pv = new PersonVineMethod().args(p1:"alice").mode(CacheMode.OPTIONAL)
-        def cf = pv.cacheFile()
-        println "cf: ${cf}"
-        cf.delete()
+        def cfs = pv.cacheFiles()
+        println "cfs: ${cfs}"
+        cfs.delete()
         def mc1 = pv.call()
-        def cft = cf.text
-        cft = cft.replaceAll("alice", "bob")
-        cf.write(cft)
+        cfs.each {
+            def cft = it.text
+            cft = cft.replaceAll("alice", "bob")
+            it.write(cft)
+        }
         def mc2 = pv.call()
 
         then:
         noExceptionThrown()
-        mc2.result instanceof Person
-        mc2.result.name == "bob"
+        mc2.result instanceof MappedDataTable
+        mc2.result.dataGet('1', 'name') == "bob"
     }
 
 
     def "cachemode optional fetches and writes if no cache file present"() {
         when:
         def pv = new PersonVineMethod().args(p1:"alice")
-        def cf = pv.cacheFile()
-        cf.delete()
+        def cfs = pv.cacheFiles()
+        if (cfs.exist()) cfs.toMap().values().each { it.delete() } 
 
         then:
-        !cf.exists()
+        !cfs.exist()
 
         when:
         def mc = pv.call(CacheMode.OPTIONAL)
 
         then:
-        cf.exists()
+        cfs.exist()
     }
 
 
     def "cachemode ignore writes cache file"() {
         when:
         def pv = new PersonVineMethod().args(p1:"alice")
-        def cf = pv.cacheFile()
-        if (cf.exists()) cf.delete()
+        def cfs = pv.cacheFiles()
+        if (cfs.exist()) cfs.toMap().values().each { it.delete() } 
 
         then:
-        !cf.exists()
+        !cfs.exist()
 
         when:
         def mc = pv.call(CacheMode.IGNORE)
 
         then:
-        cf.exists()
+        cfs.exist()
     }
 
 
     def "cachemode ignore ignores existing file"() {
         when:
         def pv = new PersonVineMethod().args(p1:"alice")
-        pv.cacheFile().write(CRUD)
+        pv.cacheFiles().toMap().values().each { it.write(CRUD) }
         def mc = pv.call(CacheMode.IGNORE)
 
         then:
         noExceptionThrown()
         mc != null
-        mc instanceof JsonVineMethodCall<Person>
+        mc instanceof MappedDataTableVineMethodCall
         mc.vineMethodClass == PersonVineMethod
         mc.arguments != null
         mc.arguments instanceof Map
         mc.arguments.containsKey('p1')
         mc.arguments.get('p1') == "alice"
         mc.result != null
-        mc.result instanceof Person
-        mc.result.name == "alice"
+        mc.result instanceof MappedDataTable
+        mc.result.dataGet('1', 'name') == "alice"
     }
 
 
     def "invalid cache file causes an exception"() {
         when:
         def pv = new PersonVineMethod().args(p1:"alice")
-        pv.cacheFile().write(CRUD)
+        pv.cacheFiles().toMap().values().each { it.write(CRUD) }
         def mc = pv.call(CacheMode.OPTIONAL)
 
         then:
         Exception e = thrown()
         //e.printStackTrace()
-        e instanceof JsonParseException || e instanceof ParseException
+        e instanceof ComposerException
     }
 
 
@@ -169,8 +178,8 @@ class JsonVineMethodSpec extends Specification {
 
         then:
         p != null
-        p instanceof Person
-        p.name == "alice"
+        p instanceof MappedDataTable
+        p.dataGet('1', 'name') == "alice"
     }
 
 }

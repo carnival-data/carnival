@@ -94,7 +94,7 @@ class JsonVineMethodCallSpec extends Specification {
         when:
         def pv = new PersonVineMethod()
         def mc1 = pv.call(CacheMode.IGNORE, [p1:"alice"])
-        def mcf = mc1.writeFile(tmpDir)
+        def mcf = mc1.writeFiles(tmpDir)[0]
         println "mcf: $mcf"
         def mc2 = JsonVineMethodCall.createFromFile(mcf)
 
@@ -124,7 +124,7 @@ class JsonVineMethodCallSpec extends Specification {
         when:
         def pv = new PersonVineMethod()
         def mc = pv.call(CacheMode.IGNORE, [p1:"alice"])
-        def mcf = mc.writeFile(tmpDir)
+        def mcf = mc.writeFiles(tmpDir)[0]
         println "mcf: $mcf"
 
         then:

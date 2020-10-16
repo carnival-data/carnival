@@ -275,6 +275,25 @@ abstract class DataTable {
 
 
     /**
+     * Find the files required to build a DataTable of the given name in
+     * the given directory.
+     *
+     * @param dir The directory in which to look.
+     * @param name The base name of the DataTable.
+     *
+     * @return A DataTableFiles object containing the meta and data files if
+     * both files exist.  If either does not exist, null is returned.
+     *
+     */
+    static public DataTableFiles findDataTableFiles(File dir, String name) {
+        def meta = findMetaFile(dir, name)
+        def data = findDataFile(dir, name)
+        if (meta && data) return new DataTableFiles(meta:meta, data:data)
+        else return null
+    }
+    
+
+    /**
      * Find the meta-data file for a DataTable of the given name in the
      * given directory.
      *
@@ -1126,17 +1145,26 @@ abstract class DataTable {
      * file and Map.dataFile the data file.
      *
      */
-    @WithReadLock
+    
     public List<File> writeFiles(File destDir, Map args = [:]) {
         log.trace "DataTable.writeFiles: ${this.name} ${destDir?.canonicalPath}"
+        writeDataTableFiles(destDir, args).toList()
+    }
 
-        List<File> files = new ArrayList<File>()
-        files << writeMetaFile(destDir, args)
-        files << writeDataFile(destDir, args)
 
-        writtenTo.addAll(files)
+    @WithReadLock
+    public DataTableFiles writeDataTableFiles(File destDir, Map args = [:]) {
+        assert destDir != null
+        assert destDir.exists()
+        assert destDir.canWrite()
+        assert destDir.isDirectory()
 
-        return files
+        File meta = writeMetaFile(destDir, args)
+        File data = writeDataFile(destDir, args)
+
+        DataTableFiles dtf = new DataTableFiles(meta:meta, data:data)
+        writtenTo.addAll(dtf.toList())
+        dtf
     }
 
 

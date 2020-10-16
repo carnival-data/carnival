@@ -7,6 +7,8 @@ import org.apache.commons.codec.digest.DigestUtils
 
 import carnival.util.Defaults
 import carnival.core.util.CoreUtil
+import carnival.util.MappedDataTable
+import carnival.util.DataTableFiles
 
 
 
@@ -21,14 +23,14 @@ What do vine methods need to accomplish:
 
 */
 @Slf4j
-abstract class JsonVineMethod<T> extends VineMethod {
+abstract class MappedDataTableVineMethod extends VineMethod {
 
 
     ///////////////////////////////////////////////////////////////////////////
     // ABSTRACT INTERFACE
     ///////////////////////////////////////////////////////////////////////////
 
-    abstract T fetch(Map args)
+    abstract MappedDataTable fetch(Map args)
 
 
 
@@ -36,21 +38,22 @@ abstract class JsonVineMethod<T> extends VineMethod {
     // METHODS CALL
     ///////////////////////////////////////////////////////////////////////////
 
-    JsonVineMethodCall<T> call(Map args) {
+
+    MappedDataTableVineMethodCall call(Map args) {
         assert args != null
         this.arguments = args
         call()
     }
 
 
-    JsonVineMethodCall<T> call(CacheMode cacheMode) {
+    MappedDataTableVineMethodCall call(CacheMode cacheMode) {
         assert cacheMode != null
         this.cacheMode = cacheMode
         call()
     }
 
 
-    JsonVineMethodCall<T> call(CacheMode cacheMode, Map args) {
+    MappedDataTableVineMethodCall call(CacheMode cacheMode, Map args) {
         assert cacheMode != null
         assert args != null
         this.cacheMode = cacheMode
@@ -58,11 +61,12 @@ abstract class JsonVineMethod<T> extends VineMethod {
         call()
     }
 
-    JsonVineMethodCall<T> call() {
+
+    MappedDataTableVineMethodCall call() {
         assert this.cacheMode != null
         assert this.arguments != null
 
-        JsonVineMethodCall<T> methodCall
+        MappedDataTableVineMethodCall methodCall
         switch (this.cacheMode) {
             case CacheMode.IGNORE: methodCall = _callCacheModeIgnore(); break;
             case CacheMode.OPTIONAL: methodCall = _callCacheModeOptional(); break;
@@ -72,20 +76,21 @@ abstract class JsonVineMethod<T> extends VineMethod {
             throw new RuntimeException("unrecognized cache mode: ${this.cacheMode}")
         }
         assert methodCall != null
-        methodCall
+        methodCall    
     }
 
 
-    JsonVineMethodCall<T> _callCacheModeIgnore() {
+
+    MappedDataTableVineMethodCall _callCacheModeIgnore() {
         _fetchAndCache()
     }
 
 
-    JsonVineMethodCall<T> _callCacheModeOptional() {
-        JsonVineMethodCall<T> methodCall
-        File cacheFile = findCacheFile()
-        if (cacheFile) {
-            methodCall = _readFromCache(cacheFile)
+    MappedDataTableVineMethodCall _callCacheModeOptional() {
+        MappedDataTableVineMethodCall methodCall
+        DataTableFiles cacheFiles = findCacheFiles()
+        if (cacheFiles) {
+            methodCall = _readFromCache(cacheFiles)
         } else {
             methodCall = _fetchAndCache()
         }
@@ -93,8 +98,8 @@ abstract class JsonVineMethod<T> extends VineMethod {
     }
 
 
-    JsonVineMethodCall<T> _callCacheModeRequired() {
-        final String EXT = "cache-mode 'required' requires an existing cache file."
+    MappedDataTableVineMethodCall _callCacheModeRequired() {
+        final String EXT = "cache-mode 'required' requires existing cache files."
 
         File cacheDir = _cacheDirectory()
         if (cacheDir == null) throw new RuntimeException("cache directory is null. ${EXT}")
@@ -102,32 +107,34 @@ abstract class JsonVineMethod<T> extends VineMethod {
         if (!cacheDir.isDirectory()) throw new RuntimeException("cache directory is not a directory. ${EXT}")
         if (!cacheDir.canRead()) throw new RuntimeException("cache directory is not readable. ${EXT}")
 
-        File cacheFile = JsonVineMethodCall.findFile(cacheDir, this.class, this.arguments)
-        if (cacheFile == null) throw new RuntimeException("cache file does not exist. ${EXT}")        
-        if (!cacheFile.exists()) throw new RuntimeException("cache file does not exist. ${EXT}")
-        if (!cacheFile.isFile()) throw new RuntimeException("cache file is not a regular file. ${EXT}")
-        if (!cacheFile.canRead()) throw new RuntimeException("cache file is not readable. ${EXT}")
+        DataTableFiles cacheFiles = MappedDataTableVineMethodCall.findFiles(cacheDir, this.class, this.arguments)
+        if (cacheFiles == null || cacheFiles.areNull()) throw new RuntimeException("cache files are null. ${EXT}")        
+        if (!cacheFiles.exist()) throw new RuntimeException("cache files do not exist. ${EXT}")
+        if (!cacheFiles.areFiles()) throw new RuntimeException("cache files are not regular files. ${EXT}")
+        if (!cacheFiles.areReadable()) throw new RuntimeException("cache files are not readable. ${EXT}")
 
         _readFromCache(cacheFile)
     }
 
 
-    JsonVineMethodCall<T> _fetchAndCache() {
-        T fetchResult = fetch(this.arguments)
-        JsonVineMethodCall<T> methodCall = _createCallObject(this.arguments, fetchResult)
+    MappedDataTableVineMethodCall _readFromCache(DataTableFiles cacheFiles) {
+        assert cacheFiles != null
+        assert cacheFiles.exist()
+        assert cacheFiles.areReadable()
+        MappedDataTableVineMethodCall.createFromFiles(cacheFiles)
+    }
+
+
+
+    MappedDataTableVineMethodCall _fetchAndCache() {
+        MappedDataTable fetchResult = fetch(this.arguments)
+        MappedDataTableVineMethodCall methodCall = _createCallObject(this.arguments, fetchResult)
         _writeCacheFile(methodCall)
         methodCall        
     }
 
 
-    JsonVineMethodCall<T> _readFromCache(File cacheFile) {
-        assert cacheFile.exists()
-        assert cacheFile.canRead()
-        JsonVineMethodCall.createFromFile(cacheFile)
-    }
-
-
-    List<File> _writeCacheFile(JsonVineMethodCall<T> methodCall) {
+    List<File> _writeCacheFile(MappedDataTableVineMethodCall methodCall) {
         File cacheDir = _cacheDirectory()
         if (cacheDir == null) {
             log.warn "cache directory is null. no cache file will be written."
@@ -138,17 +145,33 @@ abstract class JsonVineMethod<T> extends VineMethod {
     }
 
 
-    JsonVineMethodCall<T> _createCallObject(Map arguments, T result) {
+    MappedDataTableVineMethodCall _createCallObject(Map arguments, MappedDataTable result) {
+        assert arguments != null
         assert result != null
-        JsonVineMethodCall<T> mc 
-        if (result instanceof List) mc = new JsonVineMethodListCall<T>()
-        else mc = new JsonVineMethodCall<T>()
-        //JsonVineMethodCall<T> mc = new JsonVineMethodCall<T>()
+
+        MappedDataTableVineMethodCall mc = new MappedDataTableVineMethodCall()
         mc.vineMethodClass = this.class
         mc.arguments = arguments
         mc.result = result
         mc
     }
+
+
+    MappedDataTable createMappedDataTable(String idFieldName) {
+        String name = MappedDataTableVineMethodCall.computedName(this.class, this.arguments)
+        new MappedDataTable(
+            name:name,
+            idFieldName:idFieldName,
+            vine:[
+                //vineClass:Vine.this.class.name,
+                methodClass:this.class.name,
+                arguments:this.arguments
+            ]
+        )
+    }
+
+
+
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -160,23 +183,23 @@ abstract class JsonVineMethod<T> extends VineMethod {
     }
 
 
-    File findCacheFile() {
+    DataTableFiles findCacheFiles() {
         File cacheDir = _cacheDirectory()
         if (cacheDir == null) {
             log.warn "cache directory is null. findCacheFile will return null."
             return null
         }
-        JsonVineMethodCall.findFile(cacheDir, this.class, this.arguments)
+        MappedDataTableVineMethodCall.findFiles(cacheDir, this.class, this.arguments)
     }
+    
 
-
-    File cacheFile() {
+    DataTableFiles cacheFiles() {
         File cacheDir = _cacheDirectory()
         if (cacheDir == null) {
             log.warn "cache directory is null. cacheFile will return null."
             return null
         }
-        JsonVineMethodCall.file(cacheDir, this.class, this.arguments)
+        DataTableFiles.create(cacheDir, MappedDataTableVineMethodCall.computedName(this))
     }
 
 }

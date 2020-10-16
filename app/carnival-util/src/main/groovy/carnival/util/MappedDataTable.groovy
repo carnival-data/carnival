@@ -157,6 +157,16 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
         assert dir.isDirectory()
 
         def metaFile = metaFile(dir, name)
+        loadMetaDataFromFile(metaFile)
+    }
+
+
+    /**
+     *
+     *
+     */
+    static protected Map loadMetaDataFromFile(File metaFile) {
+        assert metaFile != null
         assert metaFile.exists()
         assert metaFile.length() > 0
 
@@ -171,6 +181,7 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
     }
 
 
+
     /** 
      * Load data from a CSV file and write it to the provided MappedDataTable
      * instance.
@@ -182,8 +193,19 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
      */
     static protected void loadDataFromFile(File dir, String name, MappedDataTable mdt) {
         def dataFile = dataFile(dir, name)
+        loadDataFromFile(dataFile, mdt)
+    }
+
+
+    /**
+     *
+     *
+     */
+    static protected void loadDataFromFile(File dataFile, MappedDataTable mdt) {
+        assert dataFile != null
         assert dataFile.exists()
         assert dataFile.length() > 0
+        assert mdt != null
 
         def dataFileText = dataFile.text
 
@@ -220,6 +242,18 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
         loadDataFromFile(dir, name, mdt)
 
         return mdt
+    }
+
+
+
+    /**
+     *
+     */
+    static public MappedDataTable createFromFiles(DataTableFiles cacheFiles) {
+        def meta = loadMetaDataFromFile(cacheFiles.meta)
+        def mdt = new MappedDataTable(meta)
+        loadDataFromFile(cacheFiles.data, mdt)
+        mdt
     }
 
 

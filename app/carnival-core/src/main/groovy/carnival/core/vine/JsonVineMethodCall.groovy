@@ -6,28 +6,21 @@ import java.io.BufferedReader
 import java.io.StringReader
 import groovy.util.logging.Slf4j
 
-import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
 import com.fasterxml.jackson.databind.ObjectWriter
-import com.fasterxml.jackson.databind.JsonMappingException
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.ser.FilterProvider
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
-import org.apache.commons.codec.digest.DigestUtils
 
-import carnival.util.StringUtils
 import carnival.core.util.CoreUtil
 
 
 
 @Slf4j
 @JsonPropertyOrder(["thisClass", "vineMethodClass", "resultClass", "arguments", "result"])
-class JsonVineMethodCall<T> {
+class JsonVineMethodCall<T> implements VineMethodCall<T> {
 
     ///////////////////////////////////////////////////////////////////////////
     // CLASSES
@@ -250,7 +243,7 @@ class JsonVineMethodCall<T> {
     // METHODS - FILES
     ///////////////////////////////////////////////////////////////////////////
 
-    public File writeFile(File dir) { 
+    public List<File> writeFiles(File dir) { 
         assert dir != null
         assert dir.exists()
         assert dir.isDirectory()
@@ -266,7 +259,7 @@ class JsonVineMethodCall<T> {
 
         destFile.write(json)
 
-        destFile
+        [destFile]
     }
 
 

@@ -17,7 +17,7 @@ Probably nice that JsonVine is a trait. Since there is not multiple
 inheritance in Java, it would be restrictive to force all Vines to extend
 a class.
 */
-class JvsTestVine implements JsonVine { 
+class JvsTestVine implements Vine { 
 
     @ToString(includeNames=true)
     static class Person { String name }

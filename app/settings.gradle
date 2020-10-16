@@ -8,14 +8,5 @@
  * in the user guide at https://docs.gradle.org/4.4/userguide/multi_project_builds.html
  */
 
-/*
-// To declare projects as part of a multi-project build use the 'include' method
-include 'shared'
-include 'api'
-include 'services:webservice'
-*/
-
 rootProject.name = 'carnival'
-
-include 'carnival-gremlin-dsl', 'carnival-util', 'carnival-graph', 'carnival-core', 'carnival-clinical', 'carnival-website'
-
+include 'carnival-gradle', 'carnival-util', 'carnival-graph', 'carnival-core', 'carnival-website'

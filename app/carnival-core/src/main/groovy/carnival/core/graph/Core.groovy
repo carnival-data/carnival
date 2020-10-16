@@ -9,9 +9,9 @@ import groovy.transform.CompileStatic
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import carnival.graph.EdgeDefTrait
-import carnival.graph.PropertyDefTrait
-import carnival.graph.VertexDefTrait
+import carnival.graph.EdgeDefinition
+import carnival.graph.PropertyDefinition
+import carnival.graph.VertexDefinition
 
 
 
@@ -27,7 +27,8 @@ class Core {
 	///////////////////////////////////////////////////////////////////////////
 
     /** */
-    static enum VX implements VertexDefTrait {
+    @VertexDefinition
+    static enum VX {
         APPLICATION (
             vertexProperties:[
                 PX.NAME.withConstraints(required:true, index:true),
@@ -69,17 +70,13 @@ class Core {
             vertexProperties:[
                 PX.NAME.withConstraints(required:true, unique:true)
             ]
-        ),
-
-
-        private VX() {}
-        //private VX(Map m) { if (m.vertexProperties) this.vertexProperties = m.vertexProperties }
-        private VX(Map m) {m.each { k,v -> this."$k" = v } }
+        )
     }
 
 
     /** */
-    static enum EX implements EdgeDefTrait {
+    @EdgeDefinition
+    static enum EX {
     	IS_IDENTIFIED_BY,
         WAS_IDENTIFIED_BY,
 
@@ -114,14 +111,12 @@ class Core {
 
         IS_INVALID_AS_DESCRIBED_BY,
         IS_DERIVED_FROM
-
-        private EX() {}
-        private EX(Map m) {m.each { k,v -> this."$k" = v } }
     }
 
 
     /** */
-    static enum PX implements PropertyDefTrait {
+    @PropertyDefinition
+    static enum PX {
         NAME,
         DATE,
         START_TIME,
@@ -132,7 +127,9 @@ class Core {
         HAS_SCOPE,
         HAS_CREATION_FACILITY,
         SUCCESS,
-        MESSAGE
+        MESSAGE,
+        EXCEL_ROW_NUM,
+        DERIVATION_SOURCE
     }
 
 }

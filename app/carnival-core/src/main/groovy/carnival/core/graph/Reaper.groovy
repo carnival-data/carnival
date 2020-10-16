@@ -2,10 +2,6 @@ package carnival.core.graph
 
 
 
-import java.lang.annotation.Retention
-import java.lang.annotation.RetentionPolicy
-import java.lang.annotation.Target
-import java.lang.annotation.ElementType
 import java.lang.reflect.Field
 
 import org.slf4j.Logger
@@ -17,23 +13,10 @@ import org.apache.tinkerpop.gremlin.structure.T
 import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.structure.Vertex
 
-import org.apache.tinkerpop.gremlin.neo4j.structure.*
-
-import carnival.core.vine.Vine
-import carnival.core.vine.CachingVine.CacheMode
+import carnival.core.util.CoreUtil
 import carnival.graph.VertexDefTrait
 import carnival.graph.EdgeDefTrait
 import carnival.graph.PropertyDefTrait
-
-
-
-
-/** */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface ReaperMethodResource {
-    //public String value() default "";
-}
 
 
 
@@ -45,7 +28,7 @@ abstract class Reaper {
 	///////////////////////////////////////////////////////////////////////////
 	static Logger sqllog = LoggerFactory.getLogger('sql')
 	static Logger elog = LoggerFactory.getLogger('db-entity-report')
-	static Logger log = LoggerFactory.getLogger('carnival')
+	static Logger log = LoggerFactory.getLogger(Reaper)
 
     /** */
     static enum VX implements VertexDefTrait {
@@ -118,7 +101,6 @@ abstract class Reaper {
         m
     }
 
-
     /** */
     static Map<PropertyDefTrait,PropertyDefTrait> pxMap(Class enumFrom, Class enumTo) {
         Map<PropertyDefTrait,PropertyDefTrait> m = new HashMap<PropertyDefTrait,PropertyDefTrait>()
@@ -128,29 +110,6 @@ abstract class Reaper {
         }
         m
     }
-
-
-
-	///////////////////////////////////////////////////////////////////////////
-	// FIELDS
-	///////////////////////////////////////////////////////////////////////////
-	
-	/** data cache mode setting */
-	CacheMode forcedCacheMode = null
-
-
-	/////////////////////////////////////////////////////////////////////////
-	// CONSTRUCTOR
-	/////////////////////////////////////////////////////////////////////////
-	
-    /**
-     * Constructor.
-     *
-     */
-    public Reaper(Map args = [:]) {
-		// configuration
-		if (args.forcedCacheMode) this.forcedCacheMode = args.forcedCacheMode
-	}
 
 
 
@@ -194,6 +153,7 @@ abstract class Reaper {
         assert methodName
 
         def rmi = createReaperMethodInstance(methodName)
+        if (rmi == null) throw new RuntimeException("Could not find reaper method '${methodName}' of ${this.class.name}")
         optionallyRunSingletonProcess(rmi, methodArgs)
     }
 
@@ -212,11 +172,12 @@ abstract class Reaper {
         assert reaperMethodInstance
 
         def res = [:]
-        if (reaperMethodInstance.getAllSuccessfulTrackedProcesses(traversal()).size() == 0) {
+        def numRuns = reaperMethodInstance.getAllSuccessfulTrackedProcesses(traversal()).size()
+        if (numRuns == 0) {
             res = call(reaperMethodInstance, methodArgs)
             log.info "Reaper.optionallyRunSingletonProcess ${reaperMethodInstance.class.simpleName} res: $res"
         } else {
-            log.info "Reaper.optionallyRunSingletonProcess ${reaperMethodInstance.class.simpleName} already run"
+            log.info "Reaper.optionallyRunSingletonProcess ${reaperMethodInstance.class.simpleName} already run ${numRuns} times"
         }
 
         return res        
@@ -273,7 +234,7 @@ abstract class Reaper {
         // reap
         res.reap = reaperMethodInstance.reap(methodArgs)
         assert res.reap != null, "${reaperMethodInstance.name}() with arguments ${methodArgs} returned a null result"
-        assert res.reap.get('graphModified') != null, "${reaperMethodInstance.name}() with arguments ${methodArgs} returned a null graphModified boolean value"
+        //assert res.reap.get('graphModified') != null, "${reaperMethodInstance.name}() with arguments ${methodArgs} returned a null graphModified boolean value"
 
         // post-condition check
         res.checkPostConditions = reaperMethodInstance.checkPostConditions(methodArgs, res)
@@ -291,12 +252,12 @@ abstract class Reaper {
             }
         }
 
-        // process is a success
-        procV.property(Core.PX.SUCCESS.label, true)
-
         // compute success
         res.success = !(res.checkPreConditions || res.checkPostConditions)
         if (res.reap.success != null && !res.reap.success) res.success = false
+
+        // process is a success
+        procV.property(Core.PX.SUCCESS.label, res.success)
 
         // return the result
         return res
@@ -356,21 +317,7 @@ abstract class Reaper {
     public Collection<Class> getAllReaperMethodClasses() {
         def allSubClasses = []
         allSubClasses.addAll(Arrays.asList(this.class.getDeclaredClasses()));
-        
-        //log.debug "${this.class?.name} allSubClasses:"
-        allSubClasses.each { cl ->
-            //log.debug "cl: $cl ${cl.name}"
-            //if (ReaperMethod.isAssignableFrom(cl)) log.debug "ReaperMethod.isAssignableFrom(cl)"
-            //if (cl.isAssignableFrom(ReaperMethod)) log.debug "cl.isAssignableFrom(ReaperMethod)"
-            cl.interfaces.each { ifc ->
-                //log.debug "ifc: $ifc ${ifc.name}"
-            }
-        }
-
         def allReaperMethodClasses = allSubClasses.findAll { cl -> ReaperMethod.isAssignableFrom(cl) }
-        //log.debug "allReaperMethodClasses"
-        //allReaperMethodClasses.each { cl -> log.debug "log. $cl ${cl.name} ${cl.simpleName}" }
-
         return allReaperMethodClasses
     }
 
@@ -411,7 +358,6 @@ abstract class Reaper {
      */
     public ReaperMethod createReaperMethodInstance(String methodName) {
         def rmc = findReaperMethodClass(methodName)
-        //log.debug "Reaper rmc: $rmc"
         if (!rmc) return null
         createReaperMethodInstance(rmc)
     }
@@ -427,46 +373,10 @@ abstract class Reaper {
         def allReaperMethodClasses = getAllReaperMethodClasses()
         assert allReaperMethodClasses.contains(rmc)
 
-        // initialize graph structure
-        //initializeGraphStructure(rmc)
-    	
         // create reaper method instance
-        def vm = rmc.newInstance()
-        vm.metaClass.enclosingReaper = this   
-
-        def classes = allClasses(this)
-        //log.debug "Reaper classes: $classes"
-
-        //log.debug "this.class: ${this.class}"
-        List<Field> reaperMethodResourceFields = []
-        classes.each { cl ->
-            for (Field field: cl.getDeclaredFields()) {
-                field.setAccessible(true);
-                if (field.isAnnotationPresent(ReaperMethodResource.class)) {
-                    reaperMethodResourceFields << field
-                }
-            }
-        }
-        //log.debug "reaperMethodResourceFields: $reaperMethodResourceFields"
-
-        reaperMethodResourceFields.each { vmrf ->
-            vm.metaClass."${vmrf.name}" = vmrf.get(this)
-        }
+        def vm = rmc.newInstance(this)
 
         return vm
-    }
-
-
-    /** */
-    Set<Class> allClasses(Object obj) {
-        Set<Class> classes = new HashSet<Class>()
-        Class cl = obj.class
-        classes << cl
-        while (cl != null) {
-            cl = cl.superclass
-            if (cl != null) classes << cl
-        }
-        return classes
     }
 
 }

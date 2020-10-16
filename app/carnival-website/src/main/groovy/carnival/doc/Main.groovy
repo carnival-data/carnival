@@ -2,8 +2,7 @@ package carnival.doc
 
 
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 import static org.asciidoctor.Asciidoctor.Factory.create
 import org.asciidoctor.Asciidoctor
@@ -11,14 +10,13 @@ import org.asciidoctor.Asciidoctor
 
 
 /** */
+@Slf4j
 class Main {
 
 
 	///////////////////////////////////////////////////////////////////////////
 	// STATIC
 	///////////////////////////////////////////////////////////////////////////
-    static Logger log = LoggerFactory.getLogger('carnival')
-
 
     /**
      *

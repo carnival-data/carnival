@@ -10,14 +10,6 @@ import groovy.transform.Memoized
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
-import au.com.bytecode.opencsv.CSVWriter
-import au.com.bytecode.opencsv.CSVReader
-
-import org.yaml.snakeyaml.Yaml
-
 import groovy.sql.*
 import groovy.transform.ToString
 import groovy.transform.Synchronized
@@ -78,7 +70,7 @@ class FeatureReport extends MappedDataTable {
     static Logger elog = LoggerFactory.getLogger('db-entity-report')
 
     /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
+    static Logger log = LoggerFactory.getLogger(FeatureReport)
 
     /** */
     static final String DATE_SHIFT_SUFFIX = '_SHIFTED'
@@ -103,7 +95,6 @@ class FeatureReport extends MappedDataTable {
             assert mdt
             setMeta (
                 name: mdt.name,
-                secondaryIdFieldMap: mdt.secondaryIdFieldMap,
                 reportDescriptor: mdt.reportDescriptor
             )
         }
@@ -196,6 +187,7 @@ class FeatureReport extends MappedDataTable {
     }
 
 
+
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
@@ -208,6 +200,7 @@ class FeatureReport extends MappedDataTable {
 
     /** map of field name to feature descriptor */
     Map<String,FeatureSetDescriptor> featureDescriptors = new HashMap<String,FeatureSetDescriptor>()
+
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -245,6 +238,32 @@ class FeatureReport extends MappedDataTable {
         if (args.containsKey('reportDescriptor')) this.reportDescriptor = args.reportDescriptor
     }
 
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // KEY SET
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    public void moveKeyBefore(String keyToMove, String objectKey) {
+        assert keyToMove != null
+        assert objectKey != null
+
+        keyToMove = toFieldName(keyToMove)
+        objectKey = toFieldName(objectKey)
+        assert keySet.contains(keyToMove)
+        assert keySet.contains(objectKey)
+
+        LinkedHashSet<String> curKeys = new LinkedHashSet<String>()
+        keySet.each { key ->
+            if (key.equals(keyToMove)) return
+            if (key.equals(objectKey)) {
+                curKeys.add(keyToMove)
+            } 
+            curKeys.add(key) 
+        }
+        keySet = curKeys
+    }
 
 
 
@@ -313,6 +332,7 @@ class FeatureReport extends MappedDataTable {
             cl.delegate = curDelegate
         }
     }
+
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -403,8 +423,7 @@ class FeatureReport extends MappedDataTable {
 
         def dd = new FeatureReport(
             name:"${this.name}-dd", 
-            idFieldName:'FEATURE_NAME', 
-            idKeyType:KeyType.GENERIC_STRING_ID
+            idFieldName:'FEATURE_NAME'
         )
         dd.setOrderedKeysMappedDataTableDefault()
 
@@ -432,7 +451,6 @@ class FeatureReport extends MappedDataTable {
     // FEATURE SET RECIPE
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -462,6 +480,7 @@ class FeatureReport extends MappedDataTable {
         keySet.clear()
         keySet.addAll(orderedKeys)
     }
+
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -568,7 +587,7 @@ class FeatureReport extends MappedDataTable {
             }
         }
         dateFields = dateFields.collect { DataTable.toFieldName(it) }
-        log.debug "dateFields: $dateFields"
+        log.trace "dateFields: $dateFields"
 
         // if given fields to ignore, remove them from dateFields
         if (args.fieldsToIgnore) {
@@ -690,6 +709,38 @@ class FeatureReport extends MappedDataTable {
     }
 
 
+
+    ///////////////////////////////////////////////////////////////////////////
+    // FEATURE REPORT COMBINATION
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    @WithWriteLock
+    public void addFeatureSets(FeatureReport source, Closure shouldIncludeField) {
+        assert this.idFieldName == source.idFieldName
+
+        //log.debug "source.keySet: ${source.keySet}"
+        source.keySet.each { fieldName ->
+            if (shouldIncludeField(fieldName)) {
+                //log.debug "adding ${fieldName}"
+                this.keySet.add(fieldName)
+            }
+        }
+
+        source.dataIterator().each { rec ->
+            def subjectId = rec.get(this.idFieldName)
+            //log.trace "subjectId: $subjectId"
+
+            rec.each { k, v ->
+                if (!shouldIncludeField(k)) return
+                if (v == null) return
+                this.addFeature(subjectId, k, String.valueOf(v))
+            }
+        }
+    }
+
+
+
     ///////////////////////////////////////////////////////////////////////////
     // FEATURE EXTRACTION
     ///////////////////////////////////////////////////////////////////////////
@@ -748,8 +799,7 @@ class FeatureReport extends MappedDataTable {
      * @param data Collection<Map> matrix of data
      * @param subjectIdKey String data key for subjectId
      * @param featureName String name of feature
-     * @param featureIdKey String data key for field that identifies the linked entity
-     * @param featureValueKey String data key for the feature value pertaining to the linked entity
+     * @param featureValueKeys String data keys for the feature values pertaining to the linked entity
      *
      * Data example:
      *   EMPI   STAGE   DATE
@@ -786,7 +836,7 @@ class FeatureReport extends MappedDataTable {
         // marshall arguments
         Collection<Map> data = args.get('data')
         String subjectIdKey = args.get('subjectIdKey')
-        List<String> featureValueKeys = args.get('featureValueKeys')
+        List<String> featureValueKeys = args.get('featureValueKeys').toList()
 
         String featureName
         if (args.containsKey('featureDescriptor')) featureName = args.get('featureDescriptor').name
@@ -818,7 +868,11 @@ class FeatureReport extends MappedDataTable {
 
         // add features to report
         def groups = data.groupBy { it.get(subjectIdKey) }
+
+        //log.debug "FeatureReport groups: ${groups.size()} ${groups.take(10)}"
+
         groups.each { subjectId, recs ->
+
             if (args.includeNum) {
                 def fn = "${featureName}_COUNT"
                 def fv = recs.size().toString()
@@ -844,6 +898,7 @@ class FeatureReport extends MappedDataTable {
      * @param featureName String name of feature
      * @param featureIdKey String data key for field that identifies the linked entity
      * @param featureValueKey String data key for the feature value pertaining to the linked entity
+     * @param includeNum Boolean if true, add an _COUNT feature
      *
      * Data example:
      *   EMPI   STAGE
@@ -954,6 +1009,11 @@ class FeatureReport extends MappedDataTable {
      * Results:
      *   ['SEVERITY_1', 'SEVERITY_2']
      *
+     * Explanation:
+     *   EMPI 1 has two TUMOR_ID values.  All other EMPIs have 0 or 1 vaues.
+     *   So, the max number of severities in these data is 2 and we have
+     *   fields SEVERITY_1 and SEVERITY_2 to contain  them.
+     *
      */
     public List<String> multiFeatureNames(Map args) {
         Collection<Map> data = args.get('data')
@@ -1020,6 +1080,7 @@ class FeatureReport extends MappedDataTable {
         (1..featureValues.size()).each { out << multiFeatureName(featureName, it) }
         return out
     }
+
 
 
     ///////////////////////////////////////////////////////////////////////////

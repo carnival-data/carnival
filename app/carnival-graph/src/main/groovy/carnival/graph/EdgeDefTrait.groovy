@@ -2,6 +2,9 @@ package carnival.graph
 
 
 
+import groovy.transform.InheritConstructors
+import groovy.util.logging.Slf4j
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -15,14 +18,8 @@ import org.apache.tinkerpop.gremlin.structure.Edge
 
 
 /** */
-trait EdgeDefTrait {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
+@Slf4j
+trait EdgeDefTrait extends WithPropertyDefsTrait {
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -40,6 +37,19 @@ trait EdgeDefTrait {
 
     /** */
     boolean global = false
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // GETTERS / SETTERS
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** Setter wrapper for propertyDefs */
+    List<PropertyDefTrait> getEdgeProperties() { propertyDefs }
+    
+    /** Getter wrapper for propertyDefs */
+    void setEdgeProperties(ArrayList<PropertyDefTrait> propertyDefs) {
+        propertyDefs = propertyDefs
+    }
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -67,6 +77,11 @@ trait EdgeDefTrait {
     }
 
 
+
+    ///////////////////////////////////////////////////////////////////////////
+    // DOMAIN / RANGE
+    ///////////////////////////////////////////////////////////////////////////
+
     /** */
     public List<String> getDomainLabels() {
         if (domain == null) return null
@@ -87,7 +102,7 @@ trait EdgeDefTrait {
             if (this.domain.contains(fromDef)) return
             if (fromDef.isGlobal() && this.domain.find({ it.label == fromDef.label })) return
             if (this.domain.find({ it.label == fromDef.label && it.isGlobal() })) return
-            throw new RuntimeException("The 'from' vertex is not found in the domain of this relation -- relation:${this} relationDomain:${this.domain} fromVertexDef:${fromDef}")
+            throw new EdgeDomainException("The 'from' vertex is not found in the domain of this relation -- relation:${this} relationDomain:${this.domain} fromVertexDef:${fromDef}")
         }
     }
 
@@ -105,7 +120,7 @@ trait EdgeDefTrait {
             if (this.range.contains(toDef)) return
             if (toDef.isGlobal() && this.range.find({ it.label == toDef.label })) return
             if (this.range.find({ it.label == toDef.label && it.isGlobal() })) return
-            throw new RuntimeException("The 'to' vertex is not found in the range of this relation -- relation:${this} relationDomain:${this.range} toVertexDef:${toDef}")
+            throw new EdgeRangeException("The 'to' vertex is not found in the range of this relation -- relation:${this} relationDomain:${this.range} toVertexDef:${toDef}")
         }
     }
 
@@ -114,6 +129,16 @@ trait EdgeDefTrait {
     public void assertRange(Vertex to) {
         def toDef = VertexDef.lookup(to)
         assertRange(toDef)        
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Builders
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    public EdgeBuilder instance() {
+        return new EdgeBuilder(this)
     }
 
 

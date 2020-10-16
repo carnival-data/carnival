@@ -3,8 +3,6 @@ package carnival.core.graph
 
 
 import groovy.sql.*
-import groovy.mock.interceptor.StubFor
-import groovy.util.AntBuilder
 import groovy.transform.InheritConstructors
 
 import spock.lang.Specification
@@ -14,8 +12,6 @@ import spock.lang.Shared
 import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
-
-import org.apache.commons.io.FileUtils
 
 import carnival.graph.*
 
@@ -61,7 +57,7 @@ class ReaperSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
-    void initGraph(Graph graph, GraphTraversalSource g) {
+    static void initGraph(Graph graph, GraphTraversalSource g) {
         [
             Core.VX.PROCESS_CLASS,
             Core.VX.DATA_TRANSFORMATION_PROCESS_CLASS,
@@ -188,6 +184,25 @@ class ReaperSpec extends Specification {
     }
 
 
+    def "shared resource"() {
+        given:
+        def reaper = new SimpleReaper()
+        def g = reaper.graph.traversal()
+        ReaperSpec.initGraph(reaper.graph, g)
+        g.close()
+        def res
+
+        when:
+        res = reaper.call('ReaperMethodSharedResource')
+
+        then:
+        res != null
+        res.reap != null
+        res.reap.str != null
+        res.reap.str == "dang y'all"
+    }
+
+
     def "call via methodMissing fail"() {
         given:
         def reaper = new SimpleReaper()
@@ -225,6 +240,7 @@ class ReaperSpec extends Specification {
     }
 
 
+    /* relaxed this requirement
     def "call reap must have graphModified"() {
         given:
         def reaper = new SimpleReaper()
@@ -240,7 +256,7 @@ class ReaperSpec extends Specification {
 
         then:
         e = thrown()
-    }
+    }*/
 
 
     def "call reap"() {
@@ -361,9 +377,10 @@ class ReaperSpec extends Specification {
 
         then:
         reaperMethodClasses != null
-        reaperMethodClasses.size() == 1
+        reaperMethodClasses.size() == 2
 
         reaperMethodClasses.find { it.name.endsWith("ReaperMethod1") }
+        reaperMethodClasses.find { it.name.endsWith("ReaperMethodSharedResource") }
     }
 
 }
@@ -374,7 +391,7 @@ class ReaperSpec extends Specification {
 @InheritConstructors
 class ReaperWithDefs extends SimpleReaper {
 
-    static class ReaperMethodWithDefs extends ReaperMethod {
+    class ReaperMethodWithDefs extends ReaperMethod {
 
         /** */
         static enum VX implements VertexDefTrait {
@@ -419,6 +436,9 @@ class SimpleReaper extends Reaper {
     @ReaperMethodResource
     Graph graph
 
+    @ReaperMethodResource
+    String sharedResource = "dang"
+
     public SimpleReaper() {
         this.graph = TinkerGraph.open()
     }
@@ -435,8 +455,7 @@ class SimpleReaper extends Reaper {
     }
 
 
-    static class ReaperMethod1 extends ReaperMethod {
-
+    class ReaperMethod1 extends ReaperMethod {
         Collection<GraphValidationError> checkPreConditions(Map args) {
             log.debug "ReaperMethod1 checkPreConditions"
             if (args.pre) return args.pre(args)
@@ -454,8 +473,28 @@ class SimpleReaper extends Reaper {
             if (args.post) return args.post(args)
             return []
         }
+    }
+
+
+    class ReaperMethodSharedResource extends ReaperMethod {
+
+        Collection<GraphValidationError> checkPreConditions(Map args) {
+            return []
+        }
+
+        Map reap(Map args = [:]) {
+            log.debug "ReaperMethodSharedResource reap"
+            def str = "${sharedResource} y'all"            
+            return [str:str]
+        }
+
+        Collection<GraphValidationError> checkPostConditions(Map args, Map results = [:]) {
+            return []
+        }
 
     }
+
+
 }
 
 

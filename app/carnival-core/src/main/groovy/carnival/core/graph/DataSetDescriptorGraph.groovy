@@ -6,9 +6,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 
 import groovy.transform.Memoized
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 import groovy.transform.ToString
 import groovy.transform.Synchronized
@@ -25,7 +23,6 @@ import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.structure.Edge
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 
-import carnival.util.KeyType
 import carnival.util.DescribedEntity
 import carnival.util.DataSetDescriptor
 import carnival.util.FeatureReport
@@ -172,7 +169,7 @@ class DataSetDescriptorGraph implements GremlinTrait {
                 __.outE(Core.EX.DEPENDS_ON.label).count().is(0)
             )
         .toSet().each {
-            log.debug "${it} ${it.label()}"
+            //log.debug "${it} ${it.label()}"
             dsd.recipeSteps << loadFeatureSetRecipeStep(g, it)
         }
 
@@ -294,7 +291,7 @@ class DataSetDescriptorGraph implements GremlinTrait {
 
         def dsdV = save(g, dsd)
 
-        def reportV = VX.FEATURE_REPORT.instance().withProperty(Core.PX.NAME, report.name).createVertex(graph, g)
+        def reportV = VX.FEATURE_REPORT.instance().withProperty(Core.PX.NAME, report.name).createVertex(graph)
         Core.EX.DESCRIBES.relate(g, dsdV, reportV)
 
         dsdV
@@ -306,7 +303,7 @@ class DataSetDescriptorGraph implements GremlinTrait {
         assert g
         assert dsd
         
-        def dsdV = VX.DATA_SET_DESCRIPTOR.instance().withProperty(Core.PX.NAME, dsd.name).createVertex(graph, g)
+        def dsdV = VX.DATA_SET_DESCRIPTOR.instance().withProperty(Core.PX.NAME, dsd.name).createVertex(graph)
         if (dsd.description) dsdV.property(Core.PX.DESCRIPTION.label, dsd.description)
 
         dsd.recipeIngredients.each { 
@@ -336,12 +333,12 @@ class DataSetDescriptorGraph implements GremlinTrait {
         }
 
         fsd.featureSetNames.each {
-            def fsnV = VX.FEATURE_SET_NAME.instance().withProperty(Core.PX.VALUE, it).createVertex(graph, g)
+            def fsnV = VX.FEATURE_SET_NAME.instance().withProperty(Core.PX.VALUE, it).createVertex(graph)
             Core.EX.DESCRIBES.relate(g, fsdV, fsnV)
         }
 
         fsd.dataTypes.each { FeatureDataType fdt ->
-            def fdtV = VX.FEATURE_DATA_TYPE.instance().withProperty(Core.PX.NAME, fdt.name()).createVertex(graph, g)
+            def fdtV = VX.FEATURE_DATA_TYPE.instance().withProperty(Core.PX.NAME, fdt.name()).createVertex(graph)
             Core.EX.DESCRIBES.relate(g, fdtV, fsdV)
         }
 
@@ -420,7 +417,7 @@ class DataSetDescriptorGraph implements GremlinTrait {
         assert vdt
         assert de
 
-        def v = vdt.instance().withProperty(Core.PX.NAME, de.name).createVertex(graph, g)
+        def v = vdt.instance().withProperty(Core.PX.NAME, de.name).createVertex(graph)
         if (de.description) v.property(Core.PX.DESCRIPTION.label, de.description)
 
         v
@@ -444,14 +441,6 @@ class DataSetDescriptorGraph implements GremlinTrait {
 class FeatureSetRecipeStepVineMethod implements DescribedEntity {
 
     ///////////////////////////////////////////////////////////////////////////
-    // STATIC FIELDS
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
-
-
-    ///////////////////////////////////////////////////////////////////////////
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
@@ -467,14 +456,6 @@ class FeatureSetRecipeStepVineMethod implements DescribedEntity {
  */
 @ToString(includeNames=true)
 class FeatureSetRecipeStepGraphTraversal implements DescribedEntity {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC FIELDS
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
-
 
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS

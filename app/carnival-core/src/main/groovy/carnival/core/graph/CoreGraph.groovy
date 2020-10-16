@@ -2,11 +2,8 @@ package carnival.core.graph
 
 
 
-import groovy.util.AntBuilder
 import groovy.transform.ToString
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 import org.reflections.Reflections
 
@@ -23,6 +20,7 @@ import org.apache.tinkerpop.gremlin.structure.Transaction
 import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.structure.Edge
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
+import org.apache.tinkerpop.gremlin.structure.Graph.Features.GraphFeatures
 
 import carnival.util.Defaults
 import carnival.graph.EdgeDefTrait
@@ -40,15 +38,8 @@ import carnival.graph.ControlledInstance
  * The core graph.  See the documentation for model details.
  *
  */
-abstract class CoreGraph {
-
-	///////////////////////////////////////////////////////////////////////////
-	// STATIC FIELDS
-	///////////////////////////////////////////////////////////////////////////
-
-	/** Carnival log*/
-	static Logger log = LoggerFactory.getLogger('carnival')
-
+@Slf4j
+abstract class CoreGraph implements GremlinTrait {
 
 	///////////////////////////////////////////////////////////////////////////
 	// UTILITY
@@ -62,7 +53,6 @@ abstract class CoreGraph {
 
         def maxClosureParams = cl.getMaximumNumberOfParameters()
 
-        def g
 		try {
 			if (maxClosureParams == 0) {
 				cl()
@@ -72,6 +62,36 @@ abstract class CoreGraph {
 		} finally {
 			tx.commit()
 			tx.close()
+		}
+	}
+
+
+	/** */
+	static public void withTransactionIfSupported(Graph graph, Closure cl) {
+		def transactionsAreSupported = graph.features().graph().supportsTransactions()
+		log.trace "transactionsAreSupported:${transactionsAreSupported}"
+
+		def tx
+		if (transactionsAreSupported) {
+			tx = graph.tx()
+			if (tx.isOpen()) tx.close()
+			tx.open()
+		}
+
+        def maxClosureParams = cl.getMaximumNumberOfParameters()
+
+		try {
+			if (maxClosureParams == 0) {
+				cl()
+			} else if (maxClosureParams == 1) {
+				if (transactionsAreSupported) cl(tx)
+				else cl()
+			}
+		} finally {
+			if (transactionsAreSupported) {
+				tx.commit()
+				tx.close()
+			}
 		}
 	}
 
@@ -96,8 +116,8 @@ abstract class CoreGraph {
 	// INSTANCE
 	///////////////////////////////////////////////////////////////////////////
 
-	/** */
-	Graph graph
+	/** Graph object is added by GremlinTrait. */
+	//Graph graph
 
 	/** */
 	CoreGraphSchema graphSchema
@@ -128,12 +148,21 @@ abstract class CoreGraph {
 	///////////////////////////////////////////////////////////////////////////
 
 	/** */
-	public void initializeGremlinGraph(Graph graph, GraphTraversalSource g) {
-		reaperMethodLabelDefinitions(graph, g)
-		initializeDefinedVertices(graph, g)
-		initializeDefinedEdges(graph, g)
+	public void initializeGremlinGraph(Graph graph, GraphTraversalSource g, String packageName) {
+		log.info "CoreGraph initializeGremlinGraph graph:$graph g:$g packageName:$packageName"
+
+		reaperMethodLabelDefinitions(graph, g, packageName)
+		initializeDefinedVertices(graph, g, packageName)
+		initializeDefinedEdges(graph, g, packageName)
 		createControlledInstances(graph, g)
 	}
+
+	/** */
+	public void initializeGremlinGraph(Graph graph, GraphTraversalSource g) {
+		log.info "CoreGraph initializeGremlinGraph graph:$graph g:$g"
+		initializeGremlinGraph(graph, g, 'carnival')
+	}
+	
 
 
 	///////////////////////////////////////////////////////////////////////////
@@ -141,24 +170,20 @@ abstract class CoreGraph {
 	///////////////////////////////////////////////////////////////////////////
 
 	/** */
-	public void initializeDefinedVertices(Graph graph, GraphTraversalSource g) {
-		initializeDefinedVertices(graph, g, 'carnival')
-	}
-
-
-	/** */
     public void initializeDefinedVertices(Graph graph, GraphTraversalSource g, String packageName) {
+		log.info "CoreGraph initializeDefinedVertices graph:$graph g:$g packageName:$packageName"
+		
 		assert graph
 		assert g
 		assert packageName
 
-		List<VertexLabelDefinition> newDefinitions = findNewVertexLabelDefinitions(graph, g, packageName)
+		List<VertexLabelDefinition> newDefinitions = findNewVertexLabelDefinitions(packageName)
 
-		withTransaction(graph) {
+		withTransactionIfSupported(graph) {
 	        newDefinitions.each { vld ->
-	        	log.trace "initializeDefinedVertices vld: $vld"
+	        	log.trace "initializeDefinedVertices vld: ${vld.label} $vld"
 
-	        	log.trace "adding vertex label definition to graph schema ${vld}"
+	        	log.trace "adding vertex label definition to graph schema ${vld.label} ${vld}"
 				graphSchema.dynamicLabelDefinitions << vld
 
 				// add the controlled instance, which can only be done if there
@@ -171,33 +196,42 @@ abstract class CoreGraph {
 
 	            	if (!ci) {
 	            		ci = vdef.controlledInstance()
-	            		log.trace "created controlled instance ${ci}"
+	            		log.trace "created controlled instance ${ci.vertexDef.label} ${ci}"
 		            	graphSchema.controlledInstances << ci
 		            }
 	            	
 	            	vdef.vertex = ci.vertex(graph, g)
-	            	log.trace "created controlled instance vertex ${vdef.vertex}"
+	            	log.trace "created controlled instance vertex ${vdef.label} ${vdef.nameSpace} ${vdef.vertex}"
             	}
+
+				// attempt to set super/sub class relationship
+				if (vdef.superClass) {
+					assert vdef.isClass()
+					assert vdef.superClass.isClass()
+					assert vdef.vertex
+					assert vdef.superClass.vertex
+					vdef.setSubclassOf(g, vdef.superClass)
+				}
 	        }
 		}
     }
 
 
     /** */
-    public Collection<VertexLabelDefinition> findNewVertexLabelDefinitions(Graph graph, GraphTraversalSource g, String packageName) {
-		assert graph
-		assert g
+    public Collection<VertexLabelDefinition> findNewVertexLabelDefinitions(String packageName) {
+		log.info "CoreGraph findNewVertexLabelDefinitions packageName:$packageName"
+
 		assert packageName
 
-    	def vertexDefClasses = findVertexDefClases(packageName)
+    	Set<Class<VertexDefTrait>> vertexDefClasses = findVertexDefClases(packageName)
     	
 		List<VertexLabelDefinition> existingDefinitions = graphSchema.getLabelDefinitions()
 		List<VertexLabelDefinition> newDefinitions = new ArrayList<VertexLabelDefinition>()
 
-        vertexDefClasses.each { vdc ->
+        vertexDefClasses.each { Class vdc ->
         	log.trace "findNewVertexLabelDefinitions vdc: $vdc"
 
-            vdc.values().each { vdef ->
+            vdc.values().each { VertexDefTrait vdef ->
             	log.trace "findNewVertexLabelDefinitions vdef: $vdef"
 
             	// check if already defined
@@ -206,7 +240,7 @@ abstract class CoreGraph {
             	}
             	if (!found) {
 					def vld = VertexLabelDefinition.create(vdef)
-					log.trace "found new vertex label definition ${vld}"
+					log.trace "found new vertex label definition ${vld.label} ${vld}"
 	            	newDefinitions << vld
             	}
             }
@@ -221,20 +255,14 @@ abstract class CoreGraph {
     	// find all vertex defs
     	Reflections reflections = new Reflections(packageName)
     	Set<Class<VertexDefTrait>> classes = reflections.getSubTypesOf(VertexDefTrait.class)
-    	log.trace "findVertexDefClases classes: $classes"
+    	log.trace "findVertexDefClases classes(${classes?.size()}): $classes"
 
     	// remove genralized classes
     	classes.remove(carnival.graph.DynamicVertexDef)
-    	log.trace "findVertexDefClases classes: $classes"
+    	log.trace "findVertexDefClases classes(${classes?.size()}): $classes"
 
     	return classes
     }
-
-
-	/** */
-	public void initializeDefinedEdges(Graph graph, GraphTraversalSource g) {
-		initializeDefinedEdges(graph, g, 'carnival')
-	}
 
 
 	/** */
@@ -249,7 +277,7 @@ abstract class CoreGraph {
 		List<RelationshipDefinition> existingDefinitions = graphSchema.getRelationshipDefinitions()
 		log.trace "existing relationship definitions: $existingDefinitions"
 
-		withTransaction(graph) {
+		withTransactionIfSupported(graph) {
 	        edgeDefClasses.each { edc ->
 	        	log.trace "initializeDefinedEdges edc: $edc"
 
@@ -298,14 +326,6 @@ abstract class CoreGraph {
 
 
 	/** */
-	public List<VertexLabelDefinition> reaperMethodLabelDefinitions(Graph graph, GraphTraversalSource g) {
-		log.trace "CoreGraph.reaperMethodLabelDefinitions"
-
-		reaperMethodLabelDefinitions(graph, g, 'carnival')
-	}
-
-
-	/** */
     public List<VertexLabelDefinition> reaperMethodLabelDefinitions(Graph graph, GraphTraversalSource g, String packageName) {
     	def rmcs = findReaperMethodClasses(packageName)
     	log.trace "rmcs: $rmcs"
@@ -320,7 +340,7 @@ abstract class CoreGraph {
     	List<VertexLabelDefinition> labelDefs = new ArrayList<VertexLabelDefinition>()
     	def existingDefinitions = graphSchema.labelDefinitions
 
-    	withTransaction(graph) {
+    	withTransactionIfSupported(graph) {
 			rmcs.each { rmc ->
 
 	        	// try to create a reaper method instance
@@ -329,7 +349,7 @@ abstract class CoreGraph {
 	        		rm = rmc.newInstance()
 	        		log.trace "rm: $rm"
 	    		} catch (Throwable t) {
-	    			log.info "rmc:${rmc.simpleName} t:${t.message}"
+	    			log.trace "rmc:${rmc.simpleName} t:${t.message}"
 	    		}
 	    		if (!rm) return
 
@@ -340,7 +360,7 @@ abstract class CoreGraph {
 	        		tpcd = rm.getTrackedProcessClassDef()
 	        		tpd = rm.getTrackedProcessDef()
 	    		} catch (Throwable t) {
-	    			log.info "rmc:${rmc.simpleName} t:${t.message}"
+	    			log.trace "rmc:${rmc.simpleName} t:${t.message}"
 	    		}
 
 	    		// they both need to be defined or none of them
@@ -372,7 +392,6 @@ abstract class CoreGraph {
 	            	}
 	            	if (!found) {
 		    			def vld = VertexLabelDefinition.create(vdef)
-		                //def vld = new VertexLabelDefinition(label:vdef.label)
 		                log.trace "adding VertexLabelDefinition ${vdef.label} $vld"
 		                labelDefs << vld
 	            	}
@@ -410,9 +429,9 @@ abstract class CoreGraph {
 
 		def verts = []
 		
-		withTransaction(graph) {
+		withTransactionIfSupported(graph) {
 			graphSchema.controlledInstances.each { ci ->
-				log.trace "creating controlled instance $ci"
+				log.trace "creating controlled instance ${ci.class.simpleName} $ci"
 				if (ci instanceof ControlledInstance) verts << ci.vertex(graph, g)
 				else verts << createControlledInstanceVertex(graph, g, ci)
 			}
@@ -492,9 +511,12 @@ abstract class CoreGraph {
 				cl()
 			} else if (maxClosureParams == 1) {
 				cl(tx)
-			} else {
+			} else if (maxClosureParams == 2) {
 				g = traversal()
 				cl(tx, g)
+			} else {
+				g = traversal()
+				cl(tx, g, graph)
 			}
 		} finally {
 			tx.commit()

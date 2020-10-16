@@ -1,4 +1,4 @@
-moduleName=Carnival Core Extension Module
+moduleName=carnival-core-extensions
 moduleVersion=1.0-test
-extensionClasses=carnival.util.FieldNameExtensions,carnival.core.graph.TinkerpopExtensions
-staticExtensionClasses=
+extensionClasses=org.codehaus.groovy.macro.methods.MacroGroovyMethods,carnival.util.FieldNameExtensions,carnival.graph.ext.TinkerpopTraversalExtension
+staticExtensionClasses=org.codehaus.groovy.macro.methods.MacroGroovyMethods,carnival.graph.ext.TinkerpopAnonTraversalExtension

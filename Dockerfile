@@ -21,8 +21,8 @@ ADD "https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/download/${
 
 # set up CARNIVAL_HOME directory
 WORKDIR ${CARNIVAL_HOME}/config
-COPY app/carnival-core/config/*yml-template /${CARNIVAL_HOME}/config/
-COPY app/carnival-core/config/logback.xml-travis-template /${CARNIVAL_HOME}/config/
+COPY config/*yml-template /${CARNIVAL_HOME}/config/
+COPY config/logback.xml-travis-template /${CARNIVAL_HOME}/config/
 RUN rename -v 's/-travis-template//' *travis-template
 RUN rename -v 's/-template//' *-template
 RUN dos2unix **

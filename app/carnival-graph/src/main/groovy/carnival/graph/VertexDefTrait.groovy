@@ -3,6 +3,8 @@ package carnival.graph
 
 
 import groovy.transform.ToString
+import groovy.util.logging.Slf4j
+
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -13,6 +15,7 @@ import org.apache.tinkerpop.gremlin.structure.T
 import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.structure.Edge
+import org.apache.tinkerpop.gremlin.structure.VertexProperty
 
 import carnival.util.StringUtils
 import carnival.graph.Base
@@ -23,14 +26,12 @@ import carnival.graph.Base
  *
  *
  */
-trait VertexDefTrait {
+@Slf4j
+trait VertexDefTrait extends WithPropertyDefsTrait {
 
     ///////////////////////////////////////////////////////////////////////////
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
 
     /** */
     public static final String GLOBAL = 'GlobalVertexDefinition'
@@ -55,25 +56,24 @@ trait VertexDefTrait {
     
 
     /** */
-    List<PropertyDefTrait> vertexProperties = new ArrayList<PropertyDefTrait>()
-
-
-    /** */
     boolean global = false
 
 
-
-    ///////////////////////////////////////////////////////////////////////////
-    // BUILDER METHODS
-    ///////////////////////////////////////////////////////////////////////////
-
     /** */
-    public VertexDefTrait withPropertyDef(PropertyDefTrait vertexPropertyDef) {
-        vertexProperties << vertexPropertyDef
-        return this
+    VertexDefTrait superClass
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // GETTERS / SETTERS
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** Setter wrapper for propertyDefs */
+    List<PropertyDefTrait> getVertexProperties() { this.propertyDefs }
+    
+    /** Getter wrapper for propertyDefs */
+    void setVertexProperties(List<PropertyDefTrait> propertyDefs) {
+        this.propertyDefs = propertyDefs
     }
-
-
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -110,55 +110,15 @@ trait VertexDefTrait {
 
 
     /** */
-    public List<String> getUniquePropertyLabels() {
-        return uniqueProperties*.label
-    }
-
-
-    /** */
-    public List<String> getRequiredPropertyLabels() {
-        return requiredProperties*.label
-    }
-
-
-    /** */
-    public List<String> getIndexedPropertyLabels() {
-        return indexedProperties*.label
-    }
-
-
-    /** */
-    public List<PropertyDefTrait> getUniqueProperties() {
-        return vertexProperties.findAll {
-            it instanceof ConstrainedPropertyDefTrait &&
-            it.unique
+    public Set<VertexProperty> definedPropertiesOf(Vertex v) {
+        Set<VertexProperty> vProps = new HashSet<VertexProperty>()
+        propertyDefs.each { pDef ->
+            def vp = v.property(pDef.label)
+            if (VertexProperty.empty().equals(vp)) return
+            if (!vp.isPresent()) return
+            vProps.add(vp)
         }
-    }
-
-
-    /** */
-    public List<PropertyDefTrait> getRequiredProperties() {
-        return vertexProperties.findAll {
-            it instanceof ConstrainedPropertyDefTrait &&
-            it.required
-        }
-    }
-
-
-    /** */
-    public List<PropertyDefTrait> getIndexedProperties() {
-        return vertexProperties.findAll {
-            it instanceof ConstrainedPropertyDefTrait &&
-            it.index
-        }
-    }
-
-
-    /** */
-    public List<PropertyDefTrait> getDefaultProperties() {
-        return vertexProperties.findAll {
-            it.defaultValue != null
-        }
+        vProps
     }
 
 
@@ -181,37 +141,19 @@ trait VertexDefTrait {
     }
 
 
-    /** 
-     *
-     *
-     */
+    /** */
     public ControlledInstance instance() {
         controlledInstance()
     }
 
 
-    /** 
-     *
-     *
-     */
+    /** */
     public ControlledInstance controlledInstance() {
         return new ControlledInstance(this)
     }
 
 
-    /** 
-     *
-     *
-     */
-    public Vertex createVertex(Graph graph, GraphTraversalSource g) {
-        this.instance().createVertex(graph, g)
-    }
-
-
-    /** 
-     *
-     *
-     */
+    /** */
     public Vertex createVertex(Graph graph) {
         assert graph
         if (isClass()) throw new RuntimeException("cannot create instance vertex of class ${this}")
@@ -228,6 +170,16 @@ trait VertexDefTrait {
     }
 
 
+
+    ///////////////////////////////////////////////////////////////////////////
+    // SIMPLE VALIDATION
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    public boolean isa(Vertex v) {
+        assert v != null
+        (v.label() == getLabel() && Base.PX.NAME_SPACE.valueOf(v) == getNameSpace())
+    }
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -274,7 +226,7 @@ trait VertexDefTrait {
      *
      */
     public void setRelationship(GraphTraversalSource g, EdgeDefTrait rel, VertexDefTrait targetClassDef) {
-        log.debug "setRelationship rel:$rel"
+        //log.debug "setRelationship rel:$rel"
         g.V(vertex)
             .outE(rel.label).as('r')
             .inV()

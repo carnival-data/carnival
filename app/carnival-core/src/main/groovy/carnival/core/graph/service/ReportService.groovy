@@ -23,11 +23,8 @@ import static org.apache.tinkerpop.gremlin.process.traversal.step.TraversalOptio
 import static org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__.*
 import static org.apache.tinkerpop.gremlin.neo4j.process.traversal.LabelP.of
 
-import org.apache.tinkerpop.gremlin.neo4j.structure.*
-
 import carnival.core.*
 import carnival.core.graph.*
-import carnival.util.KeyType
 import carnival.util.DataTable
 import carnival.util.GenericDataTable
 import carnival.util.TabularReport
@@ -46,7 +43,7 @@ abstract class ReportService {
 
     static final Logger sqllog = LoggerFactory.getLogger('sql')
     static final Logger elog = LoggerFactory.getLogger('db-entity-report')
-    static final Logger log = LoggerFactory.getLogger('carnival')
+    static final Logger log = LoggerFactory.getLogger(ReportService)
 
 
     ///////////////////////////////////////////////////////////////////////////

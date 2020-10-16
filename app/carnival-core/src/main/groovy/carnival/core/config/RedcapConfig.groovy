@@ -16,9 +16,9 @@ class RedcapConfig extends DatabaseConfig {
 	/** */
 	static public RedcapConfig getDatabaseConfigFromFile(String confFilePath, String prefix) {
         def conf = loadYamlFile(confFilePath)
-        if (!conf.get('dataSourcesRedcap')) throw new RuntimeException("no dataSourcesRedcap configurations in: $confFilePath")
-        if (!conf.dataSourcesRedcap.get(prefix)) throw new RuntimeException("no configuration in $confFilePath for $prefix")
-        def db = new RedcapConfig(conf.dataSourcesRedcap.get(prefix))
+        if (!conf.get('carnival.dataSourcesRedcap')) throw new RuntimeException("no dataSourcesRedcap configurations in: $confFilePath")
+        if (!conf.carnival.dataSourcesRedcap.get(prefix)) throw new RuntimeException("no configuration in $confFilePath for $prefix")
+        def db = new RedcapConfig(conf.carnival.dataSourcesRedcap.get(prefix))
 		return db
 	}
 

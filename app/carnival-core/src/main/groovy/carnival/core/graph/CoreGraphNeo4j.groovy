@@ -5,9 +5,7 @@ package carnival.core.graph
 import groovy.util.AntBuilder
 import groovy.transform.ToString
 import groovy.transform.InheritConstructors
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 import org.reflections.Reflections
 
@@ -35,14 +33,12 @@ import carnival.util.Defaults
 
 /** */
 @InheritConstructors
+@Slf4j
 class CoreGraphNeo4j extends CoreGraph {
 
 	///////////////////////////////////////////////////////////////////////////
 	// STATIC
 	///////////////////////////////////////////////////////////////////////////
-
-	/** Carnival log*/
-	static Logger log = LoggerFactory.getLogger('carnival')
 
 	/** File path to the graph directory */
 	static String GRAPH_PATH = "${Defaults.dataGraphDirectory}"
@@ -98,14 +94,15 @@ class CoreGraphNeo4j extends CoreGraph {
    		config.setProperty('gremlin.neo4j.directory', Defaults.dataGraphDirectoryPath)
 
    		[
-   			'gremlin.neo4j.conf.dbms.security.auth_enabled',
-   			'gremlin.neo4j.conf.dbms.directories.plugins',
-   			'gremlin.neo4j.conf.dbms.security.procedures.unrestricted',
-   			'gremlin.neo4j.conf.dbms.security.procedures.whitelist',
-   			'gremlin.neo4j.conf.dbms.unmanaged_extension_classes'
-
+   			"carnival.gremlin.neo4j.conf.dbms.security.auth_enabled",
+   			"carnival.gremlin.neo4j.conf.dbms.directories.plugins",
+   			"carnival.gremlin.neo4j.conf.dbms.security.procedures.unrestricted",
+   			"carnival.gremlin.neo4j.conf.dbms.security.procedures.whitelist",
+   			"carnival.gremlin.neo4j.conf.dbms.unmanaged_extension_classes"
    		].each { p ->
-	   		config.setProperty(p, Defaults.getConfigValue(p))
+		    def k = p.split('\\.').drop(1).join('.')
+		    def v = Defaults.getConfigValue(p)
+	   		config.setProperty(k, v)
    		}
    		
    		return config
@@ -126,6 +123,7 @@ class CoreGraphNeo4j extends CoreGraph {
    		if (args.graphDirectory) config.setProperty('gremlin.neo4j.directory', args.graphDirectory)
 
 		// create gremlin Neo4jGraph
+		log.info "opening Neo4j graph config:${config} ..."
 		Graph graph = Neo4jGraph.open(config)
 		assert graph
 
@@ -163,24 +161,107 @@ class CoreGraphNeo4j extends CoreGraph {
 	}
 
 
+    ///////////////////////////////////////////////////////////////////////////
+    // LIFE-CYCLE
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    public void close() {
+        graph.close()
+    }
+
 
 	///////////////////////////////////////////////////////////////////////////
 	// GRAPH DIRECTORY OPERATIONS
 	///////////////////////////////////////////////////////////////////////////
 
 	/** */
+	public static File graphDir() {
+		File graphDir = new File(GRAPH_PATH)
+		assert graphDir.exists()
+		assert graphDir.isDirectory()
+		graphDir
+	}
+
+
+	/** */
+	public static File sisterDir(String dirName) {
+		assert dirName
+		File graphDir = graphDir()
+		File parentDir = graphDir.getParentFile()
+		assert parentDir.exists()
+		assert parentDir.isDirectory()
+
+		new File(parentDir, dirName)
+	}
+
+
+	/** */
  	public static clearGraph() {
+		log.info "clearGraph"
         def ant = new AntBuilder()
-        def testdir = new File(GRAPH_PATH)
-        if (testdir.exists()) ant.delete(dir:testdir)
+        def graphDir = graphDir()
+        if (graphDir.exists()) ant.delete(dir:graphDir)
     }
 
 
 	/** */
+	public static resetGraphFrom(String sourceDirName) {
+		log.info "resetGraphFrom sourceDirName:${sourceDirName}"
+
+		File sourceDir = sisterDir(sourceDirName)
+		assert sourceDir.exists()
+
+		resetGraphFrom(sourceDir)
+	}
+
+
+	/** */
+	public static resetGraphFromIfExists(String sourceDirName) {
+		log.info "resetGraphFromIfExists sourceDirName:${sourceDirName}"
+
+		File sourceDir = sisterDir(sourceDirName)
+		if (sourceDir.exists()) resetGraphFrom(sourceDir)
+	}
+
+
+	/** */
+	public static resetGraphFrom(File sourceDir) {
+		log.info "resetGraphFrom sourceDir:${sourceDir}"
+
+		assert sourceDir
+		assert sourceDir.exists()
+
+        def ant = new AntBuilder()
+		File graphDir = graphDir()
+        if (graphDir.exists()) ant.delete(dir:graphDir)
+        ant.mkdir(dir:graphDir)
+        ant.sequential {
+			echo("copy graph ${sourceDir} to ${graphDir}")
+		    copy(todir: graphDir) {
+		        fileset(dir: sourceDir)
+		    }
+		    echo("done")
+		}
+	}
+
+
+	/** */
+	public copyGraph(String dirName) {
+		log.info "copyGraph dirName: $dirName"
+		assert dirName
+
+		File publishDir = sisterDir(dirName)
+		copyGraph(publishDir)
+	}
+
+
+	/** */
 	public copyGraph(File publishDir) {
+		log.info "copyGraph $publishDir"
 		assert publishDir
 
-		log.trace "CoreGraph.copyGraph $GRAPH_PATH $publishDir"
+		File graphDir = graphDir()
 
 		// set up publish directory
         def ant = new AntBuilder()
@@ -189,13 +270,12 @@ class CoreGraphNeo4j extends CoreGraph {
 
         // copy
         ant.sequential {
-		    echo("inside ant sequential")
+			echo("copy graph ${graphDir} to ${publishDir}")
 		    copy(todir: publishDir) {
-		        fileset(dir: GRAPH_PATH)
+		        fileset(dir: graphDir)
 		    }
 		    echo("done")
 		}
 	}
 	
-
 }

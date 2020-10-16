@@ -2,21 +2,6 @@ package carnival.util
 
 
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
-import java.sql.Timestamp
-import java.text.SimpleDateFormat
-
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
-
-import groovy.sql.GroovyRowResult
-import groovy.transform.EqualsAndHashCode
-
-
-
 /**
  * NOT USED!  INCLUDED FOR INFORMATIONAL/EXAMPLE PURPOSES ONLY.
  *

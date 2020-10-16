@@ -7,17 +7,7 @@ import java.text.SimpleDateFormat
 import static java.util.UUID.randomUUID
 
 import groovy.transform.Memoized
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
-import au.com.bytecode.opencsv.CSVWriter
-import au.com.bytecode.opencsv.CSVReader
-
-import org.yaml.snakeyaml.Yaml
+import groovy.util.logging.Slf4j
 
 import groovy.sql.*
 import groovy.transform.ToString
@@ -33,15 +23,8 @@ import static groovy.json.JsonOutput.*
  *
  */
 @ToString(includeNames=true)
+@Slf4j
 class DataSetDescriptor extends MarkdownRenderer implements DescribedEntity {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC FIELDS
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
-
 
     ///////////////////////////////////////////////////////////////////////////
     // STATIC METHODS
@@ -189,15 +172,8 @@ class DataSetDescriptor extends MarkdownRenderer implements DescribedEntity {
  *
  */
 @ToString(includeNames=true)
+@Slf4j
 class FeatureSetDescriptor extends MarkdownRenderer implements DescribedEntity {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC FIELDS
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
-
 
     ///////////////////////////////////////////////////////////////////////////
     // STATIC METHODS
@@ -265,15 +241,8 @@ class FeatureSetDescriptor extends MarkdownRenderer implements DescribedEntity {
  *
  */
 @ToString(includeNames=true)
+@Slf4j
 class FeatureSetRecipe extends MarkdownRenderer implements DescribedEntity {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC FIELDS
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
-
 
     ///////////////////////////////////////////////////////////////////////////
     // STATIC METHODS
@@ -330,14 +299,8 @@ class FeatureSetRecipe extends MarkdownRenderer implements DescribedEntity {
  *
  */
 @ToString(includeNames=true)
+@Slf4j
 class FeatureSetRecipeStep extends MarkdownRenderer implements DescribedEntity {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC FIELDS
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -436,15 +399,8 @@ class FeatureSetRecipeStep extends MarkdownRenderer implements DescribedEntity {
  *
  */
 @ToString(includeNames=true)
+@Slf4j
 class FeatureSetRecipeIngredient extends MarkdownRenderer implements DescribedEntity {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC FIELDS
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
-
 
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS

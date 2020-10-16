@@ -5,114 +5,138 @@ package carnival.core.vine
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
-
-import groovy.sql.*
-
-import carnival.core.config.DatabaseConfig
+import carnival.core.util.CoreUtil
 
 
 
-/**
- * Vine is the superclass of objects that interact read and write data to
- * data sources.
- *
- */
-abstract class Vine {
+/** */
+trait Vine {
 
     /** */
-	static Logger log = LoggerFactory.getLogger('carnival')
+    static Logger log = LoggerFactory.getLogger(Vine)
 
     /** */
-    static Logger elog = LoggerFactory.getLogger('db-entity-report')
-    
+    Map<String,Object> _dynamicVineMethodResources = new HashMap<String,Object>()
 
+    /** */
+    def methodMissing(String name, def args) {
+        log.trace "Vine invoke method via methodMissing name:$name args:${args?.class?.name}"
 
-	/**
-	 * Write the list of rows (as from a Groovy SQL query) to a CSV file.
-	 * Note that it lower-cases the first row, which contains the field
-	 * names.  This done only so that code that consumes the file can 
-	 * assume lower case keys, which generally look better in a text
-	 * editor.
-	 *
-	 */
-    static File writeToCsvFile(List<GroovyRowResult> rows, String filename) {
-        assert rows
-        assert rows.size() > 0
-
-        File file = new File(filename)
-        PrintWriter pw = new PrintWriter(file);
-
-        try {
-            def keys = rows.first().keySet().toArray()
-            pw.println keys.collect({ "${it.toLowerCase()}" }).join(",")
-
-            rows.each { row ->
-                def orderedValues = []
-                keys.each { orderedValues << row[it] }
-                orderedValues = orderedValues.collect { 
-                    (it != null) ? "$it" : "" 
-                }
-                pw.println orderedValues.join(",")
+        // verify arguments
+        if (args != null) {
+            if (args.size() > 2) throw new IllegalArgumentException("there can be at most two arguments to a vine method call: ${args}")
+            if (args.size() == 1) {
+                if (!(args[0] instanceof Map)) throw new IllegalArgumentException("args must be a map: ${args}")
             }
-        } catch (Exception e) {
-            log.error "writeToFile exception!!!"
-            def epw = new PrintWriter(new File("${filename}-stacktrace.txt"))
-            try {
-                e.printStackTrace(epw)
-            } finally {
-                if (epw) epw.close()
+            if (args.size() == 2) {
+                if (!(args[0] instanceof CacheMode)) throw new IllegalArgumentException("the first argument must be a cache mode: ${args[0]}")
+                if (!(args[1] instanceof Map)) throw new IllegalArgumentException("the second argument must be a map: ${args[1]}")
             }
-        } finally {
-            if (pw) pw.close()
         }
 
-        return file
+        // find and create the vine method instance
+        VineMethod vmi = createVineMethodInstance(name)
+        if (vmi == null) throw new MissingMethodException(name, this.class, args)
+
+        // call the method
+        VineMethodCall mc
+        if (args == null) {
+            mc = vmi.call()
+        } else {
+            if (args.size() == 1) {
+                mc = vmi.call(args[0])
+            } else if (args.size() == 2) {
+                mc = vmi.call(args[0], args[1])
+            }
+        } 
+
+        // return the result
+        mc
+    }
+
+
+    /** */
+    VineMethod method(String name) {
+        assert name != null
+        assert name.trim().length() > 0
+        createVineMethodInstance(name)
     }
 
 
 
+    ///////////////////////////////////////////////////////////////////////////
+    // UTILITY - VINE METHOD CLASSES
+    ///////////////////////////////////////////////////////////////////////////    
+
     /**
-     * Generic read from CSV file.
+     * Get all vine method classes using introspection.
      *
      */
-    static List<Map> readFromCsvFile(String filename) {
-        File df = new File(filename)
-        return readFromCsvFile(df)
+    public Set<Class> allVineMethodClasses() {
+        Set<Class> subClasses = new HashSet<Class>()
+        subClasses.addAll(Arrays.asList(this.class.getDeclaredClasses()));
+        //log.debug "subClasses: ${subClasses}"
+        
+        Set<Class> vineMethodClasses = subClasses.findAll { cl -> VineMethod.isAssignableFrom(cl) }
+
+        return vineMethodClasses
     }
 
 
     /**
-     * Generic read from CSV file.
+     * Find a vine method class by case insensitive matching of the name.
      *
      */
-    static List<Map> readFromCsvFile(File file) {
-        CsvIterator csvIterator = parseCsv(file.text)
-        List<Map> data = []
-        csvIterator.each { PropertyMapper csvVals ->
-            data << csvVals.toMap()
+    public Set<Class> findAllVineMethodClasses(String methodName) {
+        def vmcs = allVineMethodClasses()
+        vmcs.findAll { it.simpleName.toLowerCase() == methodName.toLowerCase() }
+    }
+
+
+    /**
+     * Find a vine method class by case insensitive matching of the name.
+     *
+     */
+    public Class findVineMethodClass(String methodName) {
+        def matches = findAllVineMethodClasses(methodName)
+        if (matches.size() > 1) throw new RuntimeException("multiple matches for $methodName: ${matches}")
+        if (matches.size() < 1) return null
+
+        def match = matches.first()
+        return match
+    }
+
+
+    /** */
+    public VineMethod createVineMethodInstance(String methodName) {
+        log.trace "Vine.createVineMethodInstance methodName:${methodName}"
+
+        // find the vine method class
+        def vmc = findVineMethodClass(methodName)
+        if (!vmc) throw new MissingMethodException(methodName, this.class)
+        log.trace "vine method class: ${vmc.name}"
+
+        // create a vine method instance
+        def vm = vmc.newInstance(this)
+
+        // should probably get rid of this
+        _dynamicVineMethodResources.each { String name, Object value ->
+            setResource(vm, name, value)
         }
-        return data
+
+        return vm
     }
 
 
+    /** */
+    void setResource(VineMethod vm, String name, Object value) {
+        vm.metaClass."${name}" = value
+    }
 
 
-	///////////////////////////////////////////////////////////////////////////
-	// INSTANCE
-	///////////////////////////////////////////////////////////////////////////
-
-    /**
-     *
-     *
-     */
-    public Vine() {
-        // no-op
+    /** */
+    void vineMethodResource(String name, Object value) {
+        _dynamicVineMethodResources.put(name, value)
     }
 
 }
-
-
-

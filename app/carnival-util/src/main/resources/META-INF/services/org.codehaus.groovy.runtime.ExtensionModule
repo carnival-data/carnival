@@ -1,4 +1,4 @@
-moduleName=Carnival Core Extension Module
+moduleName=Carnival Util Extension Module
 moduleVersion=1.0-test
 extensionClasses=carnival.util.FieldNameExtensions
 staticExtensionClasses=

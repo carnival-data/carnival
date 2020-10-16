@@ -16,30 +16,60 @@ import org.apache.tinkerpop.gremlin.structure.Vertex
 /** */
 class GremlinTraitUtilities {
 
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
+    static Logger log = LoggerFactory.getLogger(GremlinTraitUtilities)
+
+
+    /**
+     * cl(g)
+     *
+     */
+    static public Object withTraversal(Graph graph, GraphTraversalSource g, Closure cl) {
+        def maxClosureParams = cl.getMaximumNumberOfParameters()
+        assert maxClosureParams > 0 : "closure must accept at least one parameter"
+
+        try {
+            if (maxClosureParams == 1) {
+                cl(g)
+            } else {
+                cl(graph, g)
+            }
+        } finally {
+            if (g != null) g.close()
+        }
+    }
+
+
 
     /**
      * cl(graph, g)
      *
      */
     static public Object withGremlin(Graph graph, GraphTraversalSource g, Closure cl) {
+        assert graph != null
+        assert g != null
+        assert cl != null
+
         def res
+		def transactionsAreSupported = graph.features().graph().supportsTransactions()
         
         try {
             res = cl(graph, g)
         } catch (Exception e) {
-            try {
-                graph.tx().rollback()
-            } catch (Exception e2) {
-                log.error("could not rollback", e2)
+            if (transactionsAreSupported) {
+                try {
+                    graph.tx().rollback()
+                } catch (Exception e2) {
+                    log.error("could not rollback", e2)
+                }
             }
             throw e
         } finally {
-            try {
-                graph.tx().commit()
-            } catch (Exception e3) {
-                log.error("could not commit", e3)
+            if (transactionsAreSupported) {
+                try {
+                    graph.tx().commit()
+                } catch (Exception e3) {
+                    log.error("could not commit", e3)
+                }
             }
         }
 
@@ -57,8 +87,7 @@ trait GremlinTrait  {
     // STATIC FIELDS
     ///////////////////////////////////////////////////////////////////////////
     static Logger sqllog = LoggerFactory.getLogger('sql')
-    static Logger elog = LoggerFactory.getLogger('db-entity-report')
-    static Logger log = LoggerFactory.getLogger('carnival')
+    static Logger log = LoggerFactory.getLogger(GremlinTrait)
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -76,10 +105,15 @@ trait GremlinTrait  {
     /** */
     public Graph getGraph() { this.graph }
 
+    /** */
+    public void setGraph(Graph theGraph) { this.graph = theGraph }
+
 
     /** */
     public GraphTraversalSource traversal() { 
-        def g = this.graph.traversal() 
+        Graph theGraph = getGraph()
+        assert theGraph
+        def g = theGraph.traversal() 
         return g
     }
 
@@ -87,6 +121,7 @@ trait GremlinTrait  {
     /** */
     public Object cypher(String q) {
         sqllog.info("GrelinTrait.cypher:\n$q")
+        assert graph
         return graph.cypher(q)
     }
 
@@ -94,21 +129,23 @@ trait GremlinTrait  {
     /** */
     public Object cypher(String q, Map args) {
         sqllog.info("GremlinTrait.cypher:\n$q\n$args")
+        assert graph
         return graph.cypher(q, args)
     }
 
 
     /**
-     * cl(graph, g)
+     * cl(g)
      *
      */
     public Object withTraversal(Closure cl) {
-        def g = traversal()
-        try {
-            cl(g)
-        } finally {
-            g.close()
-        }
+        GraphTraversalSource g = traversal()
+        assert g
+
+        Graph graph = graph
+        assert graph
+
+        GremlinTraitUtilities.withTraversal(graph, g, cl)
     }
 
 
@@ -117,7 +154,12 @@ trait GremlinTrait  {
      *
      */
     public Object withGremlin(Closure cl) {
-        def g = traversal()
+        GraphTraversalSource g = traversal()
+        assert g
+
+        Graph graph = graph
+        assert graph
+
         try {
             GremlinTraitUtilities.withGremlin(graph, g, cl)    
         } finally {

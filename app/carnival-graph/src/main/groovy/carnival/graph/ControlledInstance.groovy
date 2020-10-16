@@ -4,8 +4,7 @@ package carnival.graph
 
 import groovy.transform.ToString
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
@@ -20,17 +19,20 @@ import org.apache.tinkerpop.gremlin.structure.Edge
  *
  *
  */
-class ControlledInstance {
+@Slf4j
+class ControlledInstance extends PropertyValuesHolder<ControlledInstance> {
 
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
+    ///////////////////////////////////////////////////////////////////////////
+    // FIELDS
+    ///////////////////////////////////////////////////////////////////////////
 
     /** */
     VertexDefTrait vertexDef
 
-    /** */
-    Map<PropertyDefTrait,Object> propertyValues = new HashMap<PropertyDefTrait,Object>()
 
+    ///////////////////////////////////////////////////////////////////////////
+    // CONSTRUCTOR
+    ///////////////////////////////////////////////////////////////////////////
 
     /** */
     public ControlledInstance(VertexDefTrait vertexDef) {
@@ -38,6 +40,18 @@ class ControlledInstance {
         this.vertexDef = vertexDef
     }
 
+
+    ///////////////////////////////////////////////////////////////////////////
+    // GETTERS
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    public WithPropertyDefsTrait getElementDef() { vertexDef }
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // METHODS
+    ///////////////////////////////////////////////////////////////////////////
 
     /** */
     public String toString() {
@@ -48,57 +62,9 @@ class ControlledInstance {
 
 
     /** */
-    public ControlledInstance withProperty(PropertyDefTrait propDef, Object propValue) {
-        boolean found = vertexDef.vertexProperties.find({it.label == propDef.label})
-        if (!found) throw new IllegalArgumentException("${propDef} is not a property of ${vertexDef.label}: ${vertexDef.vertexProperties}")
-
-        propertyValues.put(propDef, propValue)
-        return this
+    public Vertex ensure(Graph graph, GraphTraversalSource g) {
+        vertex(graph, g)
     }
-
-
-    /** */
-    public ControlledInstance withProperties(Object... args) {
-        withProperties(args.toList())
-    }
-
-
-    /** */
-    public ControlledInstance withProperties(List args) {
-        def numArgs = args.size()
-        assert numArgs >= 2
-        assert numArgs % 2 == 0
-
-        Map<PropertyDefTrait,Object> props = new HashMap<PropertyDefTrait,Object>()
-        def i = 0
-        while (i < numArgs) {
-            def propDef = args[i++]
-            def propVal = args[i++]
-            props.put(propDef, propVal)
-        }    
-        //log.trace "withProperties props: $props"
-
-        props.each { PropertyDefTrait vp, Object val ->
-            this.withProperty(vp, val)
-        }
-        return this
-    }
-
-
-    /** */
-    public Map<PropertyDefTrait,Object> allPropertyValues() {
-        def pvs = [:]
-        pvs.putAll(propertyValues)
-        vertexDef.defaultProperties.each { PropertyDefTrait defVp ->
-            def found = pvs.find({ vp, val -> vp.label == defVp.label})
-            //log.debug "found: $found"
-            
-            if (!found) {
-                pvs.put(defVp, defVp.defaultValue)                
-            }
-        }
-        return pvs
-    } 
 
 
     /** */
@@ -106,7 +72,27 @@ class ControlledInstance {
         assert graph
         assert g
 
-        assertRequiredProperties(graph, g)
+        def traversal = traversal(graph, g)
+
+        def pvs = allPropertyValues()
+        pvs.each { PropertyDefTrait vp, Object val -> 
+            traversal.has(vp.label, val) 
+        }
+
+        def vertex = traversal.tryNext().orElseGet {
+            createVertex(graph)
+        }
+
+        return vertex
+    }
+
+
+    /** */
+    public Traversal traversal(Graph graph, GraphTraversalSource g) {
+        assert graph
+        assert g
+
+        assertRequiredProperties()
 
         boolean isClass = vertexDef.isClass()
         def lbl = vertexDef.getLabel()
@@ -117,25 +103,22 @@ class ControlledInstance {
         if (isClass) traversal.has(Base.PX.IS_CLASS.label, isClass)
         traversal.has(Base.PX.NAME_SPACE.label, ns)
 
-        def pvs = allPropertyValues()
-        pvs.each { PropertyDefTrait vp, Object val -> 
-            traversal.has(vp.label, val) 
-        }
-
-        def vertex = traversal.tryNext().orElseGet {
-            createVertex(graph, g)
-        }
-
-        return vertex
+        traversal
     }
 
 
     /** */
-    public Vertex createVertex(Graph graph, GraphTraversalSource g) {
-        assert graph
-        assert g
+    public Vertex create(Graph graph) {
+        createVertex(graph)
+    }
 
-        assertRequiredProperties(graph, g)
+
+
+    /** */
+    public Vertex createVertex(Graph graph) {
+        assert graph
+
+        assertRequiredProperties()
 
         def lbl = vertexDef.getLabel()
         def ns = vertexDef.getNameSpace()
@@ -149,10 +132,7 @@ class ControlledInstance {
         if (vertexDef.isClass()) v.property(Base.PX.IS_CLASS.label, vertexDef.isClass())
         if (vertexDef.isGlobal()) v.property(Base.PX.VERTEX_DEFINITION_CLASS.label, vertexDef.vertexDefinitionClass)
 
-        def pvs = allPropertyValues()
-        pvs.each { PropertyDefTrait vp, Object val ->
-            v.property(vp.label, val) 
-        }
+        setElementProperties(v)
 
         //log.debug "added vertex $v with label ${v.label()} and props $propertyValues"
         return v
@@ -160,7 +140,7 @@ class ControlledInstance {
 
 
     /** */
-    void assertRequiredProperties(Graph graph, GraphTraversalSource g) {
+    void assertRequiredProperties() {
         vertexDef.requiredProperties.each { requiredPropDef ->
             boolean found = allPropertyValues().find { k, v ->
                 k.label == requiredPropDef.label

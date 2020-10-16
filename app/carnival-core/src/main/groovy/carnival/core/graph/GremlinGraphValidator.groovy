@@ -2,8 +2,7 @@ package carnival.core.graph
 
 
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
@@ -22,17 +21,27 @@ import carnival.graph.Base
 
 
 /** */
+@Slf4j
 public class GremlinGraphValidator implements GraphValidator {
 
 	///////////////////////////////////////////////////////////////////////////
 	// STATIC FIELDS
 	///////////////////////////////////////////////////////////////////////////
 
-	/** Carnival log*/
-	static Logger log = LoggerFactory.getLogger('carnival')
-
 	/** */
 	static final String GLOBAL_NAME_SPACE = 'GlobalNameSpace'
+
+
+	///////////////////////////////////////////////////////////////////////////
+	// STATIC METOHDS
+	///////////////////////////////////////////////////////////////////////////
+
+	/** */
+	static boolean sameAs(String a, String b) {
+		if (a == null && b == null) return true
+		if (a == null || b == null) return false
+		a.equals(b)
+	}
 
 
 	///////////////////////////////////////////////////////////////////////////
@@ -81,8 +90,10 @@ public class GremlinGraphValidator implements GraphValidator {
 	        	.hasLabel(lbl)
 	        	.has(Base.PX.NAME_SPACE.label, instance.vertexDef.nameSpace)
 
+			//log.debug "GraphValidator.checkConstraints instance.propertyValues: ${instance.propertyValues}"
+
 	        instance.propertyValues.each { PropertyDefTrait vp, Object val -> 
-	        	log.debug "GraphValidator ${vp.label} $val"
+	        	//log.debug "GraphValidator.checkConstraints instance.propertyValues.each ${vp.label} $val"
 	        	traversal.has(vp.label, val) 
 	        }
 
@@ -211,7 +222,7 @@ public class GremlinGraphValidator implements GraphValidator {
 		def dbPropertyKeys = graph.cypher("CALL db.propertyKeys()").toList()*.propertyKey
 		def unmodeledPropertyKeys = dbPropertyKeys - modeledPropertyKeys
 		unmodeledPropertyKeys = unmodeledPropertyKeys - ["~gremlin.neo4j.multiProperties", "~gremlin.neo4j.metaProperties"] // default properties
-		if (unmodeledPropertyKeys) warnings << "Unmodeled vertex labels: $unmodeledPropertyKeys"
+		if (unmodeledPropertyKeys) warnings << "Unmodeled property labels: $unmodeledPropertyKeys"
 		*/
 
 		return warnings
@@ -225,7 +236,7 @@ public class GremlinGraphValidator implements GraphValidator {
 		assert graphSchema
 
 		def warnings = []
-		
+
 		def unmodeledVertices = unmodeledElements(
 			g.V(), 
 			graphSchema.labelDefinitions
@@ -244,6 +255,7 @@ public class GremlinGraphValidator implements GraphValidator {
 	Set<String> unmodeledElements(Traversal traversal, Collection<ElementDef> allModels) {
 
 		def modelsByLabel = modelsByLabel(allModels)
+		log.debug "modelsByLabel: $modelsByLabel"
 
 		Set<DefaultElementDef> dbElementDefs = new HashSet<DefaultElementDef>()
 		traversal.each { e ->
@@ -264,7 +276,9 @@ public class GremlinGraphValidator implements GraphValidator {
 			}
 
 			def models = modelsByLabel.get(dbr.label)
-			if (models.find({it.label == dbr.label && (it.isGlobal() || it.nameSpace == dbr.nameSpace)})) return
+			if (models.find({ 
+				sameAs(it.label, dbr.label) && (it.isGlobal() || sameAs(it.nameSpace, dbr.nameSpace)) 
+			})) return
 
 			unmodeledElements << "${dbr.nameSpace}.${dbr.label}"
 		}
@@ -282,7 +296,7 @@ public class GremlinGraphValidator implements GraphValidator {
 			}
 			mds.get(edef.label) << edef
 		}
-		mds.each { log.debug "${it}" }
+		//mds.each { log.debug "${it}" }
 		return mds
 	}
 
@@ -306,59 +320,9 @@ public class GremlinGraphValidator implements GraphValidator {
 			if (globalDef) filteredModels << globalDef
 			else filteredModels.addAll(edefs)
 		}
-		filteredModels.each { log.debug "${it}" }
+		//filteredModels.each { log.debug "${it}" }
 		return filteredModels
 	}
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-// GRAVEYARD
-
-
-		/*Map<String,List<RelationshipDefinition>> modelsByLabel = new HashMap<String,List<RelationshipDefinition>>()
-		modeledRelationships.each { RelationshipDefinition rd ->
-			if (!modelsByLabel.containsKey(rd.label)) {
-				modelsByLabel.put(rd.label, [rd])
-				return
-			}
-			modelsByLabel.get(rd.label) << rd
-		}
-		modelsByLabel.each { log.debug "${it}" }*/
-
-		/*List<RelationshipDefinition> filteredModels = new ArrayList<RelationshipDefinition>()
-		modelsByLabel.each { lbl, rds ->
-			if (rds.size() == 1) {
-				filteredModels << rds.first()
-				return
-			}
-			def globalDef = rds.find { it.isGlobal() }
-			if (globalDef) filteredModels << globalDef
-			else filteredModels.addAll(rds)
-		}
-		filteredModels.each { log.debug "${it}" }
-
-		Set<String> modeledFullNames = new HashSet<String>()
-		filteredModels.each { rd ->
-			if (rd.isGlobal()) modeledFullNames << "${GLOBAL_NAME_SPACE}.${rd.label}"
-			else modeledFullNames << "${rd.nameSpace}.${rd.label}"
-		}
-
-		Set<String> dbFullNames = new HashSet<String>()
-		g.E().each { e ->
-			def lbl = e.label()
-			def ns = e.property(Base.PX.NAME_SPACE.label).orElse(GLOBAL_NAME_SPACE)
-			dbFullNames << "${ns}.${lbl}"
-		}
-		log.trace "dbFullNames: $dbFullNames"*/
-

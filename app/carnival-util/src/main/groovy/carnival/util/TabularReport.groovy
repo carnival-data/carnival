@@ -5,12 +5,6 @@ package carnival.util
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
-import au.com.bytecode.opencsv.CSVWriter
-import au.com.bytecode.opencsv.CSVReader
-
 import org.yaml.snakeyaml.Yaml
 
 import groovy.sql.*
@@ -67,31 +61,20 @@ class TabularReport extends GenericDataTable {
         def meta = yaml.load(metaFile.text)
         assert meta.name
 
-        if (meta.secondaryIdFieldMap) assert meta.secondaryIdFieldMap instanceof Map : "Error in TabularReport.createFromFiles($dir, $name): could not parse secondaryIdFieldMap, expected to be of type 'Map', was of type ${meta.secondaryIdFieldMap.class}.  meta: $meta"
-        meta.secondaryIdFieldMap.each {k, v ->
-            assert k instanceof String : "Error in TabularReport.createFromFiles($dir, $name): could not parse secondaryIdFieldMap, keys expected to be of type 'String'.  meta: $meta"
-            assert v instanceof KeyType : "Error in TabularReport.createFromFiles($dir, $name): could not parse secondaryIdFieldMap, values expected to be of type 'KeyType'.  meta: $meta"
-        }
-
-        def mdt = new TabularReport(
+        def dataTable = new TabularReport(
             name:meta.name, 
-            secondaryIdFieldMap:meta.secondaryIdFieldMap
         )
 
         if (dataFileText) {
-            log.trace "parseCsv"
-            CsvIterator csvIterator = parseCsv(dataFileText)
-            // TODO fix: this doesn't seem to work; hasNext() is returning true for a bad test file
-            //log.trace "hasNext: ${csvIterator.hasNext()} "
-            if (!csvIterator.hasNext()) {
-                elog.warn "error in createFromFiles for file $dataFile. no data found"
-                return
+            def csvReader = CsvUtil.createReaderHeaderAware(dataFileText)
+            if (!CsvUtil.hasNext(csvReader)) {
+                log.warn "error in createFromFiles for file $dataFile. no data found."
             }
-            log.trace "dataAddAll(csvIterator)"
-            mdt.dataAddAll(csvIterator)
+            dataTable.dataAddAll(csvReader)
+            dataTable.readFrom = dataFile
         }
 
-        return mdt
+        return dataTable
     }
 
 
@@ -104,7 +87,7 @@ class TabularReport extends GenericDataTable {
     static Logger elog = LoggerFactory.getLogger('db-entity-report')
 
     /** carnival log */
-    static Logger log = LoggerFactory.getLogger('carnival')
+    static Logger log = LoggerFactory.getLogger(TabularReport)
 
 
     /**
@@ -121,7 +104,6 @@ class TabularReport extends GenericDataTable {
             assert mdt
             setMeta (
                 name: mdt.name,
-                secondaryIdFieldMap: mdt.secondaryIdFieldMap,
                 reportDescriptor: mdt.reportDescriptor
             )
         }
@@ -172,7 +154,6 @@ class TabularReport extends GenericDataTable {
     public TabularReport(MetaData args) {
         this()
         this.name = args.name
-        this.secondaryIdFieldMap = args.secondaryIdFieldMap
         this.reportDescriptor = args.reportDescriptor
     }
 
@@ -345,9 +326,6 @@ class TabularReport extends GenericDataTable {
         // propertly format the supplied id field
         def idf = toFieldName(idField)
 
-        // verify that the id field is a secondar id field of this object
-        if (!secondaryIdFieldMap.containsKey(idf)) throw new IllegalArgumentException("$idf is not a secondary id field ${secondaryIdFieldMap}")
-
         // get the id value from the supplied value map
         if (!vals.containsKey(idf)) throw new IllegalArgumentException("vals must contain a value for $idf")
         def idv = formatIdValue(vals.get(idf))
@@ -366,17 +344,17 @@ class TabularReport extends GenericDataTable {
         }
 
         // ...
-        def idFormattedVals = vals.collectEntries{ k, v -> 
-            [(toFieldName(k)): (k in secondaryIdFieldMap.keySet() ? formatIdValue(v) : v)]
+        def formattedVals = vals.collectEntries{ k, v -> 
+            [(toFieldName(k)): v]
         }
 
         // check that the data in vals are disjoint by key from the existing
         // data.  if not, throw an error.
         existingRecords.each { rec ->
-            if (rec && !rec.keySet().disjoint(idFormattedVals.keySet())) {
-                def commonKeys = rec.keySet().intersect(idFormattedVals.keySet())
+            if (rec && !rec.keySet().disjoint(formattedVals.keySet())) {
+                def commonKeys = rec.keySet().intersect(formattedVals.keySet())
                 commonKeys.each { k ->
-                    if (rec.get(k) != idFormattedVals.get(k)) throw new IllegalArgumentException("rec $k:${rec.get(k)} != idFormattedVals $k:${idFormattedVals.get(k)}")
+                    if (rec.get(k) != formattedVals.get(k)) throw new IllegalArgumentException("rec $k:${rec.get(k)} != formattedVals $k:${formattedVals.get(k)}")
                 }
             }
         }
@@ -390,7 +368,7 @@ class TabularReport extends GenericDataTable {
             } 
         }
 
-        keySet.addAll(idFormattedVals.keySet())
+        keySet.addAll(formattedVals.keySet())
     }
 
 }

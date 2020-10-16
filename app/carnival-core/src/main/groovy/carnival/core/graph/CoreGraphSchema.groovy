@@ -2,11 +2,8 @@ package carnival.core.graph
 
 
 
-import groovy.util.AntBuilder
 import groovy.transform.ToString
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 import org.reflections.Reflections
 
@@ -37,15 +34,8 @@ import carnival.graph.ControlledInstance
  * The core graph.  See the documentation for model details.
  *
  */
+@Slf4j
 class CoreGraphSchema implements GraphSchema {
-
-	///////////////////////////////////////////////////////////////////////////
-	// STATIC FIELDS
-	///////////////////////////////////////////////////////////////////////////
-
-	/** Carnival log*/
-	static Logger log = LoggerFactory.getLogger('carnival')
-
 
 	///////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTOR
@@ -73,7 +63,7 @@ class CoreGraphSchema implements GraphSchema {
 	public List<ControlledInstance> getControlledInstances() {
 		return controlledInstances
 	}
-
+	
 
 	///////////////////////////////////////////////////////////////////////////
 	// LABEL DEFINITIONS

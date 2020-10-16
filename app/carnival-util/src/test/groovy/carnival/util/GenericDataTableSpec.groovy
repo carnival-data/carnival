@@ -1,18 +1,13 @@
 package carnival.util
 
 
-import groovy.mock.interceptor.StubFor
+import java.time.LocalDate
 import groovy.sql.*
 import groovy.transform.InheritConstructors
 
 import spock.lang.Specification
 import spock.lang.Unroll
 import spock.lang.Shared
-
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
-
 
 
 
@@ -35,9 +30,6 @@ class GenericDataTableSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
-
-    static EMPI = KeyType.EMPI
-    static MRN = KeyType.MRN
 
     @Shared testDate
 
@@ -101,27 +93,13 @@ class GenericDataTableSpec extends Specification {
         def now = new Date()
 
         when:
-        mdt = new GenericDataTable(name:'mdt-test', secondaryIdFieldMap:[id:EMPI])
+        mdt = new GenericDataTable(name:'mdt-test')
 
         then:
         mdt != null
         mdt.name == "mdt-test"
-        mdt.secondaryIdFieldMap != null
-        mdt.secondaryIdFieldMap.size() == 1
-        mdt.secondaryIdFieldMap[DataTable.toFieldName('id')] == EMPI
         mdt.queryDate.getTime() - now.getTime() <= 1000
         mdt.dataSourceDateOfUpdate == null
-
-        when:
-        mdt = new GenericDataTable(name:'mdt-test', secondaryIdFieldMap:[id:EMPI, xx:MRN])
-
-        then:
-        mdt != null
-        mdt.name == "mdt-test"
-        mdt.secondaryIdFieldMap != null
-        mdt.secondaryIdFieldMap.size() == 2
-        mdt.secondaryIdFieldMap.containsKey(DataTable.toFieldName('id')) 
-        mdt.secondaryIdFieldMap.containsKey(DataTable.toFieldName('xx')) 
 
         when:
         mdt = new GenericDataTable(name:'mdt-test')
@@ -129,29 +107,21 @@ class GenericDataTableSpec extends Specification {
         then:
         mdt != null
         mdt.name == "mdt-test"
-        mdt.secondaryIdFieldMap != null
-        mdt.secondaryIdFieldMap.size() == 0
 
         when:
-        mdt = new GenericDataTable(name:'mdt-test', secondaryIdFieldMap:[id:EMPI], queryDate:testDate)
+        mdt = new GenericDataTable(name:'mdt-test', queryDate:testDate)
 
         then:
         mdt != null
         mdt.name == "mdt-test"
-        mdt.secondaryIdFieldMap != null
-        mdt.secondaryIdFieldMap.size() == 1
-        mdt.secondaryIdFieldMap[DataTable.toFieldName('id')] == EMPI
         mdt.queryDate == testDate
 
         when:
-        mdt = new GenericDataTable(name:'mdt-test', secondaryIdFieldMap:[id:EMPI], queryDate:DataTable.dataSetDateToString(testDate))
+        mdt = new GenericDataTable(name:'mdt-test', queryDate:DataTable.dataSetDateToString(testDate))
 
         then:
         mdt != null
         mdt.name == "mdt-test"
-        mdt.secondaryIdFieldMap != null
-        mdt.secondaryIdFieldMap.size() == 1
-        mdt.secondaryIdFieldMap[DataTable.toFieldName('id')] == EMPI
         mdt.queryDate == testDate
     }
 
@@ -167,7 +137,7 @@ class GenericDataTableSpec extends Specification {
         def emf = new File('build/md-test.yaml')
         if (edf.exists()) edf.delete()
         if (emf.exists()) emf.delete()
-        def mdt0 = new GenericDataTable(name:'mdt-test', secondaryIdFieldMap:[id:EMPI], queryDate:testDate)
+        def mdt0 = new GenericDataTable(name:'mdt-test', queryDate:testDate)
         mdt0.dataAddAllListList([
             ['id', 'v1']
             , ['id1', 'v11']
@@ -183,9 +153,6 @@ class GenericDataTableSpec extends Specification {
         mdt != null
         mdt.name == 'mdt-test'
         mdt.queryDate == testDate
-        mdt.secondaryIdFieldMap != null
-        mdt.secondaryIdFieldMap.size() == 1 
-        mdt.secondaryIdFieldMap[DataTable.toFieldName('id')] == EMPI
 
         when:
         def data = mdt.data
@@ -224,7 +191,7 @@ class GenericDataTableSpec extends Specification {
         Throwable e
 
         when:
-        mdt = new GenericDataTable(name:'mdt-test', secondaryIdFieldMap:[id:EMPI])
+        mdt = new GenericDataTable(name:'mdt-test',)
         mdt.dataAddAllListList([
             ['id', 'v1']
             , ['id1', 'v11']
@@ -262,11 +229,11 @@ class GenericDataTableSpec extends Specification {
         def meta
         Throwable e
         def now = new Date()
-        def yesterday = now.plus(-1)
+        Date yesterday = new Date(LocalDate.now().minusDays(1).toEpochDay())
         def yaml = new org.yaml.snakeyaml.Yaml(new DataTableRepresenter())
 
         when:
-        mdt = new GenericDataTable(name:'mdt-test', secondaryIdFieldMap:[id:EMPI])
+        mdt = new GenericDataTable(name:'mdt-test')
         file = mdt.writeMetaFile(new File('build'))
         println "${file.name} ${file.canonicalPath}"
 
@@ -280,13 +247,10 @@ class GenericDataTableSpec extends Specification {
 
         then:
         meta.name == 'mdt-test'
-        meta.secondaryIdFieldMap != null
-        meta.secondaryIdFieldMap.size() == 1
-        meta.secondaryIdFieldMap[DataTable.toFieldName('id')] == KeyType.EMPI
         meta.queryDate.getTime() - now.getTime() <= 1000
 
         when:
-        mdt = new GenericDataTable(name:'mdt-test', secondaryIdFieldMap:[id:EMPI], queryDate:testDate)
+        mdt = new GenericDataTable(name:'mdt-test', queryDate:testDate)
         mdt.dataSourceDateOfUpdate = yesterday
         file = mdt.writeMetaFile(new File('build'))
         println "${file.name} ${file.canonicalPath}"
@@ -301,9 +265,6 @@ class GenericDataTableSpec extends Specification {
 
         then:
         meta.name == 'mdt-test'
-        meta.secondaryIdFieldMap != null
-        meta.secondaryIdFieldMap.size() == 1
-        meta.secondaryIdFieldMap[DataTable.toFieldName('id')] == KeyType.EMPI
         meta.queryDate.equals(testDate)
         meta.dataSourceDateOfUpdate == yesterday
         //metaDataSourceDateOfUpdate.getTime().equals(yesterday.getTime())
@@ -321,7 +282,7 @@ class GenericDataTableSpec extends Specification {
         def mdt
         def res
         Throwable e
-        mdt = new GenericDataTable(name:'mdt-test', secondaryIdFieldMap:[id:EMPI])
+        mdt = new GenericDataTable(name:'mdt-test')
 
         when:
         res = [
@@ -359,41 +320,13 @@ class GenericDataTableSpec extends Specification {
     }
 
 
-    def "dataAdd PropertyMapper"() {
-        given:
-        def mdt
-        def res
-        Throwable e
-        mdt = new GenericDataTable(name:'mdt-test', secondaryIdFieldMap:[id:EMPI])
-
-        when:
-        res = new PropertyMapper(
-            values: ['id1', 'd11'],
-            columns: [id:0, d1:1]
-        )
-        mdt.dataAdd(res)
-
-        then:
-        mdt.data[0].size() == 2
-
-        when:
-        res = new PropertyMapper(
-            values: ['id2', 'd12'],
-            columns: [ID:0, d1:1]
-        )
-        mdt.dataAdd(res)
-
-        then:
-        mdt.data[1].size() == 2
-    }
-
 
     def "dataAdd GroovyRowResult"() {
         given:
         def mdt
         def res
         Throwable e
-        mdt = new GenericDataTable(name:'mdt-test', secondaryIdFieldMap:[id:EMPI])
+        mdt = new GenericDataTable(name:'mdt-test')
 
         when:
         res = [id:'id1', d1:'d11'] as GroovyRowResult
@@ -414,7 +347,7 @@ class GenericDataTableSpec extends Specification {
     def "dataAdd Map date values"() {
         given:
         def mdt
-        mdt = new GenericDataTable(name:'mdt-test', secondaryIdFieldMap:[id:EMPI])
+        mdt = new GenericDataTable(name:'mdt-test')
 
         when:
         def cal = Calendar.getInstance()
@@ -442,7 +375,7 @@ class GenericDataTableSpec extends Specification {
     def "dataAdd Map values single row"() {
         given:
         def mdt
-        mdt = new GenericDataTable(name:'mdt-test', secondaryIdFieldMap:[id:EMPI])
+        mdt = new GenericDataTable(name:'mdt-test')
 
         when:
         def m = [ID:id]
@@ -482,7 +415,7 @@ class GenericDataTableSpec extends Specification {
     def "dataAdd Map field names are cleaned up"() {
         given:
         def mdt
-        mdt = new GenericDataTable(name:'mdt-test', secondaryIdFieldMap:[id:EMPI])
+        mdt = new GenericDataTable(name:'mdt-test')
 
         when:
         def m = [id:'1']
@@ -499,30 +432,11 @@ class GenericDataTableSpec extends Specification {
     }
 
 
-    def "dataAdd Map id values are cleaned up"() {
-        given:
-        def mdt
-        mdt = new GenericDataTable(name:'mdt-test', secondaryIdFieldMap:[id:EMPI])
-
-        when:
-        mdt.dataAdd(id:idVal, v1:'v11')
-        def d = mdt.data[0]
-
-        then:
-        d != null
-        d.size() == 2
-        d['ID'] == 'a'
-
-        where:
-        idVal << ['a', ' a', 'a ', 'A']
-    }
-
-
     def "dataAdd Map keys are mapped to field names"() {
         given:
         def mdt
         Throwable e
-        mdt = new GenericDataTable(name:'mdt-test', secondaryIdFieldMap:[id:EMPI])
+        mdt = new GenericDataTable(name:'mdt-test')
 
         when:
         def m = [:]
@@ -539,7 +453,7 @@ class GenericDataTableSpec extends Specification {
 
         then:
         data.size() == 2
-        data.ID == "a${idCount}"
+        data.ID == "A${idCount}"
         data.V1 == 'v11'
 
         where:
@@ -556,7 +470,7 @@ class GenericDataTableSpec extends Specification {
         def row
 
         when:
-        mdt = new GenericDataTable(name:'mdt-test', secondaryIdFieldMap:[id:EMPI])
+        mdt = new GenericDataTable(name:'mdt-test')
 
         then:
         mdt.data.size() == 0
@@ -582,13 +496,10 @@ class GenericDataTableSpec extends Specification {
         def mdt
 
         when:
-        mdt = new GenericDataTable(name:'mdt-test', secondaryIdFieldMap:[a:EMPI, b:MRN])
+        mdt = new GenericDataTable(name:'mdt-test')
 
         then:
         mdt.name == 'mdt-test'
-        mdt.secondaryIdFieldMap.size() == 2
-        mdt.secondaryIdFieldMap.containsKey('A')
-        mdt.secondaryIdFieldMap.containsKey('B')
     }
 
 

@@ -35,9 +35,6 @@ class ControlledInstanceSpec extends Specification {
     static enum PX implements PropertyDefTrait {
         CIS_PROP_A,
         CIS_PROP_B
-
-        public PX() {}
-        public PX(Map m) {m.each { k,v -> this."$k" = v }}
     }
 
 
@@ -75,6 +72,14 @@ class ControlledInstanceSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+    def "try next"() {
+        expect:
+        !VX.CIS_THING.instance().withProperties(
+            PX.CIS_PROP_A, 'a',
+            PX.CIS_PROP_B, 'b'
+        ).traversal(graph, g).tryNext().isPresent()
+    }
 
 
     def "default property values"() {

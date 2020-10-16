@@ -8,17 +8,14 @@ import org.slf4j.LoggerFactory
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
-import au.com.bytecode.opencsv.CSVWriter
-import au.com.bytecode.opencsv.CSVReader
-
 import groovy.sql.GroovyRowResult
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.Synchronized
 import groovy.transform.WithReadLock
 import groovy.transform.WithWriteLock
+
+import com.opencsv.CSVReaderHeaderAware
+import com.opencsv.CSVWriter
 
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.introspector.Property
@@ -48,6 +45,13 @@ import org.yaml.snakeyaml.constructor.*
  */
 abstract class DataTable {
     
+    ///////////////////////////////////////////////////////////////////////////
+    // STATIC
+    ///////////////////////////////////////////////////////////////////////////
+
+	/** carnival logger */
+    static Logger log = LoggerFactory.getLogger(DataTable)
+
 
     ///////////////////////////////////////////////////////////////////////////
     // STATIC INNER CLASSES
@@ -75,9 +79,6 @@ abstract class DataTable {
     ///////////////////////////////////////////////////////////////////////////
     // STATIC FIELDS
     ///////////////////////////////////////////////////////////////////////////
-
-    /** logger */
-    static Logger log = LoggerFactory.getLogger('carnival')
 
     /** 
      * a date format precise to the day for use in representing query dates
@@ -238,8 +239,7 @@ abstract class DataTable {
      *
      */
     static public List<Map> readDataFromCsvFile(String filename) {
-        File df = new File(filename)
-        return readDataFromCsvFile(df)
+        CsvUtil.readFromCsvFile(filename)
     }
 
 
@@ -251,12 +251,7 @@ abstract class DataTable {
      *
      */
     static public List<Map> readDataFromCsvFile(File file) {
-        CsvIterator csvIterator = parseCsv(file.text)
-        List<Map> data = []
-        csvIterator.each { PropertyMapper csvVals ->
-            data << csvVals.toMap()
-        }
-        return data
+        CsvUtil.readFromCsvFile(file)
     }
 
 
@@ -278,6 +273,25 @@ abstract class DataTable {
         else return [:]
     }
 
+
+    /**
+     * Find the files required to build a DataTable of the given name in
+     * the given directory.
+     *
+     * @param dir The directory in which to look.
+     * @param name The base name of the DataTable.
+     *
+     * @return A DataTableFiles object containing the meta and data files if
+     * both files exist.  If either does not exist, null is returned.
+     *
+     */
+    static public DataTableFiles findDataTableFiles(File dir, String name) {
+        def meta = findMetaFile(dir, name)
+        def data = findDataFile(dir, name)
+        if (meta && data) return new DataTableFiles(meta:meta, data:data)
+        else return null
+    }
+    
 
     /**
      * Find the meta-data file for a DataTable of the given name in the
@@ -625,11 +639,6 @@ abstract class DataTable {
             cv = null
         }
 
-        // special case the secondary id fields
-        else if (fn in secondaryIdFieldMap.keySet()) {
-            cv = formatIdValue(v)
-        }
-
         // special cased types
         else if (v instanceof Date) {
             cv = SqlUtils.timestampAsString(v) 
@@ -750,6 +759,15 @@ abstract class DataTable {
             it.resolveStrategy = Closure.DELEGATE_FIRST 
         }
         this.setKeySetComparator(new OrderBy(cs))
+    }
+
+
+    /** 
+     * Convenience method to order keys by alphabetical order.
+     *
+     */
+    public void setOrderedKeysAlphabetical() {
+        setKeySetComparator([{it}])
     }
 
 
@@ -945,7 +963,12 @@ abstract class DataTable {
 
             // headers
             List keys = this.keySet.toList()
-            if (args.keys) keys.retainAll(args.keys)
+            if (args.keys) {
+                List filteredKeys = []
+                keys.each { k -> if (args.keys.contains(k)) filteredKeys.add(k)}
+                //keys.retainAll(args.keys)
+                keys = filteredKeys
+            }
             line = keys.toArray()
             writer.writeNext(line)
 
@@ -1042,9 +1065,17 @@ abstract class DataTable {
      * @param dataToAdd Data in a CSVIterator.
      *
      */
-    public void dataAddAll(CsvIterator csvIterator) {
-        csvIterator.each { rec ->
-            //log.debug "dataAddAll(CsvIterator): ${rec.columns}"
+    public void dataAddAll(CSVReaderHeaderAware csvReader) {
+        assert csvReader != null
+
+        def firstRec = true
+        while (CsvUtil.hasNext(csvReader)) {
+            def rec = csvReader.readMap()
+            if (firstRec) {
+                def fieldNames = rec.keySet().collect { toFieldName(it) }
+                this.keySet.addAll(fieldNames)
+                firstRec = false
+            }
             dataAdd(rec) 
         }
     }
@@ -1114,17 +1145,26 @@ abstract class DataTable {
      * file and Map.dataFile the data file.
      *
      */
-    @WithReadLock
+    
     public List<File> writeFiles(File destDir, Map args = [:]) {
         log.trace "DataTable.writeFiles: ${this.name} ${destDir?.canonicalPath}"
+        writeDataTableFiles(destDir, args).toList()
+    }
 
-        List<File> files = new ArrayList<File>()
-        files << writeMetaFile(destDir, args)
-        files << writeDataFile(destDir, args)
 
-        writtenTo.addAll(files)
+    @WithReadLock
+    public DataTableFiles writeDataTableFiles(File destDir, Map args = [:]) {
+        assert destDir != null
+        assert destDir.exists()
+        assert destDir.canWrite()
+        assert destDir.isDirectory()
 
-        return files
+        File meta = writeMetaFile(destDir, args)
+        File data = writeDataFile(destDir, args)
+
+        DataTableFiles dtf = new DataTableFiles(meta:meta, data:data)
+        writtenTo.addAll(dtf.toList())
+        dtf
     }
 
 

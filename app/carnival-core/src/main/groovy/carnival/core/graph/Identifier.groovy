@@ -2,7 +2,6 @@ package carnival.core.graph
 
 
 
-import groovy.util.AntBuilder
 import groovy.transform.ToString
 
 import org.slf4j.Logger
@@ -23,9 +22,6 @@ import org.apache.tinkerpop.gremlin.structure.Transaction
 import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.structure.Edge
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
-
-import org.apache.tinkerpop.gremlin.neo4j.structure.Neo4jGraph
-import org.apache.tinkerpop.gremlin.neo4j.structure.Neo4jVertex
 
 import carnival.util.Defaults
 
@@ -92,7 +88,7 @@ class Identifier {
 				return foundVert.get()
 			}
 			else {
-				def idVert = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, value).createVertex(graph, g)
+				def idVert = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, value).createVertex(graph)
 				Core.EX.IS_INSTANCE_OF.relate(g, idVert, identifierClass)
 				Core.EX.IS_SCOPED_BY.relate(g, idVert, identifierScope)
 				return idVert
@@ -109,7 +105,7 @@ class Identifier {
 				return foundVert.get()
 			}
 			else {
-				def idVert = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, value).createVertex(graph, g)
+				def idVert = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, value).createVertex(graph)
 				Core.EX.IS_INSTANCE_OF.relate(g, idVert, identifierClass)
 				Core.EX.WAS_CREATED_BY.relate(g, idVert, identifierFacility)
 				return idVert
@@ -122,7 +118,7 @@ class Identifier {
 				return foundVert.get()
 			}
 			else {
-				def idVert = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, value).createVertex(graph, g)
+				def idVert = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, value).createVertex(graph)
 				Core.EX.IS_INSTANCE_OF.relate(g, idVert, identifierClass)
 				return idVert
 			}

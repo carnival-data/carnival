@@ -2,7 +2,6 @@ package carnival.core.graph
 
 
 
-import groovy.util.AntBuilder
 import groovy.transform.ToString
 import groovy.transform.EqualsAndHashCode
 
@@ -40,7 +39,7 @@ interface GraphSchema {
 	/** 
 	 * Controlled instances are singleton vertices that are governed by rules
 	 * of cardinality and required properties.  There can be only a single
-	 * instance of a vertex with the specific values for the refined required 
+	 * instance of a vertex with the specific values for the defined required 
 	 * properties.  For example, if there is a controlled instance with label
 	 * IdentifierClass and required boolean property hasScope, there can be
 	 * only a single vertex (IdentifierClass {hasScope:true}) and a single

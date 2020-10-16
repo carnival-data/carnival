@@ -1,46 +1,134 @@
-/**
+/******************************************************************************
  *
- * Carnival top level project.
+ * CARNIVAL
  *
- */
+ *****************************************************************************/
+
+
+///////////////////////////////////////////////////////////////////////////////
+// build script settings
+///////////////////////////////////////////////////////////////////////////////
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath group: 'org.yaml', name: 'snakeyaml', version: '1.27'
+        classpath group: 'org.kordamp.gradle', name: 'stats-gradle-plugin', version: '0.2.2'
+    }    
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////
 // plugins
 ///////////////////////////////////////////////////////////////////////////////
-
 plugins {
     id 'groovy'
+    id 'maven-publish'
     id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
-    id ("maven-publish")
+    
     // code coverage
     id 'jacoco'
     id 'com.github.kt3k.coveralls' version '2.6.3'
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
+// Java
+///////////////////////////////////////////////////////////////////////////////
+java {
+    sourceCompatibility = JavaVersion.toVersion('11')
+    targetCompatibility = JavaVersion.toVersion('11')
+}
+task printJavaVersion {
+    println "[Carnival] Java version: ${JavaVersion.current()}"
+}
+clean.dependsOn('printJavaVersion')
+compileGroovy.dependsOn('printJavaVersion')
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // app version
+// repositories
+// common plugins
 ///////////////////////////////////////////////////////////////////////////////
-
 allprojects {
     group = 'edu.upenn.pmbb'
-    sourceCompatibility = 1.8
-    version = '0.3.1-SNAPSHOT'   // see https://semver.org/
+    sourceCompatibility = JavaVersion.toVersion('11')
+    version = '0.4.0-SNAPSHOT'   // see https://semver.org/
+
+    repositories {
+        mavenCentral()
+        jcenter()
+        mavenLocal()
+        flatDir(dir: 'libs', name: 'Local libs')  
+    }
 
     apply plugin: 'jacoco'
+    apply plugin: 'project-report'
+    apply plugin: 'org.kordamp.gradle.stats'
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
+// sub-project dependencies
+///////////////////////////////////////////////////////////////////////////////
 subprojects {
-    apply plugin: 'groovy'  
+    apply plugin: 'groovy'
+
+    dependencies {
+        // see gradle.properties for versions
+
+        // Groovy
+        implementation "org.codehaus.groovy:groovy-all:${groovyVersion}"
+
+        // Tinkerpop
+        implementation "org.apache.tinkerpop:gremlin-core:${gremlinVersion}"
+        implementation "org.apache.tinkerpop:gremlin-groovy:${gremlinVersion}"
+        implementation "org.apache.tinkerpop:tinkergraph-gremlin:${gremlinVersion}"
+
+        // Neo4J
+        implementation "org.apache.tinkerpop:neo4j-gremlin:${gremlinVersion}"
+        implementation "org.neo4j:neo4j-tinkerpop-api-impl:${neo4jTinkerpopVersion}"
+        implementation "org.neo4j.driver:neo4j-java-driver:${neo4JavaDriverVersion}"
+
+        // Testing
+        // there are test helpers implemented in the source tree, so the
+        // implementation dependency tag is required
+        //implementation "org.spockframework:spock-core:1.3-groovy-2.5"
+        testImplementation 'org.spockframework:spock-core:2.0-M3-groovy-3.0'        
+
+        // Logging
+        implementation 'org.slf4j:slf4j-api:1.7.30'
+        implementation 'ch.qos.logback:logback-classic:1.2.3'
+
+        // Data formats
+        implementation "org.yaml:snakeyaml:1.27"
+        implementation "com.opencsv:opencsv:5.2"
+
+        // Apache Commons
+        implementation "commons-io:commons-io:2.5"
+    }
 }
 
-// add to base project for jacoco plugin
-repositories {
-    jcenter()
-    mavenLocal()  
+
+///////////////////////////////////////////////////////////////////////////////
+// debug options
+///////////////////////////////////////////////////////////////////////////////
+subprojects {
+    // compile in debug modes
+    tasks.withType(GroovyCompile) {
+      //options.debug = true
+      //options.verbose = true
+      //options.listFiles = true
+    }
+
+    tasks.withType(JavaCompile) {
+      //options.debug = true
+      //options.verbose = true
+      //options.listFiles = true
+    }
 }
 
 
@@ -63,8 +151,9 @@ subprojects {
     }
 }
 
+
 ///////////////////////////////////////////////////////////////////////////////
-// Testing Tasks
+// Testing
 ///////////////////////////////////////////////////////////////////////////////
 apply from: 'setupTestsReports.gradle'
 
@@ -74,13 +163,15 @@ subprojects {
     //test.ignoreFailures true
 
     test {
-        systemProperty 'vine.config.file.path', System.getProperty('vine.config.file.path')
-        systemProperty 'cgis.use.cached.data.files', System.getProperty('cgis.use.cached.data.files')
-        systemProperty 'cgis.use.cached.graph', System.getProperty('cgis.use.cached.graph')
+        useJUnitPlatform()
+        //useTestNG()
+
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
+
         systemProperty 'test.http', System.getProperty('test.http') ?: true
         systemProperty 'test.graph.rollback', System.getProperty('test.graph.rollback')
-        systemProperty 'allow.redcap.modification', System.getProperty('allow.redcap.modification')
-        systemProperty 'disable.filevine.tests', System.getProperty('disable.filevine.tests')
         testLogging {
             events 'standard_out'
         }
@@ -89,17 +180,18 @@ subprojects {
             systemProperty('carnival.home', System.getProperty('carnival.home'))
             systemProperty('logback.configurationFile', System.getProperty('carnival.home') + '/config/logback.xml')
         }
-        if (System.env.CARNIVAL_HOME) {
-            systemProperty('logback.configurationFile', System.env.CARNIVAL_HOME + '/config/logback.xml')
+        if (System.getenv('CARNIVAL_HOME')) {
+            systemProperty('carnival.home', System.getenv('CARNIVAL_HOME'))
+            systemProperty('logback.configurationFile', System.getenv('CARNIVAL_HOME') + '/config/logback.xml')
         }
         if (System.getProperty('logback.configurationFile')) {
             systemProperty("logback.configurationFile", System.getProperty('logback.configurationFile'))
-        } else if (System.env.CARNIVAL_LOGBACK_CONFIG) {
-            systemProperty("logback.configurationFile", System.env.CARNIVAL_LOGBACK_CONFIG)
+        } else if (System.getenv('CARNIVAL_LOGBACK_CONFIG')) {
+            systemProperty("logback.configurationFile", System.getenv('CARNIVAL_LOGBACK_CONFIG'))
         }
-        if (!(System.getProperty('carnival.home') || System.env.CARNIVAL_HOME)) {
+        if (!(System.getProperty('carnival.home') || System.getenv('CARNIVAL_HOME'))) {
             ant.echo "WARNING: Carnival home is not set. Use command line argument -Dcarnival.home= or environment variable CARNIVAL_HOME. See documentation."
-            if (!(System.getProperty('logback.configurationFile') || System.env.CARNIVAL_LOGBACK_CONFIG)) {
+            if (!(System.getProperty('logback.configurationFile') || System.getenv('CARNIVAL_LOGBACK_CONFIG'))) {
                 ant.echo "WARNING: Logback configuration file not set. Use the -D command line argument like -Dlogback.configurationFile=/path/to/file.xml.  Or, set the environment variable CARNIVAL_LOGBACK_CONFIG to /path/to/file.xml. See documentation."
             }
         }
@@ -108,6 +200,7 @@ subprojects {
         jvmArgs '-Xmx6g'
     }
 }
+
 
 // to run all test suites even if a failure occurs use the flag '--continue'
 // https://docs.gradle.org/current/userguide/command_line_interface.html#sec:continue_build_on_failure
@@ -134,23 +227,17 @@ def browse(path) {
     }
 }
 
+
 ///////////////////////////////////////////////////////////////////////////////
 // convenience local publishing tasks
 ///////////////////////////////////////////////////////////////////////////////
-
-task refreshGremlinDsl {
-    dependsOn 'carnival-gremlin-dsl:publishToMavenLocal'
-}
-
 task refreshUtil {
-    dependsOn refreshGremlinDsl
     dependsOn 'carnival-util:publishToMavenLocal'
 }
 
 task publishGraph {
     dependsOn refreshUtil
     dependsOn 'carnival-graph:publishToMavenLocal'
-    dependsOn 'carnival-gremlin-dsl:publishToMavenLocal'
 }
 
 task publishCore {
@@ -160,47 +247,94 @@ task publishCore {
 
 task publishAll {
     dependsOn publishCore
-    dependsOn 'carnival-clinical:publishToMavenLocal'
+    dependsOn 'carnival-gradle:publishToMavenLocal'
 }
 
-//This JaCoCo coverage task for multi-module Gradle project was inspired by:
-//https://github.com/ben-manes/caffeine/blob/master/build.gradle
+task deleteLocalRepos {
+    doLast {
+        [
+            "${System.getProperty('user.home')}/.m2/repository/edu/upenn/pmbb/", 
+            "${System.getProperty('user.home')}/.groovy/grapes/edu.upenn.pmbb/"
+        ].each { bd ->
+            ant.echo(bd)
+            
+            def file = new File(bd)
+            if (!file.exists()) return
+            
+            def path = ant.path {
+                dirset(dir:bd, includes:'carnival-*')
+            }
+            path.list().each {
+                println it
+                ant.delete(includeEmptyDirs:true, verbose:true, dir:it)
+            }        
+            //ant.delete(includeEmptyDirs:true, verbose:true) {
+            //    dirset(dir:bd, includes:'carnival-*')
+            //}
+        }
+    }
+}
+
+task cleanBuild {
+    subprojects.each { dependsOn("${it.name}:clean") } 
+    subprojects.each { finalizedBy("${it.name}:compileGroovy") } 
+    doLast {println 'cleanBuild'} 
+}
+
+task localRebuildAndPublish { 
+    dependsOn cleanBuild
+    dependsOn deleteLocalRepos
+    finalizedBy publishAll
+    doLast {println 'localRebuildAndPublish'} 
+}
+
+task localBuildAndPublish { 
+    subprojects.each { dependsOn("${it.name}:compileGroovy") } 
+    dependsOn deleteLocalRepos
+    finalizedBy publishAll
+    doLast {println 'localBuildAndPublish'} 
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// JaCoCo code coverage
+///////////////////////////////////////////////////////////////////////////////
 
 // Only report code coverage for projects that are distributed
 def publishedProjects = subprojects.findAll()
 
 task jacocoMerge(type: JacocoMerge) {
-  publishedProjects.each { subproject ->
-    executionData subproject.tasks.withType(Test)
-  }
-  doFirst {
-    executionData = files(executionData.findAll { it.exists() })
-  }
+    publishedProjects.each { subproject ->
+        executionData subproject.tasks.withType(Test)
+    }
+    doFirst {
+        executionData = files(executionData.findAll { it.exists() })
+    }
 }
 
 task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
-  description = 'Generates an aggregate report from all subprojects'
-  dependsOn publishedProjects.test, jacocoMerge
+    description = 'Generates an aggregate report from all subprojects'
+    dependsOn publishedProjects.test, jacocoMerge
 
-  additionalSourceDirs.from = files(publishedProjects.sourceSets.main.allSource.srcDirs)
-  sourceDirectories.from = files(publishedProjects.sourceSets.main.allSource.srcDirs)
-  classDirectories.from = files(publishedProjects.sourceSets.main.output)
-  executionData jacocoMerge.destinationFile
+    additionalSourceDirs.from = files(publishedProjects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories.from = files(publishedProjects.sourceSets.main.allSource.srcDirs)
+    classDirectories.from = files(publishedProjects.sourceSets.main.output)
+    executionData jacocoMerge.destinationFile
 
-  reports {
-    html.enabled = true // human readable
-    xml.enabled = true // required by coveralls
-  }
+    reports {
+        html.enabled = true // human readable
+        xml.enabled = true // required by coveralls
+    }
 }
 
 coveralls {
-  sourceDirs = publishedProjects.sourceSets.main.allSource.srcDirs.flatten()
-  jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
+    sourceDirs = publishedProjects.sourceSets.main.allSource.srcDirs.flatten()
+    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
 }
 
 tasks.coveralls {
-  group = 'Coverage reports'
-  description = 'Uploads the aggregated coverage report to Coveralls'
+    group = 'Coverage reports'
+    description = 'Uploads the aggregated coverage report to Coveralls'
 
-  dependsOn jacocoRootReport
+    dependsOn jacocoRootReport
 }

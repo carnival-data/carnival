@@ -1,14 +1,9 @@
 package carnival.util
 
 
+import java.text.SimpleDateFormat
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
-import au.com.bytecode.opencsv.CSVWriter
-import au.com.bytecode.opencsv.CSVReader
 
 import groovy.sql.*
 import groovy.transform.ToString
@@ -29,18 +24,26 @@ import org.yaml.snakeyaml.representer.Representer
  * associated with a single entity that has a unique identifier.  
  *
  * The core data structure of MappedDataTable is a Map from a unique identifier
- * to a Map of key/value data.  The unique identifier is described by the
- * keyType field, which is of type KeyType.
+ * to a Map of key/value data
  *
  * MappedDataTables can be written to and read from files.  A single
  * MappedDataTable is represented by two files, a .csv file for the data and a
- * .yaml file for the other bits of information including keyType. The
+ * .yaml file for the other bits of information. The
  * MappedDataTable object itself keeps track of which files to which it has
  * been written and from which it has been read.
  *
  */
 @ToString(excludes=['data'], includeNames=true)
 class MappedDataTable extends DataTable implements MappedDataInterface {
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // STATIC
+    ///////////////////////////////////////////////////////////////////////////
+
+	/** carnival logger */
+    static Logger log = LoggerFactory.getLogger(GenericDataTable)
+
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -67,9 +70,9 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
                 queryDate : mdt.queryDate,
                 dataSourceDateOfUpdate : mdt.dataSourceDateOfUpdate,
                 idFieldName: mdt.idFieldName,
-                idKeyType: mdt.idKeyType,
-                secondaryIdFieldMap: mdt.secondaryIdFieldMap,
-                vine:mdt.vine
+                vine:mdt.vine,
+                dateFormat:mdt.dateFormat,
+                dateFormatPattern:mdt.dateFormat.toPattern()
             )
         }
 
@@ -82,25 +85,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
 
             this.data.name = args.name
             this.data.idFieldName = toFieldName(args.idFieldName)
-
-            if (args.containsKey('idKeyType')) this.data.idKeyType = args.idKeyType
-            
-            if (args.containsKey("secondaryIdFieldMap")) {
-                if (args.secondaryIdFieldMap) assert args.secondaryIdFieldMap instanceof Map : "Error in MappedDataTable.MetaData.setMeta(): could not parse secondaryIdFieldMap, expected to be of type 'Map', got ${args.secondaryIdFieldMap?.class}.  args: $args"
-
-                this.data.secondaryIdFieldMap = [:]
-
-                args.secondaryIdFieldMap.each { k, v ->
-                    assert k instanceof String || k instanceof GString : "Error in MappedDataTable.MetaData.setMeta(): could not parse secondaryIdFieldMap, keys expected to be of type 'String' or 'GString', have type ${k.class}.  args: $args"
-                    assert v instanceof KeyType : "Error in MappedDataTable.MetaData.setMeta(): could not parse secondaryIdFieldMap, values expected to be of type 'KeyType', have type ${v.class}.  args: $args"
-                    this.data.secondaryIdFieldMap[toFieldName(k)] = v
-                }
-
-                if (this.data.secondaryIdFieldMap.keySet().contains(this.data.idFieldName))
-                    throw new IllegalArgumentException("key defined as both a primary and secondary id field: ${this.data.idFieldName}")
-            } else {
-                this.data.secondaryIdFieldMap = [:]
-            }
 
             if (args.get('queryDate') != null) {
                 assert ((args.queryDate instanceof String) || (args.queryDate instanceof Date)) 
@@ -115,6 +99,13 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
             this.data.dataSourceDateOfUpdate = computeDataSourceDate(args, 'dataSourceDateOfUpdate')
 
             if (args.get('vine') != null) this.data.vine = args.vine
+
+            if (args.get('dateFormat') != null) this.data.dateFormat = args.dateFormat
+
+            if (args.get('dateFormatPattern') != null) {
+                this.data.dateFormatPattern = args.dateFormatPattern
+                this.data.dateFormat = new SimpleDateFormat(args.dateFormatPattern)
+            }
         }
 
         public String getName() {
@@ -133,27 +124,18 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
             return data.idFieldName
         }
 
-        public KeyType getIdKeyType() {
-            return data.idKeyType
-        }
-
-        public Map getSecondaryIdFieldMap() {
-            return data.secondaryIdFieldMap
-        }
-
         public Map getVine() {
             return data.vine
         }
+
+        public SimpleDateFormat getDateFormat() {
+            return data.dateFormat
+        }
+
+        public String getDateFormatPattern() {
+            return data.dateFormatPattern
+        }
     }
-
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC FIELDS
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** logger */
-	static Logger log = LoggerFactory.getLogger('carnival')
-
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -175,6 +157,16 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
         assert dir.isDirectory()
 
         def metaFile = metaFile(dir, name)
+        loadMetaDataFromFile(metaFile)
+    }
+
+
+    /**
+     *
+     *
+     */
+    static protected Map loadMetaDataFromFile(File metaFile) {
+        assert metaFile != null
         assert metaFile.exists()
         assert metaFile.length() > 0
 
@@ -184,16 +176,10 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
         assert meta.name
         assert meta.queryDate
         assert meta.idFieldName
-        assert meta.idKeyType
-
-        if (meta.secondaryIdFieldMap) assert meta.secondaryIdFieldMap instanceof Map : "Error in MappedDataTable.createFromFiles($dir, $name): could not parse secondaryIdFieldMap, expected to be of type 'Map', was of type ${meta.secondaryIdFieldMap.class}.  meta: $meta"
-        meta.secondaryIdFieldMap.each {k, v ->
-            assert k instanceof String : "Error in MappedDataTable.createFromFiles($dir, $name): could not parse secondaryIdFieldMap, keys expected to be of type 'String'.  meta: $meta"
-            assert v instanceof KeyType : "Error in MappedDataTable.createFromFiles($dir, $name): could not parse secondaryIdFieldMap, values expected to be of type 'KeyType'.  meta: $meta"
-        }
 
         return meta
     }
+
 
 
     /** 
@@ -207,17 +193,29 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
      */
     static protected void loadDataFromFile(File dir, String name, MappedDataTable mdt) {
         def dataFile = dataFile(dir, name)
+        loadDataFromFile(dataFile, mdt)
+    }
+
+
+    /**
+     *
+     *
+     */
+    static protected void loadDataFromFile(File dataFile, MappedDataTable mdt) {
+        assert dataFile != null
         assert dataFile.exists()
         assert dataFile.length() > 0
+        assert mdt != null
 
         def dataFileText = dataFile.text
 
         if (dataFileText) {
-            CsvIterator dataIterator = parseCsv(dataFileText)
-            // TODO fix: this doesn't seem to work; hasNext() is returning true for a bad test file
-            //log.trace "hasNext: ${dataIterator.hasNext()} "
-            if (!dataIterator.hasNext()) log.warn "createFromFiles for file $dataFile: no data found."
-            mdt.dataAddAll(dataIterator)
+            def csvReader = CsvUtil.createReaderHeaderAware(dataFileText)
+            if (!CsvUtil.hasNext(csvReader)) {
+                log.warn "error in loadDataFromFile for file $dataFile. no data found."
+            }
+            mdt.dataAddAll(csvReader)
+            mdt.readFrom = dataFile
         }
     }
 
@@ -248,6 +246,18 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
 
 
 
+    /**
+     *
+     */
+    static public MappedDataTable createFromFiles(DataTableFiles cacheFiles) {
+        def meta = loadMetaDataFromFile(cacheFiles.meta)
+        def mdt = new MappedDataTable(meta)
+        loadDataFromFile(cacheFiles.data, mdt)
+        mdt
+    }
+
+
+
 
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS
@@ -256,14 +266,8 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
     /** the name of the id field */
     String idFieldName
 
-    /** the type of the id key */
-    KeyType idKeyType = KeyType.GENERIC_STRING_ID
-
     /** id -> map of vals */
     SortedMap<String,Map<String,String>> data = new TreeMap<String, Map<String,String>>()
-
-    /** secondary id fields and their key types */
-    Map<String, KeyType> secondaryIdFieldMap = [:]
 
     /** date of the query */
     Date queryDate
@@ -273,6 +277,9 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
 
     /** if a query, the date the dataSource was last updated.  Default is null as set in metadata.setMeta */
     Date dataSourceDateOfUpdate 
+
+    /** the formatter to use with date values */
+    SimpleDateFormat dateFormat = SqlUtils.DEFAULT_TIMESTAMP_FORMATER
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -301,9 +308,13 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
         this.queryDate = args.queryDate
         this.dataSourceDateOfUpdate = args.dataSourceDateOfUpdate
 
-        if (args.idKeyType) this.idKeyType = args.idKeyType
-        if (args.secondaryIdFieldMap) this.secondaryIdFieldMap = args.secondaryIdFieldMap
         if (args.vine) this.vine = args.vine
+
+        if (args.dateFormat) this.dateFormat = args.dateFormat
+        
+        if (args.dateFormatPattern) {
+            this.dateFormat = new SimpleDateFormat(args.dateFormatPattern)
+        }
     }
 
 
@@ -333,7 +344,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
             new OrderBy(
                 [
                     { it != idFieldName },
-                    { !secondaryIdFieldMap.containsKey(it) }, 
                     { it }
                 ]
             )
@@ -350,10 +360,8 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
             vine:vine,
             name:name, 
             queryDate:queryDate,
-            idFieldName:idFieldName, 
-            secondaryIdFieldMap:secondaryIdFieldMap
+            idFieldName:idFieldName
         ]
-        if (idKeyType != null) m.idKeyType = idKeyType
         if (dataSourceDateOfUpdate != null) m.dataSourceDateOfUpdate = dataSourceDateOfUpdate
         
         new MetaData(m)
@@ -372,8 +380,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
         if (obj == null) return false
         if (!(obj instanceof MappedDataTable)) return false
         if (!areEqual(this.idFieldName, obj.idFieldName)) return false
-        if (!areEqual(this.idKeyType, obj.idKeyType)) return false
-        if (!areEqual(this.secondaryIdFieldMap, obj.secondaryIdFieldMap)) return false
         if (!areEqual(this.queryDate, obj.queryDate)) return false
         if (!areEqual(this.vine, obj.vine)) return false
         if (!areEqual(this.dataSourceDateOfUpdate, obj.dataSourceDateOfUpdate)) return false
@@ -519,18 +525,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
 
 
     /**
-     * Add the data from a single PropertyMapper (from CSVIterator.each).
-     *
-     * @param rec A PropertyMapper that must contain the idFieldName field.
-     *
-     */
-    public void dataAdd(PropertyMapper rec) {
-        //log.debug "dataAdd(PropertyMapper) rec:$rec"
-        dataAdd(rec.toMap())
-    }
-
-
-    /**
      * Add a single row of data from a Groovy SQL query result.
      *
      * @param row The row of data
@@ -542,17 +536,17 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
     public void dataAdd(GroovyRowResult row) {
         Map<String,Object> vals = new HashMap<String,Object>()
         row.each { k,v ->
-            String keyVal = "${k}"
-            this.keySet << keyVal
+            String fn = toFieldName("${k}")
+            this.keySet << fn
 
             // this is a hack to handle MySQL boolean fields that are binary(1)
             // they come back as byte arrays with a single value, either 48 or 49
             // for 0 and 1 respectively
             // the following code block maps [48,49] > [0,1]
             if (v instanceof byte[] && v.length == 1) {
-                vals[keyVal] = (char)v[0]
+                vals[fn] = (char)v[0]
             } else {
-                vals[keyVal] = v
+                vals[fn] = v
             }
         }
 
@@ -639,14 +633,10 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
                 cv = null
             }
 
-            // special case the secondary id fields
-            else if (fn in secondaryIdFieldMap.keySet()) {
-                cv = formatIdValue(v)
-            }
-
             // special cased types
             else if (v instanceof Date) {
-                cv = SqlUtils.timestampAsString(v) 
+                //cv = SqlUtils.timestampAsString(v) 
+                cv = dateFormat.format(v)
             }
 
             // handle as string
@@ -688,7 +678,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
 
         def idv = toIdValue(String.valueOf(id))
         def formattedKey = toFieldName(key)
-        def formattedVal = key in secondaryIdFieldMap.keySet() ? formatIdValue(value) : value
 
         Map<String,String> m = this.data[idv]
         if (!m) {
@@ -697,7 +686,7 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
             m.put(this.idFieldName, idv)
             this.keySet.add(this.idFieldName)
         }
-        m.put(formattedKey, formattedVal)
+        m.put(formattedKey, value)
         this.keySet.add(formattedKey)
     }
 
@@ -720,22 +709,22 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
         def idv = toIdValue(String.valueOf(id))
         def existingData = this.data[idv]
 
-        def idFormattedVals = vals.collectEntries{ k, v -> 
-            [(toFieldName(k)): (k in secondaryIdFieldMap.keySet() ? formatIdValue(v) : v)]
+        def formattedVals = vals.collectEntries{ k, v -> 
+            [(toFieldName(k)): v]
         }
 
         // check that the data in vals are disjoint by key from the existing
         // data.  if not, throw an error.
-        if (existingData && !existingData.keySet().disjoint(idFormattedVals.keySet())) {
-            def commonKeys = existingData.keySet().intersect(idFormattedVals.keySet())
+        if (existingData && !existingData.keySet().disjoint(formattedVals.keySet())) {
+            def commonKeys = existingData.keySet().intersect(formattedVals.keySet())
             commonKeys.each { k ->
-                if (existingData.get(k) != idFormattedVals.get(k)) throw new IllegalArgumentException("existingData $k:${existingData.get(k)} != idFormattedVals $k:${idFormattedVals.get(k)}")
+                if (existingData.get(k) != formattedVals.get(k)) throw new IllegalArgumentException("existingData $k:${existingData.get(k)} != formattedVals $k:${formattedVals.get(k)}")
             }
         }
 
         // make sure that vals does not contain the id key
-        def idKey = findFieldName(this.idFieldName, idFormattedVals)
-        if (idKey) throw new IllegalArgumentException("id cannot be in vals: idFieldName:${idFieldName} idFormattedVals:${idFormattedVals}")
+        def idKey = findFieldName(this.idFieldName, formattedVals)
+        if (idKey) throw new IllegalArgumentException("id cannot be in vals: idFieldName:${idFieldName} formattedVals:${formattedVals}")
 
         if (!this.data[idv]) {
             this.data[idv] = new HashMap<String,String>()
@@ -744,8 +733,8 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
         }
         
 
-        this.data[idv].putAll(idFormattedVals)
-        keySet.addAll(idFormattedVals.keySet())
+        this.data[idv].putAll(formattedVals)
+        keySet.addAll(formattedVals.keySet())
     }
 
 
@@ -778,9 +767,9 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
             queryDate:queryDate,
             dataSourceDateOfUpdate:dataSourceDateOfUpdate,
             idFieldName:idFieldName,
-            idKeyType:idKeyType,
-            secondaryIdFieldMap:secondaryIdFieldMap,
-            vine:vine
+            vine:vine,
+            dateFormatPattern:dateFormat.toPattern(),
+            //dateFormat:dateFormat
         ]
 
         try {

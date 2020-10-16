@@ -5,28 +5,26 @@ import static java.lang.System.err
 
 import org.yaml.snakeyaml.Yaml
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
+import groovy.util.logging.Slf4j
 
 
 /**
  * A database configuration.
  *
  */
+@Slf4j
 class RdfConfig extends DatabaseConfig {
 
 
 	///////////////////////////////////////////////////////////////////////////
 	// STATIC
 	///////////////////////////////////////////////////////////////////////////
-	static final Logger log = LoggerFactory.getLogger('carnival')
 
 	static public RdfConfig getDatabaseConfigFromFile(String confFilePath, String prefix) {
         def conf = loadYamlFile(confFilePath)
-        if (!conf.get('dataSourcesRdf')) throw new RuntimeException("no dataSourcesRdf configurations in: $confFilePath")
-        if (!conf.dataSourcesRdf.get(prefix)) throw new RuntimeException("no configuration in $confFilePath for $prefix")
-        def db = new RdfConfig(conf.dataSourcesRdf.get(prefix))
+        if (!conf.get('carnival.dataSourcesRdf')) throw new RuntimeException("no dataSourcesRdf configurations in: $confFilePath")
+        if (!conf.carnival.dataSourcesRdf.get(prefix)) throw new RuntimeException("no configuration in $confFilePath for $prefix")
+        def db = new RdfConfig(conf.carnival.dataSourcesRdf.get(prefix))
 		return db
 	}
 

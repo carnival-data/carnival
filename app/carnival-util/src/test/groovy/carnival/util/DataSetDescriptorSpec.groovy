@@ -1,17 +1,12 @@
 package carnival.util
 
 
-import groovy.mock.interceptor.StubFor
 import groovy.sql.*
 import groovy.transform.InheritConstructors
 
 import spock.lang.Specification
 import spock.lang.Unroll
 import spock.lang.Shared
-
-import static com.xlson.groovycsv.CsvParser.parseCsv
-import com.xlson.groovycsv.CsvIterator
-import com.xlson.groovycsv.PropertyMapper
 
 import carnival.graph.*
 
@@ -38,8 +33,6 @@ class DataSetDescriptorSpec extends Specification {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    static EMPI = KeyType.EMPI
-    static MRN = KeyType.MRN
 
     @Shared testDate
 

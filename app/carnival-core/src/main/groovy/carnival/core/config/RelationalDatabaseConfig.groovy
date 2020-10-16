@@ -1,29 +1,26 @@
 package carnival.core.config
 
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
+import groovy.util.logging.Slf4j
 
 
 /**
  * A database configuration.
  *
  */
+@Slf4j
 class RelationalDatabaseConfig extends DatabaseConfig {
 
 
 	///////////////////////////////////////////////////////////////////////////
 	// STATIC
 	///////////////////////////////////////////////////////////////////////////
-	static final Logger log = LoggerFactory.getLogger('carnival')
 
-	
 	static public RelationalDatabaseConfig getDatabaseConfigFromFile(String fileName, String prefix) {
         File dsConfigFile = new File(fileName)
         assert dsConfigFile.exists()
         Map dsConfigVals = loadYaml(dsConfigFile.text)
-        def db = new RelationalDatabaseConfig(dsConfigVals['dataSources'][prefix])
+        def db = new RelationalDatabaseConfig(dsConfigVals['carnival.dataSources'][prefix])
 		return db
 	}
 
@@ -40,9 +37,9 @@ class RelationalDatabaseConfig extends DatabaseConfig {
         log.trace "dbConfigText: $dbConfigText"
 
         Map dbm = loadYaml(dbConfigText)
-        log.trace "dbm: ${dbm.dataSources}"
+        log.trace "dbm: ${dbm.carnival.dataSources}"
 
-        return dbm.dataSources.get(tag)        
+        return dbm.carnival.dataSources.get(tag)        
     }
 
 

@@ -3,8 +3,7 @@ package carnival.util
 
 
 import org.yaml.snakeyaml.Yaml
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 
 
@@ -12,18 +11,28 @@ import org.slf4j.LoggerFactory
  * Configuration utility -- to be re-written!!!!
  *
  */
+@Slf4j
 public class Defaults {
 
 
 	///////////////////////////////////////////////////////////////////////////
-	// STATIC
+	// STATIC FIELDS
 	///////////////////////////////////////////////////////////////////////////
 
     /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
+    static final Random random = new Random()
 
     /** */
-    static final Random random = new Random()
+    final String[] requiredNeo4jConfigs = [
+        'carnival.gremlin.neo4j.conf.dbms.security.auth_enabled',
+        'carnival.gremlin.neo4j.conf.dbms.directories.plugins',
+        'carnival.gremlin.neo4j.conf.dbms.security.procedures.unrestricted',
+        'carnival.gremlin.neo4j.conf.dbms.security.procedures.whitelist',
+        'carnival.gremlin.neo4j.conf.dbms.unmanaged_extension_classes'
+    ]
+
+    /** */
+    static Map configData = null
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -57,45 +66,59 @@ public class Defaults {
         String configDirPath
         File configFile
 
-        // look for config in -DconfigDir
-        if (!configFile && System.getProperty('carnival.home')) {
+        // if the system property carnival.home is set, then it is expected
+        // that the directory exists and the configuration file is found there.
+        // carnival.home is set automatically by the Carnival Gradle Plugin.
+        // it is expected that applications that rely on Carnival as a library
+        // will set this value.
+        if (System.getProperty('carnival.home')) {
             configDirPath = System.getProperty('carnival.home') + "/config"
             configFile = findApplicationConfigurationFileInDirectoryPath(configDirPath)
+            if (configFile != null && configFile.exists()) {
+                log.info "config file from carnival.home: ${configFile}"
+                return configFile
+            } else {
+                log.warn "configuration not found in config.home: ${configDirPath}"
+                return null
+            } 
+        } else {
+            log.info "carnival.home is not set"
         }
-        
-        // look for config in CARNIVAL_HOME/config
-        if (!configFile && env.containsKey('CARNIVAL_HOME')) {
+
+        // running outside an application context implies core framework
+        // development.  in this case, the environment variable CARNIVAL_HOME
+        // is expected to be set.  a home directory is required for a place to
+        // put graph data and also provides the opportunity to override default
+        // logging and carnival configuration during the development process.
+        if (System.getProperty('CARNIVAL_HOME')) {
             configDirPath = env.get('CARNIVAL_HOME') + "/config"
             configFile = findApplicationConfigurationFileInDirectoryPath(configDirPath)
+            if (configFile != null && configFile.exists()) {
+                log.info "config file from CARNIVAL_HOME: ${configFile}"
+                return configFile
+            } else {
+                log.warn "configuration not found in CONFIG_HOME: ${configDirPath}"
+                return null
+            }             
+        } else {
+            log.info "CARNIVAL_HOME is not set"
         }
 
         // look for config in ./config
-        if (!configFile) {
-            configFile = findApplicationConfigurationFileInDirectoryPath('config')
+        configFile = findApplicationConfigurationFileInDirectoryPath('config')
+        if (configFile != null && configFile.exists()) {
+            log.info "config file from current directory: ${configFile}"
+            return configFile
         }
 
-        // if we don't have a config file by now, it's an error.
-        if (!configFile) {
-            def msg = "Could not find application config file in 'config' directory. See documentation."
-            msg += " carnival.home(sys prop): ${System.getProperty('carnival.home')}."
-            if (env.containsKey('CARNIVAL_HOME')) msg += " CARNIVAL_HOME(env): ${env.get('CARNIVAL_HOME')}"
-            else msg += " CARNIVAL_HOME(env) is not set."
-            
-            log.error msg
-            throw new RuntimeException(msg)
-        }
-
-        log.trace "configFile: ${configFile}"
-
-        return configFile
+        // if we have made it this far, it's a warning
+        log.warn "could not find a configuration file in carnival.home, CARNIVAL_HOME, or ./config/"
+        return null
     }
 
 
     static private File findApplicationConfigurationFileInDirectoryPath(String dirPath) {
-        if (dirPath == null) {
-            throw new RuntimeException('dirPath is null')
-            return null
-        }
+        assert dirPath != null
         def dir = new File(dirPath)
         return findApplicationConfigurationFileInDirectory(dir)
     }
@@ -129,7 +152,10 @@ public class Defaults {
 
     static public File findApplicationConfigurationDirectory() {
         def configFile = findApplicationConfigurationFile()
-        if (!configFile) throw new RuntimeException('could not locate configuration file')
+        if (!configFile) {
+            log.warn 'findApplicationConfigurationDirectory - could not locate configuration file. returning null.'
+            return null
+        }
         return configFile.parentFile
     }
 
@@ -139,12 +165,19 @@ public class Defaults {
     ///////////////////////////////////////////////////////////////////////////
 
     static public Map loadApplicationConfiguration() {
+        if (Defaults.configData) return Defaults.configData
+
         def confFile = findApplicationConfigurationFile()
 
         // blow up if we have no configuration
-        if (!confFile) throw new RuntimeException('could not locate configuration file')
+        if (!confFile) {
+            log.warn "loadApplicationConfiguration - could not locate configuration file. using default configuration."
+            this.configData = [:]
+            return this.configData
+        }
 
         def conf = loadApplicationConfiguration(confFile)
+        this.configData = conf
         return conf
     }
 
@@ -178,9 +211,66 @@ public class Defaults {
     */
 
 
+    ///////////////////////////////////////////////////////////////////////////
+    // CONFIGURATION SETTER
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    static public void setConfigData(Map m) {
+        assert m != null
+        if (Defaults.configData == null) Defaults.loadApplicationConfiguration()
+        //if (Defaults.configData == null) Defaults.configData = [:]
+        m.entrySet().each { entry -> setConfigData(Defaults.configData, entry )}
+        log.trace "setConfigData final Defaults.configData: ${Defaults.configData}"
+    }
+
+
+    /** */
+    static public void setConfigData(Map dest, Map.Entry toSet) {
+        log.trace "setConfigData dest:${dest} toSet:${toSet}"
+
+        def toSetKey = toSet.getKey()
+        def toSetVal = toSet.getValue()
+
+        if (toSetVal instanceof Map) {
+
+            if (dest.containsKey(toSetKey)) {
+                
+                def destVal = dest.get(toSetKey)
+                if (destVal == null) {
+                    dest.put(toSetKey, toSetVal)
+                } else {
+                    if (!(destVal instanceof Map)) throw new IllegalArgumentException("trying to override existing scalar value with a map: ${destVal} ${toSetKey} ${toSetVal}")
+                    toSetVal.each { entry -> setConfigData(destVal, entry)}
+                }
+
+            } else {
+
+                dest.put(toSetKey, toSetVal)
+
+            }
+
+        } else {
+
+            if (dest.containsKey(toSetKey)) {
+
+                def destVal = dest.get(toSetKey)
+                if (destVal != null && destVal instanceof Map) throw new IllegalArgumentException("trying to replace a map with scalar value: ${destVal} ${toSetVal}")
+                dest.put(toSetKey, String.valueOf(toSetVal))
+
+            } else {
+
+                dest.put(toSetKey, String.valueOf(toSetVal))
+
+            }
+
+        }
+
+    }
+
 
     ///////////////////////////////////////////////////////////////////////////
-    // CONVENIENCE GETTERS
+    // GENERIC GETTERS
     ///////////////////////////////////////////////////////////////////////////
 
     static public String getConfigValue(String key) {
@@ -210,6 +300,11 @@ public class Defaults {
         return val
     }
 
+
+    ///////////////////////////////////////////////////////////////////////////
+    // HOME DIR
+    ///////////////////////////////////////////////////////////////////////////
+
     static private File getHomeDir() {
         def homeDir
         if (!homeDir) homeDir = findDirectoryFromSysProp('carnival.home')
@@ -229,8 +324,13 @@ public class Defaults {
         return val
     }
 
+
+    ///////////////////////////////////////////////////////////////////////////
+    // CARNIVAL CONFIG GETTERS
+    ///////////////////////////////////////////////////////////////////////////
+
     static public String getTargetDirectoryPath() {
-        getDirectoryConfigValue('directories.execution.target', 'target') 
+        getDirectoryConfigValue('carnival.directories.execution.target', 'target') 
     }
 
     static public File getTargetDirectory() {
@@ -238,7 +338,7 @@ public class Defaults {
     }
 
     static public String getDataDirectoryPath() {
-        getDirectoryConfigValue('directories.data.root', 'data') 
+        getDirectoryConfigValue('carnival.directories.data.root', 'data') 
     }
 
     static public File getDataDirectory() {
@@ -246,7 +346,7 @@ public class Defaults {
     }
 
     static public String getDataCacheDirectoryPath() {
-        return getConfigValue('directories.data.cache') ?: "${dataDirectoryPath}/cache"
+        return getConfigValue('carnival.directories.data.cache') ?: "${dataDirectoryPath}/cache"
     }
 
     static public File getDataCacheDirectory() {
@@ -254,7 +354,7 @@ public class Defaults {
     }
 
     static public String getDataGraphDirectoryPath() {
-        return getConfigValue('directories.data.graph.app') ?: "${dataDirectoryPath}/graph/app"
+        return getConfigValue('carnival.directories.data.graph.app') ?: "${dataDirectoryPath}/graph/app"
     }
 
     static public File getDataGraphDirectory() {
@@ -262,7 +362,7 @@ public class Defaults {
     }
 
     static public String getDataGraphPublishBaseDirectoryPath() {
-        return getConfigValue('directories.data.graph.publish.base') ?: "${dataDirectoryPath}/graph/publish/base"
+        return getConfigValue('carnival.directories.data.graph.publish.base') ?: "${dataDirectoryPath}/graph/publish/base"
     }
 
     static public File getDataGraphPublishBaseDirectory() {
@@ -270,7 +370,7 @@ public class Defaults {
     }
 
     static public String getDataGraphPublishWorkspaceDirectoryPath() {
-        return getConfigValue('directories.data.graph.publish.workspace') ?: "${dataDirectoryPath}/graph/publish/workspace"
+        return getConfigValue('carnival.directories.data.graph.publish.workspace') ?: "${dataDirectoryPath}/graph/publish/workspace"
     }
 
     static public File getDataGraphPublishWorkspaceDirectory() {
@@ -285,10 +385,10 @@ public class Defaults {
     static public void initDirectory(File dir) {
         assert dir != null
 
-        log.trace "\n\nDefaults.initDirectory dir: $dir\n\n\n"
+        log.info "Defaults.initDirectory dir: $dir"
 
         if (!dir.exists()) {
-            log.warn "${dir} does not exist. creating empty directory."
+            log.info "${dir} does not exist. creating empty directory."
             boolean success = dir.mkdirs()
             if (!success) throw new RuntimeException("failed create directory ${dir}")
             return
@@ -304,43 +404,13 @@ public class Defaults {
         initDirectory(getDataGraphDirectory())
         initDirectory(getDataGraphPublishBaseDirectory())
         initDirectory(getDataGraphPublishWorkspaceDirectory())
-    }
 
-
-
-    /*
-    static private void setSystemProps(Map conf) {
-        log.trace "directories: ${conf.get('directories')}"
-        Map dconf = conf.get('directories').get('data')
-        if (!dconf) throw new RuntimeException('directories.data not configured')
-
-        ['root', 'graph', 'cache'].each {
-            def propKey = "directory-data-${it}"
-            if (dconf.get(it)) System.setProperty(propKey, dconf.get(it)) 
-            log.debug "$it $propKey " + System.getProperty(propKey) 
-        }
-
-        Map econf = conf.get('directories').get('execution')
-        if (!econf) throw new RuntimeException('directories.execution not configured')
-        ['target'].each {
-            def propKey = "directory-execution-${it}"
-            if (econf.get(it)) System.setProperty(propKey, econf.get(it)) 
-            log.debug "$it $propKey " + System.getProperty(propKey) 
+        def configFile = findApplicationConfigurationFile()
+        if (configFile == null) {
+            def configDirectory = new File(getHomeDir(), 'config')
+            initDirectory(configDirectory)
         }
     }
-
-    static public void setConfigDir(File configDir) {
-        assert configDir
-        assert configDir.exists()
-        assert configDir.isDirectory()
-        System.setProperty('directory-config', configDir.canonicalPath)
-    }
-    */
-
-
-
-
-
 
 }
 

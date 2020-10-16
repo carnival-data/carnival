@@ -1,0 +1,101 @@
+/**
+ * carnival-gradle
+ *
+ */
+
+
+///////////////////////////////////////////////////////////////////////////////
+// properties file
+///////////////////////////////////////////////////////////////////////////////
+
+task writePropertiesFile(type: WriteProperties) {
+    outputFile = file('src/main/resources/carnival/gradle/Version.properties')
+    property 'groovyVersion', groovyVersion
+    property 'gremlinVersion', gremlinVersion
+    property 'neo4jTinkerpopVersion', neo4jTinkerpopVersion
+    property 'neo4JavaDriverVersion', neo4JavaDriverVersion
+    property 'carnivalVersion', carnivalVersion
+}
+compileGroovy.dependsOn 'writePropertiesFile'
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+// maven publishing
+///////////////////////////////////////////////////////////////////////////////
+publishToMavenLocal.dependsOn 'compileGroovy'
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    from sourceSets.main.allGroovy
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    from groovydoc
+    classifier = 'javadoc'
+}
+
+publishing {
+    publications {
+        mavenGroovy(MavenPublication) {
+            artifactId = 'carnival-gradle'
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    name 'Carnival Gradle'
+                    description 'A Gradle plugin to facilitate integration of Carnival into Java applications.'
+                    url 'https://github.com/pmbb-ibi/carnival'
+                    licenses {
+                        license {
+                            name 'GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007'
+                            url 'https://www.gnu.org/licenses/gpl-3.0.txt'
+                        }
+                    }
+                    developers {
+						developer {
+                            id 'augustearth'
+                            name 'David Birtwell'
+                            email 'augustearth@gmail.com'
+                        }
+                        developer {
+                            id 'hjwilli'
+                            name 'Heather Williams'
+                            email 'hjwilli@gmail.com'
+                        }
+                    }
+                    scm {
+                        connection 'scm:git:git://github.com:pmbb-ibi/carnival.git'
+                        developerConnection 'scm:git:ssh://github.com:pmbb-ibi/carnival.git'
+                        url 'https://github.com/pmbb-ibi/carnival'
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            // change URLs to point to your repos, e.g. http://my.org/repo
+            def releasesRepoUrl = "$buildDir/repos/releases"
+            def snapshotsRepoUrl = "$buildDir/repos/snapshots"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+        }
+    }
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+// dependencies
+///////////////////////////////////////////////////////////////////////////////
+
+// In this section you declare the dependencies for your production and test code
+dependencies {
+    implementation gradleApi()
+    implementation localGroovy()
+}
+

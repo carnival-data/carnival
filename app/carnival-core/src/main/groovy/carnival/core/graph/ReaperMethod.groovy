@@ -18,42 +18,6 @@ import carnival.graph.DynamicVertexDef
 
 
 
-/** */
-public interface ReaperMethodInterface {
-
-    /**
-     * Check that the pre-conditions to running this reaper method with
-     * the given args hold.
-     *
-     * @return Collection of GraphValidationError objects, each of which
-     * represents a validation failure.  If there are no failures, an
-     * empty collection is returned.
-     *
-     */
-    Collection<GraphValidationError> checkPreConditions(Map args)
-
-
-    /**
-     * Run the reaper method with the given arguments.
-     *
-     */
-    Map reap(Map args)
-
-
-    /**
-     * Check that the post-conditions to running this reaper method with
-     * the given args hold.
-     *
-     * @return Collection of GraphValidationError objects, each of which
-     * represents a validation failure.  If there are no failures, an
-     * empty collection is returned.
-     *
-     */
-    Collection<GraphValidationError> checkPostConditions(Map args, Map result)
-}
-
-
-
 /**
  * The ReaperMethod interface must be implemented by any reaper methods...
  *
@@ -64,8 +28,9 @@ abstract class ReaperMethod implements ReaperMethodInterface, TrackedProcessTrai
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
-    static Logger log = LoggerFactory.getLogger('carnival')
+	/** carnival logger */
+    static Logger log = LoggerFactory.getLogger(ReaperMethod)
+
 
     /** */
     static void assertPatientVertices(Map args) {
@@ -105,8 +70,7 @@ abstract class ReaperMethod implements ReaperMethodInterface, TrackedProcessTrai
 
     /** */
     public Map ensure(Map args = [:]) {
-        assert enclosingReaper != null
-        enclosingReaper.optionallyRunSingletonProcess(this, args)
+        optionallyRunSingletonProcess(this, args)
     }
 
 
@@ -125,7 +89,7 @@ abstract class ReaperMethod implements ReaperMethodInterface, TrackedProcessTrai
         Reaper.VX.REAPER_PROCESS_CLASS.setSubclassOf(g, Core.VX.DATA_TRANSFORMATION_PROCESS_CLASS)
 
         def procClassDef = getTrackedProcessClassDef()
-        log.debug "procClassDef: $procClassDef"
+        log.trace "procClassDef: $procClassDef"
         
         procClassDef.setSubclassOf(g, Reaper.VX.REAPER_PROCESS_CLASS)
 
@@ -142,6 +106,11 @@ abstract class ReaperMethod implements ReaperMethodInterface, TrackedProcessTrai
     /** */
     void setReaperProcessInputs(Collection<Vertex> inputVertices) {
         setTrackedProcessInputs(inputVertices)
+    }
+
+    /** */
+    void setReaperProcessInput(Vertex inputVertex) {
+        setTrackedProcessInputs([inputVertex])
     }
 
 
@@ -214,43 +183,25 @@ abstract class ReaperMethod implements ReaperMethodInterface, TrackedProcessTrai
         return hash
     }    
 
+
     /** */
-    protected Graph getGraph() {
-        enclosingReaper.graph
+    protected Object withTraversal(Closure cl) {
+        def g = traversal()
+        GremlinTraitUtilities.withTraversal(graph, g, cl)
     }
 
     /** */
-    protected GraphTraversalSource traversal() {
-        enclosingReaper.traversal()
+    protected Object withGremlin(Closure cl) {
+        def g = traversal()
+        try {
+            GremlinTraitUtilities.withGremlin(graph, g, cl)
+        } finally {
+            try {
+                if (g != null) g.close()
+            } catch (Exception e) {
+                e.printStackTrace()
+            }
+        }
     }
 
 }
-
-
-
-
-
-/** */
-class DefaultReaperMethod extends ReaperMethod {
-
-
-    Collection<GraphValidationError> checkPreConditions(Map args) {
-        return []
-    }
-
-
-    Map reap(Map args) {
-        return [:]
-    }
-
-
-
-    Collection<GraphValidationError> checkPostConditions(Map args, Map result) {
-        return []
-    }
-
-}
-
-
-
-

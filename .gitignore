@@ -29,6 +29,9 @@ build
 *.tgz
 *.properties
 
+# needed for gradle-plugin
+!app/carnival-gradle/src/main/resources/META-INF/gradle-plugins/edu.upenn.pmbb.carnival.properties
+
 # do not ignore the docker-compose file
 !docker-compose.yml
 
@@ -113,3 +116,10 @@ docs/groovy/**/*.yml
 .jekyll-cache
 .sass-cache
 _site
+docs/node_modules
+
+# might be created by tests that write files
+app/carnival-core/data
+
+# scratch code
+*.groovy_

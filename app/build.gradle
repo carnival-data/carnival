@@ -56,7 +56,7 @@ compileGroovy.dependsOn('printJavaVersion')
 allprojects {
     group = 'edu.upenn.pmbb'
     sourceCompatibility = JavaVersion.toVersion('11')
-    version = '0.4.0-SNAPSHOT'   // see https://semver.org/
+    version = '2.0.0-SNAPSHOT'   // see https://semver.org/
 
     repositories {
         mavenCentral()

@@ -14,7 +14,7 @@ task writePropertiesFile(type: WriteProperties) {
     property 'gremlinVersion', gremlinVersion
     property 'neo4jTinkerpopVersion', neo4jTinkerpopVersion
     property 'neo4JavaDriverVersion', neo4JavaDriverVersion
-    property 'carnivalVersion', carnivalVersion
+    property 'carnivalVersion', version
 }
 compileGroovy.dependsOn 'writePropertiesFile'
 

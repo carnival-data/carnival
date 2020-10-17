@@ -2,7 +2,7 @@
 # Feel free to add content and custom Front Matter to this file.
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
-layout: default
+layout: page
 title: Developer Setup
 nav_order: 1
 has_children: false
@@ -11,16 +11,18 @@ parent: Home
 
 # Developer Setup
 
-*This documentation is applicable for developing the core Carnival framework, not developing an application that uses Carnival.*
+_This documentation is applicable for developing the core Carnival framework, not developing an application that uses Carnival._
 
 **Carnival** is a [Groovy](https://groovy-lang.org) multi-project that uses [Gradle](https://gradle.org) as the build engine. The main project is in the app directory. Folders within app contain the sub-projects (eg. app/carnival-core). Every sub-project has a build.gradle configuration file that defines its dependencies and the gradle tasks that it can execute. The build.gradle file in the app directory defines project-wide configuration. Gradle task commands executed from the root project filter down to the sub-projects. Gradle commands referenced in this documentation are assumed to be called from the root project directory carnival/app unless otherwise noted. This project also includes a Docker image configuration that can be built to run the Carnival test suite.
 
 ## Installation
 
 ### Java JDK
-If you do not already have one, install the Java JDK.  We recommend [Amazon Corretto](https://aws.amazon.com/corretto/), Java 8 or above.
+
+If you do not already have one, install the Java JDK. We recommend [Amazon Corretto](https://aws.amazon.com/corretto/), Java 8 or above.
 
 ### Github
+
 1. If you do not already have one, create a free account on [Github](https://github.com).
 1. Install [Github Desktop](https://desktop.github.com).
 1. Clone the [Carnival repository from Github](https://github.com/pmbb-ibi/carnival).
@@ -38,15 +40,15 @@ Set up a Carnival home directory, which will be used to contain data files and o
 **Note** - In the config files windows paths should be specified using double forward-slashes (i.e. `C://Users//myuser//somedirectory`).
 
 #### Configuration Files
-Name | Description
---- | ---
-application.yaml | Contains data source information (i.e. credentals to relational dbs, RDF dbs, REDCap, etc.), the default vine cache-mode, local directory configuration and the gremlin configuration.
-logback.xml | Can be modified to change the log levels.
 
+| Name             | Description                                                                                                                                                                            |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| application.yaml | Contains data source information (i.e. credentals to relational dbs, RDF dbs, REDCap, etc.), the default vine cache-mode, local directory configuration and the gremlin configuration. |
+| logback.xml      | Can be modified to change the log levels.                                                                                                                                              |
 
-### Neo4j APOC *(optional)*
+### Neo4j APOC _(optional)_
 
-Awesome Procedures on Cypher (APOC) is a library of Neo4j procedures.  While Carnival does not depend on any of these procedures, it may be useful to install the library.
+Awesome Procedures on Cypher (APOC) is a library of Neo4j procedures. While Carnival does not depend on any of these procedures, it may be useful to install the library.
 
 1. Download the most recent 3.5+ release from the [Neo4j Github](https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases).
 
@@ -67,15 +69,13 @@ gremlin:
                         whitelist: apoc.*
 ```
 
-
 ### Installation Test
+
 1. Open a Command Prompt.
 2. `cd` to the carnival repository directory.
 3. `cd app`
 4. `gradlew clean`
 5. `gradlew compileGroovy`
-
-
 
 ## Compiling
 
@@ -133,8 +133,3 @@ To publish all modules:
 ```
 gradlew publishAll
 ```
-
-
-
-
-

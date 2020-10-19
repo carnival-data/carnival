@@ -11,5 +11,13 @@
 -   Algorithms compute and stratify
 -   Sowers export data
 
-## Contents
-- [Core Developer Setup](developer-setup.md)
+## Core Development
+- [Developer Setup](developer-setup.md)
+- [Production Builds](production-buids.md)
+
+## Application Development
+- [Data Tables](data-tables.md)
+  - [Mapped Data Table](mapped-data-table.md)
+  - [Generic Data Table](generic-data-table.md)
+- [Vines](vines.md)
+- [Graph Model](graph-model.md)

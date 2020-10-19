@@ -76,6 +76,9 @@ class MappedDataTableVineMethodCall implements VineMethodCall<MappedDataTable> {
     /** the result returned by the call */
     MappedDataTable result
 
+    /** log of files written */
+    List<File> writtenTo = new ArrayList<File>()
+
 
     ///////////////////////////////////////////////////////////////////////////
     // METHODS - RESULT
@@ -110,8 +113,11 @@ class MappedDataTableVineMethodCall implements VineMethodCall<MappedDataTable> {
         assert dir.isDirectory()
         assert dir.canWrite()
 
-        this.result.writeFiles(dir)
+        List<File> files = this.result.writeFiles(dir)
+        writtenTo.addAll(files)
+        files
     }
+
 
     public DataTableFiles writeDataTableFiles(File dir) { 
         assert dir != null

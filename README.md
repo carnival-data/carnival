@@ -10,8 +10,7 @@
 
 ## Quick Links
 
--   [Documentation](docs/index.markdown)
--   [Documentation Website](https://pmbb-ibi.github.io/carnival/)
+-   [Documentation Website Hosted by Github](https://pmbb-ibi.github.io/carnival/)
 
 ## Contents
 
@@ -46,7 +45,7 @@ Carnival’s property graph database:
 
 ## <a name="github-pages-site"></a> Github Pages
 
-The Github pages site is stored in the `docs` directory and makes use of [jekyll](https://jekyllrb.com). See the [jekyll docs](https://jekyllrb.com/docs/) for jekyll installation and usage instructions.
+The Github pages site is stored in the `/docs` directory and makes use of [jekyll](https://jekyllrb.com). See the [jekyll docs](https://jekyllrb.com/docs/) for jekyll installation and usage instructions.
 
 ### Prerequisites
 - Install [Ruby](https://www.ruby-lang.org/en/)

@@ -14,6 +14,7 @@ import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 
 import carnival.graph.*
+import carnival.core.util.CoreUtil
 
 
 
@@ -71,6 +72,69 @@ class ReaperSpec extends Specification {
             it.setSubclassOf(g, Reaper.VX.REAPER_PROCESS_CLASS)
         }   
     }
+
+    def "ensure takes args into account"() {
+        when:
+        def g1 = TinkerGraph.open()
+        def g = g1.traversal()
+        initGraph(g1, g)
+
+        then:
+        g.V().hasLabel('ReaperMethod2Process').toList().size() == 0
+
+
+        when:
+        def reaper = new SimpleReaper(g1)
+        def methodArgs = [arg1:'val1'] 
+        def res = reaper.ensure('ReaperMethod2', methodArgs)
+        println "res: ${res}"
+        g.V().toList().each { println "${it} ${it.label()}" }
+
+        then:
+        g.V().hasLabel('ReaperMethod2Process').count().next() == 1
+        res.reaperMethodInstance
+        res.reaperMethodInstance.getAllTrackedProcesses(g).size() == 1
+
+        when:
+        def procVertFromGraph = g.V().hasLabel('ReaperMethod2Process').next()
+        def procVertFromResult = res.reaperMethodInstance.trackedProcessVertex
+
+        then:
+        procVertFromGraph == procVertFromResult
+
+        when:        
+        def procV = procVertFromGraph
+
+        then:
+        Core.PX.ARGUMENTS_HASH.of(procV).isPresent()
+
+        when:
+        String methodArgsHash = CoreUtil.standardizedUniquifier(String.valueOf(methodArgs))
+        def argsHashFromVert = Core.PX.ARGUMENTS_HASH.valueOf(procV)
+
+        then:
+        methodArgsHash == argsHashFromVert
+        
+        when:
+        def methodArgs2 = [arg1:'val2'] 
+        def res2 = reaper.ensure('ReaperMethod2', methodArgs2)
+
+        then:
+        g.V().hasLabel('ReaperMethod2Process').count().next() == 2
+        res2.reaperMethodInstance
+        res2.reaperMethodInstance.getAllTrackedProcesses(g).size() == 2
+        res.reaperMethodInstance.trackedProcessVertex != res2.reaperMethodInstance.trackedProcessVertex
+
+        when:
+        String methodArgsHash2 = CoreUtil.standardizedUniquifier(String.valueOf(methodArgs2))
+        def argsHashFromVert2 = Core.PX.ARGUMENTS_HASH.valueOf(res2.reaperMethodInstance.trackedProcessVertex)
+
+        then:
+        methodArgsHash2 == argsHashFromVert2
+
+    }
+
+
 
     def "default tracked process"() {
         given:
@@ -341,7 +405,7 @@ class ReaperSpec extends Specification {
 
         where:
         name << [
-            'reaperMethod2', 
+            'reaperMethod58', 
             'dfsdfsdf'
         ]
     }
@@ -377,9 +441,10 @@ class ReaperSpec extends Specification {
 
         then:
         reaperMethodClasses != null
-        reaperMethodClasses.size() == 2
+        reaperMethodClasses.size() == 3
 
         reaperMethodClasses.find { it.name.endsWith("ReaperMethod1") }
+        reaperMethodClasses.find { it.name.endsWith("ReaperMethod2") }
         reaperMethodClasses.find { it.name.endsWith("ReaperMethodSharedResource") }
     }
 
@@ -492,6 +557,14 @@ class SimpleReaper extends Reaper {
             return []
         }
 
+    }
+
+
+    class ReaperMethod2 extends DefaultReaperMethod {
+        Map reap(Map args = [:]) {
+            log.debug "ReaperMethod2: ${args}"
+            args
+        }
     }
 
 

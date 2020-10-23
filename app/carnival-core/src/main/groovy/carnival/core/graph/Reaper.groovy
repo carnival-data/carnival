@@ -40,16 +40,6 @@ abstract class Reaper {
     // STATIC METHODS
     ///////////////////////////////////////////////////////////////////////////
     
-    /**
-     * TODO: remove this?
-     * temporary till MappedDataTable update
-     *  
-     */
-    static protected String graphSafeString(def value) {
-        return value?.toString() ?: ""
-    }
-
-
     ///////////////////////////////////////////////////////////////////////////
     // UTLITY
     ///////////////////////////////////////////////////////////////////////////
@@ -132,19 +122,38 @@ abstract class Reaper {
 
     /** */
     public Map ensure(String methodName, Map methodArgs = [:]) {
-        optionallyRunSingletonProcess(methodName, methodArgs)
+        assert methodName
+
+        def rmi = createReaperMethodInstance(methodName)
+        if (rmi == null) throw new RuntimeException("Could not find reaper method '${methodName}' of ${this.class.name}")
+        ensure(rmi, methodArgs)
     }
 
 
     /** */
     public Map ensure(Class reaperMethodClass, Map methodArgs = [:]) {
-        optionallyRunSingletonProcess(reaperMethodClass, methodArgs)
+        assert reaperMethodClass
+        def rmi = createReaperMethodInstance(reaperMethodClass)
+        ensure(rmi, methodArgs)
     }
 
 
     /**  */
     public Map ensure(ReaperMethod reaperMethodInstance, Map methodArgs = [:]) {
-        optionallyRunSingletonProcess(reaperMethodInstance, methodArgs)       
+        assert reaperMethodInstance
+
+        def res = [:]
+        def runs = reaperMethodInstance.getAllSuccessfulTrackedProcesses(traversal())
+        String argsHash = CoreUtil.standardizedUniquifier(String.valueOf(methodArgs))
+        def theRun = runs.find { Core.PX.ARGUMENTS_HASH.valueOf(it) == argsHash }
+        if (theRun == null) {
+            res = call(reaperMethodInstance, methodArgs)
+            log.info "Reaper.ensure ${reaperMethodInstance.class.simpleName} res: $res"
+        } else {
+            log.info "Reaper.ensure ${reaperMethodInstance.class.simpleName} already run ${runs.size()} times"
+        }
+
+        return res  
     } 
 
 
@@ -222,7 +231,11 @@ abstract class Reaper {
         // reaper process
         def procV = reaperMethodInstance.createReaperProcess()
         log.trace "Reaper.call reaper process vertex: $procV" 
-        if (procV) reaperMethodInstance.setTrackedProcessVertex(procV)
+        if (procV) {
+            String argsHash = CoreUtil.standardizedUniquifier(String.valueOf(methodArgs))
+            Core.PX.ARGUMENTS_HASH.set(procV, argsHash)
+            reaperMethodInstance.setTrackedProcessVertex(procV)
+        }
 
         // pre-condition check
         def preCheck = reaperMethodInstance.checkPreConditions(methodArgs)

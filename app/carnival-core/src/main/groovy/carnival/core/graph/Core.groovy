@@ -129,7 +129,8 @@ class Core {
         SUCCESS,
         MESSAGE,
         EXCEL_ROW_NUM,
-        DERIVATION_SOURCE
+        DERIVATION_SOURCE,
+        ARGUMENTS_HASH
     }
 
 }

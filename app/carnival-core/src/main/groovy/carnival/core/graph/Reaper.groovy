@@ -145,7 +145,9 @@ abstract class Reaper {
         def res = [:]
         def runs = reaperMethodInstance.getAllSuccessfulTrackedProcesses(traversal())
         String argsHash = CoreUtil.standardizedUniquifier(String.valueOf(methodArgs))
-        def theRun = runs.find { Core.PX.ARGUMENTS_HASH.valueOf(it) == argsHash }
+        def theRun = runs.find { 
+            Core.PX.ARGUMENTS_HASH.of(it).isPresent() && Core.PX.ARGUMENTS_HASH.valueOf(it) == argsHash 
+        }
         if (theRun == null) {
             res = call(reaperMethodInstance, methodArgs)
             log.info "Reaper.ensure ${reaperMethodInstance.class.simpleName} res: $res"

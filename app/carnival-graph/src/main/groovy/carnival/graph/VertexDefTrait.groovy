@@ -54,13 +54,14 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
      */
     Vertex vertex
     
-
     /** */
     boolean global = false
 
-
     /** */
     VertexDefTrait superClass
+
+    /** */
+    Boolean propertiesMustBeDefined = true
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -149,7 +150,9 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
 
     /** */
     public ControlledInstance controlledInstance() {
-        return new ControlledInstance(this)
+        def ci = new ControlledInstance(this)
+        ci.propertiesMustBeDefined = this.propertiesMustBeDefined
+        ci
     }
 
 

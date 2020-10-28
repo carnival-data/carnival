@@ -73,7 +73,6 @@ trait WithPropertyDefsTrait {
     /** */
     public List<PropertyDefTrait> getUniqueProperties() {
         return propertyDefs.findAll {
-            it instanceof ConstrainedPropertyDefTrait &&
             it.unique
         }
     }
@@ -82,7 +81,6 @@ trait WithPropertyDefsTrait {
     /** */
     public List<PropertyDefTrait> getRequiredProperties() {
         return propertyDefs.findAll {
-            it instanceof ConstrainedPropertyDefTrait &&
             it.required
         }
     }
@@ -91,7 +89,6 @@ trait WithPropertyDefsTrait {
     /** */
     public List<PropertyDefTrait> getIndexedProperties() {
         return propertyDefs.findAll {
-            it instanceof ConstrainedPropertyDefTrait &&
             it.index
         }
     }

@@ -172,17 +172,6 @@ class VertexDefTraitSpec extends Specification {
     }
 
 
-    def "property def constraints"() {
-
-        expect:
-        !PX.PROP_A.hasProperty('required')
-        VX.THING_1.vertexProperties[0].hasProperty('required')
-        !VX.THING_2.vertexProperties[0].hasProperty('required')
-        VX.THING_3.vertexProperties[0].hasProperty('required')
-
-    }
-
-
     def "controlled instance vertex enum"() {
         given:
         def v

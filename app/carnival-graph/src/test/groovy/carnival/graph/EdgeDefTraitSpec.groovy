@@ -182,16 +182,6 @@ class EdgeDefTraitSpec extends Specification {
     }
 
 
-    def "property def constraints"() {
-
-        expect:
-        !PX.PROP_A.hasProperty('required')
-        EX1.RELATION.propertyDefs[0].hasProperty('required')
-        !EX2.RELATION.propertyDefs[0].hasProperty('required')
-        EX3.RELATION.propertyDefs[0].hasProperty('required')
-    }
-
-
     def "vertex vertex enforce range with global"() {
         given:
         def v1

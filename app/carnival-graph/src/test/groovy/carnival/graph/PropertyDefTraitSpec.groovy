@@ -61,31 +61,41 @@ class PropertyDefTraitSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
-    /*
-    def "required index"() {
+
+    def "defaultValue is not global"() {
         when:
-        def p1 = PX.PROP_A.require().index()
+        PX px1 = PX.PROP_A
 
         then:
-        p1 != null
-        p1 instanceof ConstrainedPropertyDefTrait
-        p1.required
-        !p1.unique
-        p1.index
-    }
+        PX.PROP_A.defaultValue == null
+        px1.defaultValue == null
 
-    def "required"() {
         when:
-        def p1 = PX.PROP_A.require()
+        def px2 = PX.PROP_A.defaultValue('a')
 
         then:
-        p1 != null
-        p1 instanceof ConstrainedPropertyDefTrait
-        p1.required
-        !p1.unique
-        !p1.index
+        PX.PROP_A.defaultValue == null
+        px1.defaultValue == null
+        px2.defaultValue == 'a'
     }
-    */
+
+
+    def "constraints is not global"() {
+        when:
+        PX px1 = PX.PROP_A
+
+        then:
+        !PX.PROP_A.required
+        !px1.required
+
+        when:
+        def px2 = PX.PROP_A.withConstraints(required:true)
+
+        then:
+        !PX.PROP_A.required
+        !px1.required
+        px2.required
+    }
 
 
     def "withConstraints required"() {
@@ -94,10 +104,10 @@ class PropertyDefTraitSpec extends Specification {
 
         then:
         p1 != null
-        p1 instanceof ConstrainedPropertyDefTrait
         p1.required
         !p1.unique
         !p1.index
     }
+
 }
 

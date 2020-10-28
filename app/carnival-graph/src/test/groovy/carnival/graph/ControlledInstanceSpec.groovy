@@ -96,8 +96,8 @@ class ControlledInstanceSpec extends Specification {
         vpDefs.size() == 2
         vpDefs[0].hasProperty('required')
         vpDefs[1].hasProperty('required')
-        vpDefs[0] instanceof ConstrainedPropertyDefTrait
-        vpDefs[1] instanceof ConstrainedPropertyDefTrait
+        vpDefs[0].required
+        vpDefs[1].required
 
 
         when:

@@ -3,8 +3,6 @@ package carnival.graph
 
 
 import groovy.util.logging.Slf4j
-//import org.slf4j.Logger
-//import org.slf4j.LoggerFactory
 
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
@@ -20,6 +18,27 @@ import org.apache.tinkerpop.gremlin.structure.Property
 
 /** */
 @Slf4j
+class PropertyDefTraitHolder implements PropertyDefTrait {
+    PropertyDefTrait source
+
+    public PropertyDefTraitHolder(PropertyDefTrait source) {
+        assert source != null
+        this.source = source
+        this.defaultValue = source.defaultValue
+        this.unique = source.unique
+        this.required = source.required
+        this.index = source.index
+    }
+
+    def methodMissing(String name, def args) {
+        assert this.source != null
+        source.invokeMethod(name, args)
+    }
+}
+
+
+/** */
+@Slf4j
 trait PropertyDefTrait {
 
 
@@ -30,54 +49,51 @@ trait PropertyDefTrait {
     /** */
     Object defaultValue = null
 
+    /**
+     * If true, then the values of this property must be unique across all
+     * elements.
+     */
+    Boolean unique = false
+
+    /**
+     * If true, then this property must be present in all elements.
+     */
+    Boolean required = false
+
+    /**
+     * If true, then this property should be indexed by the underlying database
+     * system.
+     */
+    Boolean index = false
+
 
 	///////////////////////////////////////////////////////////////////////////
 	// FACTORY METHODS
 	///////////////////////////////////////////////////////////////////////////
 
-    /*
-    public ConstrainedPropertyDefTrait index() {
-        println "index() ${this instanceof ConstrainedPropertyDefTrait} $this"
-        def cpd = (this instanceof ConstrainedPropertyDefTrait) ? this : this as ConstrainedPropertyDefTrait
-        cpd.index = true
-        cpd
-    }
-
-    public ConstrainedPropertyDefTrait require() {
-        println "require() ${this instanceof ConstrainedPropertyDefTrait} $this"
-        def cpd = (this instanceof ConstrainedPropertyDefTrait) ? this : this as ConstrainedPropertyDefTrait
-        cpd.required = true
-        cpd
-    }
-    */
-
 	/** */
-	public ConstrainedPropertyDefTrait withConstraints(Map m) {
-        def cpd = this as ConstrainedPropertyDefTrait
+	public PropertyDefTrait withConstraints(Map m) {
+        def newObj = new PropertyDefTraitHolder(this)
 
-		if (m.unique) cpd.unique = m.unique
-		if (m.required) cpd.required = m.required
-		if (m.index) cpd.index = m.index
+		if (m.unique) newObj.unique = m.unique
+		if (m.required) newObj.required = m.required
+		if (m.index) newObj.index = m.index
 
-		return cpd
+		return newObj
 	}
 
 
     /** */
     public PropertyDefTrait defaultValue(Object o) {
-        //log.debug "PropertyDefTrait.defaultValue o:${o.class.name}"
-        //log.debug "this: ${this.class.name} ${this}"
-        //log.debug "this instanceof ConstrainedPropertyDefTrait ${this instanceof ConstrainedPropertyDefTrait}"
-
-        this.defaultValue = o
-        return this
+        def newObj = new PropertyDefTraitHolder(this)
+        newObj.defaultValue = o
+        return newObj
     }
 
 
 	///////////////////////////////////////////////////////////////////////////
 	// PROPERTY METHODS
 	///////////////////////////////////////////////////////////////////////////
-
 
     /** */
     public Property of(Element el) {
@@ -125,54 +141,13 @@ trait PropertyDefTrait {
 
     /** */
     public String toString() {
-    	return "${name()} ${label}"
-    }
-    
-}
-
-
-
-/** */
-@Slf4j
-trait ConstrainedPropertyDefTrait {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // FIELDS
-    ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    //PropertyDefTrait parent
-
-    /**
-     * If true, then the values of this property must be unique across all
-     * elements.
-     */
-    Boolean unique = false
-
-    /**
-     * If true, then this property must be present in all elements.
-     */
-    Boolean required = false
-
-    /**
-     * If true, then this property should be indexed by the underlying database
-     * system.
-     */
-    Boolean index = false
-
-
-    ///////////////////////////////////////////////////////////////////////////
-    // METHODS
-    ///////////////////////////////////////////////////////////////////////////
-
-
-    /** */
-    public String toString() {
-        def str = super.toString()
+        def str = "${name()} ${label}"
         if (unique) str += " unique:${unique}"
         if (required) str += " required:${required}"
         if (index) str += " index:${index}"
         return str
-    }
 
+    }
+    
 }
+

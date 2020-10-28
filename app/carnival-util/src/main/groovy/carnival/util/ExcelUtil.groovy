@@ -125,8 +125,9 @@ class ExcelUtil {
      *
      * Reading from an Excel is not straightforward or easy.
      * These utility methods might might help you out if:
-     *    - The Excel sheet is formatted like a data table where the first
-     *      column contains the field names.
+     *    - The Excel sheet is formatted like a data table where a header
+     *      row contains the field names and the remainder of the sheet
+     *      contains rows of data.
      *    - There is only a single format for dates in the sheet.
      *
      * The default behavior is to be tolerant of read failures, writing warning
@@ -144,10 +145,16 @@ class ExcelUtil {
      * @param failOnError If there is an error reading the file, throw a 
      *        ParseException.
      * @param firstRowNum Integer The first row to read. Use this parameter to skip 
-     *        one or more rows at the start of the document.
+     *        one or more rows at the start of the document before the header row.
      * @param skipRowNums Set<Integer> Rownums to skip. Use this parameter to  skip
-     *        rows that are buried within valid rows.
+     *        rows that are buried within data rows.
      * @param skipBlankRows Boolean If true, skip over rows that contain no data.
+     * @param skipNullRows Boolean If true, skip over rowNums that have a null row.
+     *        readExcelSheet attempts to read the entire sheet by accessing the
+     *        rows by rowNum in sequential order. There is no guarantee that there
+     *        will be no skipped rowNums in an Excel sheet, even if there are no
+     *        apparent empty rows.  skipNullRows should probably be the default,
+     *        but it is an explicit switch for now.
      *
      */
     static List<Map> readExcelSheet(File inputFile, String sheetName, Map params = [:]) {
@@ -194,23 +201,33 @@ class ExcelUtil {
         XSSFSheet sheet = wb.getSheet(sheetName)
         assert sheet
 
-        int firstRowNum = sheet.getFirstRowNum()
-        assert firstRowNum == 0
+        int firstRowNumOfSheet = sheet.getFirstRowNum()
 
+        int firstRowNum
         if (params.containsKey('firstRowNum')) firstRowNum = Integer.valueOf(params.firstRowNum)
+        else firstRowNum = firstRowNumOfSheet
+        assert firstRowNum >= 0
+        assert firstRowNum >= firstRowNumOfSheet
+
+        for (int rowNum = firstRowNumOfSheet; rowNum < firstRowNum; rowNum++) {
+            XSSFRow row = sheet.getRow(rowNum)
+            assert row != null
+            List<String> rowVals = readRow(row)
+            log.trace "skipping header row ${rowNum}: ${rowVals}"
+        }
 
         XSSFRow firstRow = sheet.getRow(firstRowNum)
         List<String> firstRowVals = readRow(firstRow)
-        //log.trace "firstRowVals: $firstRowVals"
+        log.trace "firstRowVals: $firstRowVals"
 
         Map idxToColName = indexMap(firstRowVals)
-        //log.trace "idxToColName: $idxToColName"
+        log.trace "idxToColName: $idxToColName"
 
         Map colNameToIdx = new HashMap<String,Integer>()
         idxToColName.each { Integer k, String v ->
             colNameToIdx.put(v, k)
         }
-        //log.trace "colNameToIdx: $colNameToIdx"
+        log.trace "colNameToIdx: $colNameToIdx"
         params.colNameToIdx = colNameToIdx
 
         Set<Integer> rowNumsToSkip = new HashSet<Integer>()
@@ -228,10 +245,16 @@ class ExcelUtil {
             }
 
             XSSFRow row = sheet.getRow(rowIdx)
+            if (params.skipNullRows && row == null) {
+                log.info "row with rowNum ${rowIdx} is null. skipping."
+                return
+            }
 
             Map<String,String> rowValsMap = new HashMap<String,String>()
 
             List<String> cellVals = readRow(row, params)
+            log.trace "cellVals(${rowIdx}): ${cellVals}"
+
             cellVals.eachWithIndex { cellVal, cellValIdx ->
                 String ck = idxToColName.get(cellValIdx)
                 if (ck == null) {
@@ -267,7 +290,7 @@ class ExcelUtil {
 
     /** */
     static List<String> readRow(XSSFRow row, Map params = [:]) {
-        assert row
+        assert row != null
 
         List<String> out = new ArrayList<String>()
 

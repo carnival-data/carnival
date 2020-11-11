@@ -58,7 +58,7 @@ abstract class DataTable {
     ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * I believe this class is unused....
+     * See ExtensionModule.
      *
      */
     static class FieldNameExtensions {
@@ -67,13 +67,16 @@ abstract class DataTable {
         static FieldName fn(String str) {
             return FieldName.create(str)
         }
+
     }
+
 
     /**
      * Each DataTable class will habe an associated MetaData class.
      *
      */
     static abstract class MetaData {
+
         String name
         Boolean caseSensitive = false
         Date queryDate
@@ -104,6 +107,7 @@ abstract class DataTable {
 
             if (args.get('vine') != null) this.vine = args.vine
         }
+        
     }
 
 

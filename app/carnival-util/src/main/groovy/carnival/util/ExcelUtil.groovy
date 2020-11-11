@@ -2,6 +2,7 @@ package carnival.util
 
 
 
+import groovy.transform.ToString
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -120,6 +121,14 @@ class ExcelUtil {
 	// READ AN INDIVIDUAL DATA SHEET
 	///////////////////////////////////////////////////////////////////////////
 
+    @ToString(includeNames=true)
+    static class ExcelRow {
+        int rowNum
+        List<String> rawData
+        Map mappedData
+    }
+
+
     /** 
      * Read an individual sheet from an Excel file.  
      *
@@ -157,12 +166,12 @@ class ExcelUtil {
      *        but it is an explicit switch for now.
      *
      */
-    static List<Map> readExcelSheet(File inputFile, String sheetName, Map params = [:]) {
+    static List<ExcelRow> readExcelSheet(File inputFile, String sheetName, Map params = [:]) {
         assert inputFile
         assert sheetName
 
     	InputStream inp
-    	List<Map> data
+    	List<ExcelRow> data
         try {
             inp = new FileInputStream(inputFile)
             data = readExcelSheet(inp, sheetName, params)
@@ -174,11 +183,11 @@ class ExcelUtil {
 
 
     /** */
-    static List<Map> readExcelSheet(InputStream input, String sheetName, Map params = [:]) {
+    static List<ExcelRow> readExcelSheet(InputStream input, String sheetName, Map params = [:]) {
         assert input
         assert sheetName
 
-        List<Map> data
+        List<ExcelRow> data
         XSSFWorkbook wb
         try {
             log.info "opening workbook..."
@@ -194,13 +203,15 @@ class ExcelUtil {
 
 
     /** */
-    static List<Map> readSheet(XSSFWorkbook wb, String sheetName, Map params = [:]) {
+    static List<ExcelRow> readSheet(XSSFWorkbook wb, String sheetName, Map params = [:]) {
         assert wb
         assert sheetName
 
+        // open the sheet
         XSSFSheet sheet = wb.getSheet(sheetName)
         assert sheet
 
+        // get the field names from the "first row"
         int firstRowNumOfSheet = sheet.getFirstRowNum()
 
         int firstRowNum
@@ -230,23 +241,35 @@ class ExcelUtil {
         log.trace "colNameToIdx: $colNameToIdx"
         params.colNameToIdx = colNameToIdx
 
+        // put the row nums to skip in a set
         Set<Integer> rowNumsToSkip = new HashSet<Integer>()
         if (params.skipRowNums) {
             rowNumsToSkip = params.skipRowNums.toSet()
         }
 
-        List<Map> out = new ArrayList<Map>()
+        // the output
+        List<ExcelRow> out = new ArrayList<ExcelRow>()
 
         int lastRowNum = sheet.getLastRowNum()
         (firstRowNum+1../*firstRowNum+10*/lastRowNum-1).each { rowIdx ->
-            if (rowNumsToSkip.contains(rowIdx)) {
-                log.trace "skipping row ${rowIdx}"
+
+            XSSFRow row = sheet.getRow(rowIdx)
+
+            if (params.skipNullRows && row == null) {
+                log.info "row with rowNum ${rowIdx} is null. skipping."
                 return
             }
 
-            XSSFRow row = sheet.getRow(rowIdx)
-            if (params.skipNullRows && row == null) {
-                log.info "row with rowNum ${rowIdx} is null. skipping."
+            // not sure why poi/excel does this, but rowNum() is not the same as the row number
+            // you see in an excel sheet.  the number you see on the sheet is rowNum()+1. 
+            // at least, it seems that way.  there is every chance that even that apparent
+            // rule will be broken.  
+            // when working with an excel sheet, it's easier to be able to reference the visible
+            // number, so am using that here unless/until it proves ineffective.
+            int displayedRowNum = row.getRowNum()+1
+
+            if (row != null && rowNumsToSkip.contains(displayedRowNum)) {
+                log.trace "skipping row ${rowIdx}"
                 return
             }
 
@@ -280,8 +303,14 @@ class ExcelUtil {
                 return
             }
 
-            rowValsMap.put(EXCEL.ROW_NUM.name(), String.valueOf(row.getRowNum()+1))
-            out << rowValsMap
+            // record the output
+            rowValsMap.put(EXCEL.ROW_NUM.name(), String.valueOf(displayedRowNum))
+            ExcelRow excelRow = new ExcelRow(
+                rowNum:displayedRowNum,
+                mappedData:rowValsMap,
+                rawData:cellVals
+            )
+            out << excelRow
         }
 
         return out

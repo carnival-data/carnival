@@ -80,6 +80,111 @@ class MappedDataTableSpec extends Specification {
 
 
 
+    ///////////////////////////////////////////////////////////////////////////
+    // CASE SENSITIVITY
+    ///////////////////////////////////////////////////////////////////////////
+
+
+
+    // containsIdentifier
+    def "containsIdentifier case sensitivity"() {
+        def mdt
+
+        when:
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
+        mdt.dataAdd(['id':'id1', 'f1':'v1'])
+
+        then:
+        mdt.containsIdentifier('id1')
+        mdt.containsIdentifier('iD1')
+        mdt.containsIdentifier('ID1')
+
+        when:
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', caseSensitive:true)
+        mdt.dataAdd(['id':'id1', 'f1':'v1'])
+
+        then:
+        mdt.containsIdentifier('id1')
+        !mdt.containsIdentifier('iD1')
+        !mdt.containsIdentifier('ID1')
+    }
+
+
+    // dataAdd
+    def "dataAdd case sensitivity"() {
+        def mdt
+
+        when:
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
+        mdt.dataAdd(['iD':'iD1', 'f1':'v1'])
+
+        then:
+        !mdt.caseSensitive
+        mdt.keySet.contains('ID')
+        mdt.keySet.contains('F1')
+        mdt.data.get('id1').get('F1') == 'v1'
+
+        when:
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'iD', caseSensitive:true)
+        mdt.dataAdd(['ID':'iD1', 'f1':'v1'])
+
+        then:
+        Exception e = thrown()
+        e instanceof IllegalArgumentException
+
+        when:
+        mdt.dataAdd(['iD':'iD1', 'f1':'v1'])
+
+        then:
+        mdt.caseSensitive
+        mdt.keySet.contains('iD')
+        mdt.keySet.contains('f1')
+        mdt.data.get('iD1').get('f1') == 'v1'
+    }
+
+
+    // keySetContains
+    def "keySetContains case sensitivity"() {
+        when:
+        def mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
+        mdt.dataAdd(['id':'id1', 'f1':'v1'])
+
+        then:
+        mdt.keySetContains('f1')
+        mdt.keySetContains('F1')
+
+        when:
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', caseSensitive:true)
+        mdt.dataAdd(['id':'id1', 'f1':'v1'])
+        println "mdt.keySet: ${mdt.keySet} " + mdt.keySet.collect({ mdt.toFieldName(it) })
+
+        then:
+        mdt.keySet.contains('f1')
+        mdt.keySet.contains("f1")
+        mdt.keySetContains('f1')
+        !mdt.keySetContains('F1')
+    }
+
+
+    def "stringHandlingArgs"() {
+        def mdt
+        def saa
+
+        when:
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
+        saa = mdt.stringHandlingArgs()
+
+        then:
+        !saa.caseSensitive
+
+        when:
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id', caseSensitive:true)
+        saa = mdt.stringHandlingArgs()
+
+        then:
+        saa.caseSensitive
+    }
+
 
     ///////////////////////////////////////////////////////////////////////////
     // MAPPEDDATAINTERFACE - MAPPED DATA INTERFACE
@@ -119,8 +224,8 @@ class MappedDataTableSpec extends Specification {
 
         then:
         mdt.data['id1'].size() == 2
-        mdt.dataGet('id1').get(DataTable.toFieldName('id')) == 'id1'
-        mdt.dataGet('id1').get(DataTable.toFieldName('pre_d1')) == 'd11'
+        mdt.dataGet('id1').get(DataTable.fieldName('id')) == 'id1'
+        mdt.dataGet('id1').get(DataTable.fieldName('pre_d1')) == 'd11'
 
         when:
         res = mockResultSet(id:'id1', d1:'d11')
@@ -157,8 +262,8 @@ class MappedDataTableSpec extends Specification {
 
         then:
         mdt.dataGet('id1').size() == 2
-        mdt.dataGet('id1').get(DataTable.toFieldName('id')) == 'id1'
-        mdt.dataGet('id1').get(DataTable.toFieldName('pre_v1')) == 'v11'
+        mdt.dataGet('id1').get(DataTable.fieldName('id')) == 'id1'
+        mdt.dataGet('id1').get(DataTable.fieldName('pre_v1')) == 'v11'
 
         // cannot add id1 twice
         when:
@@ -799,7 +904,7 @@ class MappedDataTableSpec extends Specification {
         then:
         mdt != null
         mdt.name == "some-name"
-        mdt.idFieldName == DataTable.toFieldName("id-key")
+        mdt.idFieldName == DataTable.fieldName("id-key")
         mdt.queryDate.getTime() - now.getTime() <= 1000
         mdt.dataSourceDateOfUpdate == null
 
@@ -809,7 +914,7 @@ class MappedDataTableSpec extends Specification {
         then:
         mdt != null
         mdt.name == "some-name"
-        mdt.idFieldName == DataTable.toFieldName("id-key")
+        mdt.idFieldName == DataTable.fieldName("id-key")
         mdt.queryDate.getTime() - now.getTime() <= 1000
 
         when:
@@ -818,7 +923,7 @@ class MappedDataTableSpec extends Specification {
         then:
         mdt != null
         mdt.name == "some-name"
-        mdt.idFieldName == DataTable.toFieldName("id-key")
+        mdt.idFieldName == DataTable.fieldName("id-key")
         mdt.queryDate.equals(testDate)
 
         when:
@@ -827,7 +932,7 @@ class MappedDataTableSpec extends Specification {
         then:
         mdt != null
         mdt.name == "some-name"
-        mdt.idFieldName == DataTable.toFieldName("id-key")
+        mdt.idFieldName == DataTable.fieldName("id-key")
         mdt.queryDate.equals(testDate)
 
         when:
@@ -950,7 +1055,7 @@ class MappedDataTableSpec extends Specification {
         mdtFromFile
         mdtFromFile.data.size() == 0
         mdtFromFile.name == "mdt-test"
-        mdtFromFile.idFieldName == DataTable.toFieldName("id")
+        mdtFromFile.idFieldName == DataTable.fieldName("id")
     }
 
 
@@ -1043,7 +1148,7 @@ class MappedDataTableSpec extends Specification {
         mdtFromFile
         mdtFromFile.data.size() == 0
         mdtFromFile.name == "mdt-test-vine"
-        mdtFromFile.idFieldName == DataTable.toFieldName("id")
+        mdtFromFile.idFieldName == DataTable.fieldName("id")
         mdtFromFile.vine
         mdtFromFile.vine.name.equals(vine.name)
         mdtFromFile.vine.method.equals(vine.method)
@@ -1084,7 +1189,7 @@ class MappedDataTableSpec extends Specification {
         mdt != null
         mdt.name == 'mdt-test'
         mdt.queryDate == testDate
-        mdt.idFieldName == DataTable.toFieldName('id')
+        mdt.idFieldName == DataTable.fieldName('id')
 
         when:
         def data = mdt.data
@@ -1240,7 +1345,7 @@ class MappedDataTableSpec extends Specification {
 
         then:
         meta.name == 'mdt-test-file'
-        meta.idFieldName == DataTable.toFieldName('id')
+        meta.idFieldName == DataTable.fieldName('id')
         meta.queryDate.getTime() - now.getTime() <= 1000
 
         when:
@@ -1264,7 +1369,7 @@ class MappedDataTableSpec extends Specification {
         meta.dataSourceDateOfUpdate == yesterday
         //metaDataSourceDateOfUpdate.getTime().equals(yesterday.getTime())
         metaDataSourceDateOfUpdate.getTime() - yesterday.getTime() <= 1000 // milliseconds truncated during yaml conversion
-        meta.idFieldName == DataTable.toFieldName('id')
+        meta.idFieldName == DataTable.fieldName('id')
     }
 
 
@@ -1294,7 +1399,7 @@ class MappedDataTableSpec extends Specification {
 
         then:
         meta.name == 'mdt-test'
-        meta.idFieldName == DataTable.toFieldName('id')
+        meta.idFieldName == DataTable.fieldName('id')
     }
 
 
@@ -1818,7 +1923,7 @@ class MappedDataTableSpec extends Specification {
         assert mdtDataMap.size() > 0
 
         data.each { k, v ->
-            def fn = DataTable.toFieldName(k)
+            def fn = DataTable.fieldName(k)
             assert mdtDataMap.containsKey(fn)
 
             def mdtValue = mdtDataMap.get(fn)

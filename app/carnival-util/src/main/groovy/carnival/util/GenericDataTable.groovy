@@ -56,65 +56,20 @@ class GenericDataTable extends DataTable {
      */
     static class MetaData extends DataTable.MetaData {
 
-        Map meta = [:]
-
-        public MetaData() {
-        }
+        public MetaData() { }
 
         public MetaData(Map args) {
-            setMeta(args)
+            setFields(args)
         }
 
         public MetaData(GenericDataTable mdt) {
             assert mdt
-            setMeta (
+            setFields (
                 name: mdt.name,
                 queryDate:mdt.queryDate,
                 dataSourceDateOfUpdate:mdt.dataSourceDateOfUpdate,
                 vine:mdt.vine,
             )
-        }
-
-        protected void setMeta(Map args) {
-            log.trace "GenericDataTable.setMeta args:${args?.keySet()}"
-
-            assert args
-            assert args.name
-            if (args.containsKey('queryDate') && args.queryDate != null) {
-                assert ((args.queryDate instanceof String) || (args.queryDate instanceof Date)) 
-                assert (args.queryDate)
-            }
-
-            if (args.containsKey('dataSourceDateOfUpdate') && args.dataSourceDateOfUpdate != null) {
-                assert ((args.dataSourceDateOfUpdate instanceof String) || (args.dataSourceDateOfUpdate instanceof Date)) 
-                assert (args.dataSourceDateOfUpdate)
-            }
-
-            this.meta = [:]
-            this.meta.name = args.name
-
-            this.meta.queryDate = computeDataSetDate(args, 'queryDate')
-            this.meta.dataSourceDateOfUpdate = computeDataSourceDate(args, 'dataSourceDateOfUpdate')
-
-            if (args.containsKey('vine')) {
-                this.meta.vine = args.vine
-            }
-        }
-
-        public String getName() {
-            return meta.name
-        }
-
-        public Date getQueryDate() {
-            return meta.queryDate
-        }
-
-        public Date getDataSourceDateOfUpdate() {
-            return meta.dataSourceDateOfUpdate
-        }
-
-        public Map getVine() {
-            return meta.vine
         }
 
     }
@@ -265,14 +220,6 @@ class GenericDataTable extends DataTable {
     /** list of recs */
     List<Map<String,String>> data = new ArrayList<Map<String,String>>()
 
-    /** date of the query **/
-    Date queryDate
-
-    /** vine info */
-    Map vine
-
-    /** if a query, the date the dataSource was last updated.  Default is null as set in metadata.setMeta **/
-    Date dataSourceDateOfUpdate 
 
     ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTOR

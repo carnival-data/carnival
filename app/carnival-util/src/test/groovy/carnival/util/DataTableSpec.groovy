@@ -66,7 +66,7 @@ class DataTableSpec extends Specification {
 
 
     ///////////////////////////////////////////////////////////////////////////
-    // TESTS FOR STATIC METHODS
+    // TESTS 
     ///////////////////////////////////////////////////////////////////////////
 
 
@@ -310,7 +310,7 @@ class DataTableSpec extends Specification {
     }
 
 
-    def "find duplicate field names"() {
+    /*def "find duplicate field names"() {
         given:
         def res
 
@@ -334,7 +334,7 @@ class DataTableSpec extends Specification {
         [' a', 'A'].toSet()           |      [[' a', 'A']]
         ['a', 'A', 'b'].toSet()       |      [['a', 'A']]
         ['a', 'A', 'b', 'B'].toSet()  |      [['a', 'A'], ['b', 'B']]
-    }
+    }*/
 
 
     void matchDupLists(List expected, List actual) {
@@ -350,6 +350,46 @@ class DataTableSpec extends Specification {
 
             assert a.size() == 1, "error finding match for expected $e in $actual: $a"
         }
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // ID VALUE
+    ///////////////////////////////////////////////////////////////////////////
+
+    def "formatIdValue case sensitive"() {
+        when:
+        def res = DataTable.formatIdValue(inv, args)
+
+        then:
+        res == outv
+
+        where:
+        inv | args | outv
+        " " | [:] | ""
+        " " | [caseSensitive:true] | ""
+        null | [:] | null
+        null | [caseSensitive:true] | null
+        " myIdVal " | [:] | "myidval"
+        " myIdVal " | [caseSensitive:true] | "myIdVal"
+        new java.math.BigDecimal(58) | [:] | "58"
+        new java.math.BigDecimal(58) | [caseSensitive:true] | "58"
+    }
+
+
+    def "toIdValue case sensitive"() {
+        when:
+        def res = DataTable.toIdValue(inv, args)
+
+        then:
+        res == outv
+
+        where:
+        inv | args | outv
+        " myIdVal " | [:] | "myidval"
+        " myIdVal " | [caseSensitive:true] | "myIdVal"
+        new java.math.BigDecimal(58) | [:] | "58"
+        new java.math.BigDecimal(58) | [caseSensitive:true] | "58"
     }
 
 
@@ -412,12 +452,59 @@ class DataTableSpec extends Specification {
     }
 
 
+
+    ///////////////////////////////////////////////////////////////////////////
+    // FIELD NAME
+    ///////////////////////////////////////////////////////////////////////////
+
+    def "findFieldName map case sensitive"() {
+        when:
+        def res = DataTable.findFieldName(inv, data, args)
+
+        then:
+        res == outv
+
+        where:
+        data | inv | args | outv
+        ['MYFIELDNAME':''] | " myFieldName " | [:] | "MYFIELDNAME"
+        ['MYFIELDNAME':''] |" myFieldName " | [caseSensitive:true] | null
+    }
+
+
+    def "findFieldName set case sensitive"() {
+        when:
+        def res = DataTable.findFieldName(inv, data.toSet(), args)
+
+        then:
+        res == outv
+
+        where:
+        data | inv | args | outv
+        ['MYFIELDNAME'] | " myFieldName " | [:] | "MYFIELDNAME"
+        ['MYFIELDNAME'] |" myFieldName " | [caseSensitive:true] | null
+    }
+
+
+    def "fieldName case sensitive"() {
+        when:
+        def res = DataTable.fieldName(inv, args)
+
+        then:
+        res == outv
+
+        where:
+        inv | args | outv
+        " myFieldName " | [:] | "MYFIELDNAME"
+        " myFieldName " | [caseSensitive:true] | "myFieldName"
+    }
+
+
     def "to field name bad"() {
         given:
         Throwable e
 
         when:
-        DataTable.toFieldName(str)
+        DataTable.fieldName(str)
 
         then:
         e = thrown()
@@ -432,7 +519,7 @@ class DataTableSpec extends Specification {
         def res
 
         when:
-        res = DataTable.toFieldName(str)
+        res = DataTable.fieldName(str)
 
         then:
         res == out

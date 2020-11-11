@@ -11,6 +11,7 @@ import org.apache.tinkerpop.gremlin.structure.T
 import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.structure.Vertex
 
+import carnival.core.util.CoreUtil
 import carnival.core.graph.GremlinTrait
 import carnival.graph.EdgeDefTrait
 import carnival.graph.VertexDefTrait
@@ -76,16 +77,22 @@ abstract public class Reasoner implements ReasonerInterface, GremlinTrait, Track
     /** */
     public Map ensure(Map args) {
         def out = [:]
-        def numRuns = getAllSuccessfulTrackedProcesses(traversal()).size()
-        if (numRuns == 0) {
+        def runs = getAllSuccessfulTrackedProcesses(traversal())
+        String argsHash = CoreUtil.standardizedUniquifier(String.valueOf(args))
+        def theRun = runs.find { 
+            Core.PX.ARGUMENTS_HASH.of(it).isPresent() && Core.PX.ARGUMENTS_HASH.valueOf(it) == argsHash 
+        }
+        if (theRun == null) {
             out.result = this.reason(args)
             out.processVertex = this.createAndSetTrackedProcessVertex(graph)
+            Core.PX.ARGUMENTS_HASH.set(out.processVertex, argsHash)
             if (out.result?.success) Core.PX.SUCCESS.set(out.processVertex, true)
             log.info "${this.class.simpleName} ensure result: ${out.result}"
         } else {
-            log.info "${this.class.simpleName} already run ${numRuns} times"
+            log.info "${this.class.simpleName} already run ${runs.size()} times"
         }
         out
     }
+
 
 }

@@ -64,6 +64,31 @@ class ReasonerSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
+    void "ensure differentiates by args"() {
+        when:
+        def r1 = new MyReasoner(graph)
+        def o1 = r1.ensure(success:true, a:'a')
+
+        then:
+        o1.result.get('success') == true
+        o1.processVertex != null
+
+        when:
+        def o2 = r1.ensure(success:true, a:'b')
+
+        then:
+        o2.result.get('success') == true
+        o2.processVertex != null
+        o2.processVertex != o1.processVertex
+
+        when:
+        def o3 = r1.ensure(success:true, a:'b')
+
+        then:
+        o3 == [:]
+    }
+
+
     void "rerun after failure"() {
         when:
         def r1 = new MyReasoner(graph)

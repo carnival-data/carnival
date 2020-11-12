@@ -6,7 +6,10 @@ import groovy.transform.ToString
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import java.text.ParseException
+import java.time.format.DateTimeParseException
+import java.time.LocalDate
+import java.time.Instant
+import java.time.ZoneId
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.apache.poi.xssf.extractor.XSSFExcelExtractor
@@ -284,7 +287,7 @@ class ExcelUtil {
                     if ("$cellVal".toString().trim().length() > 0) {
                         def em = "could not get column name for column index ${cellValIdx} -- ${cellVal}"
                         if (params.failOnError) {
-                            throw new ParseException(em)
+                            throw new DateTimeParseException(em)
                         } else {
                             log.warn em
                         }
@@ -363,11 +366,14 @@ class ExcelUtil {
 
                 try {
                     Date d = cell.getDateCellValue()
-                    valAsString = params.dates.outputFormat.format(d)
+                    LocalDate ld = Instant.ofEpochMilli(d.time)
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate()
+                    valAsString = ld.format(params.dates.outputFormat)
                 } catch (IllegalArgumentException e) {
                     def em = "count not parse numeric date ${valAsString}."
                     if (params.failOnError) {
-                        throw new ParseException(em, e)
+                        throw new DateTimeParseException(em, e)
                     } else {
                         valAsString = ""
                         log.warn "${em} inserting empty value. ${e.message}."
@@ -383,9 +389,12 @@ class ExcelUtil {
                 String cellStr = cell.richStringCellValue.toString()
                 if ("$cellStr".toString().length() > 0) {
                     try {
-                        Date d = params.dates.sourceFormat.parse(cellStr)
-                        valAsString = params.dates.outputFormat.format(d)
-                    } catch (ParseException e) {
+                        LocalDate d = LocalDate.parse(
+                            cellStr,
+                            params.dates.sourceFormat
+                        )
+                        valAsString = d.format(params.dates.outputFormat) 
+                    } catch (DateTimeParseException e) {
                         def msg = "could not parse string date: ${cellStr}."
                         if (params.failOnError) {
                             log.error msg

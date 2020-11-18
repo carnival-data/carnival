@@ -47,6 +47,7 @@ abstract class RelationalVineOracle extends RelationalVineAutoRecoverable {
 			sql = Sql.newInstance(m)
 		} catch (java.sql.SQLRecoverableException e) {
 			elog.warn "withSql SQLRecoverableException: ${e.message}"
+			elog.warn "withSql url: ${m?.url}, user:${m?.user}"
 		} catch (java.sql.SQLException e) {
 			if (e.message.startsWith('ORA-02391') || e.message.startsWith('ORA-02396')) {
 				elog.warn "withSql SQLException: ${e.message}"

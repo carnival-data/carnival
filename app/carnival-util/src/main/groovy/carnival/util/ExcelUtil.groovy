@@ -148,6 +148,8 @@ class ExcelUtil {
      *
      * @param inputFile The Excel file to read.
      * @param sheetName The name of the sheet.
+     * @param params.raws Optional list of fields to treat as raw values.
+     * @param params.integers Optional list of fields to interpret as integers.
      * @param params.dates Optional map of data parsing params.
      * @param params.dates.sourceFormat The format (DateFormat) used for dates
      *        in the Excel file.
@@ -321,23 +323,38 @@ class ExcelUtil {
 
 
     /** */
-    static List<String> readRow(XSSFRow row, Map params = [:]) {
+    static List<String> readRow(XSSFRow row) {
+        readRow(row, [:])
+    }
+
+
+    /** */
+    static List<String> readRow(XSSFRow row, Map params) {
         assert row != null
+        assert params != null
 
-        List<String> out = new ArrayList<String>()
-
-        Set<Integer> dateIndexes = new HashSet<Integer>()
         if (params.dates) {
             assert params.colNameToIdx
             assert params.dates.sourceFormat
             assert params.dates.outputFormat
             assert params.dates.fields
-
-            params.dates.fields.each { fn ->
-                assert params.colNameToIdx.containsKey(fn)
-                dateIndexes << params.colNameToIdx.get(fn)
-            }
         }
+
+        def getIndexes = { List<String> fieldNames -> 
+            Set<Integer> theIndexes = new HashSet<Integer>()
+            if (fieldNames == null) return theIndexes
+            fieldNames.each { fn ->
+                assert params.colNameToIdx.containsKey(fn)
+                theIndexes << params.colNameToIdx.get(fn)
+            }
+            theIndexes
+        }
+
+        Set<Integer> dateIndexes = getIndexes(params.dates?.fields) 
+        Set<Integer> rawIndexes = getIndexes(params.raws)
+        Set<Integer> integerIndexes = getIndexes(params.integers)
+
+        List<String> out = new ArrayList<String>()
 
         short fcn = row.firstCellNum
         short lcn = row.lastCellNum
@@ -357,32 +374,46 @@ class ExcelUtil {
             String valAsString
             CellType ct = cell.getCellType()
             boolean isDateField = dateIndexes.contains(cn)
+            Boolean isIntegerField = integerIndexes.contains(cn)
+            Boolean isRawField = rawIndexes.contains(cn)
 
             //log.debug "cell: $cell"
             //log.debug "ct: ${ct}"
             //log.debug "isDateField: ${isDateField}"
 
-            if (ct == CellType.NUMERIC && isDateField) {
+            if (isRawField) {
 
-                try {
-                    Date d = cell.getDateCellValue()
-                    LocalDate ld = Instant.ofEpochMilli(d.time)
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate()
-                    valAsString = ld.format(params.dates.outputFormat)
-                } catch (IllegalArgumentException e) {
-                    def em = "count not parse numeric date ${valAsString}."
-                    if (params.failOnError) {
-                        throw new DateTimeParseException(em, e)
-                    } else {
-                        valAsString = ""
-                        log.warn "${em} inserting empty value. ${e.message}."
+                valAsString = cell.getRawValue()
+
+            } else if (ct == CellType.NUMERIC) {
+
+                if (isDateField) {
+
+                    try {
+                        Date d = cell.getDateCellValue()
+                        LocalDate ld = Instant.ofEpochMilli(d.time)
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate()
+                        valAsString = ld.format(params.dates.outputFormat)
+                    } catch (IllegalArgumentException e) {
+                        def em = "count not parse numeric date ${valAsString}."
+                        if (params.failOnError) {
+                            throw new DateTimeParseException(em, e)
+                        } else {
+                            valAsString = ""
+                            log.warn "${em} inserting empty value. ${e.message}."
+                        }
                     }
-                }
-            
-            } else if (ct == CellType.NUMERIC && !isDateField) {
 
-                valAsString = String.valueOf(cell.getNumericCellValue())
+                } else if (isIntegerField) {
+
+                    double cellValueDouble = cell.getNumericCellValue()
+                    long cellValueLong = Math.round(cellValueDouble)
+                    valAsString = String.valueOf(cellValueLong)
+
+                } else {
+                    valAsString = String.valueOf(cell.getNumericCellValue())
+                }
 
             } else if (isDateField) {
 

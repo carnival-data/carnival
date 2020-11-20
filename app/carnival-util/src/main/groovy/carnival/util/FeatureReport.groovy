@@ -1196,9 +1196,9 @@ class FeatureReport extends MappedDataTable {
      */
     @WithWriteLock
     public void addFeature(String subjectId, String featureName, String featureValue) {
-        assert subjectId != null
-        assert featureName != null
-        assert featureValue != null
+        assert subjectId != null : "subjectId cannot be null. featureName:${featureName} featureValue:${featureValue}"
+        assert featureName != null : "featureName cannot be null. subjectId:${subjectId} featureValue:${featureValue}"
+        assert featureValue != null : "featureValue cannot be null. subjectId:${subjectId} featureName:${featureName}"
 
         // check mode
         if (!dataModes.contains(DataMode.ADD_FEATURE)) throw new IllegalStateException('Data mode ADD_FEATURE required to call addFeature()')

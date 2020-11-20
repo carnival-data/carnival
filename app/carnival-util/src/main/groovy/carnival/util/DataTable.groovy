@@ -888,6 +888,25 @@ abstract class DataTable {
     }
 
 
+    /** */
+    public void setOrderedKeysBooleanCriteria(List<Closure> booleanClosures) {
+        List<String> keys = this.keySet.toList()
+        List<String> oks = new ArrayList<String>()
+        booleanClosures.each { bcl ->
+            List<String> chunk = keys.findAll(bcl)
+            oks.addAll(chunk)
+            keys.removeAll(chunk)
+        }
+        setOrderedKeys(oks)
+    }
+
+
+    /** */
+    public void setOrderedKeysBooleanCriteria(Closure... booleanClosures) {
+        setOrderedKeysBooleanCriteria(booleanClosures.toList())
+    }
+
+
     /**
      * Add/append ordered keys to the existing keySet via addFieldNamesToKeySet().
      *

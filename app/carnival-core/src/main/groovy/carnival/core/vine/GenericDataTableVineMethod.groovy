@@ -16,19 +16,9 @@ import carnival.util.DataTable
 
 
 
-
-/**
-What do vine methods need to accomplish:
-- implement the fetch operation
-- expose the meta-data associated with a call to the vine method, which is needed to:
-  - compute a cache file name
-  - check cache validity
-  - record the method call parameters
-  - other details of the call, such as datetime
-
-*/
+/** */
 @Slf4j
-abstract class MappedDataTableVineMethod extends DataTableVineMethod<MappedDataTable,MappedDataTableVineMethodCall> {
+abstract class GenericDataTableVineMethod extends DataTableVineMethod<GenericDataTable,GenericDataTableVineMethodCall> {
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -36,19 +26,19 @@ abstract class MappedDataTableVineMethod extends DataTableVineMethod<MappedDataT
     ///////////////////////////////////////////////////////////////////////////
 
 
-    MappedDataTableVineMethodCall _readFromCache(DataTableFiles cacheFiles) {
+    GenericDataTableVineMethodCall _readFromCache(DataTableFiles cacheFiles) {
         assert cacheFiles != null
         assert cacheFiles.exist()
         assert cacheFiles.areReadable()
-        MappedDataTableVineMethodCall.createFromFiles(cacheFiles)
+        GenericDataTableVineMethodCall.createFromFiles(cacheFiles)
     }
 
 
-    MappedDataTableVineMethodCall _createCallObject(Map arguments, MappedDataTable result) {
+    GenericDataTableVineMethodCall _createCallObject(Map arguments, GenericDataTable result) {
         assert arguments != null
         assert result != null
 
-        MappedDataTableVineMethodCall mc = new MappedDataTableVineMethodCall()
+        GenericDataTableVineMethodCall mc = new GenericDataTableVineMethodCall()
         mc.vineMethodClass = this.class
         mc.arguments = arguments
         mc.result = result
@@ -56,16 +46,11 @@ abstract class MappedDataTableVineMethod extends DataTableVineMethod<MappedDataT
     }
 
 
-    MappedDataTable createDataTable(Map args) {
-        assert args != null
-        assert args.idFieldName
-        String idFieldName = args.idFieldName
+    GenericDataTable createDataTable(Map args = [:]) {
         String name = DataTableVineMethodCall.computedName(this.class, this.arguments)
-        new MappedDataTable(
+        new GenericDataTable(
             name:name,
-            idFieldName:idFieldName,
             vine:[
-                //vineClass:Vine.this.class.name,
                 methodClass:this.class.name,
                 arguments:this.arguments
             ]
@@ -74,6 +59,3 @@ abstract class MappedDataTableVineMethod extends DataTableVineMethod<MappedDataT
 
 
 }
-
-
-

@@ -163,54 +163,43 @@ class GenericDataTable extends DataTable {
     // STATIC METHODS - CREATE
     ///////////////////////////////////////////////////////////////////////////
 
+
     /**
-     * Create a GenericDataTable from files in the given directory using the 
+     * Create a MappedDataTable from files in the given directory using the 
      * given base name.
      *
-     * @param dir The directory in which to look for the GenericDataTable files.
-     * @param name The name to use for the GenericDataTable and the base name
+     * @param dir The directory in which to look for the MappedDataTable files.
+     * @param name The name to use for the MappedDataTable and the base name
      * to use when searching for files.
      *
      */
     static public GenericDataTable createFromFiles(File dir, String name) {
-        log.trace "GenericDataTable.createFromFiles dir:${dir?.canonicalPath} name:$name"
+        log.trace "createFromFiles dir:${dir?.canonicalPath} name:$name"
 
-        assert dir
-        assert dir.exists()
-        assert dir.isDirectory()
+        // get the metadata from file
+        def meta = loadMetaDataFromFile(dir, name)
 
-        def metaFile = metaFile(dir, name)
-        assert metaFile.exists()
-        assert metaFile.length() > 0
+        // construct a mapped data table object from 
+        def mdt = new GenericDataTable(meta)
 
-        def dataFile = dataFile(dir, name)
-        assert dataFile.exists()
-        assert dataFile.length() > 0
+        // load the file data
+        loadDataFromFile(dir, name, mdt)
 
-        def yaml = new org.yaml.snakeyaml.Yaml(new DataTableConstructor())
-        def meta = yaml.load(metaFile.text)
-        assert meta.name
-        assert meta.queryDate
-
-        def dataTable = new GenericDataTable(meta)
-
-        def dataFileText = dataFile.text
-        if (dataFileText) dataFileText = dataFileText.trim()
-        log.trace "dataFileText: ${dataFileText.size()} characters"
-        def numNewlines = dataFileText.findAll('\n').size()
-        log.trace "numNewlines: ${numNewlines}"
-
-        if (dataFileText) {
-            def csvReader = CsvUtil.createReaderHeaderAware(dataFileText)
-            if (!CsvUtil.hasNext(csvReader)) {
-                log.warn "error in createFromFiles for file $dataFile. no data found."
-            }
-            dataTable.dataAddAll(csvReader)
-            dataTable.readFrom = dataFile
-        }
-
-        return dataTable
+        return mdt
     }
+
+
+
+    /**
+     *
+     */
+    static public GenericDataTable createFromFiles(DataTableFiles cacheFiles) {
+        def meta = loadMetaDataFromFile(cacheFiles.meta)
+        def mdt = new GenericDataTable(meta)
+        loadDataFromFile(cacheFiles.data, mdt)
+        mdt
+    }
+
 
 
     ///////////////////////////////////////////////////////////////////////////

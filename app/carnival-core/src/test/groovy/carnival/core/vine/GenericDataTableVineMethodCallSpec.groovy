@@ -5,16 +5,17 @@ package carnival.core.vine
 import groovy.transform.ToString
 import spock.lang.Specification
 import spock.lang.Shared
-import carnival.util.MappedDataTable
+import carnival.util.GenericDataTable
 
 
-class MdtvmcsVine {
+
+class GdtvmcsVine {
     @ToString(includeNames=true)
     static class Person { String name }
 
-    static class PersonVineMethod extends MappedDataTableVineMethod { 
-        MappedDataTable fetch(Map args) {
-            def mdt = createDataTable(idFieldName:'ID')
+    static class PersonVineMethod extends GenericDataTableVineMethod { 
+        GenericDataTable fetch(Map args) {
+            def mdt = createDataTable()
             mdt.dataAdd(id:'1', name:args.p1)
             mdt
         }
@@ -22,7 +23,8 @@ class MdtvmcsVine {
 }
 
 
-class MappedDataTableVineMethodCallSpec extends Specification {
+
+class GenericDataTableVineMethodCallSpec extends Specification {
 
     ///////////////////////////////////////////////////////////////////////////
     // classes
@@ -31,9 +33,9 @@ class MappedDataTableVineMethodCallSpec extends Specification {
     @ToString(includeNames=true)
     static class Person { String name }
 
-    static class PersonVineMethod extends MappedDataTableVineMethod { 
-        MappedDataTable fetch(Map args) {
-            def mdt = createDataTable(idFieldName:'ID')
+    static class PersonVineMethod extends GenericDataTableVineMethod { 
+        GenericDataTable fetch(Map args) {
+            def mdt = createDataTable()
             mdt.dataAdd(id:'1', name:args.p1)
             mdt
         }
@@ -62,7 +64,7 @@ class MappedDataTableVineMethodCallSpec extends Specification {
         def mc1 = pv.call(CacheMode.IGNORE, [p1:"alice"])
         def dtf = mc1.writeDataTableFiles(tmpDir)
         println "dtf: $dtf"
-        def mc2 = MappedDataTableVineMethodCall.createFromFiles(dtf)
+        def mc2 = GenericDataTableVineMethodCall.createFromFiles(dtf)
 
         then:
         mc1 != null
@@ -76,10 +78,11 @@ class MappedDataTableVineMethodCallSpec extends Specification {
         mc1.arguments.get('p1') == mc2.arguments.get('p1')
         mc1.result != null
         mc2.result != null
-        mc1.result instanceof MappedDataTable
-        mc2.result instanceof MappedDataTable
+        mc1.result instanceof GenericDataTable
+        mc2.result instanceof GenericDataTable
         mc1.result.data.size() == mc2.result.data.size()
-        mc1.result.dataGet('1', 'name') == mc2.result.dataGet('1', 'name')
+        mc1.result.data[0].get('id') == mc1.result.data[0].get('id')
+        mc1.result.data[0].get('name') == mc1.result.data[0].get('name')
     }
 
 
@@ -112,7 +115,7 @@ class MappedDataTableVineMethodCallSpec extends Specification {
         def mc1 = pvm1.call(CacheMode.IGNORE, [a:'a'])
         def cn1 = mc1.computedName()
 
-        def pvm2 = new MdtvmcsVine.PersonVineMethod()
+        def pvm2 = new GdtvmcsVine.PersonVineMethod()
         def mc2 = pvm2.call(CacheMode.IGNORE, [a:'a'])
         def cn2 = mc2.computedName()
 
@@ -147,7 +150,7 @@ class MappedDataTableVineMethodCallSpec extends Specification {
         def cn = mc.computedName()
 
         then:
-        cn.startsWith("carnival-core-vine-MappedDataTableVineMethodCallSpec-PersonVineMethod")
+        cn.startsWith("carnival-core-vine-GenericDataTableVineMethodCallSpec-PersonVineMethod")
         cn =~ /[0-9a-f]{32}/
     }
 
@@ -159,7 +162,7 @@ class MappedDataTableVineMethodCallSpec extends Specification {
         def cn = mc.computedName()
 
         then:
-        cn == "carnival-core-vine-MappedDataTableVineMethodCallSpec-PersonVineMethod"
+        cn == "carnival-core-vine-GenericDataTableVineMethodCallSpec-PersonVineMethod"
     }
 
 

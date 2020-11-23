@@ -14,23 +14,20 @@ import carnival.util.DataTable
 
 
 
-
-
-
 @Slf4j
-class MappedDataTableVineMethodCall extends DataTableVineMethodCall<MappedDataTable> {
+class GenericDataTableVineMethodCall extends DataTableVineMethodCall<GenericDataTable> {
 
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    static public MappedDataTableVineMethodCall createFromFiles(DataTableFiles cacheFiles) {
-        MappedDataTable mdt = MappedDataTable.createFromFiles(cacheFiles)
-        MappedDataTableVineMethodCall methodCall = new MappedDataTableVineMethodCall()
-        methodCall.result = mdt
-        methodCall.arguments = mdt.vine.arguments
-        methodCall.vineMethodClass = Class.forName(mdt.vine.methodClass)
+    static public GenericDataTableVineMethodCall createFromFiles(DataTableFiles cacheFiles) {
+        GenericDataTable gdt = GenericDataTable.createFromFiles(cacheFiles)
+        GenericDataTableVineMethodCall methodCall = new GenericDataTableVineMethodCall()
+        methodCall.result = gdt
+        methodCall.arguments = gdt.vine.arguments
+        methodCall.vineMethodClass = Class.forName(gdt.vine.methodClass)
         methodCall
     }
 
@@ -40,20 +37,19 @@ class MappedDataTableVineMethodCall extends DataTableVineMethodCall<MappedDataTa
     ///////////////////////////////////////////////////////////////////////////
 
     /** the result returned by the call */
-    MappedDataTable result
+    GenericDataTable result
 
 
     ///////////////////////////////////////////////////////////////////////////
     // METHODS - RESULT
     ///////////////////////////////////////////////////////////////////////////
 
-    public MappedDataTable getResult() {
+    public GenericDataTable getResult() {
         return this.result
     }
 
-    public void setResult(MappedDataTable result) {
+    public void setResult(GenericDataTable result) {
         this.result = result
     }
 
 }
-

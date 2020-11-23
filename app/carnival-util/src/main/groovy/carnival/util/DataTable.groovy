@@ -760,6 +760,88 @@ abstract class DataTable {
     }
 
 
+
+
+    /** 
+     * Load MappedDataTable meta-data from a file.
+     *
+     * @param dir The directory in which to look for the file.
+     * @param name The name of the file.
+     *
+     * @return A map of meta-data.
+     *
+     */
+    static protected Map loadMetaDataFromFile(File dir, String name) {
+        assert dir
+        assert dir.exists()
+        assert dir.isDirectory()
+
+        def metaFile = metaFile(dir, name)
+        loadMetaDataFromFile(metaFile)
+    }
+
+
+    /**
+     *
+     *
+     */
+    static protected Map loadMetaDataFromFile(File metaFile) {
+        assert metaFile != null
+        assert metaFile.exists()
+        assert metaFile.length() > 0
+
+        def yaml = new org.yaml.snakeyaml.Yaml(new DataTableConstructor())
+       
+        def meta = yaml.load(metaFile.text)
+        assert meta != null
+        assert meta.name
+        assert meta.queryDate
+
+        return meta
+    }
+
+
+
+    /** 
+     * Load data from a CSV file and write it to the provided DataTable
+     * instance.
+     * 
+     * @param dir The directory in which to look for the file.
+     * @param name The name of the file.
+     * @param mdt The DataTable to populate with data.
+     *
+     */
+    static protected void loadDataFromFile(File dir, String name, DataTable dataTable) {
+        def dataFile = dataFile(dir, name)
+        loadDataFromFile(dataFile, dataTable)
+    }
+
+
+    /**
+     *
+     *
+     */
+    static protected void loadDataFromFile(File dataFile, DataTable dataTable) {
+        assert dataFile != null
+        assert dataFile.exists()
+        assert dataFile.length() > 0
+        assert dataTable != null
+
+        def dataFileText = dataFile.text
+
+        if (dataFileText) {
+            def csvReader = CsvUtil.createReaderHeaderAware(dataFileText)
+            if (!CsvUtil.hasNext(csvReader)) {
+                log.warn "error in loadDataFromFile for file $dataFile. no data found."
+            }
+            dataTable.dataAddAll(csvReader)
+            dataTable.readFrom = dataFile
+        }
+    }
+
+
+
+
     ///////////////////////////////////////////////////////////////////////////
     // METHODS - CASE SENSITIVE
     ///////////////////////////////////////////////////////////////////////////

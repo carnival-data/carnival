@@ -24,13 +24,13 @@ trait Vine {
 
         // verify arguments
         if (args != null) {
-            if (args.size() > 2) throw new IllegalArgumentException("there can be at most two arguments to a vine method call: ${args}")
+            if (args.size() > 2) throw new IllegalArgumentException("there can be at most two arguments to a vine method call: ${name} ${args}")
             if (args.size() == 1) {
-                if (!(args[0] instanceof Map)) throw new IllegalArgumentException("args must be a map: ${args}")
+                if (!(args[0] instanceof Map)) throw new IllegalArgumentException("args must be a map: ${name} ${args}")
             }
             if (args.size() == 2) {
-                if (!(args[0] instanceof CacheMode)) throw new IllegalArgumentException("the first argument must be a cache mode: ${args[0]}")
-                if (!(args[1] instanceof Map)) throw new IllegalArgumentException("the second argument must be a map: ${args[1]}")
+                if (!(args[0] instanceof CacheMode)) throw new IllegalArgumentException("the first argument must be a cache mode: ${name} ${args[0]}")
+                if (!(args[1] instanceof Map)) throw new IllegalArgumentException("the second argument must be a map: ${name} ${args[1]}")
             }
         }
 

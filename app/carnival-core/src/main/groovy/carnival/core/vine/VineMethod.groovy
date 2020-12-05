@@ -10,6 +10,16 @@ import carnival.core.util.CoreUtil
 
 
 
+
+/**
+ * VineMethod is an abstract class that defines the interface that must be
+ * implemented by vine methods as well as providing some high level methods
+ * that contribute to the operation of vine methods.  It is not expected that
+ * client code would extend this class directly, but rather one of the more
+ * concrete subclasses, such as JsonVineMethod, GenericDataTableVineMethod,
+ * and MappedDataTableVineMethod.
+ *
+ */
 @Slf4j
 abstract class VineMethod {
 

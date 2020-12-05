@@ -15,6 +15,11 @@ import carnival.util.DataTable
 
 
 
+/**
+ * A partial concretization of VineMethodCall for vine methods that return data
+ * tables.  
+ *
+ */
 @Slf4j
 abstract class DataTableVineMethodCall<T> implements VineMethodCall<T> {
 

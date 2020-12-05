@@ -15,6 +15,13 @@ import carnival.util.DataTable
 
 
 
+/**
+ * DataTableVineMethod is a partial concretization of VineMethod for vine
+ * methods that return a data table as a result.  It is not expected that
+ * client code will extend this class, but rather the more concrete sub-classes
+ * of GenericDataTableVineMethod or MappedDataTableVineMethod.
+ *
+ */
 @Slf4j
 abstract class DataTableVineMethod<T,U extends VineMethodCall> extends VineMethod { 
 

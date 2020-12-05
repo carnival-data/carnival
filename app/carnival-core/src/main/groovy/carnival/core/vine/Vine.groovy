@@ -9,7 +9,13 @@ import carnival.core.util.CoreUtil
 
 
 
-/** */
+/** 
+ * Vine is is a trait that can be applied to a class to enable the
+ * implementation of vine methods.  The Vine trait is not required to implement
+ * vine methods.  It provides a convenient mechanism to aggregate related vine
+ * methods and share common resources.
+ *
+ */
 trait Vine {
 
     /** */

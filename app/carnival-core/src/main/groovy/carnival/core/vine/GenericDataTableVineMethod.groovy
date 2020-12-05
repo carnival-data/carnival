@@ -16,7 +16,12 @@ import carnival.util.DataTable
 
 
 
-/** */
+/** 
+ * GenericDataTableVineMethod is a partially concretized version of  
+ * DataTableVineMethod to support vine methods that return a
+ * GenericDataTable.
+ *
+ */
 @Slf4j
 abstract class GenericDataTableVineMethod extends DataTableVineMethod<GenericDataTable,GenericDataTableVineMethodCall> {
 

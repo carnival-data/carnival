@@ -28,39 +28,9 @@ abstract class ReaperMethod implements ReaperMethodInterface, TrackedProcessTrai
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
 
-	/** carnival logger */
+	/** logger */
     static Logger log = LoggerFactory.getLogger(ReaperMethod)
 
-
-    /** */
-    static void assertPatientVertices(Map args) {
-        if (args.patientVertices) {
-            assert args.patientVertices.each {
-                assert it instanceof Vertex
-                assert it.label() == "Patient"
-            }
-        }
-    }
-
-
-    /** */
-    static List patientVerts(GraphTraversalSource g, Map args) {
-        def patientVerts = []
-        def operateOverAllPatients = false
-        if (args.containsKey('patientVertices')) {
-            patientVerts = args.patientVertices
-        } else {
-            patientVerts = g.patients().toList()
-            operateOverAllPatients = true
-        }
-
-        patientVerts.each {
-            assert it instanceof Vertex
-            assert it.label() == "Patient"
-        }
-
-        return [patientVerts, operateOverAllPatients]            
-    }
 
 
 
@@ -173,22 +143,12 @@ abstract class ReaperMethod implements ReaperMethodInterface, TrackedProcessTrai
     }
 
 
-    /**
-     * Convenience method to great a lookup hash for the given objects.
-     *
-     */
-    Map createHash(Collection objects) {
-        def hash = new HashMap()
-        objects.each { hash.put(it, 1) }
-        return hash
-    }    
-
-
     /** */
     protected Object withTraversal(Closure cl) {
         def g = traversal()
         GremlinTraitUtilities.withTraversal(graph, g, cl)
     }
+    
 
     /** */
     protected Object withGremlin(Closure cl) {

@@ -17,7 +17,6 @@ import org.apache.tinkerpop.gremlin.process.traversal.P
 
 import carnival.util.Log
 import carnival.core.graph.ReaperMethod
-import carnival.core.graph.ReaperMethodResource
 import carnival.core.graph.GraphValidationError
 import carnival.graph.VertexDefTrait
 import carnival.graph.PropertyDefTrait

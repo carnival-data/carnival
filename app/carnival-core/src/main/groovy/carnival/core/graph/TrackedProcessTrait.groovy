@@ -2,6 +2,8 @@ package carnival.core.graph
 
 
 
+import java.time.LocalDateTime
+import java.time.Instant
 import groovy.transform.Synchronized
 
 import org.slf4j.Logger
@@ -64,7 +66,7 @@ trait TrackedProcessTrait implements TrackedProcessInterface {
         assert trackedProcessClassDef.vertex
         assert trackedProcessDef.label
 
-        long now = new Date().time
+        long now = Instant.now().toEpochMilli()  // new Date().time
         def procV = graph.addVertex(
             T.label, trackedProcessDef.label,
             Base.PX.NAME_SPACE.label, trackedProcessDef.nameSpace,

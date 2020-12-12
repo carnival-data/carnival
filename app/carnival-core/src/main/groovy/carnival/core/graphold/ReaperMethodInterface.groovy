@@ -1,4 +1,4 @@
-package carnival.core.graph
+package carnival.core.graphold
 
 
 
@@ -13,6 +13,7 @@ import org.apache.tinkerpop.gremlin.structure.T
 
 import carnival.graph.VertexDefTrait
 import carnival.graph.DynamicVertexDef
+import carnival.core.graph.GraphValidationError
 
 
 

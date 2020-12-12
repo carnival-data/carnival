@@ -1,4 +1,4 @@
-package carnival.core.graph
+package carnival.core.graphold
 
 
 
@@ -17,6 +17,7 @@ import carnival.core.util.CoreUtil
 import carnival.graph.VertexDefTrait
 import carnival.graph.EdgeDefTrait
 import carnival.graph.PropertyDefTrait
+import carnival.core.graph.Core
 
 
 

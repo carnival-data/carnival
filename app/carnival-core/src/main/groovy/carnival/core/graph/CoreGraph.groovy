@@ -28,7 +28,7 @@ import carnival.graph.PropertyDefTrait
 import carnival.graph.VertexDefTrait
 import carnival.graph.DynamicVertexDef
 import carnival.graph.ControlledInstance
-
+import carnival.core.graphold.ReaperMethod
 
 
 

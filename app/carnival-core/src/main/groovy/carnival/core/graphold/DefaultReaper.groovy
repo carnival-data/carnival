@@ -1,9 +1,11 @@
-package carnival.core.graph
+package carnival.core.graphold
 
 
 
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 import org.apache.tinkerpop.gremlin.structure.Graph
+
+import carnival.core.graph.CoreGraph
 
 
 

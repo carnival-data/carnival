@@ -16,7 +16,6 @@ import org.apache.tinkerpop.gremlin.structure.Edge
 import org.apache.tinkerpop.gremlin.process.traversal.P
 
 import carnival.util.Log
-import carnival.core.graph.ReaperMethod
 import carnival.core.graph.GraphValidationError
 import carnival.graph.VertexDefTrait
 import carnival.graph.PropertyDefTrait
@@ -25,7 +24,6 @@ import carnival.graph.EdgeDefTrait
 import carnival.core.graph.Core
 import carnival.core.graph.CoreGraph
 import carnival.core.graph.CoreGraphUtils
-import carnival.core.graph.Reaper
 
 
 

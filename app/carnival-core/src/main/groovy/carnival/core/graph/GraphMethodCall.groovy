@@ -6,7 +6,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 
 
 
-class ReaperMethodCall {
+class GraphMethodCall {
 
     Map arguments
 
@@ -16,7 +16,7 @@ class ReaperMethodCall {
     }
 
 
-    public ReaperMethodProcess process(GraphTraversalSource) {
+    public GraphMethodProcess process(GraphTraversalSource) {
 
     }
 

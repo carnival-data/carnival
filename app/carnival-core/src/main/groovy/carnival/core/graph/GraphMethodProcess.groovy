@@ -9,7 +9,7 @@ import carnival.core.graph.Core
 
 
 
-class ReaperMethodProcess {
+class GraphMethodProcess {
 
 
     public Vertex vertex

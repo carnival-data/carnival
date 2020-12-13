@@ -11,7 +11,7 @@ import carnival.graph.VertexDefinition
 
 
 
-public class ReaperMethodProcessSpec extends Specification {
+public class GraphMethodProcessSpec extends Specification {
 
 
     @VertexDefinition
@@ -57,7 +57,7 @@ public class ReaperMethodProcessSpec extends Specification {
     void "vertex() returns vertex"() {
         when:
         def v = graph.addVertex('TEST_VERTEX_LABEL')
-        def rmp = new ReaperMethodProcess()
+        def rmp = new GraphMethodProcess()
         rmp.vertex = v
         def v2 = rmp.vertex()
 
@@ -76,7 +76,7 @@ public class ReaperMethodProcessSpec extends Specification {
             .to(procV)
         .create()
 
-        def rmp = new ReaperMethodProcess()
+        def rmp = new GraphMethodProcess()
         rmp.vertex = procV
 
         def outputs = rmp.outputs(g)

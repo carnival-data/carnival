@@ -11,7 +11,7 @@ import carnival.graph.VertexDefinition
 
 
 
-public class GraphMethodProcessSpec extends Specification {
+public class GraphMethodCallSpec extends Specification {
 
 
     @VertexDefinition
@@ -30,12 +30,9 @@ public class GraphMethodProcessSpec extends Specification {
     @Shared g
 
 
-    def setupSpec() {
-    } 
+    def setupSpec() { } 
 
-
-    def cleanupSpec() {
-    }
+    def cleanupSpec() { }
 
     def setup() {
         coreGraph = CoreGraphTinker.create()
@@ -54,20 +51,21 @@ public class GraphMethodProcessSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
-    void "vertex() returns vertex"() {
+    void "arguments() returns arguments"() {
         when:
-        def v = graph.addVertex('TEST_VERTEX_LABEL')
-        def rmp = new GraphMethodProcess()
-        rmp.vertex = v
-        def v2 = rmp.vertex()
+        def procV = VX.SOME_REAPER_PROCESS.instance().create(graph)
+        def gmc = new GraphMethodCall()
+        gmc.arguments = [a:'1', b:'2']
+        def args = gmc.arguments()
 
         then:
-        v2 != null
-        v2 == v
+        args != null
+        args instanceof Map
+        args.equals([a:'1', b:'2'])
     }
 
 
-    void "outputs() works"() {
+    void "process() works"() {
         when:
         def procV = VX.SOME_REAPER_PROCESS.instance().create(graph)
         def output1V = VX.SOME_REAPER_OUTPUT.instance().create(graph)
@@ -76,15 +74,22 @@ public class GraphMethodProcessSpec extends Specification {
             .to(procV)
         .create()
 
-        def rmp = new GraphMethodProcess()
-        rmp.vertex = procV
+        def gmc = new GraphMethodCall()
+        gmc.processVertex = procV
 
-        def outputs = rmp.outputs(g)
+        def gmp = gmc.process(g)
 
         then:
-        outputs != null
-        outputs.size() == 1
-        outputs[0] == output1V
+        gmp != null
+        gmp.vertex() == procV
+
+        when:
+        def gmpOutputs = gmp.outputs(g)
+
+        then:
+        gmpOutputs != null
+        gmpOutputs.size() == 1
+        gmpOutputs[0] == output1V
     }
 
 }

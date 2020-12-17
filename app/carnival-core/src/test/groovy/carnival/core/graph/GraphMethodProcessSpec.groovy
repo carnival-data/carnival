@@ -67,6 +67,27 @@ public class GraphMethodProcessSpec extends Specification {
     }
 
 
+    void "inputs() works"() {
+        when:
+        def procV = VX.SOME_REAPER_PROCESS.instance().create(graph)
+        def input1V = VX.SOME_REAPER_OUTPUT.instance().create(graph)
+        Core.EX.IS_INPUT_OF.instance()
+            .from(input1V)
+            .to(procV)
+        .create()
+
+        def rmp = new GraphMethodProcess()
+        rmp.vertex = procV
+
+        def inputs = rmp.inputs(g)
+
+        then:
+        inputs != null
+        inputs.size() == 1
+        inputs[0] == input1V
+    }
+
+
     void "outputs() works"() {
         when:
         def procV = VX.SOME_REAPER_PROCESS.instance().create(graph)

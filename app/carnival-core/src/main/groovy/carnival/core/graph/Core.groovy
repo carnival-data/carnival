@@ -19,6 +19,11 @@ import carnival.graph.VertexDefinition
 class Core {
 
 	///////////////////////////////////////////////////////////////////////////
+    // DATA REPRESENTATION
+	///////////////////////////////////////////////////////////////////////////
+
+
+	///////////////////////////////////////////////////////////////////////////
 	// GRAPH MODEL
 	//
 	// The graph model enums below are currently part of an incubating method
@@ -42,7 +47,22 @@ class Core {
         PROCESS_CLASS,
         DATA_TRANSFORMATION_PROCESS_CLASS,
 
-        PROCESS,
+        PROCESS(
+            vertexProperties:[
+                PX.ARGUMENTS_HASH,
+                PX.START_TIME,
+                PX.STOP_TIME,
+                PX.EXCEPTION_MESSAGE
+            ]
+        ),
+        GRAPH_PROCESS(
+            vertexProperties:[
+                PX.ARGUMENTS_HASH,
+                PX.START_TIME,
+                PX.STOP_TIME,
+                PX.EXCEPTION_MESSAGE
+            ]
+        ),
 
         VALIDATION_FAILURE,
 
@@ -120,6 +140,7 @@ class Core {
         NAME,
         DATE,
         START_TIME,
+        STOP_TIME,
         VALUE,
         UNIT,
         DESCRIPTION,
@@ -130,7 +151,8 @@ class Core {
         MESSAGE,
         EXCEL_ROW_NUM,
         DERIVATION_SOURCE,
-        ARGUMENTS_HASH
+        ARGUMENTS_HASH,
+        EXCEPTION_MESSAGE
     }
 
 }

@@ -11,6 +11,7 @@ import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 
 import carnival.core.util.CoreUtil
+import carnival.graph.Base
 import carnival.graph.VertexDefTrait
 
 
@@ -54,6 +55,9 @@ abstract class GraphMethod {
     /** */
     VertexDefTrait processVertexDef = Core.VX.GRAPH_PROCESS
 
+    /** */
+    VertexDefTrait processClassVertexDef = Core.VX.GRAPH_PROCESS_CLASS
+
 
     ///////////////////////////////////////////////////////////////////////////
     // BUILDER METHODS
@@ -66,6 +70,29 @@ abstract class GraphMethod {
     public GraphMethod arguments(Map args) {
         assert args != null
         this.arguments = args
+        this
+    }
+
+
+    /**
+     *
+     *
+     */
+    public GraphMethod processDefinition(VertexDefTrait vdt) {
+        assert vdt != null
+        vdt.propertyDefs.addAll(Core.VX.GRAPH_PROCESS.propertyDefs)
+        this.processVertexDef = vdt
+        this
+    }
+
+
+    /**
+     *
+     *
+     */
+    public GraphMethod processClassDefinition(VertexDefTrait vdt) {
+        assert vdt != null
+        this.processClassVertexDef = vdt
         this
     }
 
@@ -98,6 +125,14 @@ abstract class GraphMethod {
             Core.PX.START_TIME, startTime.toEpochMilli(),
             Core.PX.STOP_TIME, stopTime.toEpochMilli()
         ).create(graph)
+        Core.EX.IS_INSTANCE_OF.instance()
+            .from(procV)
+            .to(processClassVertexDef.vertex)
+        .create()
+        Base.EX.IS_SUBCLASS_OF.instance()
+            .from(processClassVertexDef.vertex)
+            .to(Core.VX.GRAPH_PROCESS_CLASS.vertex)
+        .ensure(g)
 
         if (exception != null) {
             try {

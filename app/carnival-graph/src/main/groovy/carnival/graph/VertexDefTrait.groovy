@@ -69,10 +69,10 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
     ///////////////////////////////////////////////////////////////////////////
 
     /** Setter wrapper for propertyDefs */
-    List<PropertyDefTrait> getVertexProperties() { this.propertyDefs }
+    Set<PropertyDefTrait> getVertexProperties() { this.propertyDefs }
     
     /** Getter wrapper for propertyDefs */
-    void setVertexProperties(List<PropertyDefTrait> propertyDefs) {
+    void setVertexProperties(Set<PropertyDefTrait> propertyDefs) {
         this.propertyDefs = propertyDefs
     }
 

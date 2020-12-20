@@ -47,6 +47,7 @@ class Core {
         PROCESS_CLASS,
         DATA_TRANSFORMATION_PROCESS_CLASS,
 
+        PROCSSS_CLASS,
         PROCESS(
             vertexProperties:[
                 PX.ARGUMENTS_HASH,
@@ -55,6 +56,7 @@ class Core {
                 PX.EXCEPTION_MESSAGE
             ]
         ),
+        GRAPH_PROCESS_CLASS,
         GRAPH_PROCESS(
             vertexProperties:[
                 PX.ARGUMENTS_HASH,

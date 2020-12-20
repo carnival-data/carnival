@@ -9,6 +9,7 @@ import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 
 import carnival.core.graph.Core
+import carnival.graph.Base
 import carnival.graph.VertexDefinition
 
 
@@ -18,6 +19,7 @@ public class GraphMethodSpec extends Specification {
 
     @VertexDefinition
     static enum VX {
+        SOME_REAPER_PROCESS_CLASS,
         SOME_REAPER_PROCESS,
         SOME_REAPER_OUTPUT
     }
@@ -65,6 +67,71 @@ public class GraphMethodSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+    
+    void "processClassDefinition() sets process class vertex def"() {
+        when:
+        def gm = new TestGraphMethod()
+        gm.arguments(a:'1', b:'2')
+            .processDefinition(VX.SOME_REAPER_PROCESS)
+            .processClassDefinition(VX.SOME_REAPER_PROCESS_CLASS)            
+        def gmc = gm.call(graph, g)
+
+        then:
+        gmc != null
+        gmc.processVertex != null
+
+        when:
+        def procV = gmc.processVertex
+
+        then:
+        VX.SOME_REAPER_PROCESS.isa(procV)
+        Core.PX.START_TIME.of(procV).isPresent()
+        Core.PX.STOP_TIME.of(procV).isPresent()
+        !Core.PX.EXCEPTION_MESSAGE.of(procV).isPresent()
+
+        g.V(procV)
+            .out(Core.EX.IS_INSTANCE_OF)
+            .is(VX.SOME_REAPER_PROCESS_CLASS.vertex)
+            .tryNext()
+        .isPresent()
+
+        g.V(VX.SOME_REAPER_PROCESS_CLASS.vertex)
+            .out(Base.EX.IS_SUBCLASS_OF)
+            .is(Core.VX.GRAPH_PROCESS_CLASS.vertex)
+            .tryNext()
+        .isPresent()
+    }
+
+
+
+   void "processDefinition() sets process vertex def"() {
+        when:
+        def gm = new TestGraphMethod()
+        gm.arguments(a:'1', b:'2')
+        gm.processDefinition(VX.SOME_REAPER_PROCESS)
+        def gmc = gm.call(graph, g)
+
+        then:
+        gmc != null
+        gmc.processVertex != null
+
+        when:
+        def procV = gmc.processVertex
+
+        then:
+        VX.SOME_REAPER_PROCESS.isa(procV)
+        Core.PX.START_TIME.of(procV).isPresent()
+        Core.PX.STOP_TIME.of(procV).isPresent()
+        !Core.PX.EXCEPTION_MESSAGE.of(procV).isPresent()
+
+        g.V(procV)
+            .out(Core.EX.IS_INSTANCE_OF)
+            .is(Core.VX.GRAPH_PROCESS_CLASS.vertex)
+            .tryNext()
+        .isPresent()
+    }
+
 
     void "processes() finds processes"() {
         when:
@@ -127,6 +194,7 @@ public class GraphMethodSpec extends Specification {
         def procV = gmc.processVertex
 
         then:
+        Core.VX.GRAPH_PROCESS.isa(procV)
         Core.PX.START_TIME.of(procV).isPresent()
         Core.PX.STOP_TIME.of(procV).isPresent()
         !Core.PX.EXCEPTION_MESSAGE.of(procV).isPresent()

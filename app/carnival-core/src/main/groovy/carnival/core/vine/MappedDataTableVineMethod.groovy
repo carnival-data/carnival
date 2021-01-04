@@ -18,15 +18,9 @@ import carnival.util.DataTable
 
 
 /**
-What do vine methods need to accomplish:
-- implement the fetch operation
-- expose the meta-data associated with a call to the vine method, which is needed to:
-  - compute a cache file name
-  - check cache validity
-  - record the method call parameters
-  - other details of the call, such as datetime
-
-*/
+ *
+ *
+ */
 @Slf4j
 abstract class MappedDataTableVineMethod extends DataTableVineMethod<MappedDataTable,MappedDataTableVineMethodCall> {
 

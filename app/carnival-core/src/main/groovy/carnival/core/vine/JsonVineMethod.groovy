@@ -11,15 +11,14 @@ import carnival.core.util.CoreUtil
 
 
 /**
-What do vine methods need to accomplish:
-- implement the fetch operation
-- expose the meta-data associated with a call to the vine method, which is needed to:
-  - compute a cache file name
-  - check cache validity
-  - record the method call parameters
-  - other details of the call, such as datetime
-
-*/
+ * JsonVineMethod is a parameterized abstract that concretizes the call(...)
+ * methods of VineMethod where the data representation format is JSON, such as
+ * data returned from a REST API call.
+ *
+ * The fetch() method is left un-implemented.  It is expected that client code
+ * will extend this class to implement their fetch business logic.
+ *
+ */
 @Slf4j
 abstract class JsonVineMethod<T> extends VineMethod {
 

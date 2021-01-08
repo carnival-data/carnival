@@ -59,6 +59,7 @@ class Core {
         GRAPH_PROCESS_CLASS,
         GRAPH_PROCESS(
             vertexProperties:[
+                PX.NAME,
                 PX.ARGUMENTS_HASH,
                 PX.START_TIME,
                 PX.STOP_TIME,

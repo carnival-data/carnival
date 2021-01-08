@@ -110,6 +110,8 @@ abstract class GraphMethod {
         Exception exception
         Instant startTime
         
+        // execute the graph method recording the start
+        // and stop times
         try {
             startTime = Instant.now()
             result = execute(graph, g)
@@ -119,21 +121,33 @@ abstract class GraphMethod {
             stopTime = Instant.now()
         }
         
+        // compute a hash to record in the process vertex
         String argsHash = CoreUtil.standardizedUniquifier(String.valueOf(this.arguments))
+        
+        // create the process vertex
         Vertex procV = processVertexDef.instance().withProperties(
+            Core.PX.NAME, this.class.name,
             Core.PX.ARGUMENTS_HASH, argsHash,
             Core.PX.START_TIME, startTime.toEpochMilli(),
             Core.PX.STOP_TIME, stopTime.toEpochMilli()
         ).create(graph)
+        
+        // the process vertex is an instance of the process class
         Core.EX.IS_INSTANCE_OF.instance()
             .from(procV)
             .to(processClassVertexDef.vertex)
         .create()
-        Base.EX.IS_SUBCLASS_OF.instance()
-            .from(processClassVertexDef.vertex)
-            .to(Core.VX.GRAPH_PROCESS_CLASS.vertex)
-        .ensure(g)
+        
+        // ensure that the process class is a subclass of GRAPH_PROCESS_CLASS
+        // it is troubling that this happens every time a graph method is called
+        if (processClassVertexDef != Core.VX.GRAPH_PROCESS) {
+            Base.EX.IS_SUBCLASS_OF.instance()
+                .from(processClassVertexDef.vertex)
+                .to(Core.VX.GRAPH_PROCESS_CLASS.vertex)
+            .ensure(g)
+        }
 
+        // if an exception was caught, record the message in the process vertex
         if (exception != null) {
             try {
                 Core.PX.EXCEPTION_MESSAGE.set(procV, exception.message)
@@ -143,6 +157,7 @@ abstract class GraphMethod {
             throw e
         }
 
+        // construct and return a graph method call
         GraphMethodCall gmc = new GraphMethodCall(
             arguments: this.arguments,
             result: result,

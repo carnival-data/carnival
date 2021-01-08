@@ -195,9 +195,12 @@ public class GraphMethodSpec extends Specification {
 
         then:
         Core.VX.GRAPH_PROCESS.isa(procV)
+        Core.PX.NAME.of(procV).isPresent()
         Core.PX.START_TIME.of(procV).isPresent()
         Core.PX.STOP_TIME.of(procV).isPresent()
         !Core.PX.EXCEPTION_MESSAGE.of(procV).isPresent()
+
+        Core.PX.NAME.valueOf(procV) == 'carnival.core.graph.GraphMethodSpec$TestGraphMethod'
     }
 
 

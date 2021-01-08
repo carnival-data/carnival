@@ -129,6 +129,19 @@ class JsonVineSpec extends Specification {
     }
 
 
+    def "call by method missing"() {
+        when:
+        def vine = new JvsTestVine()
+        def res = vine.personVineMethod(p1:'alice').getResult()
+
+        then:
+        res != null
+        res instanceof JvsTestVine.Person
+        res.name == 'alice'
+
+    }
+
+
     def "call with cache mode"() {
         when:
         def vine = new JvsTestVine()

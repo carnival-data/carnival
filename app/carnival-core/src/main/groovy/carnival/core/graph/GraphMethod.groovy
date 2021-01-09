@@ -80,8 +80,7 @@ abstract class GraphMethod {
      */
     public GraphMethod processDefinition(VertexDefTrait vdt) {
         assert vdt != null
-        vdt.propertyDefs.addAll(Core.VX.GRAPH_PROCESS.propertyDefs)
-        this.processVertexDef = vdt
+        this.setProcessVertexDef(vdt)
         this
     }
 
@@ -92,7 +91,7 @@ abstract class GraphMethod {
      */
     public GraphMethod processClassDefinition(VertexDefTrait vdt) {
         assert vdt != null
-        this.processClassVertexDef = vdt
+        this.setProcessClassVertexDef(vdt)
         this
     }
 
@@ -123,9 +122,16 @@ abstract class GraphMethod {
         
         // compute a hash to record in the process vertex
         String argsHash = CoreUtil.standardizedUniquifier(String.valueOf(this.arguments))
+
+        // grab the defs
+        def pcvDef = getProcessClassVertexDef()
+        def pvDef = getProcessVertexDef()
+
+        // assert that the process def has the required properties
+        pvDef.propertyDefs.addAll(Core.VX.GRAPH_PROCESS.propertyDefs)
         
         // create the process vertex
-        Vertex procV = processVertexDef.instance().withProperties(
+        Vertex procV = pvDef.instance().withProperties(
             Core.PX.NAME, this.class.name,
             Core.PX.ARGUMENTS_HASH, argsHash,
             Core.PX.START_TIME, startTime.toEpochMilli(),
@@ -135,14 +141,14 @@ abstract class GraphMethod {
         // the process vertex is an instance of the process class
         Core.EX.IS_INSTANCE_OF.instance()
             .from(procV)
-            .to(processClassVertexDef.vertex)
+            .to(pcvDef.vertex)
         .create()
         
         // ensure that the process class is a subclass of GRAPH_PROCESS_CLASS
         // it is troubling that this happens every time a graph method is called
-        if (processClassVertexDef != Core.VX.GRAPH_PROCESS) {
+        if (pcvDef != Core.VX.GRAPH_PROCESS) {
             Base.EX.IS_SUBCLASS_OF.instance()
-                .from(processClassVertexDef.vertex)
+                .from(pcvDef.vertex)
                 .to(Core.VX.GRAPH_PROCESS_CLASS.vertex)
             .ensure(g)
         }
@@ -179,7 +185,7 @@ abstract class GraphMethod {
     public Set<GraphMethodProcess> processes(GraphTraversalSource g) {
         String argsHash = CoreUtil.standardizedUniquifier(String.valueOf(this.arguments))
         Set<Vertex> procVs = g.V()
-            .isa(processVertexDef)
+            .isa(getProcessVertexDef())
             .has(Core.PX.ARGUMENTS_HASH, argsHash)
         .toSet()
     }

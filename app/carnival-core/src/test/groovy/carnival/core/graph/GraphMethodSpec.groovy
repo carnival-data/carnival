@@ -11,6 +11,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 import carnival.core.graph.Core
 import carnival.graph.Base
 import carnival.graph.VertexDefinition
+import carnival.graph.VertexDefTrait
 
 
 
@@ -23,6 +24,22 @@ public class GraphMethodSpec extends Specification {
         SOME_REAPER_PROCESS,
         SOME_REAPER_OUTPUT
     }
+
+    static class TestGraphMethodProcessClassOveride extends GraphMethod {
+        VertexDefTrait processVertexDef = GraphMethodSpec.VX.SOME_REAPER_PROCESS
+        VertexDefTrait processClassVertexDef = GraphMethodSpec.VX.SOME_REAPER_PROCESS_CLASS
+        public Map execute(Graph graph, GraphTraversalSource g) {
+            [:]
+        }
+    }
+
+    static class TestGraphMethodProcessOveride extends GraphMethod {
+        VertexDefTrait processVertexDef = GraphMethodSpec.VX.SOME_REAPER_PROCESS
+        public Map execute(Graph graph, GraphTraversalSource g) {
+            [:]
+        }
+    }
+
 
     static class TestGraphMethod extends GraphMethod {
         public Map execute(Graph graph, GraphTraversalSource g) {
@@ -67,6 +84,65 @@ public class GraphMethodSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+    void "processClassDefinition override"() {
+        when:
+        def gm = new TestGraphMethodProcessClassOveride()
+        gm.arguments(a:'1', b:'2')
+        def gmc = gm.call(graph, g)
+
+        then:
+        gmc != null
+        gmc.processVertex != null
+
+        when:
+        def procV = gmc.processVertex
+
+        then:
+        VX.SOME_REAPER_PROCESS.isa(procV)
+        Core.PX.START_TIME.of(procV).isPresent()
+        Core.PX.STOP_TIME.of(procV).isPresent()
+        !Core.PX.EXCEPTION_MESSAGE.of(procV).isPresent()
+
+        g.V(procV)
+            .out(Core.EX.IS_INSTANCE_OF)
+            .is(VX.SOME_REAPER_PROCESS_CLASS.vertex)
+            .tryNext()
+        .isPresent()
+
+        g.V(VX.SOME_REAPER_PROCESS_CLASS.vertex)
+            .out(Base.EX.IS_SUBCLASS_OF)
+            .is(Core.VX.GRAPH_PROCESS_CLASS.vertex)
+            .tryNext()
+        .isPresent()
+    }
+
+
+    void "processDefinition override"() {
+        when:
+        def gm = new TestGraphMethodProcessOveride()
+        gm.arguments(a:'1', b:'2')
+        def gmc = gm.call(graph, g)
+
+        then:
+        gmc != null
+        gmc.processVertex != null
+
+        when:
+        def procV = gmc.processVertex
+
+        then:
+        VX.SOME_REAPER_PROCESS.isa(procV)
+        Core.PX.START_TIME.of(procV).isPresent()
+        Core.PX.STOP_TIME.of(procV).isPresent()
+        !Core.PX.EXCEPTION_MESSAGE.of(procV).isPresent()
+
+        g.V(procV)
+            .out(Core.EX.IS_INSTANCE_OF)
+            .is(Core.VX.GRAPH_PROCESS_CLASS.vertex)
+            .tryNext()
+        .isPresent()
+    }
 
     
     void "processClassDefinition() sets process class vertex def"() {

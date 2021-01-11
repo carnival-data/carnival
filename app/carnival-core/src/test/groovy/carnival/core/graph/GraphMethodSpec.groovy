@@ -25,6 +25,13 @@ public class GraphMethodSpec extends Specification {
         SOME_REAPER_OUTPUT
     }
 
+    static class TestGraphMethodNameOveride extends GraphMethod {
+        String name = 'my-funky-name'
+        public Map execute(Graph graph, GraphTraversalSource g) {
+            [:]
+        }
+    }
+
     static class TestGraphMethodProcessClassOveride extends GraphMethod {
         VertexDefTrait processVertexDef = GraphMethodSpec.VX.SOME_REAPER_PROCESS
         VertexDefTrait processClassVertexDef = GraphMethodSpec.VX.SOME_REAPER_PROCESS_CLASS
@@ -84,6 +91,25 @@ public class GraphMethodSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+    void "name override"() {
+        when:
+        def gm = new TestGraphMethodNameOveride()
+        gm.arguments(a:'1', b:'2')
+        def gmc = gm.call(graph, g)
+
+        then:
+        gmc != null
+        gmc.processVertex != null
+
+        when:
+        def procV = gmc.processVertex
+
+        then:
+        Core.PX.NAME.of(procV).isPresent()
+        Core.PX.NAME.valueOf(procV) == 'my-funky-name'
+    }
+
 
     void "processClassDefinition override"() {
         when:
@@ -209,7 +235,31 @@ public class GraphMethodSpec extends Specification {
     }
 
 
-    void "processes() finds processes"() {
+    ///////////////////////////////////////////////////////////////////////////
+    // PROCESSES
+    ///////////////////////////////////////////////////////////////////////////
+
+    void "processes() differentiates on name and arguments"() {
+        expect:
+        new TestGraphMethod().processes(g).size() == 0
+        new TestGraphMethod().arguments(a:'1').processes(g).size() == 0
+
+        when:
+        new TestGraphMethod().name('n1').arguments(a:'1').call(graph, g)
+        new TestGraphMethod().name('n2').arguments(a:'1').call(graph, g)
+        new TestGraphMethod().name('n2').arguments(a:'1').call(graph, g)
+
+        then:
+        new TestGraphMethod().processes(g).size() == 0
+        new TestGraphMethod().arguments(a:'1').processes(g).size() == 0
+        new TestGraphMethod().name('n1').processes(g).size() == 0
+        new TestGraphMethod().name('n1').arguments(a:'1').processes(g).size() == 1
+        new TestGraphMethod().name('n2').processes(g).size() == 0
+        new TestGraphMethod().name('n2').arguments(a:'1').processes(g).size() == 2
+    }
+
+
+    void "processes()"() {
         when:
         def gm = new TestGraphMethod()
         gm.arguments(a:'1', b:'2')
@@ -227,6 +277,12 @@ public class GraphMethodSpec extends Specification {
         procVs != null
         procVs.size() == 1
     }
+
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // call()
+    ///////////////////////////////////////////////////////////////////////////
 
 
     void "call() handles exceptions"() {

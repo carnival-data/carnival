@@ -58,6 +58,9 @@ abstract class GraphMethod {
     /** */
     VertexDefTrait processClassVertexDef = Core.VX.GRAPH_PROCESS_CLASS
 
+    /** */
+    String name = this.class.name
+
 
     ///////////////////////////////////////////////////////////////////////////
     // BUILDER METHODS
@@ -92,6 +95,17 @@ abstract class GraphMethod {
     public GraphMethod processClassDefinition(VertexDefTrait vdt) {
         assert vdt != null
         this.setProcessClassVertexDef(vdt)
+        this
+    }
+
+
+    /**
+     *
+     *
+     */
+    public GraphMethod name(String name) {
+        assert name != null
+        this.setName(name)
         this
     }
 
@@ -132,7 +146,7 @@ abstract class GraphMethod {
         
         // create the process vertex
         Vertex procV = pvDef.instance().withProperties(
-            Core.PX.NAME, this.class.name,
+            Core.PX.NAME, getName(),
             Core.PX.ARGUMENTS_HASH, argsHash,
             Core.PX.START_TIME, startTime.toEpochMilli(),
             Core.PX.STOP_TIME, stopTime.toEpochMilli()
@@ -186,6 +200,7 @@ abstract class GraphMethod {
         String argsHash = CoreUtil.standardizedUniquifier(String.valueOf(this.arguments))
         Set<Vertex> procVs = g.V()
             .isa(getProcessVertexDef())
+            .has(Core.PX.NAME, getName())
             .has(Core.PX.ARGUMENTS_HASH, argsHash)
         .toSet()
     }

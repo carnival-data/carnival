@@ -17,6 +17,7 @@ import carnival.graph.VertexDefTrait
 import carnival.graph.DynamicVertexDef
 import carnival.core.graph.TrackedProcessTrait
 import carnival.core.graph.Core
+import carnival.core.graph.GremlinTraitUtilities
 
 
 

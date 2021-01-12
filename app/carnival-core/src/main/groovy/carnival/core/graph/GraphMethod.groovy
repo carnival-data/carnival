@@ -110,6 +110,10 @@ abstract class GraphMethod {
     }
 
 
+    ///////////////////////////////////////////////////////////////////////////
+    // CALL
+    ///////////////////////////////////////////////////////////////////////////
+
     /**
      * Calls the execute() method and represents the call in the graph.
      *
@@ -189,6 +193,21 @@ abstract class GraphMethod {
 
 
     ///////////////////////////////////////////////////////////////////////////
+    // ENSURE
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    public GraphMethodCall ensure(Graph graph, GraphTraversalSource g) {
+        assert graph != null
+        assert g != null
+        
+        Set<Vertex> existingProcessVs = processes(g)
+        if (existingProcessVs.size() == 0) return call(graph, g)
+        else return null
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////
     // GRAPH GETTER METHODS
     ///////////////////////////////////////////////////////////////////////////
 
@@ -197,6 +216,7 @@ abstract class GraphMethod {
      *
      */
     public Set<GraphMethodProcess> processes(GraphTraversalSource g) {
+        assert g != null
         String argsHash = CoreUtil.standardizedUniquifier(String.valueOf(this.arguments))
         Set<Vertex> procVs = g.V()
             .isa(getProcessVertexDef())

@@ -236,6 +236,47 @@ public class GraphMethodSpec extends Specification {
 
 
     ///////////////////////////////////////////////////////////////////////////
+    // ENSURE
+    ///////////////////////////////////////////////////////////////////////////
+    
+    void "ensure() does not re-do work"() {
+        expect:
+        new TestGraphMethod().processes(g).size() == 0
+        new TestGraphMethod().arguments(a:'1').processes(g).size() == 0
+
+        when:
+        new TestGraphMethod().name('n1').arguments(a:'1').call(graph, g)
+        new TestGraphMethod().name('n2').arguments(a:'1').call(graph, g)
+        new TestGraphMethod().name('n2').arguments(a:'1').call(graph, g)
+        
+        new TestGraphMethod().name('n2').arguments(a:'1').ensure(graph, g)
+
+        then:
+        new TestGraphMethod().processes(g).size() == 0
+        new TestGraphMethod().arguments(a:'1').processes(g).size() == 0
+        new TestGraphMethod().name('n1').processes(g).size() == 0
+        new TestGraphMethod().name('n1').arguments(a:'1').processes(g).size() == 1
+        new TestGraphMethod().name('n2').processes(g).size() == 0
+        new TestGraphMethod().name('n2').arguments(a:'1').processes(g).size() == 2
+    }
+
+
+    void "ensure() works first time"() {
+        expect:
+        new TestGraphMethod().processes(g).size() == 0
+        new TestGraphMethod().arguments(a:'1').processes(g).size() == 0
+
+        when:
+        new TestGraphMethod().name('n2').arguments(a:'1').ensure(graph, g)
+
+        then:
+        new TestGraphMethod().processes(g).size() == 0
+        new TestGraphMethod().arguments(a:'1').processes(g).size() == 0
+        new TestGraphMethod().name('n2').arguments(a:'1').processes(g).size() == 1
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////
     // PROCESSES
     ///////////////////////////////////////////////////////////////////////////
 

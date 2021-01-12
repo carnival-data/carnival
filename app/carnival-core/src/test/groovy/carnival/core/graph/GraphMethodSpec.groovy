@@ -239,6 +239,17 @@ public class GraphMethodSpec extends Specification {
     // ENSURE
     ///////////////////////////////////////////////////////////////////////////
     
+    void "ensure() returns null when work is already done"() {
+        when:
+        def res1 = new TestGraphMethod().name('n1').arguments(a:'1').call(graph, g)
+        def res2 = new TestGraphMethod().name('n1').arguments(a:'1').ensure(graph, g)
+
+        then:
+        res1 != null
+        res2 == null
+    }
+
+
     void "ensure() does not re-do work"() {
         expect:
         new TestGraphMethod().processes(g).size() == 0

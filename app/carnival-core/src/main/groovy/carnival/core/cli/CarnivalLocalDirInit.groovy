@@ -7,7 +7,7 @@ import carnival.util.Defaults
 
 
 /**
- * Create the directory structure in $env.CARNIVAL_HOME
+ * Create the directory structure in the default location.
  *
  * Run:
  * gradle carnivalLocalDirInit
@@ -15,7 +15,7 @@ import carnival.util.Defaults
 class CarnivalLocalDirInit {
 
     /**
-     * Create the directory structure in $env.CARNIVAL_HOME
+     * Create the directory structure in the default location.
      *
      */
     static void main(String[] args) {

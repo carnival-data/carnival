@@ -113,6 +113,17 @@ trait PropertyDefTrait {
     public PropertyDefTrait set(Element el, Object value) {
         assert el
         assert value != null
+
+        VertexDefTrait vdt = VertexDef.lookup(el)
+        if (vdt != null && !(vdt instanceof DynamicVertexDef)) {
+            if (vdt.propertiesMustBeDefined) {
+                boolean found = vdt.propertyDefs.find({it.label == getLabel()})
+                if (!found) {
+                    throw new IllegalArgumentException("${this} is not a property of ${vdt.label}: ${vdt.propertyDefs}")
+                }
+            }
+        }
+
         el.property(getLabel(), value)
         this
     }

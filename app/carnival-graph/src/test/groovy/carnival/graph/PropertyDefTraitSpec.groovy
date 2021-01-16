@@ -20,9 +20,28 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
  */
 class PropertyDefTraitSpec extends Specification {
 
-    static enum PX implements PropertyDefTrait {
+    @PropertyDefinition
+    static enum PX {
         PROP_A,
         PROP_B
+    }
+
+    @VertexDefinition
+    static enum VX {
+        THING_1,
+
+        THING_2(
+            vertexProperties:[
+                PX.PROP_A
+            ]
+        ),
+
+        THING_3(
+            vertexProperties:[
+                PX.PROP_A,
+                PX.PROP_B
+            ]
+        )
     }
 
 
@@ -60,6 +79,32 @@ class PropertyDefTraitSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+    def "set() respects defined properties"() {
+        Exception e
+
+        when:
+        def v1 = VX.THING_1.instance().create(graph)
+        PX.PROP_A.set(v1, 'a')
+
+        then:
+        e = thrown()
+        e instanceof IllegalArgumentException
+
+        when:
+        def v2 = VX.THING_2.instance().create(graph)
+        PX.PROP_A.set(v2, 'a')
+
+        then:
+        noExceptionThrown()
+
+        when:
+        PX.PROP_B.set(v2, 'b')
+
+        then:
+        e = thrown()
+        e instanceof IllegalArgumentException
+    }
 
 
     def "defaultValue is not global"() {

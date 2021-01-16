@@ -328,6 +328,9 @@ class ReaperSpec extends Specification {
     def "call reap"() {
         given:
         def reaper = new SimpleReaper()
+        def g = reaper.graph.traversal()
+        ReaperSpec.initGraph(reaper.graph, g)
+        g.close()
 
         when:
         def methodArgs = [
@@ -461,9 +464,12 @@ class ReaperWithDefs extends SimpleReaper {
     class ReaperMethodWithDefs extends ReaperMethod {
 
         /** */
-        static enum VX implements VertexDefTrait {
+        @VertexDefinition
+        static enum VX /*implements VertexDefTrait*/ {
             SOME_REAPER_PROCESS_CLASS,
-            SOME_REAPER_PROCESS,
+            SOME_REAPER_PROCESS(
+                vertexProperties:[Core.PX.ARGUMENTS_HASH]
+            )
         }
 
         /** */

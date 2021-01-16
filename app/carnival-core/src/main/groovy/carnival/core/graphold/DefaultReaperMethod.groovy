@@ -12,7 +12,6 @@ import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.structure.T
 
 import carnival.graph.VertexDefTrait
-import carnival.graph.DynamicVertexDef
 import carnival.core.graph.GraphValidationError
 
 

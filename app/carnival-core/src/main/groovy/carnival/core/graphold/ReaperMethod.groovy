@@ -61,8 +61,6 @@ abstract class ReaperMethod implements ReaperMethodInterface, TrackedProcessTrai
         Reaper.VX.REAPER_PROCESS_CLASS.setSubclassOf(g, Core.VX.DATA_TRANSFORMATION_PROCESS_CLASS)
 
         def procClassDef = getTrackedProcessClassDef()
-        log.trace "procClassDef: $procClassDef"
-        
         procClassDef.setSubclassOf(g, Reaper.VX.REAPER_PROCESS_CLASS)
 
         createTrackedProcessVertex(graph)
@@ -105,7 +103,7 @@ abstract class ReaperMethod implements ReaperMethodInterface, TrackedProcessTrai
     @Override
     VertexDefTrait getTrackedProcessDef() { 
         def name = getTrackedProcessName()
-        DynamicVertexDef.singletonFromCamelCase(getGraph(), traversal(), name) 
+        DynamicVertexDef.singletonFromCamelCase(getGraph(), traversal(), name)
     }
 
 

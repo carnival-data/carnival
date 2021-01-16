@@ -178,7 +178,7 @@ abstract class GraphMethod {
             } catch (Exception e) {
                 log.warn "could not set exception message of process vertex ${procV} ${e.message}"
             }
-            throw e
+            throw exception
         }
 
         // construct and return a graph method call

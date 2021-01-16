@@ -14,7 +14,6 @@ import org.apache.tinkerpop.gremlin.structure.Vertex
 import carnival.graph.EdgeDefTrait
 import carnival.graph.VertexDefTrait
 import carnival.core.graph.GremlinTrait
-import carnival.core.graph.TrackedProcessDefaultTrait
 import carnival.core.graph.Core
 import carnival.core.util.CoreUtil
 

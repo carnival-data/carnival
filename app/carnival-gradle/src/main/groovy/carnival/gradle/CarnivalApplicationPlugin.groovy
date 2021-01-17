@@ -95,9 +95,9 @@ class CarnivalApplicationPlugin implements Plugin<Project> {
             implementation "org.neo4j.driver:neo4j-java-driver:${neo4JavaDriverVersion}"
 
             // Carnival
-            implementation("edu.upenn.pmbb:carnival-util:${carnivalVersion}")
-            implementation("edu.upenn.pmbb:carnival-graph:${carnivalVersion}")
-            implementation("edu.upenn.pmbb:carnival-core:${carnivalVersion}")
+            implementation("org.pmbb:carnival-util:${carnivalVersion}")
+            implementation("org.pmbb:carnival-graph:${carnivalVersion}")
+            implementation("org.pmbb:carnival-core:${carnivalVersion}")
         }
     }
 }

@@ -5,7 +5,7 @@ The MappedDataTable supports tabular data where each row of data is identified b
 _Example: Mapped data table_
 
 ```groovy
-@Grab(group='edu.upenn.pmbb', module='carnival-util', version='2.0.1-SNAPSHOT')
+@Grab(group='org.pmbb', module='carnival-util', version='2.0.1-SNAPSHOT')
 
 import carnival.util.MappedDataTable
 
@@ -35,7 +35,7 @@ As noted above, mapped data tables have a primary key, which is enforced to be u
 _Example: Non-unique identifiers_
 
 ```groovy
-@Grab(group='edu.upenn.pmbb', module='carnival-util', version='0.2.6')
+@Grab(group='org.pmbb', module='carnival-util', version='0.2.6')
 
 import carnival.util.MappedDataTable
 

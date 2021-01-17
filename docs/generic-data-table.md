@@ -5,7 +5,7 @@ Generic data tables can hold arbitrary tabular data.
 _docs/groovy/basic/generic-data-table-1.groovy_
 
 ```groovy
-@Grab(group='edu.upenn.pmbb', module='carnival-util', version='0.2.6')
+@Grab(group='org.pmbb', module='carnival-util', version='0.2.6')
 
 import carnival.util.GenericDataTable
 

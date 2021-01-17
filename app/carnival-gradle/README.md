@@ -23,8 +23,8 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath group:'edu.upenn.pmbb', name:'carnival-gradle', version:'0.2.7'
+        classpath group:'org.pmbb', name:'carnival-gradle', version:'0.2.7'
     }
 }
-apply plugin: 'edu.upenn.pmbb.carnival'
+apply plugin: 'org.pmbb.carnival'
 ```

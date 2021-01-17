@@ -54,7 +54,7 @@ compileGroovy.dependsOn('printJavaVersion')
 // common plugins
 ///////////////////////////////////////////////////////////////////////////////
 allprojects {
-    group = 'edu.upenn.pmbb'
+    group = 'org.pmbb'
     sourceCompatibility = JavaVersion.toVersion('11')
     version = '2.0.1-SNAPSHOT'   // see https://semver.org/
 
@@ -256,7 +256,7 @@ task deleteLocalRepos {
     doLast {
         [
             "${System.getProperty('user.home')}/.m2/repository/edu/upenn/pmbb/", 
-            "${System.getProperty('user.home')}/.groovy/grapes/edu.upenn.pmbb/"
+            "${System.getProperty('user.home')}/.groovy/grapes/org.pmbb/"
         ].each { bd ->
             ant.echo(bd)
             

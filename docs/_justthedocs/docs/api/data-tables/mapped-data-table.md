@@ -15,7 +15,7 @@ grand_parent: Application Programmer Interface
 _Example: Mapped data table_
 
 ```groovy
-@Grab(group='edu.upenn.pmbb', module='carnival-util', version='0.2.6')
+@Grab(group='org.pmbb', module='carnival-util', version='0.2.6')
 
 import carnival.util.MappedDataTable
 
@@ -45,7 +45,7 @@ As noted above, mapped data tables have a primary key, which is enforced to be u
 _Example: Non-unique identifiers_
 
 ```groovy
-@Grab(group='edu.upenn.pmbb', module='carnival-util', version='0.2.6')
+@Grab(group='org.pmbb', module='carnival-util', version='0.2.6')
 
 import carnival.util.MappedDataTable
 

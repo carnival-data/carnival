@@ -2,20 +2,21 @@
 
 Vines are data adapters that can be helpful when loading data from source systems. The principal benefit of using Vines to access your source data systems is the Vine caching mechanism.
 
-A Vine is a logical grouping of vine methods, which are the routines that do the work of aggregating and returning data.  A vine can contain any number of vine methods of any type.
+A Vine is a logical grouping of vine methods, which are the routines that do the work of aggregating and returning data. A vine can contain any number of vine methods of any type.
 
-There are two categories of vine methods, DataTable and JSON.  DataTable vine methods use DataTable objects as their data format while JSON vine methods use JSON.  The access methods and caching functionality are similar to both types.
+There are two categories of vine methods, DataTable and JSON. DataTable vine methods use DataTable objects as their data format while JSON vine methods use JSON. The access methods and caching functionality are similar to both types.
 
 ## Vine Methods
-Vine methods are functions that return data.  In application code, vine method are expected to be implemented as inner classes of a Vine and must implement the VineMethod interface.  There are two types of vine methods: DataTable and JSON.
+
+Vine methods are functions that return data. In application code, vine method are expected to be implemented as inner classes of a Vine and must implement the VineMethod interface. There are two types of vine methods: DataTable and JSON.
 
 ## MappedDataTable Vine Methods
 
 MappedDataTable vines return data in MappedDataTable objects.
 
 ```groovy
-@Grab(group='edu.upenn.pmbb', module='carnival-util', version='2.0.1-SNAPSHOT')
-@Grab(group='edu.upenn.pmbb', module='carnival-core', version='2.0.1-SNAPSHOT')
+@Grab(group='org.pmbb', module='carnival-util', version='2.0.1-SNAPSHOT')
+@Grab(group='org.pmbb', module='carnival-core', version='2.0.1-SNAPSHOT')
 
 import groovy.transform.ToString
 import carnival.util.MappedDataTable
@@ -23,11 +24,11 @@ import carnival.core.vine.Vine
 import carnival.core.vine.MappedDataTableVineMethod
 import carnival.core.vine.CacheMode
 
-class MdtTestVine implements Vine { 
+class MdtTestVine implements Vine {
     @ToString(includeNames=true)
     static class Person { String name }
 
-    class PersonVineMethod extends MappedDataTableVineMethod { 
+    class PersonVineMethod extends MappedDataTableVineMethod {
         MappedDataTable fetch(Map args) {
             def mdt = createMappedDataTable('ID')
             mdt.dataAdd(id:'1', name:args.p1)

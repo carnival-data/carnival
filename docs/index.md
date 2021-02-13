@@ -21,3 +21,4 @@
   - [Generic Data Table](generic-data-table.md)
 - [Vines](vines.md)
 - [Graph Model](graph-model.md)
+- [Graph Methods](graph-method.md)

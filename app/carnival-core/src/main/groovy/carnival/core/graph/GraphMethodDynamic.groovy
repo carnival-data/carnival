@@ -14,43 +14,27 @@ import carnival.graph.VertexDefTrait
 
 
 /**
- * GraphMethod encapsulates a unit of business logic that modifies the graph.
- * GraphMethods may return a Map result, but the fundamental result of a graph
- * method is a mutation of the graph.  An executed graph method will be
- * represented in the graph as a "process" vertex with optional links to
- * outputs.
- *
- * 
  *
  */
-abstract class GraphMethod extends GraphMethodBase {    
+class GraphMethodDynamic extends GraphMethodBase {   
 
 
-    ///////////////////////////////////////////////////////////////////////////
-    // ABSTRACT INTERFACE
-    ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * An abstract method to be implemented by the concretizing class to
-     * implement the logic of the method.
-     *
-     */
-    abstract Map execute(Graph graph, GraphTraversalSource g) 
-
+    /** */
+    static public final GM = new GraphMethodDynamic()
 
 
     ///////////////////////////////////////////////////////////////////////////
     // CALL
     ///////////////////////////////////////////////////////////////////////////
 
-
     /**
      * Calls the execute() method and represents the call in the graph.
      *
      */
-    public GraphMethodCall call(Graph graph, GraphTraversalSource g) {
+    public GraphMethodCall call(Graph graph, GraphTraversalSource g, Closure cl) {
         assert graph != null
         assert g != null
+        assert cl != null
 
         Map result 
         Instant stopTime
@@ -61,7 +45,15 @@ abstract class GraphMethod extends GraphMethodBase {
         // and stop times
         try {
             startTime = Instant.now()
-            result = execute(graph, g)
+            if (cl.getMaximumNumberOfParameters() == 0) {
+                result = cl()
+            } else if (cl.getMaximumNumberOfParameters() == 1) {
+                result = cl(this.arguments)
+            } else if (cl.getMaximumNumberOfParameters() == 2) {
+                result = cl(this.arguments, graph)
+            } else {
+                result = cl(this.arguments, graph, g)
+            }
         } catch (Exception e) {
             exception = e
         } finally {
@@ -77,12 +69,13 @@ abstract class GraphMethod extends GraphMethodBase {
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    public GraphMethodCall ensure(Graph graph, GraphTraversalSource g) {
+    public GraphMethodCall ensure(Graph graph, GraphTraversalSource g, Closure cl) {
         assert graph != null
         assert g != null
+        assert cl != null
         
         Set<Vertex> existingProcessVs = processes(g)
-        if (existingProcessVs.size() == 0) return call(graph, g)
+        if (existingProcessVs.size() == 0) return call(graph, g, cl)
         else return null
     }
 

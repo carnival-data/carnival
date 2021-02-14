@@ -181,49 +181,83 @@ abstract class CoreGraph implements GremlinTrait {
 
 		withTransactionIfSupported(graph) {
 	        newDefinitions.each { vld ->
-	        	log.trace "initializeDefinedVertices vld: ${vld.label} $vld"
-
-	        	log.trace "adding vertex label definition to graph schema ${vld.label} ${vld}"
-				graphSchema.dynamicLabelDefinitions << vld
-
-				// add the controlled instance, which can only be done if there
-            	// are no required properties
-            	def vdef = vld.vertexDef
-            	if (vdef.isClass() && vdef.requiredProperties.size() == 0) {
-	            	def ci = graphSchema.controlledInstances.find {
-	            		it instanceof VertexDefTrait && it.vertexDef == vdef
-	            	}
-
-	            	if (!ci) {
-	            		ci = vdef.controlledInstance()
-	            		log.trace "created controlled instance ${ci.vertexDef.label} ${ci}"
-		            	graphSchema.controlledInstances << ci
-		            }
-	            	
-	            	vdef.vertex = ci.vertex(graph, g)
-	            	log.trace "created controlled instance vertex ${vdef.label} ${vdef.nameSpace} ${vdef.vertex}"
-            	}
-
-				// attempt to set super/sub class relationship
-				if (vdef.superClass) {
-					assert vdef.isClass()
-					assert vdef.superClass.isClass()
-					assert vdef.vertex
-					assert vdef.superClass.vertex
-					vdef.setSubclassOf(g, vdef.superClass)
-				}
+				addDefinition(graph, g, vld)
 	        }
 		}
     }
 
 
+	/** */
+	public void addDefinition(Graph graph, GraphTraversalSource g, VertexLabelDefinition vld) {
+		log.trace "initializeDefinedVertices vld: ${vld.label} $vld"
+
+		log.trace "adding vertex label definition to graph schema ${vld.label} ${vld}"
+		graphSchema.dynamicLabelDefinitions << vld
+
+		// add the controlled instance, which can only be done if there
+		// are no required properties
+		def vdef = vld.vertexDef
+		if (vdef.isClass() && vdef.requiredProperties.size() == 0) {
+			def ci = graphSchema.controlledInstances.find {
+				it instanceof VertexDefTrait && it.vertexDef == vdef
+			}
+
+			if (!ci) {
+				ci = vdef.controlledInstance()
+				log.trace "created controlled instance ${ci.vertexDef.label} ${ci}"
+				graphSchema.controlledInstances << ci
+			}
+			
+			vdef.vertex = ci.vertex(graph, g)
+			log.trace "created controlled instance vertex ${vdef.label} ${vdef.nameSpace} ${vdef.vertex}"
+		}
+
+		// attempt to set super/sub class relationship
+		if (vdef.superClass) {
+			assert vdef.isClass()
+			assert vdef.superClass.isClass()
+			assert vdef.vertex
+			assert vdef.superClass.vertex
+			vdef.setSubclassOf(g, vdef.superClass)
+		}
+	}
+
+
+	/** */
+	public void addDefinitions(Graph graph, GraphTraversalSource g, Class<VertexDefTrait> vdc) {
+		List<VertexLabelDefinition> existingDefinitions = graphSchema.getLabelDefinitions()
+		vdc.values().each { VertexDefTrait vdef ->
+			def found = existingDefinitions.find {
+				it.label == vdef.label && it.nameSpace == vdef.nameSpace
+			}
+			if (!found) {
+				def vld = VertexLabelDefinition.create(vdef)
+				addDefinition(graph, g, vld)
+			}
+		}
+	}
+
+
+	/** */
+	public void addDefinitions(Class<VertexDefTrait> vdc) {
+		withGremlin { graph, g ->
+			addDefinitions(graph, g, vdc)
+		}
+	}
+
+
     /** */
     public Collection<VertexLabelDefinition> findNewVertexLabelDefinitions(String packageName) {
 		log.info "CoreGraph findNewVertexLabelDefinitions packageName:$packageName"
-
 		assert packageName
-
     	Set<Class<VertexDefTrait>> vertexDefClasses = findVertexDefClases(packageName)
+		findNewVertexLabelDefinitions(vertexDefClasses)
+	}
+
+
+    /** */
+    public Collection<VertexLabelDefinition> findNewVertexLabelDefinitions(Set<Class<VertexDefTrait>> vertexDefClasses) {
+		assert vertexDefClasses
     	
 		List<VertexLabelDefinition> existingDefinitions = graphSchema.getLabelDefinitions()
 		List<VertexLabelDefinition> newDefinitions = new ArrayList<VertexLabelDefinition>()

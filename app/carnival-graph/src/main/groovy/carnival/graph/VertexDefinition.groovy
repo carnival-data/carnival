@@ -15,5 +15,6 @@ import org.codehaus.groovy.transform.GroovyASTTransformationClass
 @Target(ElementType.TYPE)
 @GroovyASTTransformationClass(["carnival.graph.VertexDefinitionTransformation"])
 public @interface VertexDefinition {
-    //public String value() default "";
+    public String global() default "";
 }
+

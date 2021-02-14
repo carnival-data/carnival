@@ -30,11 +30,14 @@ class CoreGraphInitializationSpec extends Specification {
         CGS_SUITCASE
     }
 
+
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
     
     @Shared coreGraph
+    @Shared graph
+    @Shared g
     
     
 
@@ -44,20 +47,21 @@ class CoreGraphInitializationSpec extends Specification {
     
 
     def setup() {
-    	
+        coreGraph = CoreGraphTinker.create()
+        graph = coreGraph.graph
+        g = graph.traversal()
     }
 
     def setupSpec() {
-        coreGraph = CoreGraphTinker.create()
     } 
 
 
     def cleanupSpec() {
-        if (coreGraph) coreGraph.close()
     }
 
 
     def cleanup() {
+        if (coreGraph) coreGraph.close()
     }
 
 
@@ -66,11 +70,51 @@ class CoreGraphInitializationSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
-    def "set superclass"() {
-        given:
-    	def graph = coreGraph.graph
-    	def g = graph.traversal()
+    def "add definitions convenience method"() {
+        def modelErrs 
 
+        expect:
+        coreGraph.checkModel().size() == 0
+
+        when:
+        GraphModel.VX.DOG.instance().create(graph)
+        modelErrs = coreGraph.checkModel()
+
+        then:
+        modelErrs.size() == 1
+
+        when:
+        coreGraph.addDefinitions(GraphModel.VX)
+        modelErrs = coreGraph.checkModel()
+
+        then:
+        modelErrs.size() == 0
+    }
+
+
+    def "add definitions"() {
+        def modelErrs 
+
+        expect:
+        coreGraph.checkModel().size() == 0
+
+        when:
+        GraphModel.VX.DOG.instance().create(graph)
+        modelErrs = coreGraph.checkModel()
+
+        then:
+        modelErrs.size() == 1
+
+        when:
+        coreGraph.addDefinitions(graph, g, GraphModel.VX)
+        modelErrs = coreGraph.checkModel()
+
+        then:
+        modelErrs.size() == 0
+    }
+
+
+    def "set superclass"() {
         when:
         coreGraph.initializeGremlinGraph(graph, g, 'test.coregraphspec')
 

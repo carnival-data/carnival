@@ -22,6 +22,7 @@ import carnival.graph.Base
 
 
 
+
 /** 
  *
  *
@@ -32,9 +33,6 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
     ///////////////////////////////////////////////////////////////////////////
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    public static final String GLOBAL = 'GlobalVertexDefinition'
 
     /** */
     public static final String CLASS_SUFFIX = '_class'
@@ -130,7 +128,7 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
 
     /** */
     public String getNameSpace() {
-        if (this.global) return GLOBAL
+        if (this.global) return Base.GLOBAL_NAME_SPACE
         return getVertexDefinitionClass()
     }
 
@@ -259,20 +257,5 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
     }
 
 }
-
-
-/** */
-/*trait GlobalVertexDefTrait extends VertexDefTrait {
-
-    public static final String GLOBAL = "GLOBAL"
-
-    @Override
-    public String getNameSpace() { return GLOBAL }
-
-}*/
-
-
-
-
 
 

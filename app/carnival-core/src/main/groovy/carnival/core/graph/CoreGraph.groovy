@@ -164,9 +164,35 @@ abstract class CoreGraph implements GremlinTrait {
 	}
 	
 
+	///////////////////////////////////////////////////////////////////////////
+	// GRAPH MODEL - GENERIC METHODS
+	///////////////////////////////////////////////////////////////////////////
+
+	/** */
+	public void addDefinitions(Graph graph, GraphTraversalSource g, Class defClass) {
+		assert graph
+		assert g
+		assert defClass
+
+		def defInterfaces = defClass.getInterfaces()
+		if (defInterfaces.contains(VertexDefTrait)) addVertexDefinitions(graph, g, defClass)
+		else if (defInterfaces.contains(EdgeDefTrait)) addEdgeDefinitions(graph, g, defClass)
+		else throw new RuntimeException("unrecognized definition class: $defClass")
+	}
+
+
+	/** */
+	public void addDefinitions(Class defClass) {
+		assert defClass
+		withGremlin { graph, g ->
+			addDefinitions(graph, g, defClass)
+		}
+	}
+
+
 
 	///////////////////////////////////////////////////////////////////////////
-	// DEFINED GRAPH MODEL
+	// GRAPH MODEL - VERTICES
 	///////////////////////////////////////////////////////////////////////////
 
 	/** */
@@ -189,9 +215,9 @@ abstract class CoreGraph implements GremlinTrait {
 
 	/** */
 	public void addDefinition(Graph graph, GraphTraversalSource g, VertexLabelDefinition vld) {
-		log.trace "initializeDefinedVertices vld: ${vld.label} $vld"
+		log.trace "addDefinition vld: ${vld.label} $vld"
 
-		log.trace "adding vertex label definition to graph schema ${vld.label} ${vld}"
+		log.trace "adding vertex definition to graph schema ${vld.label} ${vld}"
 		graphSchema.dynamicLabelDefinitions << vld
 
 		// add the controlled instance, which can only be done if there
@@ -224,7 +250,7 @@ abstract class CoreGraph implements GremlinTrait {
 
 
 	/** */
-	public void addDefinitions(Graph graph, GraphTraversalSource g, Class<VertexDefTrait> vdc) {
+	public void addVertexDefinitions(Graph graph, GraphTraversalSource g, Class<VertexDefTrait> vdc) {
 		List<VertexLabelDefinition> existingDefinitions = graphSchema.getLabelDefinitions()
 		vdc.values().each { VertexDefTrait vdef ->
 			def found = existingDefinitions.find {
@@ -238,19 +264,14 @@ abstract class CoreGraph implements GremlinTrait {
 	}
 
 
-	/** */
-	public void addDefinitions(Class<VertexDefTrait> vdc) {
-		withGremlin { graph, g ->
-			addDefinitions(graph, g, vdc)
-		}
-	}
-
-
     /** */
     public Collection<VertexLabelDefinition> findNewVertexLabelDefinitions(String packageName) {
 		log.info "CoreGraph findNewVertexLabelDefinitions packageName:$packageName"
 		assert packageName
+
     	Set<Class<VertexDefTrait>> vertexDefClasses = findVertexDefClases(packageName)
+		if (!vertexDefClasses) return new ArrayList<VertexLabelDefinition>()
+
 		findNewVertexLabelDefinitions(vertexDefClasses)
 	}
 
@@ -274,7 +295,7 @@ abstract class CoreGraph implements GremlinTrait {
             	}
             	if (!found) {
 					def vld = VertexLabelDefinition.create(vdef)
-					log.trace "found new vertex label definition ${vld.label} ${vld}"
+					log.trace "found new vertex definition ${vld.label} ${vld}"
 	            	newDefinitions << vld
             	}
             }
@@ -299,43 +320,89 @@ abstract class CoreGraph implements GremlinTrait {
     }
 
 
+
+	///////////////////////////////////////////////////////////////////////////
+	// GRAPH MODEL - EDGES
+	///////////////////////////////////////////////////////////////////////////
+
+	public void addDefinition(Graph graph, GraphTraversalSource g, RelationshipDefinition relDef) {
+		log.trace "addDefinition relDef: ${relDef.label} $relDef"
+
+		log.trace "adding edge definition to graph schema ${relDef.label} ${relDef}"
+		graphSchema.dynamicRelationshipDefinitions << relDef
+	}
+
+
+	/** */
+	public void addEdgeDefinitions(Graph graph, GraphTraversalSource g, Class<EdgeDefTrait> edc) {
+		List<RelationshipDefinition> existingDefinitions = graphSchema.getRelationshipDefinitions()
+		edc.values().each { EdgeDefTrait edef ->
+			def found = existingDefinitions.find {
+				it.label == edef.label && it.nameSpace == edef.nameSpace
+			}
+			if (!found) {
+				def relDef = RelationshipDefinition.create(edef)
+				addDefinition(graph, g, relDef)
+			}
+		}
+	}
+
+
 	/** */
     public void initializeDefinedEdges(Graph graph, GraphTraversalSource g, String packageName) {
 		assert graph
 		assert g
 		assert packageName
 
-		def edgeDefClasses = findEdgeDefClases(packageName)
-		log.trace "edgeDefClasses: $edgeDefClasses"
-
-		List<RelationshipDefinition> existingDefinitions = graphSchema.getRelationshipDefinitions()
-		log.trace "existing relationship definitions: $existingDefinitions"
+		List<RelationshipDefinition> newDefinitions = findNewRelationshipDefinitions(packageName)
 
 		withTransactionIfSupported(graph) {
-	        edgeDefClasses.each { edc ->
-	        	log.trace "initializeDefinedEdges edc: $edc"
-
-	            edc.values().each { edgeDef ->
-	            	log.trace "initializeDefinedEdges edgeDef: $edgeDef"
-
-	            	// check if already defined
-	            	def found = existingDefinitions.find {
-						it.label == edgeDef.label && it.nameSpace == edgeDef.nameSpace
-	            	}
-	            	if (found) {
-	            		throw new RuntimeException("edge definition already exists: ${edgeDef} == ${found}")
-	            	}
-
-	            	// add the dynamic label definition
-					def relDef = RelationshipDefinition.create(edgeDef)
-	            	log.trace "adding RelationshipDefinition ${edgeDef.label} $relDef"
-					graphSchema.dynamicRelationshipDefinitions << relDef
-					existingDefinitions << relDef
-	            }
+	        newDefinitions.each { eld ->
+				addDefinition(graph, g, eld)
 	        }
 		}
     }	
 
+
+    /** */
+    public Collection<RelationshipDefinition> findNewRelationshipDefinitions(String packageName) {
+		log.info "CoreGraph findNewRelationshipDefinitions packageName:$packageName"
+		assert packageName
+    	
+		Set<Class<EdgeDefTrait>> defClasses = findEdgeDefClases(packageName)
+		if (!defClasses) return new ArrayList<RelationshipDefinition>()
+		
+		findNewRelationshipDefinitions(defClasses)
+	}
+
+
+	/** */
+    public Collection<RelationshipDefinition> findNewRelationshipDefinitions(Set<Class<EdgeDefTrait>> edgeDefClasses) {
+		assert edgeDefClasses
+    	
+		List<RelationshipDefinition> existingDefinitions = graphSchema.getRelationshipDefinitions()
+		List<RelationshipDefinition> newDefinitions = new ArrayList<RelationshipDefinition>()
+
+        edgeDefClasses.each { Class edc ->
+        	log.trace "findNewRelationshipDefinitions edc: $edc"
+
+            edc.values().each { EdgeDefTrait edef ->
+            	log.trace "findNewRelationshipDefinitions edef: $edef"
+
+            	// check if already defined
+            	def found = existingDefinitions.find {
+            		it.label == edef.label && it.nameSpace == edef.nameSpace
+            	}
+            	if (!found) {
+					def relDef = RelationshipDefinition.create(edef)
+					log.trace "found new relationship definition ${relDef.label} ${relDef}"
+	            	newDefinitions << relDef
+            	}
+            }
+        }
+
+        return newDefinitions
+    }
 
     
     /** */
@@ -355,9 +422,8 @@ abstract class CoreGraph implements GremlinTrait {
 
 
 	///////////////////////////////////////////////////////////////////////////
-	// REAPER METHOD GRAPH MODEL
+	// GRAPH MODEL - REAPER METHODS
 	///////////////////////////////////////////////////////////////////////////
-
 
 	/** */
     public List<VertexLabelDefinition> reaperMethodLabelDefinitions(Graph graph, GraphTraversalSource g, String packageName) {
@@ -414,7 +480,7 @@ abstract class CoreGraph implements GremlinTrait {
 	        		tpd = DynamicVertexDef.singletonFromCamelCase(graph, g, tpn)
 	    		}
 
-	    		// HACKY: add new vertex label definition iff it looks like one was created,
+	    		// HACKY: add new vertex definition iff it looks like one was created,
 	    		// ie, it's a DynamicVertexDef
 	    		log.trace "tpcd:$tpcd"
 	    		log.trace "tpd:$tpd"
@@ -455,7 +521,6 @@ abstract class CoreGraph implements GremlinTrait {
 	///////////////////////////////////////////////////////////////////////////
 	// CONTROLLED INSTANCES
 	///////////////////////////////////////////////////////////////////////////
-
 
 	/** */
 	public List<Vertex> createControlledInstances(Graph graph, GraphTraversalSource g) {

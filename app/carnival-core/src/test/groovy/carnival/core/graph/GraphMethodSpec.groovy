@@ -409,6 +409,14 @@ public class GraphMethodSpec extends Specification {
         gm.arguments != null
         gm.arguments instanceof Map
         gm.arguments.equals([a:'1', b:'2'])
+
+        when:
+        def argsAlias = gm.args
+
+        then:
+        argsAlias != null
+        argsAlias instanceof Map
+        argsAlias.equals([a:'1', b:'2'])
     }
 
 

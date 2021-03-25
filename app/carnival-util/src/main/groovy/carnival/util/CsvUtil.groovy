@@ -2,8 +2,9 @@ package carnival.util
 
 
 
-import java.io.FileWriter
 import java.io.Writer
+import java.io.FileWriter
+import java.io.FileReader
 import java.io.Reader
 import java.io.StringReader
 
@@ -39,6 +40,14 @@ class CsvUtil {
         assert text != null
         def reader = new StringReader(text)
         createReaderHeaderAware(reader)
+    }
+
+
+    static CSVReaderHeaderAware createReaderHeaderAware(File file) {
+        def reader = new FileReader(file)
+        new CSVReaderHeaderAwareBuilder(reader)
+            .withCSVParser(DEFAULT_PARSER)
+        .build()
     }
 
 
@@ -80,6 +89,7 @@ class CsvUtil {
      *
      */
     static List<Map> readFromCsvFile(String filename) {
+        assert filename != null
         File df = new File(filename)
         return readFromCsvFile(df)
     }
@@ -90,6 +100,8 @@ class CsvUtil {
      *
      */
     static List<Map> readFromCsvFile(File file) {
+        assert file != null
+        assert file.exists()
         def csvReader = CsvUtil.createReaderHeaderAware(file.text)
         List<Map> data = []
         while (CsvUtil.hasNext(csvReader)) {

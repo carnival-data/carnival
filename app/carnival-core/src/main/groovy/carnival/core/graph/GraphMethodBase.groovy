@@ -41,6 +41,16 @@ class GraphMethodBase {
 
 
     ///////////////////////////////////////////////////////////////////////////
+    // ACCESSORS
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    public Map getArgs() {
+        this.arguments
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////
     // BUILDER METHODS
     ///////////////////////////////////////////////////////////////////////////
 
@@ -166,7 +176,8 @@ class GraphMethodBase {
         // if an exception was caught, record the message in the process vertex
         if (exception != null) {
             try {
-                Core.PX.EXCEPTION_MESSAGE.set(procV, exception.message)
+                String msg = exception.message ?: "${exception.class}"
+                Core.PX.EXCEPTION_MESSAGE.set(procV, msg)
             } catch (Exception e) {
                 log.warn "could not set exception message of process vertex ${procV} ${e.message}"
             }

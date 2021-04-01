@@ -27,35 +27,26 @@ public class GraphMethodSpec extends Specification {
 
     static class TestGraphMethodNameOveride extends GraphMethod {
         String name = 'my-funky-name'
-        public Map execute(Graph graph, GraphTraversalSource g) {
-            [:]
-        }
+        public void execute(Graph graph, GraphTraversalSource g) {}
     }
 
     static class TestGraphMethodProcessClassOveride extends GraphMethod {
         VertexDefTrait processVertexDef = GraphMethodSpec.VX.SOME_REAPER_PROCESS
         VertexDefTrait processClassVertexDef = GraphMethodSpec.VX.SOME_REAPER_PROCESS_CLASS
-        public Map execute(Graph graph, GraphTraversalSource g) {
-            [:]
-        }
+        public void execute(Graph graph, GraphTraversalSource g) {}
     }
 
     static class TestGraphMethodProcessOveride extends GraphMethod {
         VertexDefTrait processVertexDef = GraphMethodSpec.VX.SOME_REAPER_PROCESS
-        public Map execute(Graph graph, GraphTraversalSource g) {
-            [:]
-        }
+        public void execute(Graph graph, GraphTraversalSource g) {}
     }
 
-
     static class TestGraphMethod extends GraphMethod {
-        public Map execute(Graph graph, GraphTraversalSource g) {
-            [:]
-        }
+        public void execute(Graph graph, GraphTraversalSource g) {}
     }
 
     static class TestGraphMethodThrowsException extends GraphMethod {
-        public Map execute(Graph graph, GraphTraversalSource g) {
+        public void execute(Graph graph, GraphTraversalSource g) {
             throw new Exception('boom')
         }
     }

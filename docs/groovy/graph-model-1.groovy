@@ -104,25 +104,3 @@ Now that we have added the EX1 model to our graph model, there are no model
 errors.
 model: ${cg.checkModel()}
 """
-
-
-
-/*
-class GmsTestMethods implements GraphMethods {
-
-    class TestGraphMethod extends GraphMethod {
-        public Map execute(Graph graph, GraphTraversalSource g) {
-            VX.SOME_THING.instance().create(graph)
-        }
-    }
-
-    class TestGraphMethodThrowsException extends GraphMethod {
-        public Map execute(Graph graph, GraphTraversalSource g) {
-            throw new Exception('boom')
-        }
-    }
-
-}
-
-println "HELLOOOOO"
-*/

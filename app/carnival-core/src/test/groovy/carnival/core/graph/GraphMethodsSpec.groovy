@@ -18,13 +18,11 @@ import carnival.graph.VertexDefinition
 class GmsTestMethods implements GraphMethods {
 
     class TestGraphMethod extends GraphMethod {
-        public Map execute(Graph graph, GraphTraversalSource g) {
-            [:]
-        }
+        public void execute(Graph graph, GraphTraversalSource g) {}
     }
 
     class TestGraphMethodThrowsException extends GraphMethod {
-        public Map execute(Graph graph, GraphTraversalSource g) {
+        public void execute(Graph graph, GraphTraversalSource g) {
             throw new Exception('boom')
         }
     }

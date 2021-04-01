@@ -35,14 +35,19 @@ abstract class GraphMethod extends GraphMethodBase {
      * implement the logic of the method.
      *
      */
-    abstract Map execute(Graph graph, GraphTraversalSource g) 
+    abstract void execute(Graph graph, GraphTraversalSource g) 
 
+
+    ///////////////////////////////////////////////////////////////////////////
+    // RESULT
+    ///////////////////////////////////////////////////////////////////////////
+
+    Map result = [:]
 
 
     ///////////////////////////////////////////////////////////////////////////
     // CALL
     ///////////////////////////////////////////////////////////////////////////
-
 
     /**
      * Calls the execute() method and represents the call in the graph.
@@ -52,7 +57,6 @@ abstract class GraphMethod extends GraphMethodBase {
         assert graph != null
         assert g != null
 
-        Map result 
         Instant stopTime
         Exception exception
         Instant startTime
@@ -61,7 +65,7 @@ abstract class GraphMethod extends GraphMethodBase {
         // and stop times
         try {
             startTime = Instant.now()
-            result = execute(graph, g)
+            execute(graph, g)
         } catch (Exception e) {
             exception = e
         } finally {

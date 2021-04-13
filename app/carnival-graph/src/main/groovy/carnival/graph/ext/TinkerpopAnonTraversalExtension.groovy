@@ -30,6 +30,11 @@ class TinkerpopAnonTraversalExtension {
     }
 
     /** */
+    static GraphTraversal "in"(__ traversal, EdgeDefTrait edef) {
+        __.inE(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace).outV()
+    }
+
+    /** */
     static GraphTraversal isa(__ traversal, VertexDefTrait vdef) {
         __.hasLabel(vdef.label).has(Base.PX.NAME_SPACE.label, vdef.nameSpace)
     }

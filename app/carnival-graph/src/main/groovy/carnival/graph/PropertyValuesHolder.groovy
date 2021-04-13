@@ -128,6 +128,7 @@ class PropertyValuesHolder<T> {
     public Element setElementProperties(Element el) {
         def pvs = allPropertyValues()
         pvs.each { PropertyDefTrait vp, Object val ->
+            if (val instanceof org.codehaus.groovy.runtime.GStringImpl) val = val.toString()
             el.property(vp.label, val) 
         }
         el

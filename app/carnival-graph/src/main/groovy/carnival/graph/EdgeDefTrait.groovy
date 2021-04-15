@@ -48,6 +48,7 @@ trait EdgeDefTrait extends WithPropertyDefsTrait {
     
     /** Getter wrapper for propertyDefs */
     void setEdgeProperties(ArrayList<PropertyDefTrait> propertyDefs) {
+        assert propertyDefs != null
         propertyDefs = propertyDefs
     }
 
@@ -118,6 +119,7 @@ trait EdgeDefTrait extends WithPropertyDefsTrait {
 
     /** */
     public void assertRange(VertexDefTrait toDef) {
+        assert toDef != null
         if (this.range.size() > 0) {
             if (this.range.contains(toDef)) return
             if (toDef.isGlobal() && this.range.find({ it.label == toDef.label })) return
@@ -129,6 +131,7 @@ trait EdgeDefTrait extends WithPropertyDefsTrait {
 
     /** */
     public void assertRange(Vertex to) {
+        assert to != null
         def toDef = VertexDef.lookup(to)
         assertRange(toDef)        
     }
@@ -185,9 +188,6 @@ trait EdgeDefTrait extends WithPropertyDefsTrait {
 
     /** */
     public Edge relate(GraphTraversalSource g, Vertex from, VertexDefTrait to) {
-        assert g != null
-        assert from != null
-        assert to != null
         setRelationship(g, from, to)
     }
 
@@ -229,6 +229,10 @@ trait EdgeDefTrait extends WithPropertyDefsTrait {
 
     /** */
     public Edge setRelationship(GraphTraversalSource g, Vertex from, Vertex to) {
+        assert g != null
+        assert from != null
+        assert to != null
+
         assertDomain(from)
         assertRange(to)
 
@@ -250,6 +254,9 @@ trait EdgeDefTrait extends WithPropertyDefsTrait {
 
     /** */
     public Edge addEdge(Vertex from, Vertex to) {
+        assert from != null
+        assert to != null
+
         def lbl = getLabel()
         def ns = getNameSpace()
         from.addEdge(

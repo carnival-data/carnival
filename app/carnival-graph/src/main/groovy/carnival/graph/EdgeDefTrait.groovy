@@ -98,6 +98,7 @@ trait EdgeDefTrait extends WithPropertyDefsTrait {
 
     /** */
     public void assertDomain(VertexDefTrait fromDef) {
+        assert fromDef != null
         if (this.domain.size() > 0) {
             if (this.domain.contains(fromDef)) return
             if (fromDef.isGlobal() && this.domain.find({ it.label == fromDef.label })) return
@@ -109,6 +110,7 @@ trait EdgeDefTrait extends WithPropertyDefsTrait {
 
     /** */
     public void assertDomain(Vertex from) {
+        assert from != null
         def fromDef = VertexDef.lookup(from)
         assertDomain(fromDef)
     }
@@ -154,6 +156,10 @@ trait EdgeDefTrait extends WithPropertyDefsTrait {
 
     /** */
     public Edge setRelationship(GraphTraversalSource g, VertexDefTrait from, VertexDefTrait to) {
+        assert g != null
+        assert from != null
+        assert to != null
+
         assertDomain(from)
         assertRange(to)
 
@@ -179,12 +185,19 @@ trait EdgeDefTrait extends WithPropertyDefsTrait {
 
     /** */
     public Edge relate(GraphTraversalSource g, Vertex from, VertexDefTrait to) {
+        assert g != null
+        assert from != null
+        assert to != null
         setRelationship(g, from, to)
     }
 
 
     /** */
     public Edge setRelationship(GraphTraversalSource g, Vertex from, VertexDefTrait to) {
+        assert g != null
+        assert from != null
+        assert to != null
+
         assertDomain(from)
         assertRange(to)
 

@@ -82,6 +82,7 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
 
     /** */
     public EdgeBuilder from(Vertex v) {
+        assert v != null
         edgeDef.assertDomain(v)
         fromVertex = v
         this

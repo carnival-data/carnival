@@ -55,7 +55,7 @@ class JvsTestVineWithResource extends JvsTestVine {
     String sharedResource = 'blah-'
 
 
-    class PersonVineMethod extends JsonVineMethod<JvsTestVine.Person> { 
+    class VineMethodThatReferencesSharedResource extends JsonVineMethod<JvsTestVine.Person> { 
         @Override
         File _cacheDirectory() { tmpDir() }
 
@@ -117,7 +117,7 @@ class JsonVineSpec extends Specification {
         when:
         def vine = new JvsTestVineWithResource()
         def res = vine
-            .method('PersonVineMethod')
+            .method('VineMethodThatReferencesSharedResource')
             .args(p1:'alice')
             .mode(CacheMode.IGNORE)
             .call()

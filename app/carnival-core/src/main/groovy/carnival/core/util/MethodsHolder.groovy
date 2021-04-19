@@ -23,10 +23,14 @@ trait MethodsHolder {
         assert methodClass != null
 
         Set<Class> subClasses = new HashSet<Class>()
-        subClasses.addAll(Arrays.asList(this.class.getDeclaredClasses()));
+        Class cl = this.class
+        while (cl != null) {
+            subClasses.addAll(Arrays.asList(cl.getDeclaredClasses()));
+            cl = cl.getSuperclass()
+        }
         //log.debug "subClasses: ${subClasses}"
         
-        Set<Class> methodClasses = subClasses.findAll { cl -> methodClass.isAssignableFrom(cl) }
+        Set<Class> methodClasses = subClasses.findAll { methodClass.isAssignableFrom(it) }
 
         return methodClasses
     }

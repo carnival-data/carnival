@@ -49,7 +49,7 @@ class MdtTestVineWithResource extends MdtTestVine {
 
     String sharedResource = 'blah-'
 
-    class PersonVineMethod extends MappedDataTableVineMethod { 
+    class VineMethodSharedResource extends MappedDataTableVineMethod { 
         //@Override
         File _cacheDirectory() { 
             def td
@@ -84,7 +84,7 @@ class MappedDataTableVineSpec extends Specification {
         when:
         def vine = new MdtTestVineWithResource()
         def res = vine
-            .method('PersonVineMethod')
+            .method('VineMethodSharedResource')
             .args(p1:'alice')
             .mode(CacheMode.IGNORE)
             .call()

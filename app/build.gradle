@@ -37,10 +37,6 @@ plugins {
 ///////////////////////////////////////////////////////////////////////////////
 // Java
 ///////////////////////////////////////////////////////////////////////////////
-java {
-    sourceCompatibility = JavaVersion.toVersion('11')
-    targetCompatibility = JavaVersion.toVersion('11')
-}
 task printJavaVersion {
     println "[Carnival] Java version: ${JavaVersion.current()}"
 }
@@ -55,8 +51,9 @@ compileGroovy.dependsOn('printJavaVersion')
 ///////////////////////////////////////////////////////////////////////////////
 allprojects {
     group = carnivalGroup
-    sourceCompatibility = JavaVersion.toVersion("${javaVersion}")
     version = carnivalVersion   // see https://semver.org/
+    sourceCompatibility = JavaVersion.toVersion("${javaVersion}")
+    targetCompatibility = JavaVersion.toVersion("${javaVersion}")
 
     repositories {
         mavenCentral()

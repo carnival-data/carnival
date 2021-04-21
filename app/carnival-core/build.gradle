@@ -118,8 +118,6 @@ dependencies {
 
     // http libraries
     // http-builder was deprecated by http-builder-ng
-    // - carnival-core/vine/http.groovy uses the updated http-builder-ng library
-    // - carnival-pmbb/vine/redcapVine.groovy uses the old http-builder library; should be updated to use http.groovy
     implementation 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
     implementation 'io.github.http-builder-ng:http-builder-ng-core:1.0.4'
 

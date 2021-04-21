@@ -28,7 +28,6 @@ import carnival.graph.PropertyDefTrait
 import carnival.graph.VertexDefTrait
 import carnival.graph.DynamicVertexDef
 import carnival.graph.ControlledInstance
-import carnival.core.graphold.ReaperMethod
 
 
 
@@ -151,7 +150,6 @@ abstract class CoreGraph implements GremlinTrait {
 	public void initializeGremlinGraph(Graph graph, GraphTraversalSource g, String packageName) {
 		log.info "CoreGraph initializeGremlinGraph graph:$graph g:$g packageName:$packageName"
 
-		reaperMethodLabelDefinitions(graph, g, packageName)
 		initializeDefinedVertices(graph, g, packageName)
 		initializeDefinedEdges(graph, g, packageName)
 		createControlledInstances(graph, g)
@@ -417,103 +415,6 @@ abstract class CoreGraph implements GremlinTrait {
     	log.trace "findEdgeDefClases classes: $classes"
 
     	return classes
-    }
-
-
-
-	///////////////////////////////////////////////////////////////////////////
-	// GRAPH MODEL - REAPER METHODS
-	///////////////////////////////////////////////////////////////////////////
-
-	/** */
-    public List<VertexLabelDefinition> reaperMethodLabelDefinitions(Graph graph, GraphTraversalSource g, String packageName) {
-    	def rmcs = findReaperMethodClasses(packageName)
-    	log.trace "rmcs: $rmcs"
-
-    	reaperMethodLabelDefinitions(graph, g, rmcs)
-    }
-
-
-	/** */
-    public List<VertexLabelDefinition> reaperMethodLabelDefinitions(Graph graph, GraphTraversalSource g, Set<Class<ReaperMethod>> rmcs) {
-
-    	List<VertexLabelDefinition> labelDefs = new ArrayList<VertexLabelDefinition>()
-    	def existingDefinitions = graphSchema.labelDefinitions
-
-    	withTransactionIfSupported(graph) {
-			rmcs.each { rmc ->
-
-	        	// try to create a reaper method instance
-	        	def rm
-	        	try {
-	        		rm = rmc.newInstance()
-	        		log.trace "rm: $rm"
-	    		} catch (Throwable t) {
-	    			log.trace "rmc:${rmc.simpleName} t:${t.message}"
-	    		}
-	    		if (!rm) return
-
-	    		// try to get hard coded defs
-	    		def tpcd
-	    		def tpd
-	        	try {
-	        		tpcd = rm.getTrackedProcessClassDef()
-	        		tpd = rm.getTrackedProcessDef()
-	    		} catch (Throwable t) {
-	    			log.trace "rmc:${rmc.simpleName} t:${t.message}"
-	    		}
-
-	    		// they both need to be defined or none of them
-	    		if ((tpcd == null && tpd != null) || (tpcd != null && tpd == null)) throw new RuntimeException("both or none must be defined, tracked process def and tracked process class def, tpcd:$tpcd tpd:$tpd")
-	    		
-	    		// if neither is defined, create new defs
-	    		// DynamicVertexDef.singletonFromCamelCase will create the singleton vertex
-	    		// it is assumed that if tpcd and tpd are defined, then they will have been
-	    		// created by the initializeDefinedVertices machinery
-	    		if (!(tpcd && tpd)) {
-	        		def tpcn = rm.getTrackedProcessClassName()
-	        		log.trace "tpcn:$tpcn"
-	        		tpcd = DynamicVertexDef.singletonFromCamelCase(graph, g, tpcn)
-
-	        		def tpn = rm.getTrackedProcessName()
-	        		log.trace "tpn:$tpn"
-	        		tpd = DynamicVertexDef.singletonFromCamelCase(graph, g, tpn)
-	    		}
-
-	    		// HACKY: add new vertex definition iff it looks like one was created,
-	    		// ie, it's a DynamicVertexDef
-	    		log.trace "tpcd:$tpcd"
-	    		log.trace "tpd:$tpd"
-	    		[tpcd, tpd].each { vdef ->
-	    			if (!(vdef instanceof DynamicVertexDef)) return
-
-	            	def found = existingDefinitions.find {
-	            		it.label == vdef.label && it.nameSpace == vdef.nameSpace
-	            	}
-	            	if (!found) {
-		    			def vld = VertexLabelDefinition.create(vdef)
-		                log.trace "adding VertexLabelDefinition ${vdef.label} $vld"
-		                labelDefs << vld
-	            	}
-	    		}
-
-	        }    		
-    	}
-        
-        graphSchema.dynamicLabelDefinitions.addAll(labelDefs)
-
-        return labelDefs
-    }	
-
-
-    /** */
-    public Set<Class<ReaperMethod>> findReaperMethodClasses(String packageName) {
-    	// find all vertex defs
-    	Reflections reflections = new Reflections(packageName)
-    	Set<Class<ReaperMethod>> targetClasses = reflections.getSubTypesOf(ReaperMethod.class)
-    	log.trace "findReaperMethodClasses packageName:$packageName targetClasses:$targetClasses"
-
-    	return targetClasses
     }
 
 

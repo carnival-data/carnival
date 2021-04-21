@@ -2,8 +2,8 @@
 
 The Carnival Gradle Plugin facilites the creation of applications build using Gradle, such as Micronaut services. It does the following:
 
--   Sets the `carnival.home` property of the test and run tasks.
--   Sets the logback configuration property of the test and run tasks to: `${home}/config/logback.xml`.
+- Sets the `carnival.home` property of the test and run tasks.
+- Sets the logback configuration property of the test and run tasks to: `${home}/config/logback.xml`.
 
 Carnival will automatically look for an application configuration file in `${home}/config/application.pml`.
 
@@ -23,8 +23,8 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath group:'org.pmbb', name:'carnival-gradle', version:'0.2.7'
+        classpath group:'org.carnival', name:'carnival-gradle', version:'0.2.7'
     }
 }
-apply plugin: 'org.pmbb.carnival'
+apply plugin: 'carnival.application'
 ```

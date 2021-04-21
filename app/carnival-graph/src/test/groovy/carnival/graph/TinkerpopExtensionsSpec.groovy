@@ -31,8 +31,8 @@ class TinkerpopExtensionsSpec extends Specification {
             vertexProperties:[PX.ID]
         )
 
-        public VX() {}
-        public VX(Map m) {m.each { k,v -> this."$k" = v }}
+        VX() {}
+        VX(Map m) {m.each { k,v -> this."$k" = v }}
     }
 
     static enum VX2 implements VertexDefTrait {
@@ -40,8 +40,8 @@ class TinkerpopExtensionsSpec extends Specification {
             vertexProperties:[PX.ID]
         )
 
-        public VX2() {}
-        public VX2(Map m) {m.each { k,v -> this."$k" = v }}
+        VX2() {}
+        VX2(Map m) {m.each { k,v -> this."$k" = v }}
     }
 
     static enum EX implements EdgeDefTrait {

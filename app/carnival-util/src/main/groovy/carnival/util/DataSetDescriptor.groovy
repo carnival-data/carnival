@@ -543,7 +543,7 @@ enum FeatureDataType {
 
     String description
 
-    public FeatureDataType(String description) {
+    FeatureDataType(String description) {
         this.description = description
     }
 }

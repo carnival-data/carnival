@@ -45,8 +45,8 @@ class EnumsAndTraitsSpec extends Specification {
         PROP_A(field1:'v1'),
         PROP_B(field1:'v2')
 
-        public PX() {}
-        public PX(Map m) {m.each { k,v -> this."$k" = v }}
+        PX() {}
+        PX(Map m) {m.each { k,v -> this."$k" = v }}
     }
 
 

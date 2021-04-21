@@ -27,8 +27,8 @@ class PropertyValuesHolderSpec extends Specification {
             ]
         )
 
-        public VX() {}
-        public VX(Map m) {m.each { k,v -> this."$k" = v }}
+        VX() {}
+        VX(Map m) {m.each { k,v -> this."$k" = v }}
     }
 
     static enum PX implements PropertyDefTrait {

@@ -54,9 +54,9 @@ compileGroovy.dependsOn('printJavaVersion')
 // common plugins
 ///////////////////////////////////////////////////////////////////////////////
 allprojects {
-    group = 'org.pmbb'
-    sourceCompatibility = JavaVersion.toVersion('11')
-    version = '2.0.1-SNAPSHOT'   // see https://semver.org/
+    group = carnivalGroup
+    sourceCompatibility = JavaVersion.toVersion("${javaVersion}")
+    version = carnivalVersion   // see https://semver.org/
 
     repositories {
         mavenCentral()
@@ -227,75 +227,6 @@ def browse(path) {
     }
 }
 
-
-///////////////////////////////////////////////////////////////////////////////
-// convenience local publishing tasks
-///////////////////////////////////////////////////////////////////////////////
-task refreshUtil {
-    dependsOn 'carnival-util:publishToMavenLocal'
-}
-
-task publishGraph {
-    dependsOn refreshUtil
-    dependsOn 'carnival-graph:publishToMavenLocal'
-}
-
-task publishCore {
-    dependsOn publishGraph
-    dependsOn 'carnival-core:publishToMavenLocal'
-}
-
-task publishAll {
-    dependsOn publishCore
-    dependsOn 'carnival-gradle:publishToMavenLocal'
-    //dependsOn 'carnival-gradle-library:publishToMavenLocal'
-    //dependsOn 'carnival-gradle-application:publishToMavenLocal'
-}
-
-task deleteLocalRepos {
-    doLast {
-        [
-            "${System.getProperty('user.home')}/.m2/repository/edu/upenn/pmbb/", 
-            "${System.getProperty('user.home')}/.groovy/grapes/org.pmbb/"
-        ].each { bd ->
-            ant.echo(bd)
-            
-            def file = new File(bd)
-            if (!file.exists()) return
-            
-            def path = ant.path {
-                dirset(dir:bd, includes:'carnival-*')
-            }
-            path.list().each {
-                println it
-                ant.delete(includeEmptyDirs:true, verbose:true, dir:it)
-            }        
-            //ant.delete(includeEmptyDirs:true, verbose:true) {
-            //    dirset(dir:bd, includes:'carnival-*')
-            //}
-        }
-    }
-}
-
-task cleanBuild {
-    subprojects.each { dependsOn("${it.name}:clean") } 
-    subprojects.each { finalizedBy("${it.name}:compileGroovy") } 
-    doLast {println 'cleanBuild'} 
-}
-
-task localRebuildAndPublish { 
-    dependsOn cleanBuild
-    dependsOn deleteLocalRepos
-    finalizedBy publishAll
-    doLast {println 'localRebuildAndPublish'} 
-}
-
-task localBuildAndPublish { 
-    subprojects.each { dependsOn("${it.name}:compileGroovy") } 
-    dependsOn deleteLocalRepos
-    finalizedBy publishAll
-    doLast {println 'localBuildAndPublish'} 
-}
 
 
 ///////////////////////////////////////////////////////////////////////////////

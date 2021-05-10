@@ -37,6 +37,16 @@ trait GraphMethods extends MethodsHolder {
     }
 
 
+    /** */
+    GraphMethod method(Class gmc) {
+        assert gmc != null
+        Set<Class> allGmcs = allGraphMethodClasses()
+        Class foundGmc = allGmcs.find { it == gmc }
+        assert foundGmc
+        return foundGmc.newInstance(this)
+    }
+
+
     ///////////////////////////////////////////////////////////////////////////
     // UTILITY
     ///////////////////////////////////////////////////////////////////////////    
@@ -64,6 +74,6 @@ trait GraphMethods extends MethodsHolder {
         def vm = vmc.newInstance(this)
 
         return vm
-    }    
+    }
 
 }

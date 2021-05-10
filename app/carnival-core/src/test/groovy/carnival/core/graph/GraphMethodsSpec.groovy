@@ -125,8 +125,33 @@ public class GraphMethodsSpec extends Specification {
     }
 
 
+    void "method(class) fails if passed bad class"() {
+        when:
+        def gms = new GmsTestMethods()
+        def allGmcs = gms.allGraphMethodClasses()
+        def aGmc = this.class
+        def gm = gms.method(aGmc)
 
-    void "method()"() {
+        then:
+        Throwable e = thrown()
+    }
+
+
+    void "method(class)"() {
+        when:
+        def gms = new GmsTestMethods()
+        def allGmcs = gms.allGraphMethodClasses()
+        def aGmc = allGmcs.find { it.simpleName.contains('ThrowsException') }
+        def gm = gms.method(aGmc)
+
+        then:
+        gm != null
+        gm instanceof GmsTestMethods.TestGraphMethodThrowsException
+    }
+
+
+
+    void "method(name)"() {
         when:
         def gms = new GmsTestMethods()
         def gm = gms.method('TestGraphMethod')

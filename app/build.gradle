@@ -11,7 +11,7 @@
 buildscript {
     repositories {
         mavenCentral()
-        jcenter()
+        mavenLocal()
     }
     dependencies {
         classpath group: 'org.yaml', name: 'snakeyaml', version: '1.27'
@@ -57,7 +57,6 @@ allprojects {
 
     repositories {
         mavenCentral()
-        jcenter()
         mavenLocal()
         flatDir(dir: 'libs', name: 'Local libs')  
     }

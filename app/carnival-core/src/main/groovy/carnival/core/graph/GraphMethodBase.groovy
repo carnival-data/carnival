@@ -28,7 +28,7 @@ class GraphMethodBase {
      * the arguments supplied to the execute method and used to compute a hash
      * of the call for unique naming.
      */
-    Map arguments
+    Map arguments = new HashMap()
 
     /** */
     VertexDefTrait processVertexDef = Core.VX.GRAPH_PROCESS

@@ -31,6 +31,11 @@ class TinkerpopTraversalExtension {
     }
 
     /** */
+    static GraphTraversal isa(DefaultTraversal traversal, EdgeDefTrait edef) {
+        traversal.hasLabel(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace)
+    }
+
+    /** */
     static GraphTraversal both(DefaultTraversal traversal, EdgeDefTrait edef) {
         traversal.bothE(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace).otherV()
     }

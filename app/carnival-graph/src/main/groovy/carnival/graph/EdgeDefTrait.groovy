@@ -78,6 +78,22 @@ trait EdgeDefTrait extends WithPropertyDefsTrait {
     }
 
 
+    ///////////////////////////////////////////////////////////////////////////
+    // TYPE CHECKING
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    public boolean isa(Edge e) {
+        assert e != null
+        (e.label() == getLabel() && Base.PX.NAME_SPACE.valueOf(e) == getNameSpace())   
+    }
+
+    /** */
+    public boolean isa(Vertex v) {
+        assert v != null
+        return false
+    }
+
 
     ///////////////////////////////////////////////////////////////////////////
     // DOMAIN / RANGE

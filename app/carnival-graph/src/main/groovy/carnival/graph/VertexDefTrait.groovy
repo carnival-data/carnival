@@ -173,8 +173,14 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
 
 
     ///////////////////////////////////////////////////////////////////////////
-    // SIMPLE VALIDATION
+    // TYPE CHECKING
     ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    public boolean isa(Edge e) {
+        assert e != null
+        return false
+    }
 
     /** */
     public boolean isa(Vertex v) {

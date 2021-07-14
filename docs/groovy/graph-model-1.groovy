@@ -2,8 +2,8 @@
 // DEPENDENCIES
 ///////////////////////////////////////////////////////////////////////////////
 
-@Grab('org.pmbb:carnival-core:2.0.1-SNAPSHOT')
-@Grab('org.apache.tinkerpop:gremlin-core:3.4.8')
+@Grab('org.carnival:carnival-core:2.1.0-SNAPSHOT')
+@Grab('org.apache.tinkerpop:gremlin-core:3.4.10')
 
 
 ///////////////////////////////////////////////////////////////////////////////

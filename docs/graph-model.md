@@ -34,6 +34,8 @@ Vertex person1 = VX.PERSON.instance().withProperty(PX.IS_ALIVE, true).create(gra
 
 The name space of a vertex will be prepended by the package and name of the enclosing class, eg. my.package.TheClass$VX.
 
+_Example: Edge definition_
+
 ```groovy
 @EdgeDefinition
 static enum EX {

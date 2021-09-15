@@ -21,6 +21,6 @@ jobs:
         -w /appsrc/app \
         carnival_app gradle test coveralls --console=plain --continue -Dtest.http=false
       env:
-       COVERALLS_REPO_TOKEN=${{ secrets.COVERALLS_REPO_TOKEN }}
+       COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
 
 

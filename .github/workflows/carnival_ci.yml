@@ -16,10 +16,10 @@ jobs:
     
     - name: Run tests and publish coverage results
       run: |
-        docker run \ 
-        -v $(pwd):/appsrc \
+        docker-compose -f docker-compose-test.yml \ 
         -w /appsrc/app \
-        carnival_app gradle test coveralls --console=plain --continue -Dtest.http=false
+        app \ 
+        gradle test coveralls --console=plain --continue -Dtest.http=false
       env:
        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
 

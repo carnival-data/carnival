@@ -16,7 +16,6 @@ jobs:
     
     - name: Run tests and publish coverage results
       run: | 
-        echo $COVERALLS_REPO_TOKEN
         docker-compose -f docker-compose-test.yml run -w /appsrc/app app gradle test coveralls --console=plain --continue -e COVERALLS_REPO_TOKEN="$COVERALLS_REPO_TOKEN" -Dtest.http=false
       env:
        COVERALLS_REPO_TOKEN: FOOBAR_TOKEN

@@ -17,8 +17,7 @@ jobs:
     - name: Run tests and publish coverage results
       run: |
         docker-compose -f docker-compose-test.yml run \ 
-        -w /appsrc/app \
-        app \ 
+        -w /appsrc/app app \ 
         gradle test coveralls --console=plain --continue
       env:
        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}

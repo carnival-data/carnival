@@ -24,7 +24,7 @@
 
 ## <a name="overview"></a> Overview
 
-Carnval uses objects called _vines_ to connect to external data sources and _reapers_ encode the domain knowledge specific to that data source. Vines can connect to sources such as MySql or Oracle databases, RedCap projects, and CSV files. Some vine features include:
+Carnival uses objects called _vines_ to connect to external data sources and _reapers_ encode the domain knowledge specific to that data source. Vines can connect to sources such as MySql or Oracle databases, RedCap projects, and CSV files. Some vine features include:
 
 -   Parameterized SQL queries
 -   Utilities to compose iterative SQL from lists of identifiers and codes

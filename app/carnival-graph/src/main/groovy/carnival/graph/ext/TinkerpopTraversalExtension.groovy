@@ -24,6 +24,10 @@ import carnival.graph.Base
 /** */
 class TinkerpopTraversalExtension {
 
+    /** */
+    static GraphTraversal properties(DefaultTraversal traversal, PropertyDefTrait pdef) {
+        traversal.properties(pdef.label)
+    }
 
     /** */
     static GraphTraversal isa(DefaultTraversal traversal, VertexDefTrait vdef) {

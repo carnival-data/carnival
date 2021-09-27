@@ -83,6 +83,12 @@ trait PropertyDefTrait {
 	}
 
 
+	/** */
+	public PropertyDefTrait constraints(Map m) {
+        withConstraints(m)
+    }
+
+
     /** */
     public PropertyDefTrait defaultValue(Object o) {
         def newObj = new PropertyDefTraitHolder(this)

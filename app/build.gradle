@@ -30,7 +30,7 @@ plugins {
     
     // code coverage
     id 'jacoco'
-    id 'com.github.kt3k.coveralls' version '2.6.3'
+    id 'com.github.kt3k.coveralls' version '2.12.0'
 }
 
 

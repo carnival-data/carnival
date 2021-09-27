@@ -1,0 +1,23 @@
+name: Carnival CI
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  test_runner:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Build testing container
+      run: docker-compose -f ./docker-compose-test.yml build -m 8g
+    
+    - name: Run tests and publish coverage results
+      run: |
+        docker-compose -f docker-compose-test.yml run -e COVERALLS_REPO_TOKEN -w /appsrc/app app gradle test coveralls --console=plain --continue -Dtest.http=false
+      env:
+       COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+
+

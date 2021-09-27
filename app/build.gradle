@@ -88,6 +88,9 @@ subprojects {
         implementation "org.apache.tinkerpop:neo4j-gremlin:${gremlinVersion}"
         implementation "org.neo4j:neo4j-tinkerpop-api-impl:${neo4jTinkerpopVersion}"
         implementation "org.neo4j.driver:neo4j-java-driver:${neo4JavaDriverVersion}"
+        //implementation "org.neo4j:parent:${neo4JavaDriverVersion}"
+        //implementation "org.neo4j:neo4j-community:${neo4JavaDriverVersion}"
+        //implementation "org.neo4j:neo4j-bolt:${neo4JavaDriverVersion}"
 
         // Testing
         // there are test helpers implemented in the source tree, so the

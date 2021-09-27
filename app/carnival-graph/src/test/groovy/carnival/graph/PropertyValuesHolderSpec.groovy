@@ -68,6 +68,18 @@ class PropertyValuesHolderSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
+    def "auto map properties"() {
+        when:
+        def rec = ['CIS_PROP_A':'val-a', 'CIS_PROP_B':'val-b']
+        def ph1 = VX.CIS_THING.instance().withProperties(rec)
+
+        then:
+        ph1.propertyValues.size() == 2
+        ph1.propertyValues.find({ k, v -> k.name() == PX.CIS_PROP_A.name()}).value == 'val-a'
+        ph1.propertyValues.find({ k, v -> k.name() == PX.CIS_PROP_B.name()}).value == 'val-b'
+    }
+
+
     def "with non-null properties"() {
         when:
         def ph1 = VX.CIS_THING.instance().withNonNullProperties(

@@ -69,7 +69,7 @@ class PropertyValuesHolder<T> {
 
         args.each { k, v ->
             def propertyDef = eDef.propertyDefs.find { it.name() == k }
-            assert propertyDef
+            assert propertyDef : "Could not find property definition for ${k}."
             withProperty(propertyDef, v)
         }
         return this
@@ -106,6 +106,20 @@ class PropertyValuesHolder<T> {
 
         return this
     }
+
+
+    /** */
+    public T withMatchingProperties(Map args) {
+        assert this.respondsTo("getElementDef")
+        WithPropertyDefsTrait eDef = getElementDef()
+
+        args.each { k, v ->
+            def propertyDef = eDef.propertyDefs.find { it.name() == k }
+            if (propertyDef) withProperty(propertyDef, v)
+        }
+        return this
+    }
+
 
 
     /** */

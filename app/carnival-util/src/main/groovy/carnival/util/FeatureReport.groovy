@@ -1107,6 +1107,17 @@ class FeatureReport extends MappedDataTable {
     }
 
 
+    /**
+     * Return true iff the subject has already been added to the report.
+     *
+     */
+    public boolean containsSubject(String subjectId) {
+        return this.data.containsKey(
+            toIdValue(subjectId)
+        )
+    }
+
+
     /** 
      * Add a new subject along with some features associated with that subject.
      *

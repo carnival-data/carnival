@@ -64,6 +64,24 @@ class FeatureReportSpec extends Specification {
     // DATA ADD VARIABLES
     ///////////////////////////////////////////////////////////////////////////
 
+    def "contains subject"() {
+        given:
+        def res
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'EMPI')
+        frp.dataModes([
+            FeatureReport.DataMode.ADD_SUBJECT
+        ])
+
+        expect:
+        !frp.containsSubject("1")
+
+        when:
+        frp.addSubject("1")
+
+        then:
+        frp.containsSubject("1")
+    }
+
 
     def "shift date time"() {
         given:

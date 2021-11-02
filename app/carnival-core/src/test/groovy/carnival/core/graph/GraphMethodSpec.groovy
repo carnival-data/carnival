@@ -51,6 +51,15 @@ public class GraphMethodSpec extends Specification {
         }
     }
 
+    static class TestGraphMethodArguments extends GraphMethod {
+        public void execute(Graph graph, GraphTraversalSource g) {
+            def args = arguments
+            if (args == null) throw new Exception('args are null')
+            assert args instanceof Map
+            assert args.get('a') == 1
+            assert args.get('b') == 2
+        }
+    }
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -82,6 +91,17 @@ public class GraphMethodSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+    void "arguments"() {
+        when:
+        def gm = new TestGraphMethodArguments()
+        gm.arguments(a:1, b:2)
+        def gmc = gm.call(graph, g)
+
+        then:
+        noExceptionThrown()
+    }
+
 
     void "name override"() {
         when:

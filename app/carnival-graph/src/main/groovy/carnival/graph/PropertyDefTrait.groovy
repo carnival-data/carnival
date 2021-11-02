@@ -136,11 +136,29 @@ trait PropertyDefTrait {
 
 
     /** */
+    public PropertyDefTrait set(Element el, Closure value) {
+        assert el
+        assert value != null
+        set(el, value())
+    }
+
+
+    /** */
     public PropertyDefTrait setIf(Element el, Object value, Closure cl) {
         assert el
         assert value != null
         assert cl != null
         if (cl(value)) set(el, value)
+        this
+    }
+
+
+    /** */
+    public PropertyDefTrait setIf(Element el, Closure cl) {
+        assert el
+        assert cl != null
+        def val = cl()
+        if (val != null) set(el, val)
         this
     }
 

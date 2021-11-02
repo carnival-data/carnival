@@ -80,6 +80,62 @@ class PropertyDefTraitSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
+    def "set closure result"() {
+        when:
+        def v1 = VX.THING_2.instance().create(graph)
+
+        then:
+        !PX.PROP_A.of(v1).isPresent()
+
+        when:
+        PX.PROP_A.set(v1) {1+1}
+
+        then:
+        PX.PROP_A.of(v1).isPresent()
+        PX.PROP_A.valueOf(v1) == 2
+
+        when:
+        PX.PROP_A.set(v1) { (1==1) }
+
+        then:
+        PX.PROP_A.of(v1).isPresent()
+        PX.PROP_A.valueOf(v1) == true
+
+        when:
+        PX.PROP_A.set(v1) { (1!=1) }
+
+        then:
+        PX.PROP_A.of(v1).isPresent()
+        PX.PROP_A.valueOf(v1) == false
+    }
+
+
+    def "setIf closure result"() {
+        when:
+        def v1 = VX.THING_2.instance().create(graph)
+
+        then:
+        !PX.PROP_A.of(v1).isPresent()
+
+        when:
+        PX.PROP_A.setIf(v1) {
+            null
+        }
+
+        then:
+        !PX.PROP_A.of(v1).isPresent()
+
+        when:
+        PX.PROP_A.setIf(v1) {
+            'a'
+        }
+
+        then:
+        PX.PROP_A.of(v1).isPresent()
+        PX.PROP_A.valueOf(v1) == 'a'
+    }
+
+
     def "set() respects defined properties"() {
         Exception e
 

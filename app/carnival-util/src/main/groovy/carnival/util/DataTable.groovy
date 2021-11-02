@@ -58,7 +58,7 @@ abstract class DataTable {
     ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * I believe this class is unused....
+     * See ExtensionModule.
      *
      */
     static class FieldNameExtensions {
@@ -67,13 +67,48 @@ abstract class DataTable {
         static FieldName fn(String str) {
             return FieldName.create(str)
         }
+
     }
+
 
     /**
      * Each DataTable class will habe an associated MetaData class.
      *
      */
-    static abstract class MetaData {}
+    static abstract class MetaData {
+
+        String name
+        Boolean caseSensitive = false
+        Date queryDate
+        Date dataSourceDateOfUpdate
+        Map vine
+
+        protected void setFields(Map args) {
+            assert args != null
+
+            assert args.name
+            this.name = args.name
+
+            if (args.containsKey('caseSensitive')) {
+                this.caseSensitive = args.get('caseSensitive')
+            }
+
+            if (args.get('queryDate') != null) {
+                assert ((args.queryDate instanceof String) || (args.queryDate instanceof Date)) 
+                assert (args.queryDate)
+            }
+            this.queryDate = computeDataSetDate(args, 'queryDate')
+
+            if (args.get('dataSourceDateOfUpdate') != null) {
+                assert ((args.dataSourceDateOfUpdate instanceof String) || (args.dataSourceDateOfUpdate instanceof Date)) 
+                assert (args.dataSourceDateOfUpdate)
+            }
+            this.dataSourceDateOfUpdate = computeDataSourceDate(args, 'dataSourceDateOfUpdate')
+
+            if (args.get('vine') != null) this.vine = args.vine
+        }
+        
+    }
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -84,7 +119,6 @@ abstract class DataTable {
      * a date format precise to the day for use in representing query dates
      */
     static protected SimpleDateFormat QUERY_DATE_FORMAT = new SimpleDateFormat("yyyy-M-d")
-
 
     /** 
      * a date format with no special characters that should work as part of a
@@ -100,6 +134,7 @@ abstract class DataTable {
 
     /** strings representing values that should trigger warnings */
     static final Collection<String> WARNINGS = ['null', 'NULL']
+
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -485,10 +520,13 @@ abstract class DataTable {
      * @return The input as a field name.
      *
      */
-    static String toFieldName(String val) {
+    static String fieldName(String val, Map args = [:]) {
+        //log.debug "fieldName $val $args"
         assert val != null
-        def out = val.trim().toUpperCase()
+        String out = val.trim()
+        if (!(args.get('caseSensitive'))) out = out.toUpperCase()
         if (out.length() < 1) throw new IllegalArgumentException("maps to empty field name. val:$val")
+        //log.debug "out: |$out|"
         return out
     }
 
@@ -503,9 +541,9 @@ abstract class DataTable {
      * @throws RuntimeException if more than one match is found.
      *
      */
-    static String findFieldName(String qFieldName, Map<String,String> vals) {
+    static String findFieldName(String qFieldName, Map<String,String> vals, Map args = [:]) {
         assert vals != null
-        findFieldName(qFieldName, vals.keySet())
+        DataTable.findFieldName(qFieldName, vals.keySet(), args)
     }
 
 
@@ -519,8 +557,8 @@ abstract class DataTable {
      * @throws RuntimeException if more than one match is found.
      *
      */
-    static String findFieldName(String qFieldName, Set<String> vals) {
-        def matches = vals.findAll { toFieldName(it) == toFieldName(qFieldName) }
+    static String findFieldName(String qFieldName, Set<String> vals, Map args = [:]) {
+        def matches = vals.findAll { DataTable.fieldName(it, args) == DataTable.fieldName(qFieldName, args) }
         if (matches.size() > 1) throw new RuntimeException("multiple matches for $qFieldName found in vals: $vals")
         if (matches.size() == 1) return matches.first()
         return null
@@ -535,7 +573,7 @@ abstract class DataTable {
      * @return A list of lists that contain the duplicates found.
      *
      */
-    static List<List<String>> findDuplicateFieldNames(Set<String> names) {
+    /*static List<List<String>> findDuplicateFieldNames(Set<String> names, Map args = [:]) {
         if (names == null) return []
         if (names.size() < 2) return []
 
@@ -543,15 +581,15 @@ abstract class DataTable {
         def out = []
         elements.each { el ->
             names.removeElement(el)
-            def fnEl = toFieldName(el)
+            def fnEl = toFieldName(el, args)
             names.each { name ->
-                def fnName = toFieldName(name)
+                def fnName = toFieldName(name, args)
                 if (fnName == fnEl) out << [name, el]
             }
         }
 
         return out
-    }    
+    }    */
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -568,10 +606,10 @@ abstract class DataTable {
      * @return The formatted value.
      *
      */
-    static String formatIdValue(String val) {
+    static String formatIdValue(String val, Map args = [:]) {
         if (val == null) return null
         if (val.trim().length() == 0) return val.trim()
-        return toIdValue(val)
+        return DataTable.toIdValue(val, args)
     }
 
 
@@ -582,9 +620,9 @@ abstract class DataTable {
      * @return The BigDecimal formatted as an ID value String.
      *
      */
-    static String formatIdValue(java.math.BigDecimal val) {
+    static String formatIdValue(java.math.BigDecimal val, Map args = [:]) {
         assert val != null
-        return formatIdValue(String.valueOf(val))
+        return DataTable.formatIdValue(String.valueOf(val), args)
     }
 
 
@@ -594,14 +632,16 @@ abstract class DataTable {
      * that never returns a null value.
      *
      * @param val The input value.
+     * @param args.caseSensitive If true, then the case of the ID value is not changed.
      * @throws Assertion That val != null
      * @throws IllegalArgumentException If the input is all white space.
      * @return The input formatted as an ID value, non-null.
      *
      */
-    static String toIdValue(String val) {
+    static String toIdValue(String val, Map args = [:]) {
         assert val != null
-        def out = val.trim().toLowerCase()
+        def out = val.trim()
+        if (!args.get('caseSensitive')) out = out.toLowerCase()
         if (out.length() < 1) throw new IllegalArgumentException("maps to empty id value. val:$val")
         return out
     }
@@ -615,11 +655,15 @@ abstract class DataTable {
      * @return The BigDecimal formatted as an ID value.
      *
      */
-    static String toIdValue(java.math.BigDecimal val) {
+    static String toIdValue(java.math.BigDecimal val, Map args = [:]) {
         assert val != null
-        return toIdValue(String.valueOf(val))
+        return DataTable.toIdValue(String.valueOf(val), args)
     }
 
+
+    ///////////////////////////////////////////////////////////////////////////
+    // STATIC METHODS - GENERAL UTILITY
+    ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Return a String representation of v suitable to be added to the
@@ -630,7 +674,7 @@ abstract class DataTable {
      * @return A propertly formatted String representation of v.
      *
      */
-    protected String toCleanValue(String fn, Object v) {
+    static protected String toCleanValue(String fn, Object v) {
         // compute a clean value to add to this.data
         def cv
 
@@ -688,6 +732,18 @@ abstract class DataTable {
     /** sorted set of keys (columns) */
     Set<String> keySet = new TreeSet<String>()
 
+    /** case sensitivity */
+    boolean caseSensitive = false
+
+    /** date of the query */
+    Date queryDate
+
+    /** vine info */
+    Map vine = [:]
+
+    /** if a query, the date the dataSource was last updated.  Default is null as set in metadata.setMeta */
+    Date dataSourceDateOfUpdate 
+
 
     ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTOR
@@ -703,6 +759,105 @@ abstract class DataTable {
         this.name = FILE_NAME_DATE_FORMAT.format(new java.util.Date())
     }
 
+
+
+
+    /** 
+     * Load MappedDataTable meta-data from a file.
+     *
+     * @param dir The directory in which to look for the file.
+     * @param name The name of the file.
+     *
+     * @return A map of meta-data.
+     *
+     */
+    static protected Map loadMetaDataFromFile(File dir, String name) {
+        assert dir
+        assert dir.exists()
+        assert dir.isDirectory()
+
+        def metaFile = metaFile(dir, name)
+        loadMetaDataFromFile(metaFile)
+    }
+
+
+    /**
+     *
+     *
+     */
+    static protected Map loadMetaDataFromFile(File metaFile) {
+        assert metaFile != null
+        assert metaFile.exists()
+        assert metaFile.length() > 0
+
+        def yaml = new org.yaml.snakeyaml.Yaml(new DataTableConstructor())
+       
+        def meta = yaml.load(metaFile.text)
+        assert meta != null
+        assert meta.name
+        assert meta.queryDate
+
+        return meta
+    }
+
+
+
+    /** 
+     * Load data from a CSV file and write it to the provided DataTable
+     * instance.
+     * 
+     * @param dir The directory in which to look for the file.
+     * @param name The name of the file.
+     * @param mdt The DataTable to populate with data.
+     *
+     */
+    static protected void loadDataFromFile(File dir, String name, DataTable dataTable) {
+        def dataFile = dataFile(dir, name)
+        loadDataFromFile(dataFile, dataTable)
+    }
+
+
+    /**
+     *
+     *
+     */
+    static protected void loadDataFromFile(File dataFile, DataTable dataTable) {
+        assert dataFile != null
+        assert dataFile.exists()
+        assert dataFile.length() > 0
+        assert dataTable != null
+
+        def dataFileText = dataFile.text
+
+        if (dataFileText) {
+            def csvReader = CsvUtil.createReaderHeaderAware(dataFileText)
+            if (!CsvUtil.hasNext(csvReader)) {
+                log.warn "error in loadDataFromFile for file $dataFile. no data found."
+            }
+            dataTable.dataAddAll(csvReader)
+            dataTable.readFrom = dataFile
+        }
+    }
+
+
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // METHODS - CASE SENSITIVE
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    public Map stringHandlingArgs() {
+        [caseSensitive:this.caseSensitive]
+    }
+
+
+    /** */
+    String toFieldName(String val) {
+        DataTable.fieldName(val, stringHandlingArgs())
+    }
+
+    
 
     ///////////////////////////////////////////////////////////////////////////
     // METHODS KEY SET
@@ -798,7 +953,6 @@ abstract class DataTable {
         this.keySet = new LinkedHashSet<String>()
         addFieldNamesToKeySet(keys)
 
-        //List<String> formattedKeys = keys.collect{ toFieldName(it) }
         existingKeys.removeAll(this.keySet)
         addFieldNamesToKeySet(existingKeys.toList())
     }
@@ -813,6 +967,25 @@ abstract class DataTable {
      */
     public void setOrderedKeys(String... keys) {
         setOrderedKeys(keys.toList())
+    }
+
+
+    /** */
+    public void setOrderedKeysBooleanCriteria(List<Closure> booleanClosures) {
+        List<String> keys = this.keySet.toList()
+        List<String> oks = new ArrayList<String>()
+        booleanClosures.each { bcl ->
+            List<String> chunk = keys.findAll(bcl)
+            oks.addAll(chunk)
+            keys.removeAll(chunk)
+        }
+        setOrderedKeys(oks)
+    }
+
+
+    /** */
+    public void setOrderedKeysBooleanCriteria(Closure... booleanClosures) {
+        setOrderedKeysBooleanCriteria(booleanClosures.toList())
     }
 
 

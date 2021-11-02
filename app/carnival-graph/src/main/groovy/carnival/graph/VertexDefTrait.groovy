@@ -22,6 +22,7 @@ import carnival.graph.Base
 
 
 
+
 /** 
  *
  *
@@ -32,9 +33,6 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
     ///////////////////////////////////////////////////////////////////////////
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    public static final String GLOBAL = 'GlobalVertexDefinition'
 
     /** */
     public static final String CLASS_SUFFIX = '_class'
@@ -54,13 +52,14 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
      */
     Vertex vertex
     
-
     /** */
     boolean global = false
 
-
     /** */
     VertexDefTrait superClass
+
+    /** */
+    Boolean propertiesMustBeDefined = true
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -68,10 +67,10 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
     ///////////////////////////////////////////////////////////////////////////
 
     /** Setter wrapper for propertyDefs */
-    List<PropertyDefTrait> getVertexProperties() { this.propertyDefs }
+    Set<PropertyDefTrait> getVertexProperties() { this.propertyDefs }
     
     /** Getter wrapper for propertyDefs */
-    void setVertexProperties(List<PropertyDefTrait> propertyDefs) {
+    void setVertexProperties(Set<PropertyDefTrait> propertyDefs) {
         this.propertyDefs = propertyDefs
     }
 
@@ -129,7 +128,7 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
 
     /** */
     public String getNameSpace() {
-        if (this.global) return GLOBAL
+        if (this.global) return Base.GLOBAL_NAME_SPACE
         return getVertexDefinitionClass()
     }
 
@@ -149,7 +148,9 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
 
     /** */
     public ControlledInstance controlledInstance() {
-        return new ControlledInstance(this)
+        def ci = new ControlledInstance(this)
+        ci.propertiesMustBeDefined = this.propertiesMustBeDefined
+        ci
     }
 
 
@@ -172,8 +173,14 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
 
 
     ///////////////////////////////////////////////////////////////////////////
-    // SIMPLE VALIDATION
+    // TYPE CHECKING
     ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    public boolean isa(Edge e) {
+        assert e != null
+        return false
+    }
 
     /** */
     public boolean isa(Vertex v) {
@@ -256,20 +263,5 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
     }
 
 }
-
-
-/** */
-/*trait GlobalVertexDefTrait extends VertexDefTrait {
-
-    public static final String GLOBAL = "GLOBAL"
-
-    @Override
-    public String getNameSpace() { return GLOBAL }
-
-}*/
-
-
-
-
 
 

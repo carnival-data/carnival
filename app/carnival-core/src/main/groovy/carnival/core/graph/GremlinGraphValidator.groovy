@@ -25,14 +25,6 @@ import carnival.graph.Base
 public class GremlinGraphValidator implements GraphValidator {
 
 	///////////////////////////////////////////////////////////////////////////
-	// STATIC FIELDS
-	///////////////////////////////////////////////////////////////////////////
-
-	/** */
-	static final String GLOBAL_NAME_SPACE = 'GlobalNameSpace'
-
-
-	///////////////////////////////////////////////////////////////////////////
 	// STATIC METOHDS
 	///////////////////////////////////////////////////////////////////////////
 
@@ -260,7 +252,7 @@ public class GremlinGraphValidator implements GraphValidator {
 		Set<DefaultElementDef> dbElementDefs = new HashSet<DefaultElementDef>()
 		traversal.each { e ->
 			def lbl = e.label()
-			def ns = e.property(Base.PX.NAME_SPACE.label).orElse(GLOBAL_NAME_SPACE)
+			def ns = e.property(Base.PX.NAME_SPACE.label).orElse(Base.GLOBAL_NAME_SPACE)
 			dbElementDefs << new DefaultElementDef(label:lbl, nameSpace:ns)
 		}
 

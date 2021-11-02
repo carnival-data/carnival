@@ -1,6 +1,7 @@
 package carnival.util
 
 
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -57,167 +58,60 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
     @ToString
     static class MetaData extends DataTable.MetaData {
 
-        Map data
+        String idFieldName
+        DateFormat dateFormat
+        String dateFormatPattern
 
         public MetaData(Map args) {
-            setMeta(args)
+            setFields(args)
         }
 
         public MetaData(MappedDataTable mdt) {
             assert mdt
-            setMeta (
+            setFields (
                 name: mdt.name,
+                caseSensitive: mdt.caseSensitive,
                 queryDate : mdt.queryDate,
                 dataSourceDateOfUpdate : mdt.dataSourceDateOfUpdate,
                 idFieldName: mdt.idFieldName,
                 vine:mdt.vine,
                 dateFormat:mdt.dateFormat,
-                dateFormatPattern:mdt.dateFormat.toPattern()
+                dateFormatPattern:mdt.dateFormatPattern
             )
         }
 
-        protected void setMeta(Map args) {
-            assert args
-            assert args.name
+        protected void setFields(Map args) {
+            super.setFields(args)
+
             assert args.idFieldName
-
-            this.data = [:]
-
-            this.data.name = args.name
-            this.data.idFieldName = toFieldName(args.idFieldName)
-
-            if (args.get('queryDate') != null) {
-                assert ((args.queryDate instanceof String) || (args.queryDate instanceof Date)) 
-                assert (args.queryDate)
+            this.idFieldName = DataTable.fieldName(args.idFieldName)
+            
+            if (args.containsKey('caseSensitive')) {
+                this.idFieldName = DataTable.fieldName(
+                    args.idFieldName, 
+                    [
+                        caseSensitive:args.get('caseSensitive')
+                    ]
+                )
             }
-            this.data.queryDate = computeDataSetDate(args, 'queryDate')
 
-            if (args.get('dataSourceDateOfUpdate') != null) {
-                assert ((args.dataSourceDateOfUpdate instanceof String) || (args.dataSourceDateOfUpdate instanceof Date)) 
-                assert (args.dataSourceDateOfUpdate)
+            if (args.get('dateFormat') != null) {
+                this.dateFormat = args.dateFormat
+                this.dateFormatPattern = dateFormat.toPattern()
             }
-            this.data.dataSourceDateOfUpdate = computeDataSourceDate(args, 'dataSourceDateOfUpdate')
-
-            if (args.get('vine') != null) this.data.vine = args.vine
-
-            if (args.get('dateFormat') != null) this.data.dateFormat = args.dateFormat
 
             if (args.get('dateFormatPattern') != null) {
-                this.data.dateFormatPattern = args.dateFormatPattern
-                this.data.dateFormat = new SimpleDateFormat(args.dateFormatPattern)
+                this.dateFormatPattern = args.dateFormatPattern
+                this.dateFormat = new SimpleDateFormat(args.dateFormatPattern)
             }
         }
 
-        public String getName() {
-            return data.name
-        }
-
-        public Date getQueryDate() {
-            return data.queryDate
-        }
-
-        public Date getDataSourceDateOfUpdate() {
-            return data.dataSourceDateOfUpdate
-        }
-
-        public String getIdFieldName() {
-            return data.idFieldName
-        }
-
-        public Map getVine() {
-            return data.vine
-        }
-
-        public SimpleDateFormat getDateFormat() {
-            return data.dateFormat
-        }
-
-        public String getDateFormatPattern() {
-            return data.dateFormatPattern
-        }
     }
 
 
     ///////////////////////////////////////////////////////////////////////////
     // STATIC METHODS - CREATE
     ///////////////////////////////////////////////////////////////////////////
-
-    /** 
-     * Load MappedDataTable meta-data from a file.
-     *
-     * @param dir The directory in which to look for the file.
-     * @param name The name of the file.
-     *
-     * @return A map of meta-data.
-     *
-     */
-    static protected Map loadMetaDataFromFile(File dir, String name) {
-        assert dir
-        assert dir.exists()
-        assert dir.isDirectory()
-
-        def metaFile = metaFile(dir, name)
-        loadMetaDataFromFile(metaFile)
-    }
-
-
-    /**
-     *
-     *
-     */
-    static protected Map loadMetaDataFromFile(File metaFile) {
-        assert metaFile != null
-        assert metaFile.exists()
-        assert metaFile.length() > 0
-
-        def yaml = new org.yaml.snakeyaml.Yaml(new DataTableConstructor())
-       
-        def meta = yaml.load(metaFile.text)
-        assert meta.name
-        assert meta.queryDate
-        assert meta.idFieldName
-
-        return meta
-    }
-
-
-
-    /** 
-     * Load data from a CSV file and write it to the provided MappedDataTable
-     * instance.
-     * 
-     * @param dir The directory in which to look for the file.
-     * @param name The name of the file.
-     * @param mdt The MappedDataTable to populate with data.
-     *
-     */
-    static protected void loadDataFromFile(File dir, String name, MappedDataTable mdt) {
-        def dataFile = dataFile(dir, name)
-        loadDataFromFile(dataFile, mdt)
-    }
-
-
-    /**
-     *
-     *
-     */
-    static protected void loadDataFromFile(File dataFile, MappedDataTable mdt) {
-        assert dataFile != null
-        assert dataFile.exists()
-        assert dataFile.length() > 0
-        assert mdt != null
-
-        def dataFileText = dataFile.text
-
-        if (dataFileText) {
-            def csvReader = CsvUtil.createReaderHeaderAware(dataFileText)
-            if (!CsvUtil.hasNext(csvReader)) {
-                log.warn "error in loadDataFromFile for file $dataFile. no data found."
-            }
-            mdt.dataAddAll(csvReader)
-            mdt.readFrom = dataFile
-        }
-    }
 
 
     /**
@@ -234,6 +128,7 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
 
         // get the metadata from file
         def meta = loadMetaDataFromFile(dir, name)
+        assert meta.idFieldName
 
         // construct a mapped data table object from 
         def mdt = new MappedDataTable(meta)
@@ -268,15 +163,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
 
     /** id -> map of vals */
     SortedMap<String,Map<String,String>> data = new TreeMap<String, Map<String,String>>()
-
-    /** date of the query */
-    Date queryDate
-
-    /** vine info */
-    Map vine = [:]
-
-    /** if a query, the date the dataSource was last updated.  Default is null as set in metadata.setMeta */
-    Date dataSourceDateOfUpdate 
 
     /** the formatter to use with date values */
     SimpleDateFormat dateFormat = SqlUtils.DEFAULT_TIMESTAMP_FORMATER
@@ -315,6 +201,8 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
         if (args.dateFormatPattern) {
             this.dateFormat = new SimpleDateFormat(args.dateFormatPattern)
         }
+
+        if (args.caseSensitive) this.caseSensitive = args.caseSensitive
     }
 
 
@@ -330,7 +218,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
     ///////////////////////////////////////////////////////////////////////////
     // METHODS
     ///////////////////////////////////////////////////////////////////////////
-
 
     /** 
      * Retore the key (field) ordering to the default, which orders keys:
@@ -390,6 +277,21 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
 
 
 
+    ///////////////////////////////////////////////////////////////////////////
+    // METHODS - CASE SENSITIVE METHODS
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    String toIdValue(String val) {
+        DataTable.toIdValue(val, stringHandlingArgs())
+    }
+
+
+    /** */
+    String findFieldName(String qFieldName, Map<String,String> vals) {
+        DataTable.findFieldName(qFieldName, vals, stringHandlingArgs())
+    }
+
 
     ///////////////////////////////////////////////////////////////////////////
     // METHODS - DATA GET
@@ -410,7 +312,9 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
      */
     public boolean containsIdentifier(String idVal) {
         //log.debug "containsIdentifier idVal: $idVal"
-        return this.data.containsKey(toIdValue(idVal))
+        return this.data.containsKey(
+            toIdValue(idVal)
+        )
     } 
 
 
@@ -436,7 +340,9 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
      */
     public Map dataGet(String idVal, Map args = [:]) {
         assert idVal != null
-        def rec = data.get(toIdValue(idVal))
+        def rec = data.get(
+            toIdValue(idVal)
+        )
         if (rec == null) {
             if (!args.containsKey('verbose') || args.verbose) log.warn "no data for key $idVal"
             //throw new IllegalArgumentException("no data for key $idVal")

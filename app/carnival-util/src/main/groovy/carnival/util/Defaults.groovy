@@ -85,25 +85,6 @@ public class Defaults {
             log.info "carnival.home is not set"
         }
 
-        // running outside an application context implies core framework
-        // development.  in this case, the environment variable CARNIVAL_HOME
-        // is expected to be set.  a home directory is required for a place to
-        // put graph data and also provides the opportunity to override default
-        // logging and carnival configuration during the development process.
-        if (System.getProperty('CARNIVAL_HOME')) {
-            configDirPath = env.get('CARNIVAL_HOME') + "/config"
-            configFile = findApplicationConfigurationFileInDirectoryPath(configDirPath)
-            if (configFile != null && configFile.exists()) {
-                log.info "config file from CARNIVAL_HOME: ${configFile}"
-                return configFile
-            } else {
-                log.warn "configuration not found in CONFIG_HOME: ${configDirPath}"
-                return null
-            }             
-        } else {
-            log.info "CARNIVAL_HOME is not set"
-        }
-
         // look for config in ./config
         configFile = findApplicationConfigurationFileInDirectoryPath('config')
         if (configFile != null && configFile.exists()) {
@@ -112,7 +93,7 @@ public class Defaults {
         }
 
         // if we have made it this far, it's a warning
-        log.warn "could not find a configuration file in carnival.home, CARNIVAL_HOME, or ./config/"
+        log.warn "could not find a configuration file in carnival.home, or ./config/"
         return null
     }
 
@@ -308,7 +289,6 @@ public class Defaults {
     static private File getHomeDir() {
         def homeDir
         if (!homeDir) homeDir = findDirectoryFromSysProp('carnival.home')
-        if (!homeDir) homeDir = findDirectoryFromEnv('CARNIVAL_HOME')
         log.trace "homeDir: $homeDir"
         return homeDir
     }

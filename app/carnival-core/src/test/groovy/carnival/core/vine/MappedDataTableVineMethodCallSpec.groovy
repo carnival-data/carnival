@@ -14,7 +14,7 @@ class MdtvmcsVine {
 
     static class PersonVineMethod extends MappedDataTableVineMethod { 
         MappedDataTable fetch(Map args) {
-            def mdt = createMappedDataTable('ID')
+            def mdt = createDataTable(idFieldName:'ID')
             mdt.dataAdd(id:'1', name:args.p1)
             mdt
         }
@@ -33,7 +33,7 @@ class MappedDataTableVineMethodCallSpec extends Specification {
 
     static class PersonVineMethod extends MappedDataTableVineMethod { 
         MappedDataTable fetch(Map args) {
-            def mdt = createMappedDataTable('ID')
+            def mdt = createDataTable(idFieldName:'ID')
             mdt.dataAdd(id:'1', name:args.p1)
             mdt
         }

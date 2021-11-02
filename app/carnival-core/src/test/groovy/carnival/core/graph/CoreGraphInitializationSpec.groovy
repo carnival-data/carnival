@@ -30,11 +30,15 @@ class CoreGraphInitializationSpec extends Specification {
         CGS_SUITCASE
     }
 
+
+
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
     
     @Shared coreGraph
+    @Shared graph
+    @Shared g
     
     
 
@@ -44,20 +48,21 @@ class CoreGraphInitializationSpec extends Specification {
     
 
     def setup() {
-    	
+        coreGraph = CoreGraphTinker.create()
+        graph = coreGraph.graph
+        g = graph.traversal()
     }
 
     def setupSpec() {
-        coreGraph = CoreGraphTinker.create()
     } 
 
 
     def cleanupSpec() {
-        if (coreGraph) coreGraph.close()
     }
 
 
     def cleanup() {
+        if (coreGraph) coreGraph.close()
     }
 
 
@@ -66,11 +71,116 @@ class CoreGraphInitializationSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
-    def "set superclass"() {
-        given:
-    	def graph = coreGraph.graph
-    	def g = graph.traversal()
 
+    def "add edge definitions convenience method"() {
+        def modelErrs 
+
+        expect:
+        coreGraph.checkModel().size() == 0
+
+        when:
+        coreGraph.addDefinitions(GraphModel.VX)
+        def d1 = GraphModel.VX.DOG.instance().create(graph)
+        def d2 = GraphModel.VX.DOG.instance().create(graph)
+        modelErrs = coreGraph.checkModel()
+
+        then:
+        modelErrs.size() == 0
+
+        when:
+        GraphModel.EX.BARKS_AT.instance().from(d1).to(d2).create()
+        modelErrs = coreGraph.checkModel()
+
+        then:
+        modelErrs.size() == 1
+
+        when:
+        coreGraph.addDefinitions(GraphModel.EX)
+        modelErrs = coreGraph.checkModel()
+
+        then:
+        modelErrs.size() == 0
+    }
+
+
+    def "add edge definitions"() {
+        def modelErrs 
+
+        expect:
+        coreGraph.checkModel().size() == 0
+
+        when:
+        coreGraph.addDefinitions(graph, g, GraphModel.VX)
+        def d1 = GraphModel.VX.DOG.instance().create(graph)
+        def d2 = GraphModel.VX.DOG.instance().create(graph)
+        modelErrs = coreGraph.checkModel()
+
+        then:
+        modelErrs.size() == 0
+
+        when:
+        GraphModel.EX.BARKS_AT.instance().from(d1).to(d2).create()
+        modelErrs = coreGraph.checkModel()
+
+        then:
+        modelErrs.size() == 1
+
+        when:
+        coreGraph.addDefinitions(graph, g, GraphModel.EX)
+        modelErrs = coreGraph.checkModel()
+
+        then:
+        modelErrs.size() == 0
+    }
+
+
+
+
+    def "add vertex definitions convenience method"() {
+        def modelErrs 
+
+        expect:
+        coreGraph.checkModel().size() == 0
+
+        when:
+        GraphModel.VX.DOG.instance().create(graph)
+        modelErrs = coreGraph.checkModel()
+
+        then:
+        modelErrs.size() == 1
+
+        when:
+        coreGraph.addDefinitions(GraphModel.VX)
+        modelErrs = coreGraph.checkModel()
+
+        then:
+        modelErrs.size() == 0
+    }
+
+
+    def "add vertex definitions"() {
+        def modelErrs 
+
+        expect:
+        coreGraph.checkModel().size() == 0
+
+        when:
+        GraphModel.VX.DOG.instance().create(graph)
+        modelErrs = coreGraph.checkModel()
+
+        then:
+        modelErrs.size() == 1
+
+        when:
+        coreGraph.addDefinitions(graph, g, GraphModel.VX)
+        modelErrs = coreGraph.checkModel()
+
+        then:
+        modelErrs.size() == 0
+    }
+
+
+    def "set superclass"() {
         when:
         coreGraph.initializeGremlinGraph(graph, g, 'test.coregraphspec')
 

@@ -42,8 +42,8 @@ class EdgeBuilderSpec extends Specification {
             ],
         )
 
-        public EX() {}
-        public EX(Map m) {m.each { k,v -> this."$k" = v }}
+        EX() {}
+        EX(Map m) {m.each { k,v -> this."$k" = v }}
     }
 
 

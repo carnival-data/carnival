@@ -41,7 +41,7 @@ class MappedDataTableVineMethodSpec extends Specification {
         File _cacheDirectory() { tmpDir() }
 
         MappedDataTable fetch(Map args) {
-            def mdt = createMappedDataTable('ID')
+            def mdt = createDataTable(idFieldName:'ID')
             mdt.dataAdd(id:'1', name:args.p1)
             mdt
         }

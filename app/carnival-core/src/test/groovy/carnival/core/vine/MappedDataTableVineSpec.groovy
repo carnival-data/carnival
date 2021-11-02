@@ -37,7 +37,7 @@ class MdtTestVine implements Vine {
         }
 
         MappedDataTable fetch(Map args) {
-            def mdt = createMappedDataTable('ID')
+            def mdt = createDataTable(idFieldName:'ID')
             mdt.dataAdd(id:'1', name:args.p1)
             mdt
         }
@@ -49,7 +49,7 @@ class MdtTestVineWithResource extends MdtTestVine {
 
     String sharedResource = 'blah-'
 
-    class PersonVineMethod extends MappedDataTableVineMethod { 
+    class VineMethodSharedResource extends MappedDataTableVineMethod { 
         //@Override
         File _cacheDirectory() { 
             def td
@@ -63,7 +63,7 @@ class MdtTestVineWithResource extends MdtTestVine {
         }
 
         MappedDataTable fetch(Map args) {
-            def mdt = createMappedDataTable('ID')
+            def mdt = createDataTable(idFieldName:'ID')
             def name = "" + sharedResource + args.p1
             mdt.dataAdd(id:'1', name:name)
             mdt
@@ -84,7 +84,7 @@ class MappedDataTableVineSpec extends Specification {
         when:
         def vine = new MdtTestVineWithResource()
         def res = vine
-            .method('PersonVineMethod')
+            .method('VineMethodSharedResource')
             .args(p1:'alice')
             .mode(CacheMode.IGNORE)
             .call()

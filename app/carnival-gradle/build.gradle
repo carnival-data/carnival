@@ -17,7 +17,7 @@ task writePropertiesFile(type: WriteProperties) {
     property 'carnivalVersion', version
 }
 compileGroovy.dependsOn 'writePropertiesFile'
-
+processResources.dependsOn 'writePropertiesFile'
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -47,8 +47,8 @@ publishing {
             pom.withXml {
                 asNode().children().last() + {
                     resolveStrategy = Closure.DELEGATE_FIRST
-                    name 'Carnival Gradle'
-                    description 'A Gradle plugin to facilitate integration of Carnival into Java applications.'
+                    name 'Carnival Gradle Plugin'
+                    description 'A Gradle plugin to facilitate creation of a Carnival libraries and applications.'
                     url 'https://github.com/pmbb-ibi/carnival'
                     licenses {
                         license {
@@ -61,11 +61,6 @@ publishing {
                             id 'augustearth'
                             name 'David Birtwell'
                             email 'augustearth@gmail.com'
-                        }
-                        developer {
-                            id 'hjwilli'
-                            name 'Heather Williams'
-                            email 'hjwilli@gmail.com'
                         }
                     }
                     scm {

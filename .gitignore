@@ -30,13 +30,16 @@ build
 *.properties
 
 # needed for gradle-plugin
-!app/carnival-gradle/src/main/resources/META-INF/gradle-plugins/edu.upenn.pmbb.carnival.properties
+!app/carnival-gradle/src/main/resources/META-INF/gradle-plugins/*
 
 # do not ignore the docker-compose file
 !docker-compose.yml
 
 #do not ignore travis file
 !.travis.yml
+
+# add github workflows
+!.github/workflows/github-pages.yml
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar

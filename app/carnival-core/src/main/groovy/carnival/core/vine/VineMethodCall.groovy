@@ -7,6 +7,11 @@ import java.io.StringReader
 import groovy.util.logging.Slf4j
 
 
+/**
+ * VineMethodCall is a parameterized interface that represents a completed call
+ * to a vine method.
+ *
+ */
 interface VineMethodCall<T> {
 
     ///////////////////////////////////////////////////////////////////////////

@@ -12,6 +12,7 @@ import org.codehaus.groovy.ast.ASTNode
 import org.codehaus.groovy.control.SourceUnit
 import org.codehaus.groovy.ast.MethodNode
 import org.codehaus.groovy.ast.ClassNode
+import org.codehaus.groovy.ast.FieldNode
 import org.codehaus.groovy.ast.MixinNode
 import org.codehaus.groovy.ast.AnnotationNode
 import org.codehaus.groovy.ast.ConstructorNode
@@ -61,28 +62,26 @@ abstract class DefinitionTransformation extends AbstractASTTransformation {
     /** */
     static void addTrait(ClassNode classNode, Class traitClass) {
         ClassNode[] interfaces = classNode.getInterfaces()
-        //println "interfaces: $interfaces"
         ClassNode traitClassNode = new ClassNode(traitClass)
         if (interfaces.contains(traitClassNode)) return
-        //println "traitClassNode: $traitClassNode"
+
         List<ClassNode> finalInterfaces = new ArrayList<ClassNode>()
         finalInterfaces.add(traitClassNode)
         finalInterfaces.addAll(interfaces)
-        //println "finalInterfaces: $finalInterfaces"
+
         ClassNode[] finalInterfacesArray = finalInterfaces.toArray(Class[])
-        //println "finalInterfacesArray: $finalInterfacesArray"
         classNode.setInterfaces(finalInterfacesArray)
     }
 
 
     /** */
-    static addNoArgConstructor(ClassNode classNode) {
+    static addNoArgConstructor(ClassNode classNode, Statement stmt = new EmptyStatement()) {
         ConstructorNode noArgConstructor = 
             new ConstructorNode(
                 ClassNode.ACC_PRIVATE, 
                 [] as Parameter[],
                 [] as ClassNode[],
-                new EmptyStatement()
+                stmt
         ) 
         classNode.addConstructor(noArgConstructor)                        
     }
@@ -119,17 +118,110 @@ abstract class DefinitionTransformation extends AbstractASTTransformation {
 
     @Override
     void visit(ASTNode[] nodes, SourceUnit source) {
+        // get the relevant nodes
+        AnnotationNode annotNode = nodes[0]
         ClassNode classNode = (ClassNode) nodes[1]
+
+        // statement to set global to true
+        BlockStatement globalTrueStmt = macro(true) {
+            this.global = true
+        }
+
+        // statement mimicing the default Groovy map constructor
+        BlockStatement mapAssignmentStmt = macro(true) { 
+            for (entry in m) { this."${entry.getKey()}" = entry.getValue() } 
+        }
+
+        // check if global by annotation
+        boolean isGlobal = false
+        Expression globalExp = annotNode.getMember("global")
+        if (globalExp) isGlobal = Boolean.valueOf(globalExp.value)
 
         // add the def trait
         addTrait(classNode, getDefTraitClass())
 
         // add no argument constructor
-        addNoArgConstructor(classNode)
+        BlockStatement noArgConstStmt = new BlockStatement()
+        if (isGlobal) noArgConstStmt.addStatement(globalTrueStmt)
+        addNoArgConstructor(classNode, noArgConstStmt)
 
         // add map constructor
-        BlockStatement simplestCode = macro(true) { for (entry in m) { this."${entry.getKey()}" = entry.getValue() } }
-        addMapConstructor(classNode, simplestCode) 
+        BlockStatement mapConstStmt = new BlockStatement()
+        mapConstStmt.addStatement(mapAssignmentStmt)
+        if (isGlobal) mapConstStmt.addStatement(globalTrueStmt)
+        addMapConstructor(classNode, mapConstStmt) 
     }
 
 }
+
+
+
+/** 
+@GroovyASTTransformation(phase = CompilePhase.CANONICALIZATION)
+class DefinitionTransformationPost extends AbstractASTTransformation {
+
+    @Override
+    void visit(ASTNode[] nodes, SourceUnit source) {
+        println "[DTP] nodes: $nodes"
+
+        ClassNode classNode = (ClassNode) nodes[1]
+        println "[DTP] classNode: $classNode"
+        println "[DTP] classNode.fields: ${classNode.fields*.name}"
+        println "[DTP] classNode.properties: ${classNode.properties}"
+
+        AnnotationNode annotNode = nodes[0]
+        println "[DTP] annotNode: $annotNode"
+        println "[DTP] annotNode.members: ${annotNode.members}"
+        println "[DTP] annotNode.classNode: ${annotNode.classNode}"
+        println "[DTP] annotNode.classNode.fields: ${annotNode.classNode.fields}"
+        println "[DTP] annotNode.classNode.properties: ${annotNode.classNode.properties}"
+
+        Expression globalExp = annotNode.getMember("global")
+        if (globalExp != null) {
+            println "[DTP] globalExp: $globalExp"
+            println "[DTP] globalExp.value: ${globalExp.value}"
+            println "[DTP] globalExp.value (boolean): ${Boolean.valueOf(globalExp.value)}"
+
+            FieldNode fieldGlobal = classNode.getField("carnival_graph_VertexDefTrait__global")
+            println "[DTP] fieldGlobal: ${fieldGlobal}"
+            println "[DTP] fieldGlobal.initialExpression: ${fieldGlobal?.initialExpression}"
+            println "[DTP] fieldGlobal.initialValueExpression: ${fieldGlobal?.initialValueExpression}"
+            println "[DTP] fieldGlobal.owner: ${fieldGlobal?.owner}"
+            println "[DTP] fieldGlobal.instance: ${fieldGlobal?.instance}"
+        }
+
+    }
+
+}
+*/
+
+
+
+/**
+@GroovyASTTransformation(phase = CompilePhase.CLASS_GENERATION)
+class GlobalElementDefinitionTransformation extends AbstractASTTransformation {
+
+    @Override
+    void visit(ASTNode[] nodes, SourceUnit source) {
+        ClassNode classNode = (ClassNode) nodes[1]
+        println "[GEDT] classNode: $classNode"
+
+        ClassNode[] interfaces = classNode.getInterfaces()
+        println "[GEDT] interfaces: $interfaces"
+
+        ClassNode traitClassNode = new ClassNode(carnival.graph.VertexDefTrait)
+        if (!interfaces.contains(traitClassNode)) return
+
+        println "[GEDT] traitClassNode: ${traitClassNode}"
+        println "[GEDT] traitClassNode.fields: ${traitClassNode.fields}"
+        println "[GEDT] traitClassNode.properties: ${traitClassNode.properties}"
+        println "[GEDT] traitClassNode.methods: ${traitClassNode.methods*.name}"
+
+        FieldNode fieldGlobal = traitClassNode.getField('global')
+        println "[GEDT] fieldGlobal: $fieldGlobal"
+        println "[GEDT] fieldGlobal.initialValueExpression: ${fieldGlobal?.getInitialValueExpression()}"
+
+    }
+
+}
+*/

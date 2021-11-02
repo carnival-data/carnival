@@ -18,6 +18,11 @@ import carnival.core.util.CoreUtil
 
 
 
+/**
+ * JsonVineMethodCall is a concretization of VineMethod deals in objects that 
+ * are serialized as JSON in for caching purposes using the jackson library.
+ *
+ */
 @Slf4j
 @JsonPropertyOrder(["thisClass", "vineMethodClass", "resultClass", "arguments", "result"])
 class JsonVineMethodCall<T> implements VineMethodCall<T> {

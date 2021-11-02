@@ -402,7 +402,7 @@ class GenericDataTableSpec extends Specification {
         assert mdtDataMap.size() > 0
 
         data.each { k, v ->
-            def fn = DataTable.toFieldName(k)
+            def fn = DataTable.fieldName(k)
             assert mdtDataMap.containsKey(fn)
 
             def mdtValue = mdtDataMap.get(fn)

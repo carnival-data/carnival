@@ -25,6 +25,9 @@ class PropertyValuesHolder<T> {
     /** */
     Map<PropertyDefTrait,Object> propertyValues = new HashMap<PropertyDefTrait,Object>()
 
+    /** */
+    Boolean propertiesMustBeDefined = true
+
 
     /** */
     public T withProperty(PropertyDefTrait propDef, Enum propValue) {
@@ -39,8 +42,10 @@ class PropertyValuesHolder<T> {
         assert this.respondsTo("getElementDef")
         WithPropertyDefsTrait eDef = getElementDef()
 
-        boolean found = eDef.propertyDefs.find({it.label == propDef.label})
-        if (!found) throw new IllegalArgumentException("${propDef} is not a property of ${eDef.label}: ${eDef.propertyDefs}")
+        if (propertiesMustBeDefined) {
+            boolean found = eDef.propertyDefs.find({it.label == propDef.label})
+            if (!found) throw new IllegalArgumentException("${propDef} is not a property of ${eDef.label}: ${eDef.propertyDefs}")
+        }
 
         propertyValues.put(propDef, propValue)
         return this
@@ -123,6 +128,7 @@ class PropertyValuesHolder<T> {
     public Element setElementProperties(Element el) {
         def pvs = allPropertyValues()
         pvs.each { PropertyDefTrait vp, Object val ->
+            if (val instanceof org.codehaus.groovy.runtime.GStringImpl) val = val.toString()
             el.property(vp.label, val) 
         }
         el

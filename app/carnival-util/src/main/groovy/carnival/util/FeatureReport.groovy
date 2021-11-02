@@ -586,13 +586,13 @@ class FeatureReport extends MappedDataTable {
                 )
             }
         }
-        dateFields = dateFields.collect { DataTable.toFieldName(it) }
+        dateFields = dateFields.collect { this.toFieldName(it) }
         log.trace "dateFields: $dateFields"
 
         // if given fields to ignore, remove them from dateFields
         if (args.fieldsToIgnore) {
             assert args.fieldsToIgnore instanceof Collection
-            args.fieldsToIgnore.each { dateFields.remove(DataTable.toFieldName(it)) }
+            args.fieldsToIgnore.each { dateFields.remove(this.toFieldName(it)) }
         }
 
         Set<String> errorFields = new HashSet<String>()
@@ -1196,9 +1196,9 @@ class FeatureReport extends MappedDataTable {
      */
     @WithWriteLock
     public void addFeature(String subjectId, String featureName, String featureValue) {
-        assert subjectId != null
-        assert featureName != null
-        assert featureValue != null
+        assert subjectId != null : "subjectId cannot be null. featureName:${featureName} featureValue:${featureValue}"
+        assert featureName != null : "featureName cannot be null. subjectId:${subjectId} featureValue:${featureValue}"
+        assert featureValue != null : "featureValue cannot be null. subjectId:${subjectId} featureName:${featureName}"
 
         // check mode
         if (!dataModes.contains(DataMode.ADD_FEATURE)) throw new IllegalStateException('Data mode ADD_FEATURE required to call addFeature()')
@@ -1207,7 +1207,7 @@ class FeatureReport extends MappedDataTable {
         def fv = this.dataGet(subjectId)
         if (fv == null) throw new RuntimeException("no feature vector for ${subjectId}")
 
-        def ffn = DataTable.toFieldName(featureName)
+        def ffn = this.toFieldName(featureName)
         if (fv.containsKey(ffn)) {
             throw new IllegalStateException("feature vector for $subjectId already contains a feature with name $featureName and value ${fv.get(ffn)}")
         }
@@ -1238,7 +1238,7 @@ class FeatureReport extends MappedDataTable {
         if (fv == null) throw new IllegalArgumentException("Subject not found: ${subjectId}")
 
         features.each { k, v ->
-            def ffn = DataTable.toFieldName(k)
+            def ffn = this.toFieldName(k)
             if (fv.containsKey(ffn)) conflicts.put(k, fv.get(ffn))
         }
         if (conflicts.size() > 0) throw new IllegalStateException("feature vector for $subjectId already contains the following features: ${conflicts}")
@@ -1259,7 +1259,7 @@ class FeatureReport extends MappedDataTable {
     public void removeFeatureSet(String featureName) {
         assert featureName
 
-        def fn = DataTable.toFieldName(featureName)
+        def fn = this.toFieldName(featureName)
         data.each { k, v ->
             v.remove(fn)
         }

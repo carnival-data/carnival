@@ -42,7 +42,7 @@ abstract class CoreGraphSpecification extends Specification {
         configFilePath = Defaults.findApplicationConfigurationFile()
         if (configFilePath != null) configFilePath = configFilePath.canonicalPath
 
-        // create pmbb graph
+        // create the graph
         println "init neo4j graph..."
         CoreGraphNeo4j.clearGraph()
         coreGraph = CoreGraphNeo4j.create()

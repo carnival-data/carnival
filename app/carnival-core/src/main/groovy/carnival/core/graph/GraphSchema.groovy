@@ -28,7 +28,6 @@ import carnival.graph.EdgeDefTrait
 import carnival.graph.PropertyDefTrait
 import carnival.graph.VertexDefTrait
 import carnival.graph.ControlledInstance
-import carnival.graph.ConstrainedPropertyDefTrait
 
 
 
@@ -116,16 +115,12 @@ class VertexLabelDefinition implements ElementDef {
 	static public VertexLabelDefinition create(VertexDefTrait vdef) {
 		def propDefs = []
 		vdef.vertexProperties.each { PropertyDefTrait pdef ->
-			if (pdef instanceof ConstrainedPropertyDefTrait) {
-				propDefs << new VertexPropertyDefinition(
-					name: pdef.label,
-					unique: pdef.unique,
-					required: pdef.required,
-					index: pdef.index
-				)
-			} else {
-				propDefs << new VertexPropertyDefinition(name: pdef.label)
-			}
+			propDefs << new VertexPropertyDefinition(
+				name: pdef.label,
+				unique: pdef.unique,
+				required: pdef.required,
+				index: pdef.index
+			)
 		}
 
 		def vld = new VertexLabelDefinition(

@@ -96,26 +96,25 @@ class TabularReport extends GenericDataTable {
      */
     static class MetaData extends GenericDataTable.MetaData {
 
+        Map reportDescriptor = [:]
+
         public MetaData(Map args) {
-            setMeta(args)
+            setFields(args)
         }
 
         public MetaData(TabularReport mdt) {
             assert mdt
-            setMeta (
+            setFields (
                 name: mdt.name,
                 reportDescriptor: mdt.reportDescriptor
             )
         }
 
-        protected void setMeta(Map args) {
-            super.setMeta(args)
-            if (args.containsKey('reportDescriptor')) this.meta.reportDescriptor = args.reportDescriptor
+        protected void setFields(Map args) {
+            super.setFields(args)
+            if (args.containsKey('reportDescriptor')) this.reportDescriptor = args.reportDescriptor
         }
 
-        public Map getReportDescriptor() {
-            return meta.reportDescriptor
-        }
     }
 
 

@@ -31,7 +31,7 @@ trait WithPropertyDefsTrait {
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    List<PropertyDefTrait> propertyDefs = new ArrayList<PropertyDefTrait>()
+    Set<PropertyDefTrait> propertyDefs = new LinkedHashSet<PropertyDefTrait>()
 
 
 
@@ -41,7 +41,7 @@ trait WithPropertyDefsTrait {
 
     /** */
     public WithPropertyDefsTrait withPropertyDef(PropertyDefTrait propertyDef) {
-        propertyDefs << propertyDef
+        propertyDefs.add(propertyDef)
         return this
     }
 
@@ -53,52 +53,49 @@ trait WithPropertyDefsTrait {
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    public List<String> getUniquePropertyLabels() {
+    public Set<String> getUniquePropertyLabels() {
         return uniqueProperties*.label
     }
 
 
     /** */
-    public List<String> getRequiredPropertyLabels() {
+    public Set<String> getRequiredPropertyLabels() {
         return requiredProperties*.label
     }
 
 
     /** */
-    public List<String> getIndexedPropertyLabels() {
+    public Set<String> getIndexedPropertyLabels() {
         return indexedProperties*.label
     }
 
 
     /** */
-    public List<PropertyDefTrait> getUniqueProperties() {
+    public Set<PropertyDefTrait> getUniqueProperties() {
         return propertyDefs.findAll {
-            it instanceof ConstrainedPropertyDefTrait &&
             it.unique
         }
     }
 
 
     /** */
-    public List<PropertyDefTrait> getRequiredProperties() {
+    public Set<PropertyDefTrait> getRequiredProperties() {
         return propertyDefs.findAll {
-            it instanceof ConstrainedPropertyDefTrait &&
             it.required
         }
     }
 
 
     /** */
-    public List<PropertyDefTrait> getIndexedProperties() {
+    public Set<PropertyDefTrait> getIndexedProperties() {
         return propertyDefs.findAll {
-            it instanceof ConstrainedPropertyDefTrait &&
             it.index
         }
     }
 
 
     /** */
-    public List<PropertyDefTrait> getDefaultProperties() {
+    public Set<PropertyDefTrait> getDefaultProperties() {
         return propertyDefs.findAll {
             it.defaultValue != null
         }

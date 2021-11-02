@@ -84,7 +84,7 @@ class CoreGraphNeo4jSpec extends Specification {
             e.printStackTrace()
             def pluginDir = Defaults.getConfigValue('carnival.gremlin.conf.dbms.directories.plugins')
             println "in order to run APOC, the APOC library must be present on the file system and configured in the application configuration."
-            println "has CARNIVAL_HOME been set?  or a configuration otherwise provided?"
+            println "has carnival.home been set?  or a configuration otherwise provided?"
             println "is the following plugin directory valid? ${pluginDir}"
         }
 

@@ -12,6 +12,7 @@ import groovy.transform.EqualsAndHashCode
 
 import org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal
+import org.apache.tinkerpop.gremlin.structure.Vertex
 
 import carnival.graph.EdgeDefTrait
 import carnival.graph.VertexDefTrait
@@ -30,8 +31,18 @@ class TinkerpopTraversalExtension {
     }
 
     /** */
+    static GraphTraversal isa(DefaultTraversal traversal, EdgeDefTrait edef) {
+        traversal.hasLabel(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace)
+    }
+
+    /** */
     static GraphTraversal both(DefaultTraversal traversal, EdgeDefTrait edef) {
         traversal.bothE(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace).otherV()
+    }
+
+    /** */
+    static GraphTraversal bothE(DefaultTraversal traversal, EdgeDefTrait edef) {
+        traversal.bothE(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace)
     }
 
     /** */
@@ -60,6 +71,11 @@ class TinkerpopTraversalExtension {
     }
 
     /** */
+    static GraphTraversal hasNot(DefaultTraversal traversal, PropertyDefTrait pdef) {
+        traversal.hasNot(pdef.label)
+    }
+
+    /** */
     static GraphTraversal has(DefaultTraversal traversal, PropertyDefTrait pdef, Enum value) {
         traversal.has(pdef.label, value.name())
     }
@@ -67,6 +83,31 @@ class TinkerpopTraversalExtension {
     /** */
     static GraphTraversal has(DefaultTraversal traversal, PropertyDefTrait pdef, Object value) {
         traversal.has(pdef.label, value)
+    }
+
+    /** */
+    static GraphTraversal matchesOn(DefaultTraversal traversal, PropertyDefTrait pdef, Vertex vertex) {
+        if (pdef.of(vertex).isPresent()) {
+            traversal.has(pdef.label, pdef.valueOf(vertex))
+        } else {
+            traversal.hasNot(pdef.label)
+        }
+        traversal        
+    }
+
+    /** */
+    static GraphTraversal matchesOn(
+        DefaultTraversal traversal, 
+        PropertyDefTrait traversalPdef, 
+        Vertex vertex, 
+        PropertyDefTrait vertexPdef
+    ) {
+        if (vertexPdef.of(vertex).isPresent()) {
+            traversal.has(traversalPdef.label, vertexPdef.valueOf(vertex))
+        } else {
+            traversal.hasNot(traversalPdef.label)
+        }
+        traversal        
     }
 
     /** */

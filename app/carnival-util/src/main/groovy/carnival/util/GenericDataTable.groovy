@@ -56,65 +56,20 @@ class GenericDataTable extends DataTable {
      */
     static class MetaData extends DataTable.MetaData {
 
-        Map meta = [:]
-
-        public MetaData() {
-        }
+        public MetaData() { }
 
         public MetaData(Map args) {
-            setMeta(args)
+            setFields(args)
         }
 
         public MetaData(GenericDataTable mdt) {
             assert mdt
-            setMeta (
+            setFields (
                 name: mdt.name,
                 queryDate:mdt.queryDate,
                 dataSourceDateOfUpdate:mdt.dataSourceDateOfUpdate,
                 vine:mdt.vine,
             )
-        }
-
-        protected void setMeta(Map args) {
-            log.trace "GenericDataTable.setMeta args:${args?.keySet()}"
-
-            assert args
-            assert args.name
-            if (args.containsKey('queryDate') && args.queryDate != null) {
-                assert ((args.queryDate instanceof String) || (args.queryDate instanceof Date)) 
-                assert (args.queryDate)
-            }
-
-            if (args.containsKey('dataSourceDateOfUpdate') && args.dataSourceDateOfUpdate != null) {
-                assert ((args.dataSourceDateOfUpdate instanceof String) || (args.dataSourceDateOfUpdate instanceof Date)) 
-                assert (args.dataSourceDateOfUpdate)
-            }
-
-            this.meta = [:]
-            this.meta.name = args.name
-
-            this.meta.queryDate = computeDataSetDate(args, 'queryDate')
-            this.meta.dataSourceDateOfUpdate = computeDataSourceDate(args, 'dataSourceDateOfUpdate')
-
-            if (args.containsKey('vine')) {
-                this.meta.vine = args.vine
-            }
-        }
-
-        public String getName() {
-            return meta.name
-        }
-
-        public Date getQueryDate() {
-            return meta.queryDate
-        }
-
-        public Date getDataSourceDateOfUpdate() {
-            return meta.dataSourceDateOfUpdate
-        }
-
-        public Map getVine() {
-            return meta.vine
         }
 
     }
@@ -208,54 +163,43 @@ class GenericDataTable extends DataTable {
     // STATIC METHODS - CREATE
     ///////////////////////////////////////////////////////////////////////////
 
+
     /**
-     * Create a GenericDataTable from files in the given directory using the 
+     * Create a MappedDataTable from files in the given directory using the 
      * given base name.
      *
-     * @param dir The directory in which to look for the GenericDataTable files.
-     * @param name The name to use for the GenericDataTable and the base name
+     * @param dir The directory in which to look for the MappedDataTable files.
+     * @param name The name to use for the MappedDataTable and the base name
      * to use when searching for files.
      *
      */
     static public GenericDataTable createFromFiles(File dir, String name) {
-        log.trace "GenericDataTable.createFromFiles dir:${dir?.canonicalPath} name:$name"
+        log.trace "createFromFiles dir:${dir?.canonicalPath} name:$name"
 
-        assert dir
-        assert dir.exists()
-        assert dir.isDirectory()
+        // get the metadata from file
+        def meta = loadMetaDataFromFile(dir, name)
 
-        def metaFile = metaFile(dir, name)
-        assert metaFile.exists()
-        assert metaFile.length() > 0
+        // construct a mapped data table object from 
+        def mdt = new GenericDataTable(meta)
 
-        def dataFile = dataFile(dir, name)
-        assert dataFile.exists()
-        assert dataFile.length() > 0
+        // load the file data
+        loadDataFromFile(dir, name, mdt)
 
-        def yaml = new org.yaml.snakeyaml.Yaml(new DataTableConstructor())
-        def meta = yaml.load(metaFile.text)
-        assert meta.name
-        assert meta.queryDate
-
-        def dataTable = new GenericDataTable(meta)
-
-        def dataFileText = dataFile.text
-        if (dataFileText) dataFileText = dataFileText.trim()
-        log.trace "dataFileText: ${dataFileText.size()} characters"
-        def numNewlines = dataFileText.findAll('\n').size()
-        log.trace "numNewlines: ${numNewlines}"
-
-        if (dataFileText) {
-            def csvReader = CsvUtil.createReaderHeaderAware(dataFileText)
-            if (!CsvUtil.hasNext(csvReader)) {
-                log.warn "error in createFromFiles for file $dataFile. no data found."
-            }
-            dataTable.dataAddAll(csvReader)
-            dataTable.readFrom = dataFile
-        }
-
-        return dataTable
+        return mdt
     }
+
+
+
+    /**
+     *
+     */
+    static public GenericDataTable createFromFiles(DataTableFiles cacheFiles) {
+        def meta = loadMetaDataFromFile(cacheFiles.meta)
+        def mdt = new GenericDataTable(meta)
+        loadDataFromFile(cacheFiles.data, mdt)
+        mdt
+    }
+
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -265,14 +209,6 @@ class GenericDataTable extends DataTable {
     /** list of recs */
     List<Map<String,String>> data = new ArrayList<Map<String,String>>()
 
-    /** date of the query **/
-    Date queryDate
-
-    /** vine info */
-    Map vine
-
-    /** if a query, the date the dataSource was last updated.  Default is null as set in metadata.setMeta **/
-    Date dataSourceDateOfUpdate 
 
     ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTOR

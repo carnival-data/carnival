@@ -1,8 +1,6 @@
-FROM gradle:6.6.1
-#FROM gradle
+FROM gradle:6-jdk11
 
 ### Development Image
-
 ENV CARNIVAL_HOME /usr/carnival_home
 #ENV APOC_HOME /usr/Neo4j/plugins
 #ENV APOC_VERSION 3.4.0.7
@@ -21,15 +19,14 @@ RUN apt-get update --fix-missing && apt-get install -y \
 
 # set up CARNIVAL_HOME directory
 WORKDIR ${CARNIVAL_HOME}/config
+
+COPY config/logback.xml-travis-template logback.xml
 COPY config/*yml-template /${CARNIVAL_HOME}/config/
-COPY config/logback.xml-travis-template /${CARNIVAL_HOME}/config/
-RUN rename -v 's/-travis-template//' *travis-template
 RUN rename -v 's/-template//' *-template
 RUN dos2unix **
 
-RUN mkdir ${CARNIVAL_HOME}/target
-RUN mkdir ${CARNIVAL_HOME}/data
-RUN mkdir ${CARNIVAL_HOME}/data/cache
+RUN mkdir -p ${CARNIVAL_HOME}/target \
+    ${CARNIVAL_HOME}/data/cache
 
 # update APOC location in application.yml config file
 # RUN sed -i "s#/path/to/neo4j/plugins#${APOC_HOME}#" application.yml

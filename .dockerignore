@@ -1,0 +1,20 @@
+.git
+.gitignore
+**/.github
+**/Dockerfile
+
+# Build and Run Artifacts
+**/.gradle
+**/bin
+**/build
+**/log
+
+# Documentation
+**/*.raml
+**/*.md
+**/doc
+
+# Gradle Wrapper
+**/gradle
+**/gradlew
+**/gradlew.bat

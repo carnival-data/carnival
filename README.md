@@ -10,7 +10,7 @@
 
 ## Quick Links
 
--   [Documentation Website Hosted by Github](https://pmbb-ibi.github.io/carnival/)
+-   [Documentation Website Hosted by Github](https://carnival-data.github.io/carnival/)
 
 ## Contents
 

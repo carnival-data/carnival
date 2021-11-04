@@ -38,7 +38,9 @@ plugins {
 // Java
 ///////////////////////////////////////////////////////////////////////////////
 task printJavaVersion {
-    println "[Carnival] Java version: ${JavaVersion.current()}"
+    doLast {
+        println "[Carnival] Java version: ${JavaVersion.current()}"
+    }
 }
 clean.dependsOn('printJavaVersion')
 compileGroovy.dependsOn('printJavaVersion')
@@ -151,6 +153,7 @@ subprojects {
 }
 
 
+
 ///////////////////////////////////////////////////////////////////////////////
 // Testing
 ///////////////////////////////////////////////////////////////////////////////
@@ -207,11 +210,10 @@ task testReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/allTests")
 
     // Include the results from the `test` task in all subprojects
-    reportOn subprojects*.test
-
-    ant.echo "TestReport - buildDir: $buildDir/reports/allTests"
+    reportOn subprojects*.test 
 
     doLast{
+       ant.echo "TestReport - buildDir: $buildDir/reports/allTests"
        browse "$buildDir/reports/allTests/index.html"
    }
 }
@@ -269,4 +271,20 @@ tasks.coveralls {
     description = 'Uploads the aggregated coverage report to Coveralls'
 
     dependsOn jacocoRootReport
+}
+
+
+/////////////////////////////////
+// Documentation
+/////////////////////////////////
+
+subprojects {
+    groovydoc {
+
+        destinationDir = file("../../docs/groovydoc/${project.name}")
+
+        doLast{
+           ant.echo "groovydoc - destinationDir: $destinationDir"
+        }
+    }
 }

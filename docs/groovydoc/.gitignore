@@ -1,0 +1,5 @@
+# This will be populated by running `gradle groovydoc`
+
+*.*
+package-list
+!.gitignore

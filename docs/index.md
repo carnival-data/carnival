@@ -22,3 +22,9 @@
 - [Vines](vines.md)
 - [Graph Model](graph-model.md)
 - [Graph Methods](graph-method.md)
+
+## GroovyDocs
+- (carnival-core)[groovydocs/carnival-core/index.html]
+- (carnival-util)[groovydocs/carnival-util/index.html]
+- (carnival-gradle)[groovydocs/carnival-gradle/index.html]
+- (carnival-graph)[groovydocs/carnival-graph/index.html]

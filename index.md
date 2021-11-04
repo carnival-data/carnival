@@ -24,7 +24,7 @@
 - [Graph Methods](graph-method.md)
 
 ## GroovyDocs
-- [carnival-core](groovydocs/carnival-core/index.html)
-- [carnival-util](groovydocs/carnival-util/index.html)
-- [carnival-gradle](groovydocs/carnival-gradle/index.html)
-- [carnival-graph](groovydocs/carnival-graph/index.html)
+- [carnival-core](groovydoc/carnival-core/index.html)
+- [carnival-util](groovydoc/carnival-util/index.html)
+- [carnival-graph](groovydoc/carnival-graph/index.html)
+- [carnival-gradle](groovydoc/carnival-gradle/index.html)

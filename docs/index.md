@@ -23,8 +23,5 @@
 - [Graph Model](graph-model.md)
 - [Graph Methods](graph-method.md)
 
-## GroovyDocs
-- [carnival-core](groovydoc/carnival-core/index.html)
-- [carnival-util](groovydoc/carnival-util/index.html)
-- [carnival-graph](groovydoc/carnival-graph/index.html)
-- [carnival-gradle](groovydoc/carnival-gradle/index.html)
+## API Documentation
+- [Groovy API documentation](groovydoc/index.html)

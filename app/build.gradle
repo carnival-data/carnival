@@ -153,6 +153,25 @@ subprojects {
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
+// Dependency Resolution
+///////////////////////////////////////////////////////////////////////////////
+task resolveRuntimeDependencies(group: "Dependency Resolution") {
+    description "Resolves all runtime and testRuntime dependencies (e.g. to build offline later)."
+
+    subprojects {
+        doLast {
+            configurations.runtimeClasspath {
+                it.resolve()
+            }
+
+            configurations.testRuntimeClasspath {
+                it.resolve()
+            }
+        }
+    }
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // Testing
@@ -197,9 +216,6 @@ subprojects {
                 ant.echo "WARNING: Logback configuration file not set. Use the -D command line argument like -Dlogback.configurationFile=/path/to/file.xml.  Or, set the environment variable CARNIVAL_LOGBACK_CONFIG to /path/to/file.xml. See documentation."
             }
         }
-
-        jvmArgs '-Xms4g'
-        jvmArgs '-Xmx6g'
     }
 }
 
@@ -207,6 +223,8 @@ subprojects {
 // to run all test suites even if a failure occurs use the flag '--continue'
 // https://docs.gradle.org/current/userguide/command_line_interface.html#sec:continue_build_on_failure
 task testReport(type: TestReport) {
+    description "Generates an aggragated test report for all subprojects."
+
     destinationDir = file("$buildDir/reports/allTests")
 
     // Include the results from the `test` task in all subprojects
@@ -278,13 +296,39 @@ tasks.coveralls {
 // Documentation
 /////////////////////////////////
 
+/*
+// Use this instead of allGroovydoc if we need separate api docs per subproject
 subprojects {
     groovydoc {
-
-        destinationDir = file("../../docs/groovydoc/${project.name}")
+        destinationDir = file("../build/docs/groovydoc/${project.name}")
 
         doLast{
            ant.echo "groovydoc - destinationDir: $destinationDir"
         }
     }
 }
+*/
+
+task allGroovydoc(type: Groovydoc, group: "Documentation") {
+    description "Generates Groovydoc API documentation for the combined main source code of all subprojects."
+
+    source subprojects.collect { it.sourceSets.main.allGroovy }                                                
+    classpath = files(subprojects.collect { it.sourceSets.main.compileClasspath })
+    destinationDir = file("${buildDir}/docs/groovydoc")
+}
+
+task localPublishGroovydoc(type: Copy, group: "Documentation") {
+    description "Publishes combined groovydocs to './docs/groovydoc'."
+    dependsOn allGroovydoc
+
+    from "${buildDir}/docs/groovydoc"
+    into file("../docs/groovydoc")
+}
+
+task apidocClean(type: Delete, group: "Clean") {
+    description "Cleans generated api docs in './docs/groovydoc'."
+
+    delete fileTree(dir: "../docs/groovydoc/", exclude: ".gitignore").getFiles()    
+}
+
+clean.dependsOn apidocClean

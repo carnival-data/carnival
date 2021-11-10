@@ -29,6 +29,10 @@ build
 *.tgz
 *.properties
 
+# github pages documentation
+docs/groovydoc/**
+!docs/groovydoc/.gitignore
+
 # needed for gradle-plugin
 !app/carnival-gradle/src/main/resources/META-INF/gradle-plugins/*
 

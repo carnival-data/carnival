@@ -39,7 +39,7 @@ jobs:
       - name: Building Docs
         run: |
           docker-compose -f ./docker-compose-doc.yml up --abort-on-container-exit --force-recreate
-          rm ./docs/.gitignore
+          rm docs/.gitignore
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:

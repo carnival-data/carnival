@@ -238,6 +238,7 @@ abstract class CoreGraph implements GremlinTrait {
 
 		// attempt to set super/sub class relationship
 		if (vdef.superClass) {
+			log.trace "set superclass to ${vdef.superClass}"
 			assert vdef.isClass()
 			assert vdef.superClass.isClass()
 			assert vdef.vertex

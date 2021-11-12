@@ -166,7 +166,10 @@ class GraphMethodBase {
         
         // ensure that the process class is a subclass of GRAPH_PROCESS_CLASS
         // it is troubling that this happens every time a graph method is called
-        if (pcvDef != Core.VX.GRAPH_PROCESS) {
+        if (
+            pcvDef.label != Core.VX.GRAPH_PROCESS_CLASS.label ||
+            pcvDef.nameSpace != Core.VX.GRAPH_PROCESS_CLASS.nameSpace
+        ) {
             Base.EX.IS_SUBCLASS_OF.instance()
                 .from(pcvDef.vertex)
                 .to(Core.VX.GRAPH_PROCESS_CLASS.vertex)

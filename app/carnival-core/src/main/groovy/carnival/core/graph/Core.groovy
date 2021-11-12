@@ -56,7 +56,9 @@ class Core {
                 PX.EXCEPTION_MESSAGE
             ]
         ),
-        GRAPH_PROCESS_CLASS,
+        GRAPH_PROCESS_CLASS(
+            superClass: VX.PROCESS_CLASS
+        ),
         GRAPH_PROCESS(
             vertexProperties:[
                 PX.NAME,

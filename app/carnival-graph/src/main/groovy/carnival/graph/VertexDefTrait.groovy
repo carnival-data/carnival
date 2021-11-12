@@ -74,6 +74,23 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
         this.propertyDefs = propertyDefs
     }
 
+    /** */
+    VertexDefTrait getSuperClass() { this.superClass }
+
+    /** */
+    void setSuperClass(VertexDefTrait vDef) {
+        this.superClass = vDef
+    }
+
+    /** */
+    boolean getGlobal() { this.global }
+
+    /** */
+    void setGlobal(boolean val) {
+        this.global = val
+    }
+
+
 
     ///////////////////////////////////////////////////////////////////////////
     // PROPERTY METHODS
@@ -205,8 +222,8 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
         g.V(this.vertex)
             .out(Base.EX.IS_SUBCLASS_OF.label)
             .is(superClassDef.vertex)
-            .tryNext().orElseGet {
-                Base.EX.IS_SUBCLASS_OF.relate(g, vertex, superClassDef.vertex)
+        .tryNext().orElseGet {
+            Base.EX.IS_SUBCLASS_OF.relate(g, vertex, superClassDef.vertex)
         }
     }
 

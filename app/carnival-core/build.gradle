@@ -153,14 +153,11 @@ compileGroovy {
 
 
 
-
-
 ///////////////////////////////////////////////////////////////////////////////
 // TASKS - CLI
 ///////////////////////////////////////////////////////////////////////////////
-
-task carnivalLocalDirInit (dependsOn: ['classes'], type: JavaExec) {
-    description 'Run CarnivalLocalDirInit script'
+task carnivalLocalDirInit (type: JavaExec) {
+    description 'Run CarnivalLocalDirInit script to initilize the CARNIVAL_HOME directory'
 
     main = 'carnival.core.cli.CarnivalLocalDirInit'
     classpath = sourceSets.main.runtimeClasspath
@@ -185,15 +182,12 @@ task carnivalLocalDirInit (dependsOn: ['classes'], type: JavaExec) {
             ant.echo "WARNING: Logback configuration file not set. Use the -D command line argument like -Dlogback.configurationFile=/path/to/file.xml.  Or, set the environment variable CARNIVAL_LOGBACK_CONFIG to /path/to/file.xml. See documentation."
         }
     }
-
-    jvmArgs '-Xms512m'
-    jvmArgs '-Xmx512m'
 }
 
 test.dependsOn 'carnivalLocalDirInit'
 
 
-
+/*
 ///////////////////////////////////////////////////////////////////////////////
 // BUILD 
 ///////////////////////////////////////////////////////////////////////////////
@@ -210,3 +204,4 @@ task createProperties(dependsOn: processResources) {
 classes {
     dependsOn createProperties
 }
+*/

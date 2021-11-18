@@ -42,9 +42,9 @@ class CarnivalLibraryPlugin implements Plugin<Project> {
             implementation "org.neo4j.driver:neo4j-java-driver:${neo4JavaDriverVersion}"
 
             // Carnival
-            implementation("org.carnival:carnival-util:${carnivalVersion}")
-            implementation("org.carnival:carnival-graph:${carnivalVersion}")
-            implementation("org.carnival:carnival-core:${carnivalVersion}")
+            implementation("io.github.carnival-data:carnival-util:${carnivalVersion}")
+            implementation("io.github.carnival-data:carnival-graph:${carnivalVersion}")
+            implementation("io.github.carnival-data:carnival-core:${carnivalVersion}")
         }
     }
 }

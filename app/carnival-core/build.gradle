@@ -23,6 +23,11 @@ task javadocJar(type: Jar) {
     classifier = 'javadoc'
 }
 
+apply plugin: "signing"
+signing {
+    sign publishing.publications
+}
+
 publishing {
     publications {
         mavenGroovy(MavenPublication) {
@@ -30,12 +35,13 @@ publishing {
             from components.java
             artifact sourcesJar
             artifact javadocJar
+
             pom.withXml {
                 asNode().children().last() + {
                     resolveStrategy = Closure.DELEGATE_FIRST
                     name 'Carnival Core'
                     description 'The core classes of the Carnival framework'
-                    url 'https://github.com/pmbb-ibi/carnival'
+                    url 'https://github.com/carnival-data/carnival'
                     licenses {
                         license {
                             name 'GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007'
@@ -55,9 +61,9 @@ publishing {
                         }
                     }
                     scm {
-                        connection 'scm:git:git://github.com:pmbb-ibi/carnival.git'
-                        developerConnection 'scm:git:ssh://github.com:pmbb-ibi/carnival.git'
-                        url 'https://github.com/pmbb-ibi/carnival'
+                        connection 'scm:git:git://github.com/carnival-data/carnival.git'
+                        developerConnection 'scm:git:ssh://github.com:carnival-data/carnival.git'
+                        url 'https://github.com/carnival-data/carnival'
                     }
                 }
             }
@@ -73,6 +79,7 @@ publishing {
     }
     repositories {
         maven {
+        // mavenCentral {
             // change URLs to point to your repos, e.g. http://my.org/repo
             def releasesRepoUrl = "$buildDir/repos/releases"
             def snapshotsRepoUrl = "$buildDir/repos/snapshots"

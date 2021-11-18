@@ -2,7 +2,7 @@
 // DEPENDENCIES
 ///////////////////////////////////////////////////////////////////////////////
 
-@Grab('org.carnival:carnival-core:2.1.1-SNAPSHOT')
+@Grab('io.github.carnival-data:carnival-core:2.1.1-SNAPSHOT')
 @Grab('org.apache.tinkerpop:gremlin-core:3.4.10')
 
 

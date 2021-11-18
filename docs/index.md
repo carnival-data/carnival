@@ -1,11 +1,19 @@
 # Carnival
 
+**REVIEW JOSS FORMATTING/RECOMMENDATIONS**
+
 **Carnival** is a semantically driven informatics toolkit that enables the aggregation of data from disparate sources into a unified property graph and provides mechanisms to model and interact with the graph in well-defined ways.
 
 ## Key Features
 - A data caching mechanism to ease the computational burden of data aggregation during the development process and promotes data provenance
 - A graph modelling framework that ensures graph data remain consistent
 - A lightweight graph algorithm framework that promotes graph building recipes with automated provenance
+
+## Why is Carnival Useful???
+- some use cases
+- some elevator pitch text, less technical than what is here now
+- explain more clearly where Carnival fits in to common needs
+
 
 ## Data Aggregation
 Carnival supports data aggregation by caching the results of queries and API calls.    This can be beneficial during the development cycle by removing unnecessary and costly query operations.
@@ -151,10 +159,10 @@ class MyDomain {
 
 
 // create a PERSON vertex
-def personV = MyDomain.PERSON.instance().create(graph)
+def personV = MyDomain.VX.PERSON.instance().create(graph)
 
 // create a NAME vertex if one with matching properties does not already exist.
-def nameV = MyDomain.NAME.instance().withProperties(
+def nameV = MyDomain.VX.NAME.instance().withProperties(
     MyDomain.PX.FIRST, 'Alice',
     MyDomain.PX.LAST, 'Smith'
 ).ensure(graph, g)
@@ -166,9 +174,14 @@ MyDomain.EX.IS_NAMED.instance().from(personV).to(nameV).create()
 To learn more about graph modelling, see the section [Graph Model](graph-model.md).
 
 
+**Add a graph image?**
+
+
 
 ## Graph Algorithms
 The ability to programmatically update a graph is part of what makes property graphs so powerful and useful for informatics.  However, it is easy to lose track of which routines were called and what their effects were.  Carnival provides a framework to wrap graph routines so that they can be called and tracked in standardized ways.
+
+**Mention that graph methods create Process vertices in the graph??**
 
 ```groovy
 /**
@@ -212,6 +225,8 @@ class Reasoners implements GraphMethods {
 
 }
 ```
+
+**Add a graph image?**
 
 To learn more about graph methods, see [Graph Methods](graph-method.md).
 

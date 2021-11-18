@@ -8,6 +8,8 @@
 
 **Carnival** is a JVM data unification framework that enables the aggregation of data from disparate sources into a unified property graph and provides tools to reason over and interact with graph data using bounded operations. **Carnival** has a robust architecture for tracking the provenance of data and providing evidence chains for conclusions or reasoning made on those data.
 
+Carnival is a general purpose tool that is data agnostic, and has [several](https://github.com/carnival-data/carnival-clinical) [extensions](https://github.com/carnival-data/carnival-openspecimen) that are specific to the clinical biobanking domain.
+
 -   [Website (including documentation)](https://carnival-data.github.io/carnival/)
 -   [API Documentation](https://carnival-data.github.io/carnival/groovydoc/index.html)
 -   [Demonstration Project](https://github.com/carnival-data/carnival-micronaut)
@@ -42,7 +44,7 @@ See [developer setup](https://pmbb-ibi.github.io/carnival/#DeveloperSetup) for f
 
 Name | Description
 --- | ---
-carnival-core | Basic carnival framework. Implements the basic carnival framework classes (vines, reapers, reasonsers, etc). Defines the basic carnival graph schema (processes, databases). - [Core graph schema](https://github.com/pmbb-ibi/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/Core.groovy)
+carnival-core | Basic carnival framework. Implements the basic carnival framework classes (vines, reapers, reasonsers, etc). Defines the basic carnival graph schema (processes, databases). [Core model](https://github.com/pmbb-ibi/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/Core.groovy)
 [carnival-graph](app/carnival-graph/README.md) | Framework for defining carnival graph schemas (vertex and edge definitions). Contains the basic vertex, edge, and property classes.
 [carnival-util](app/carnival-util/README.md) | Standalone package that contains utility and helper classes such as MappedDataTable, FeatureReport and SqlUtils. Primarily used for dealing with relational data.
 [carnival-gradle](app/carnival-gradle/README.md) | Gradle plugin for building a Micronaut app that relies on Carnival.
@@ -52,5 +54,6 @@ carnival-core | Basic carnival framework. Implements the basic carnival framewor
 
 Name | Description
 --- | ---
-[carnival-clinical](app/carnival-clinical/README.md) | Extension of carnival-core for clinical data. Contains graph schema extensions for concepts such as patients, patient cohorts and healthcare encounters. Implements methods for case-control matching for patient cohorts. - [Graph schema](https://github.com/pmbb-ibi/carnival/blob/master/app/carnival-clinical/src/main/groovy/carnival/clinical/graph/Clinical.groovy)
+[carnival-clinical](https://github.com/carnival-data/carnival-clinical) | Extension of carnival-core for clinical data and biobanking operations. Contains model extensions for concepts such as patients, patient cohorts and healthcare encounters. Implements algorithms for generating case-control patient cohorts. [Clinical Model Extension](https://github.com/carnival-data/carnival-clinical/blob/main/src/main/groovy/carnival/clinical/graph/Clinical.groovy)
+[carnival-openspecimen](https://github.com/carnival-data/carnival-openspecimen) | Extension of carnival-core that implements vines for interfacing with [OpenSpecimen](https://www.openspecimen.org/) inventory management system.
 

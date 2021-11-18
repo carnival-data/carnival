@@ -10,17 +10,9 @@
 
 ## Quick Links
 
--   [Documentation Website Hosted by Github](https://carnival-data.github.io/carnival/)
-
-## Contents
-
-1. [Overview](#overview)
-1. [Github Pages](#github-pages-site)
-1. [Packages](#package-overview)
-1. [Graph Schema](#graph-schema)
-1. [Getting Started](#getting-started)
-
-
+-   [Website (including documentation)](https://carnival-data.github.io/carnival/)
+-   [API Documentation](https://carnival-data.github.io/carnival/groovydoc/index.html)
+-   [Demonstration Project](https://github.com/carnival-data/carnival-micronaut)
 
 ## <a name="overview"></a> Overview
 
@@ -42,32 +34,9 @@ Carnival’s property graph database:
 -   Has a query engine capable of executing queries of arbitrary complexity
 
 
+## <a name="getting-started"></a> Getting Started
 
-## <a name="github-pages-site"></a> Github Pages
-
-The Github pages site is stored in the `/docs` directory and makes use of [jekyll](https://jekyllrb.com). See the [jekyll docs](https://jekyllrb.com/docs/) for jekyll installation and usage instructions.
-
-### Prerequisites
-- Install [Ruby](https://www.ruby-lang.org/en/)
-- Install [Jekyll](https://jekyllrb.com)
-
-### Building
-To build the documentation:
-
-```
-cd docs
-bundle exec jekyll clean
-bundle exec jekyll build
-```
-
-### Local Jekyll Server
-
-To run the Jekyll server locally:
-
-```
-bundle exec jekyll serve
-```
-
+See [developer setup](https://pmbb-ibi.github.io/carnival/#DeveloperSetup) for full documentation on how to set up a development environment, and a tutorial for getting started.
 
 ## <a name="package-overview"></a> Packages
 
@@ -75,24 +44,15 @@ bundle exec jekyll serve
 
 Name | Description
 --- | ---
-[carnival-util](app/carnival-util/README.md) | Contains utility and helper classes such as MappedDataTable, FeatureReport and SqlUtils.
+carnival-core | Basic carnival framework. Implements the basic carnival framework classes (vines, reapers, reasonsers, etc). Defines the basic carnival graph schema (processes, databases). - [Core graph schema](https://github.com/pmbb-ibi/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/Core.groovy)
 [carnival-graph](app/carnival-graph/README.md) | Framework for defining carnival graph schemas (vertex and edge definitions). Contains the basic vertex, edge, and property classes.
-carnival-core | Basic carnival framework. Implements the basic carnival framework classes (vines, reapers, reasonsers, etc). Defines the basic carnival graph schema (processes, databases). - [Core graph schema](https://github.com/pmbb-ibi/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/Core.groovy) - [Reaper schema](https://github.com/pmbb-ibi/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/Reaper.groovy) - [Reasoner schema](https://github.com/pmbb-ibi/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/Reasoner.groovy)
+[carnival-util](app/carnival-util/README.md) | Standalone pacckage that contains utility and helper classes such as MappedDataTable, FeatureReport and SqlUtils.
 [carnival-gradle](app/carnival-gradle/README.md) | Gradle plugin for building a Micronaut app that relies on Carnival.
-[carnival-gremlin-dsl](app/carnival-gremlin-dsl/README.md) | Gremlin dsl support for traversing carnival property graphs.
 
-### Application Packages
+
+### Application Repositories
 
 Name | Description
 --- | ---
 [carnival-clinical](app/carnival-clinical/README.md) | Extension of carnival-core for clinical data. Contains graph schema extensions for concepts such as patients, patient cohorts and healthcare encounters. Implements methods for case-control matching for patient cohorts. - [Graph schema](https://github.com/pmbb-ibi/carnival/blob/master/app/carnival-clinical/src/main/groovy/carnival/clinical/graph/Clinical.groovy)
 
-
-## <a name="graph-schema"></a> Graph Schema
-
--   [graph specification (deprecated)](app/carnival-core/doc/graph.md)
-
-
-## <a name="getting-started"></a> Getting Started
-
-See [developer setup](https://pmbb-ibi.github.io/carnival/#DeveloperSetup) for full documentation on how to set up a development environment, and a tutorial for getting started.

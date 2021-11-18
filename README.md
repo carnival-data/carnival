@@ -8,8 +8,6 @@
 
 **Carnival** is a data unification technology that enables the aggregation of data from disparate sources into a unified property graph and provides tools to reason over and interact with graph data using bounded operations. **Carnival** has a robust architecture for tracking the provenance of data and providing evidence chains for conclusions or reasoning made on those data.
 
-## Quick Links
-
 -   [Website (including documentation)](https://carnival-data.github.io/carnival/)
 -   [API Documentation](https://carnival-data.github.io/carnival/groovydoc/index.html)
 -   [Demonstration Project](https://github.com/carnival-data/carnival-micronaut)

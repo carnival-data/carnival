@@ -220,6 +220,8 @@ To learn more about graph methods, see [Graph Methods](graph-method.md).
 ## Core Development
 - [Developer Setup](developer-setup.md)
 - [Production Builds](production-buids.md)
+- [Building Documentation](documentation.md)
+- [Default Carnival Schemas](schema.md)
 
 ## Application Development
 - [Data Tables](data-tables.md)

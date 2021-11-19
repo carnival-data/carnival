@@ -1,18 +1,31 @@
 # Carnival
 
-**REVIEW JOSS FORMATTING/RECOMMENDATIONS**
+## Summary
+Loading, cleansing, and organizing data can dominate the time spent on a data science project [[1]](https://www.forbes.com/sites/gilpress/2016/03/23/data-preparation-most-time-consuming-least-enjoyable-data-science-task-survey-says/?sh=5eebf58e6f63)[[2]](https://www.anaconda.com/state-of-data-science-2020?utm_medium=press&utm_source=anaconda&utm_campaign=sods-2020&utm_content=report).  This phenomenon is exacerbated in human subjects research at an academic medical institution where data are very complex, reside in disparate repositories with varying levels of accesibility, are coded by separate yet overlapping coding systems, frequently rely on manual data entry, and change over time.  Data provenance and reproducibility of results are important factors in human subjects research.  It is no easy task to implement a robust consistent data pipeline with clear data provenance that can be rerun when source data change.  While there are several mature libraries and toolkits that enable visualization and statistical computation once the analytical data set is generated, there are comparatively fewer compelling informatics offerings to address these concerns.
+
+Knowledge bases in Resource Description Framework (RDF) triplestores can be valuable tools to harmonize and enrich complex data.  While there are relational to RDF mappers, transforming source relational data into RDF triples is challenging.  Property graphs offer a middle ground between relational and RDF.  They lack the native ability to benefit from ontologies, but are more friendly to algorithmic computation.  
+
+**Carnival** was developed to provide programmers with tools to go from source data to a well formatted property graph and onward to RDF.  
+
+
+## Statement of need
 
 **Carnival** is a semantically driven informatics toolkit that enables the aggregation of data from disparate sources into a unified property graph and provides mechanisms to model and interact with the graph in well-defined ways.
 
-## Key Features
+### Key Features
 - A data caching mechanism to ease the computational burden of data aggregation during the development process and promotes data provenance
 - A graph modelling framework that ensures graph data remain consistent
 - A lightweight graph algorithm framework that promotes graph building recipes with automated provenance
 
-## Why is Carnival Useful???
-- some use cases
-- some elevator pitch text, less technical than what is here now
-- explain more clearly where Carnival fits in to common needs
+### Uses
+
+#### Production of analytical data sets
+Carnival was initially developed to facilitate the production of analytical data sets for human subjects research.  The source data repositories included a relational data warehouse accessible by SQL, a [REDCap](https://www.project-redcap.org) installation accessible by API, and manually curated data files in CSV format.  Data pertaining to the set of study subjects was striped across each of these data sources.  Using Carnival, a data pipeline was implemented to pull data from the data sources, instantiate them in a property graph, clean and harmonize them, and produce analytical data sets at required intervals.
+
+#### Data APIs
+
+#### Data synchronization
+
 
 
 ## Data Aggregation

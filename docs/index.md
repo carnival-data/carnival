@@ -22,9 +22,12 @@ Knowledge bases in Resource Description Framework (RDF) triplestores can be valu
 #### Production of analytical data sets
 Carnival was initially developed to facilitate the production of analytical data sets for human subjects research.  The source data repositories included a relational data warehouse accessible by SQL, a [REDCap](https://www.project-redcap.org) installation accessible by API, and manually curated data files in CSV format.  Data pertaining to the set of study subjects was striped across each of these data sources.  Using Carnival, a data pipeline was implemented to pull data from the data sources, instantiate them in a property graph, clean and harmonize them, and produce analytical data sets at required intervals.
 
-#### Data APIs
+#### Queries over enriched data
+A key challenge of human subjects research is to locate patients to recruit to a study, frequently done by searching a research data set containing raw patient data.  Potential recruits need to be stratified by attributes, such as age, race, and ethnicity, matched against inclusion criteria, such as the presence of a disease diagnosis, and filtered by exclusion criteria, such as a treatment modality.  **Carnival** has been used effectively in this area by loading the relevant raw data into a graph, stratifying and categorizing patients by the relevant criteria, then using graph traversals to extract the patients who are potential recruits.
 
-#### Data synchronization
+
+#### System integrations
+**Carnival's** ability to integrate data from disparate resources into a flexible computational resource enables data driven system integrations.  For example, **Carnival** has been used effectictively to integrate a custom help desk ticketing system with Monday.com.  The help desk ticketing system was developed locally with a back-end relational database.  Monday.com is accessible via its API for reads and writes.  By modelling the help desk and Monday.com data as separate graph models, then using a third graph model to integrate the two, a **Carnival** integration application was developed to integrate the two data sets and compute changes that needed to occur based on the state of the data.  In this example, **Carnival** was partnered with [Micronaut](https://micronaut.io) and deployed as a [Docker](https://www.docker.com) container on [Microsoft Azure](https://azure.microsoft.com/).  The service would build an in-memory graph at regular minute intervals, compute the changes that were required, then call the appropriate web services to execute the logic of the integration.
 
 
 

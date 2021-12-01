@@ -80,6 +80,26 @@ class PropertyDefTraitSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
+    def "valueOf returns null if property not present"() {
+        when:
+        def v1 = VX.THING_2.instance().create(graph)
+
+        then:
+        !PX.PROP_A.of(v1).isPresent()
+        PX.PROP_A.valueOf(v1) == null
+
+    }
+
+
+    def "valueOf returns property value if present"() {
+        when:
+        def v1 = VX.THING_2.instance().withProperty(PX.PROP_A, 'a').create(graph)
+
+        then:
+        PX.PROP_A.valueOf(v1) == 'a'
+    }
+
+
     def "set closure result"() {
         when:
         def v1 = VX.THING_2.instance().create(graph)

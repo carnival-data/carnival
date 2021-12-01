@@ -111,7 +111,7 @@ trait PropertyDefTrait {
     /** */
     public Object valueOf(Element el) {
         assert el
-        el.value(getLabel())
+        el.property(getLabel()).isPresent() ? el.value(getLabel()) : null
     }
 
 

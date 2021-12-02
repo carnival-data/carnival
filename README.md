@@ -13,7 +13,7 @@ While Carnival is a general purpose tool that is domain agnostic, and has [sever
 -   [Website (including documentation)](https://carnival-data.github.io/carnival/)
 -   [API Documentation](https://carnival-data.github.io/carnival/groovydoc/index.html)
 -   [Demonstration Project](https://github.com/carnival-data/carnival-micronaut)
--   [Contribution Guide](Contribution Guide)
+-   [Contribution Guide](README.md#contribution-guide)
 
 ## <a name="overview"></a> Overview
 

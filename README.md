@@ -6,13 +6,14 @@
 
 *It's a party of information!*
 
-**Carnival** is a JVM data unification framework that enables the aggregation of data from disparate sources into a unified property graph and provides tools to reason over and interact with graph data using bounded operations. **Carnival** has a robust architecture for tracking the provenance of data and providing evidence chains for conclusions or reasoning made on those data.
+**Carnival** Carnival is an open source JVM data unification framework that allows for a large variety of ETL and analysis tasks related to relational data and property graphs. Some key functionality includes aggregation of data from disparate sources into a unified property graph and tools to reason over and interact with graph data using bounded operations. Carnival includes a robust architecture for tracking the provenance of data and providing evidence chains for conclusions or reasoning made on those data.
 
-Carnival is a general purpose tool that is data agnostic, and has [several](https://github.com/carnival-data/carnival-clinical) [extensions](https://github.com/carnival-data/carnival-openspecimen) that are specific to the clinical biobanking domain.
+While Carnival is a general purpose tool that is domain agnostic, and has [several](https://github.com/carnival-data/carnival-clinical) [extensions](https://github.com/carnival-data/carnival-openspecimen) that provide models and algorithms specific to the clinical biobanking domain.
 
 -   [Website (including documentation)](https://carnival-data.github.io/carnival/)
 -   [API Documentation](https://carnival-data.github.io/carnival/groovydoc/index.html)
 -   [Demonstration Project](https://github.com/carnival-data/carnival-micronaut)
+-   [Contribution Guide](README.md#contribution-guide)
 
 ## <a name="overview"></a> Overview
 
@@ -50,10 +51,21 @@ carnival-core | Basic carnival framework. Implements the basic carnival framewor
 [carnival-gradle](app/carnival-gradle/README.md) | Gradle plugin for building a Micronaut app that relies on Carnival.
 
 
-### Application Repositories
+### Carnvival Domain-Specific Extensions
 
 Name | Description
 --- | ---
 [carnival-clinical](https://github.com/carnival-data/carnival-clinical) | Extension of carnival-core for clinical data and biobanking operations. Contains model extensions for concepts such as patients, patient cohorts and healthcare encounters. Implements algorithms for generating case-control patient cohorts. [Clinical Model Extension](https://github.com/carnival-data/carnival-clinical/blob/main/src/main/groovy/carnival/clinical/graph/Clinical.groovy)
 [carnival-openspecimen](https://github.com/carnival-data/carnival-openspecimen) | Extension of carnival-core that implements vines for interfacing with [OpenSpecimen](https://www.openspecimen.org/) inventory management system.
+
+## Contribution Guide
+Carnival is an open source project and welcomes contributions! Here are some ways to help:
+
+* Writing and improving the documentation
+* Reporting or fixing bugs
+* Contributing features or enhancements
+* Creating carnival extensions for more domains
+* Creating demonstration projects or tutorials
+
+
 

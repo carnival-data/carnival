@@ -51,6 +51,14 @@ class VertexDefTraitSpec extends Specification {
 
         THING_5(propertiesMustBeDefined:false),
 
+        A_CLASS,
+        B_CLASS (
+            superClass: VX.A_CLASS
+        ),
+        B (
+            instanceOf: VX.B_CLASS
+        )
+
         private VX() {}
         private VX(Map m) {m.each { k,v -> this."$k" = v }}
     }
@@ -98,6 +106,63 @@ class VertexDefTraitSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+    def "instanceOf edge is automatically created"() {
+        setup:
+        // these have to be explicitly set as we are not using CoreGraph, just
+        // creating a TinkerGraph and testing VertexDefTrait in isolation
+        if (!VX.A_CLASS.vertex) VX.A_CLASS.vertex = VX.A_CLASS.instance().create(graph)
+        if (!VX.B_CLASS.vertex) VX.B_CLASS.vertex = VX.B_CLASS.instance().create(graph)
+
+        when:
+        def b = VX.B.instance().create(graph)
+
+        then:
+        b != null
+        g.V(b)
+            .out(Base.EX.IS_INSTANCE_OF)
+            .is(VX.B_CLASS.vertex)
+        .tryNext().isPresent()
+    }
+
+
+    class Something implements VertexDefTrait {
+        String name
+        String name() {
+            this.name
+        }
+    }
+
+    def "cannot set superclass unless is a class"() {
+        when:
+        def s = new Something(name:"a")
+
+        then:
+        !s.isClass()
+
+        when:
+        s.superClass = VX.THING
+
+        then:
+        Exception e = thrown()
+    }
+
+
+    def "cannot set instanceof of class"() {
+        when:
+        def s = new Something(name:"a_class")
+
+        then:
+        s.isClass()
+
+        when:
+        s.instanceOf = VX.THING
+
+        then:
+        Exception e = thrown()
+
+    }
+
 
     def "can add undefined props on switch"() {
         when:

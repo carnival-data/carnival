@@ -33,6 +33,7 @@ class Base {
     /** */
     static enum EX implements EdgeDefTrait {
         IS_SUBCLASS_OF,
+        IS_INSTANCE_OF
     }
 
 

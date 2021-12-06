@@ -59,6 +59,9 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
     VertexDefTrait superClass
 
     /** */
+    VertexDefTrait instanceOf
+
+    /** */
     Boolean propertiesMustBeDefined = true
 
 
@@ -79,6 +82,9 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
 
     /** */
     void setSuperClass(VertexDefTrait vDef) {
+        assert vDef != null
+        if (!isClass()) throw new RuntimeException("cannot set superClass when isClass() is false")
+        
         this.superClass = vDef
     }
 
@@ -88,6 +94,17 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
     /** */
     void setGlobal(boolean val) {
         this.global = val
+    }
+
+    /** */
+    VertexDefTrait getInstanceOf() { this.instanceOf }
+
+    /** */
+    void setInstanceOf(VertexDefTrait vDef) {
+        assert vDef != null
+        if (isClass()) throw new RuntimeException("cannot set instanceOf when isClass() is true")
+        
+        this.instanceOf = vDef
     }
 
 
@@ -182,6 +199,8 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
             Base.PX.NAME_SPACE.label, ns
         )
         if (isGlobal()) v.property(Base.PX.VERTEX_DEFINITION_CLASS.label, getVertexDefinitionClass())
+        
+        //if (instanceOf != null) Base.EX.IS_INSTANCE_OF.instance().from(v).to(instanceOf).create()
 
         //log.trace "createVertex ${v} ${v.label()}"
         return v

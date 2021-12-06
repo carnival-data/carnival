@@ -116,6 +116,7 @@ class ControlledInstance extends PropertyValuesHolder<ControlledInstance> {
 
     /** */
     public Vertex createVertex(Graph graph) {
+        log.trace "ControlledInstance.createVertex graph:${graph}"
         assert graph
 
         assertRequiredProperties()
@@ -131,10 +132,13 @@ class ControlledInstance extends PropertyValuesHolder<ControlledInstance> {
         
         if (vertexDef.isClass()) v.property(Base.PX.IS_CLASS.label, vertexDef.isClass())
         if (vertexDef.isGlobal()) v.property(Base.PX.VERTEX_DEFINITION_CLASS.label, vertexDef.vertexDefinitionClass)
+        if (vertexDef.instanceOf != null) {
+            assert vertexDef.instanceOf.vertex
+            Base.EX.IS_INSTANCE_OF.instance().from(v).to(vertexDef.instanceOf.vertex).create()
+        }
 
         setElementProperties(v)
 
-        //log.debug "added vertex $v with label ${v.label()} and props $propertyValues"
         return v
     }
 

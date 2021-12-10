@@ -1,8 +1,27 @@
 # Graph Model
 
-Fundamental to Carnival is the ability to model graph elements. Vertices, edges, and properties can all be modelled.
+Fundamental to Carnival is the ability to model graph elements. **Vertices**, **edges**, and **properties** can all be modelled.
 
-_Example: Vertex definition_
+## Property Definitions
+Both vertices and edges can contain properties.  The first step in graph modelling is to define the properties that will be used.  Property definitions are simple, just enumerating the properties that will be used in the graph without any further descriptors of the properties, like data type.
+
+```groovy
+@PropertyDefinition
+static enum PX {
+    IS_ALIVE
+}
+```
+- `@PropertyDefinition` tells carnival that the `PX` enum class defines properties that can be used on vertices and edges.
+- `PX` is an arbitrary name.
+- `PX` defines a single property, `IS_ALIVE`.
+
+As with vertex and edge definitions, any name can be chosen for the name.  `PX` is a convention for property definitions.  While any name can be chosen, keep in mind that the name will appear in your code whenever the properties are referenced.
+
+When used in vertex or an edge, `IS_ALIVE` will be represented as a property labelled `isAlive`.  Carnival expects that properties will follow the Java convention of capital snake case and automatically translates them to camel case for use in the property graph.
+
+
+## Vertex Definitions
+Vertex definitions define the vertex labels that will be used in the graph, the properties that are valid for each label, and other properties associated with vertices.
 
 ```groovy
 @VertexDefinition
@@ -20,51 +39,21 @@ static enum PX {
 }
 ```
 
-- `@VertexDefinition` tells Carnival that VX is a vertex definition.
+- `@VertexDefinition` tells Carnival that `VX` is a vertex definition.
 - There are no rules governing the naming of definition enums. `VX`, `EX`, and `PX` are merely conventions.
-- The `PERSON` vertex has one allowed property.  IS_ALIVE is not required to be present nor to be unique, but will be indexed for quicker searching.
+- The `PERSON` vertex has one allowed property.  `IS_ALIVE` is not required to be present nor to be unique, but will be indexed for quicker searching.
 
-Given the above vertex definition, we can create a vertex as follows:
 
-```groovy
-Vertex person1 = VX.PERSON.instance().withProperty(PX.IS_ALIVE, true).create(graph)
-```
 
-- person1 is a variable that references a Vertex with label Person and two properties, nameSpace: VX and isAlive: true.
-
-The name space of a vertex will be prepended by the package and name of the enclosing class, eg. my.package.TheClass$VX.
-
-_Example: Edge definition_
-
-```groovy
-@EdgeDefinition
-static enum EX {
-    IS_FRIENDS_WITH(
-        domain:[VX.PERSON],
-        range:[VX.PERSON]
-    )
-}
-```
-
-- `@EdgeDefinition` tells Carnival that EX is an edge definition.
-- IS_FRIENDS_WITH is an edge where the outgoing and incoming vertices must be VX.PERSON vertices
-
-Given the above, we can create a second person and a directional IS_FRIENDS_WITH edge as follows.
-
-```groovy
-Vertex person2 = VX.PERSON.instance().withProperty(PX.IS_ALIVE, true).create(graph)
-Edge edge1 = EX.IS_FRIENDS_WITH.instance().from(person1).to(person2).create()
-```
-
-## Vertex Labels
-The Carnival graph model will set the label of vertices based on the verte definition.  Vertex definitions are expected to be in snake case.  The corresponding label used in the graph will be camel case.
+### Vertex Labels
+The Carnival graph model will set the label of vertices based on the vertex definition.  Vertex definitions are expected to be in snake case.  The corresponding label used in the graph will be camel case.
 
 Vertex Definition | Vertex Label
 --- | ---
 PERSON | Person
 PERSON\_WITH\_HAT | PersonWithHat
 
-## Name Spaces
+### Name Spaces
 Vertex definitions in Carnival are name-spaced.  When a vertex is created using the Carnival graph model, a `Base.PX.NAME_SPACE` property will be added as a vertex property.  The name space will be computed based on the package, class, and enum name of the vertex definition. 
 
 For example, given a definition of:
@@ -79,7 +68,8 @@ in a class named `AwesomeClass` with package `my.fun.package`, the `Base.PX.NAME
 
 Namespaces allow disparate graph models to be represented in the same graph.  However, vertex labels are not currently scoped by namespace.  So, vertices created from `VX.PERSON` vertex definitions defined in different classes will share the `Person` label in the graph.  If the a person means something very different across definitions, the result could be a confusing graph.  Future implementation of Carnival will likely introduce a feature to automatically scope vertex labels so each definition of `Person` gets its own vertex label.
 
-## Vertex Properties
+
+### Vertex Properties
 By default, properties must be defined on vertices.
 
 ```groovy
@@ -100,8 +90,8 @@ static enum VX {
 - The `THING_WITH_ANY_PROPERTIES` vertex can have any properties due to the argument `propertiesMustBeDefined:false'.  By default, all vertex properties must be defined.
 - The `THING_WITH_NO_PROPERTIES` vertex has no defined properties and therefore will accept none.
 
-## Classes
-Vertices can be used to represent class structures, which can be useful for data representation.  
+### Class Vertices
+Vertices can be used to represent class structures.
 
 ```groovy
 @VertexDefinition
@@ -124,12 +114,12 @@ static enum VX {
     ),
 }
 ```
-- When this model is instanted in the graph, a singleton vertex will be created for `COLLIE_CLASS` and `CLASS_OF_ALL_DOGS` with a `Base.EX.IS_SUBCLASS_OF` relationship between them.
+- When this model is instantiated in the graph, a singleton vertex will be created for `COLLIE_CLASS` and `CLASS_OF_ALL_DOGS` with a `Base.EX.IS_SUBCLASS_OF` relationship between them.
 
-There is no special handling of "class" vertices beyond what is described here.  Representing a class structure in a graph is useful for computation and searching.  Given the above graph model, it woudl be straightforward to find all the shiba inus and collies even though their vertex labels do not denote that they are both dogs.  
+There is no special handling of "class" vertices beyond what is described here.  Representing a class structure in a graph can be useful for computation and searching.  Given the above graph model, it would be straightforward to find all the shiba inus and collies even though their vertex labels do not denote that they are both dogs.  
 
 
-## Instances
+### Instance Vertices
 The `instanceOf` property of a vertex definition can be used to declare the class of an instance vertex.
 
 ```groovy
@@ -141,7 +131,58 @@ static enum VX {
     )
 }
 
-def rover = VX.SHIBA_INU.instance().create(graph)
+Vertex rover = VX.SHIBA_INU.instance().create(graph)
 ```
 - A `Base.EX.IS_INSTANCE_OF` edge will be created from `rover` to the vertex representing `VX.SHIBA_INU_CLASS`.
+
+
+### Instantiating Vertices
+
+Given the above vertex definition, we can create a vertex as follows:
+
+```groovy
+Vertex person1 = VX.PERSON.instance().withProperty(PX.IS_ALIVE, true).create(graph)
+```
+
+- `person1` is a variable that references a Vertex with label Person and two properties, nameSpace: VX and isAlive: true.
+
+The name space of a vertex will be prepended by the package and name of the enclosing class, eg. my.package.TheClass$VX.
+
+
+## Edge Definitions
+Edge modelling includes the edge labels as well as the valid properties, domain, and range of edges.
+
+```groovy
+@EdgeDefinition
+static enum EX {
+    IS_FRIENDS_WITH(
+        domain:[VX.PERSON],
+        range:[VX.PERSON]
+    ),
+    propertyDefs:[
+        PX.STRENGTH_OF_RELATIONSHIP.withConstraints(index:true)
+    ]
+}
+
+@PropertyDefinition
+static enum PX {
+    STRENGTH_OF_RELATIONSHIP
+}
+```
+
+- `@EdgeDefinition` tells Carnival that EX is an edge definition.
+- `IS_FRIENDS_WITH` is an edge where the outgoing and incoming vertices must be `VX.PERSON` vertices
+- `IS_FRIENDS_WITH` edges accept a single property, `PX.STRENGTH_OF_RELATIONSHIP`
+
+### Instantiating Edges
+
+Given the above, we can create a second person and a directional `IS_FRIENDS_WITH` edge as follows.
+
+```groovy
+Vertex person2 = VX.PERSON.instance().withProperty(PX.IS_ALIVE, true).create(graph)
+Edge edge1 = EX.IS_FRIENDS_WITH.instance().from(person1).to(person2).create()
+```
+
+
+
 

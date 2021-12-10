@@ -210,46 +210,55 @@ extends java.lang.Object</pre>
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>T</code></td>
-                            <td class="colLast"><code><strong><a href="#withMatchingProperties(java.util.Map)">withMatchingProperties</a></strong>(java.util.Map args)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#withMatchingProperties(java.util.Map)">withMatchingProperties</a></strong>(java.util.Map args)</code><br>Matches a map of data against the properties of this element by name and
+ assignes the property value on match.</td>
                         </tr>
                         
                         <tr class="rowColor">
+                            <td class="colFirst"><code></code></td>
+                            <td class="colLast"><code>T</code></td>
+                            <td class="colLast"><code><strong><a href="#withNonNullMatchingProperties(java.util.Map)">withNonNullMatchingProperties</a></strong>(java.util.Map args)</code><br>Matches a map of data against the properties of this element by name and
+ assignes the property value on match ignoring data records where the
+ value is null.</td>
+                        </tr>
+                        
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>T</code></td>
                             <td class="colLast"><code><strong><a href="#withNonNullProperties(java.lang.Object)">withNonNullProperties</a></strong>(java.lang.Object[] args)</code><br></td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>T</code></td>
                             <td class="colLast"><code><strong><a href="#withNonNullProperties(java.util.List)">withNonNullProperties</a></strong>(java.util.List args)</code><br></td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>T</code></td>
                             <td class="colLast"><code><strong><a href="#withProperties(java.lang.Object)">withProperties</a></strong>(java.lang.Object[] args)</code><br></td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>T</code></td>
                             <td class="colLast"><code><strong><a href="#withProperties(java.util.Map)">withProperties</a></strong>(java.util.Map args)</code><br></td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>T</code></td>
                             <td class="colLast"><code><strong><a href="#withProperties(java.util.List)">withProperties</a></strong>(java.util.List args)</code><br></td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>T</code></td>
                             <td class="colLast"><code><strong><a href="#withProperty(carnival.graph.PropertyDefTrait, java.lang.Enum)">withProperty</a></strong>(carnival.graph.PropertyDefTrait propDef, java.lang.Enum propValue)</code><br></td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>T</code></td>
                             <td class="colLast"><code><strong><a href="#withProperty(carnival.graph.PropertyDefTrait, java.lang.Object)">withProperty</a></strong>(carnival.graph.PropertyDefTrait propDef, java.lang.Object propValue)</code><br></td>
@@ -369,7 +378,20 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>T <strong>withMatchingProperties</strong>(java.util.Map args)</h4>
-                                <p></p>
+                                <p> Matches a map of data against the properties of this element by name and
+ assignes the property value on match.
+</p>
+                            </li>
+                        </ul>
+                    
+                        <a name="withNonNullMatchingProperties(java.util.Map)"><!-- --></a>
+                        <ul class="blockListLast">
+                            <li class="blockList">
+                                <h4>T <strong>withNonNullMatchingProperties</strong>(java.util.Map args)</h4>
+                                <p> Matches a map of data against the properties of this element by name and
+ assignes the property value on match ignoring data records where the
+ value is null.
+</p>
                             </li>
                         </ul>
                     

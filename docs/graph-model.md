@@ -3,7 +3,7 @@
 Fundamental to Carnival is the ability to model graph elements. **Vertices**, **edges**, and **properties** can all be modelled.
 
 ## Property Definitions
-Both vertices and edges can contain properties.  The first step in graph modelling is to define the properties that will be used.  Property definitions are simple, just enumerating the properties that will be used in the graph without any further descriptors of the properties, like data type.
+Both vertices and edges can contain properties.  The first step in graph modelling is to define the properties that will be used.  Property definitions are simple.  They enumerate the properties that will be used in the graph without any further descriptors of the properties.  In this version of Carnival, there is no concept of data type.
 
 ```groovy
 @PropertyDefinition
@@ -15,9 +15,9 @@ static enum PX {
 - `PX` is an arbitrary name.
 - `PX` defines a single property, `IS_ALIVE`.
 
-As with vertex and edge definitions, any name can be chosen for the name.  `PX` is a convention for property definitions.  While any name can be chosen, keep in mind that the name will appear in your code whenever the properties are referenced.
+As with vertex and edge definitions, anything can be chosen for the name of the enum.  `PX` is a convention for property definitions.  While any name can be chosen, keep in mind that the name will appear in your code whenever the properties are referenced.  So, keeping it terse will promote less verbose code.
 
-When used in vertex or an edge, `IS_ALIVE` will be represented as a property labelled `isAlive`.  Carnival expects that properties will follow the Java convention of capital snake case and automatically translates them to camel case for use in the property graph.
+When applied to a vertex or an edge, `IS_ALIVE` will be represented as a property labelled `isAlive`.  Carnival expects that properties will follow the Java convention of capital snake case and automatically translates them to camel case for use in the property graph.
 
 
 ## Vertex Definitions
@@ -40,13 +40,13 @@ static enum PX {
 ```
 
 - `@VertexDefinition` tells Carnival that `VX` is a vertex definition.
-- There are no rules governing the naming of definition enums. `VX`, `EX`, and `PX` are merely conventions.
-- The `PERSON` vertex has one allowed property.  `IS_ALIVE` is not required to be present nor to be unique, but will be indexed for quicker searching.
+- There are no rules governing the naming of definition enums. `VX` is a convention for vertex definition enums.
+- The `PERSON` vertex has one allowed property, `IS_ALIVE`, which is not required to be present nor to be unique, but will be indexed for quicker searching.
 
 
 
 ### Vertex Labels
-The Carnival graph model will set the label of vertices based on the vertex definition.  Vertex definitions are expected to be in snake case.  The corresponding label used in the graph will be camel case.
+The Carnival graph model will set the label of vertices based on the vertex definition.  Vertex definitions are expected to be in snake case.  The corresponding label used in the graph will be capital camel case.
 
 Vertex Definition | Vertex Label
 --- | ---
@@ -64,13 +64,13 @@ static enum VX {
     PERSON
 }
 ```
-in a class named `AwesomeClass` with package `my.fun.package`, the `Base.PX.NAME_SPACE` would be `my.fun.package.AwesomeClass$VX`.
+in a class named `AwesomeClass` with package `my.fun.package`, the `nameSpace` property of any `Person` would be `my.fun.package.AwesomeClass$VX`.
 
-Namespaces allow disparate graph models to be represented in the same graph.  However, vertex labels are not currently scoped by namespace.  So, vertices created from `VX.PERSON` vertex definitions defined in different classes will share the `Person` label in the graph.  If the a person means something very different across definitions, the result could be a confusing graph.  Future implementation of Carnival will likely introduce a feature to automatically scope vertex labels so each definition of `Person` gets its own vertex label.
+Namespaces allow disparate graph models to be represented in the same graph.  However, please note that property graph engines optimize on vertex label.  Vertices created from `VX.PERSON` vertex definitions defined in different classes will share the `Person` label in the graph.  If the a person means something very different across definitions, the result could be a confusing graph.  Future implementation of Carnival will likely introduce a feature to automatically scope vertex labels so each definition of `Person` gets its own unique vertex label.
 
 
 ### Vertex Properties
-By default, properties must be defined on vertices.
+By default, properties must be defined on vertices and edges.
 
 ```groovy
 @VertexDefinition
@@ -86,12 +86,12 @@ static enum VX {
     THING_WITH_NO_PROPERTIES,
 }
 ```
-- The `PERSON` vertex has three allowed properties.  NAME is required, must be unique, and will be indexed by the database engine.  IS_ALIVE is not required to be present nor to be unique, but will be indexed for quicker searching.  NOTES has no constraints and will not be indexed.
-- The `THING_WITH_ANY_PROPERTIES` vertex can have any properties due to the argument `propertiesMustBeDefined:false'.  By default, all vertex properties must be defined.
-- The `THING_WITH_NO_PROPERTIES` vertex has no defined properties and therefore will accept none.
+- The `PERSON` vertex has three allowed properties.  NAME is required, must be unique, and will be indexed by the database engine.  `IS_ALIVE` is not required to be present nor to be unique, but will be indexed for quicker searching.  `NOTES` has no constraints and will not be indexed.
+- A `THING_WITH_ANY_PROPERTIES` vertex can have any properties due to the argument `propertiesMustBeDefined:false`.  The default requirement that all vertex properties must be defined is removed.
+- The `THING_WITH_NO_PROPERTIES` vertex has no defined properties and due to the default behavior will accept none.
 
 ### Class Vertices
-Vertices can be used to represent class structures.
+Vertices can be used to represent class structures in the graph.
 
 ```groovy
 @VertexDefinition
@@ -102,7 +102,7 @@ static enum VX {
         isClass:true
     ),
     
-    // by convention, a definition that ends in _CLASS is considered a class
+    // Carnival assumes a definition that ends in _CLASS is a class
     COLLIE_CLASS (
         
         // set the superlass of COLLIE_CLASS
@@ -114,7 +114,8 @@ static enum VX {
     ),
 }
 ```
-- When this model is instantiated in the graph, a singleton vertex will be created for `COLLIE_CLASS` and `CLASS_OF_ALL_DOGS` with a `Base.EX.IS_SUBCLASS_OF` relationship between them.
+- When this model is instantiated in the graph, a singleton vertex will be created for `COLLIE_CLASS`, `CLASS_OF_ALL_DOGS`, and SHIBA_INU_CLASS 
+- A `Base.EX.IS_SUBCLASS_OF` relationship will be instantiated between `CLASS_OF_ALL_DOGS` and the sub-classes `COLLIE_CLASS` and `SHIBA_INU_CLASS`.
 
 There is no special handling of "class" vertices beyond what is described here.  Representing a class structure in a graph can be useful for computation and searching.  Given the above graph model, it would be straightforward to find all the shiba inus and collies even though their vertex labels do not denote that they are both dogs.  
 
@@ -138,15 +139,15 @@ Vertex rover = VX.SHIBA_INU.instance().create(graph)
 
 ### Instantiating Vertices
 
-Given the above vertex definition, we can create a vertex as follows:
+Using the Carnival vertex builder, we can create a vertex as follows:
 
 ```groovy
 Vertex person1 = VX.PERSON.instance().withProperty(PX.IS_ALIVE, true).create(graph)
 ```
 
-- `person1` is a variable that references a Vertex with label Person and two properties, nameSpace: VX and isAlive: true.
+- `person1` is a variable that references a Vertex with label `Person` and two properties, `nameSpace: ...$VX` and `isAlive: true`.
 
-The name space of a vertex will be prepended by the package and name of the enclosing class, eg. my.package.TheClass$VX.
+The name space of a vertex will be prepended by the package and name of the enclosing class, eg. `my.package.TheClass$VX`.
 
 
 ## Edge Definitions

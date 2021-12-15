@@ -8,6 +8,7 @@ File | Description
 --- | ---
 [graph-model-1.groovy](groovy/graph-model-1.groovy) | Graph validation
 [graph-model-2.groovy](groovy/graph-model-2.groovy) | Name spaces
+[graph-model-3.groovy](groovy/graph-model-3.groovy) | Classes
 
 ## Property Definitions
 Both vertices and edges can contain properties.  The first step in graph modelling is to define the properties that will be used.  Property definitions are simple.  They enumerate the properties that will be used in the graph without any further descriptors of the properties.  In this version of Carnival, there is no concept of data type.

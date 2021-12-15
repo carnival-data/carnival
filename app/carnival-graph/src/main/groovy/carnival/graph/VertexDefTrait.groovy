@@ -64,6 +64,9 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
     /** */
     Boolean propertiesMustBeDefined = true
 
+    /** Explicitly designate this definition as a class */
+    Boolean isClass = null
+
 
     ///////////////////////////////////////////////////////////////////////////
     // GETTERS / SETTERS
@@ -131,7 +134,14 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
 
 
     /** */
+    boolean getIsClass() {
+        isClass()        
+    }
+
+
+    /** */
     public boolean isClass() {
+        if (this.isClass != null) return this.isClass
         name().toLowerCase().endsWith(CLASS_SUFFIX)
     }
 

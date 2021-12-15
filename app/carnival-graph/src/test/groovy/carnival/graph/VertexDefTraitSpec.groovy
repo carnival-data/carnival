@@ -57,6 +57,14 @@ class VertexDefTraitSpec extends Specification {
         ),
         B (
             instanceOf: VX.B_CLASS
+        ),
+
+        CLASS_OF_SOMETHING (
+            isClass: true
+        ),
+
+        NOT_A_CLASS (
+            isClass: false
         )
 
         private VX() {}
@@ -161,6 +169,15 @@ class VertexDefTraitSpec extends Specification {
         then:
         Exception e = thrown()
 
+    }
+
+
+    def "explicit isClass"() {
+        expect:
+        VX.CLASS_OF_SOMETHING.isClass()
+        !VX.NOT_A_CLASS.isClass()
+        VX.A_CLASS.isClass
+        VX.A_CLASS.isClass()
     }
 
 

@@ -239,6 +239,22 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
     // KNOWLEDGE GRAPH METHODS
     ///////////////////////////////////////////////////////////////////////////
 
+    /** */
+    public void applyTo(Graph graph, GraphTraversalSource g) {
+        if (this.isClass() && this.requiredProperties.size() == 0) {
+            this.vertex = this.instance().ensure(graph, g)
+        }
+
+		if (this.superClass) {
+			assert this.isClass()
+			assert this.superClass.isClass()
+			assert this.vertex
+			assert this.superClass.vertex
+			this.setSubclassOf(g, this.superClass)
+		}
+    }
+
+
     /** 
      *
      *

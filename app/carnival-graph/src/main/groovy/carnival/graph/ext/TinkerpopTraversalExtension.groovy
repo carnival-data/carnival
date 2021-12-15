@@ -13,6 +13,7 @@ import groovy.transform.EqualsAndHashCode
 import org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal
 import org.apache.tinkerpop.gremlin.structure.Vertex
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 
 import carnival.graph.EdgeDefTrait
 import carnival.graph.VertexDefTrait
@@ -27,6 +28,47 @@ class TinkerpopTraversalExtension {
     /** */
     static GraphTraversal properties(DefaultTraversal traversal, PropertyDefTrait pdef) {
         traversal.properties(pdef.label)
+    }
+
+    /** */
+    static GraphTraversal instances(DefaultTraversal traversal) {
+        traversal
+            .emit()
+            .repeat(
+                __.in(Base.EX.IS_SUBCLASS_OF)
+            )
+        .in(Base.EX.IS_INSTANCE_OF)
+    }
+
+    /** */
+    static GraphTraversal isInstanceOf(DefaultTraversal traversal, VertexDefTrait vdef) {
+        traversal
+            .as('ttev')
+            .out(Base.EX.IS_INSTANCE_OF)
+            .until(
+                __.isa(vdef)
+            )
+            .repeat(
+                __.out(Base.EX.IS_SUBCLASS_OF)
+            )
+        .select('ttev')
+    }
+
+    /** */
+    static GraphTraversal classes(DefaultTraversal traversal) {
+        traversal
+            .out(Base.EX.IS_INSTANCE_OF)
+            .emit()
+        .repeat(
+            __.out(Base.EX.IS_SUBCLASS_OF)
+        )
+    }
+
+    /** */
+    static GraphTraversal instanceClass(DefaultTraversal traversal) {
+        traversal
+            .out(Base.EX.IS_INSTANCE_OF)
+            .has(Base.PX.IS_CLASS, true)
     }
 
     /** */

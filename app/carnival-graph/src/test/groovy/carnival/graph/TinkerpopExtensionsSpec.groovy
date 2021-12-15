@@ -7,12 +7,16 @@ import spock.lang.Unroll
 import spock.lang.Shared
 
 import org.apache.tinkerpop.gremlin.structure.T
-
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
+
+import carnival.graph.VertexDefinition
+import carnival.graph.PropertyDefinition
+import carnival.graph.EdgeDefinition
+import carnival.graph.Base
 
 
 
@@ -26,34 +30,57 @@ class TinkerpopExtensionsSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
-    static enum VX implements VertexDefTrait {
+
+    @VertexDefinition
+    static enum VX {
         THING(
             vertexProperties:[PX.ID]
         )
-
-        VX() {}
-        VX(Map m) {m.each { k,v -> this."$k" = v }}
     }
 
-    static enum VX2 implements VertexDefTrait {
+    @VertexDefinition
+    static enum VX2 {
         THING(
             vertexProperties:[PX.ID]
         )
-
-        VX2() {}
-        VX2(Map m) {m.each { k,v -> this."$k" = v }}
     }
 
-    static enum EX implements EdgeDefTrait {
+    @EdgeDefinition
+    static enum EX {
         IS_NOT
     }
 
-    static enum EX2 implements EdgeDefTrait {
+    @EdgeDefinition
+    static enum EX2{
         IS_NOT
     }
 
-    static enum PX implements PropertyDefTrait {
+    @PropertyDefinition
+    static enum PX {
         ID
+    }
+
+    @VertexDefinition
+    static enum VX3 {
+        CLASS_OF_ALL_DOGS (
+            isClass:true
+        ),
+        
+        COLLIE_CLASS (
+            superClass: CLASS_OF_ALL_DOGS
+        ),
+
+        SHIBA_INU_CLASS (
+            superClass: CLASS_OF_ALL_DOGS
+        ),
+
+        SHIBA_INU (
+            instanceOf: SHIBA_INU_CLASS
+        ),
+
+        COLLIE (
+            instanceOf: COLLIE_CLASS
+        )
     }
 
     static enum LOCAL_ID { ID1 }
@@ -70,13 +97,17 @@ class TinkerpopExtensionsSpec extends Specification {
     // SET UP
     ///////////////////////////////////////////////////////////////////////////
     
-    def setupSpec() {
+    def setup() {
         graph = TinkerGraph.open()
         g = graph.traversal()
+
+        [VX3.CLASS_OF_ALL_DOGS, VX3.COLLIE_CLASS, VX3.SHIBA_INU_CLASS].each {
+            it.applyTo(graph, g)
+        }
     } 
 
 
-    def cleanupSpec() {
+    def cleanup() {
         if (g) g.close()
         if (graph) graph.close()
     }
@@ -87,6 +118,62 @@ class TinkerpopExtensionsSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+    def "get class of an instance vertex"() {
+        when:
+        def collieV = VX3.COLLIE.instance().create(graph)
+
+        def classVs = g.V(collieV).instanceClass().toList()
+
+        then:
+        classVs != null
+        classVs.size() == 1
+        classVs.contains(VX3.COLLIE_CLASS.vertex)
+    }
+
+
+    def "get classes of an instance vertex"() {
+        when:
+        def collieV = VX3.COLLIE.instance().create(graph)
+
+        def classVs = g.V(collieV).classes().toList()
+
+        then:
+        classVs != null
+        classVs.size() == 2
+        classVs.contains(VX3.COLLIE_CLASS.vertex)
+        classVs.contains(VX3.CLASS_OF_ALL_DOGS.vertex)
+    }
+
+
+    def "vertices that are instancef of a class"() {
+        when:
+        def collieV = VX3.COLLIE.instance().create(graph)
+        def shibaV = VX3.SHIBA_INU.instance().create(graph)
+
+        def dogVs = g.V().isInstanceOf(VX3.CLASS_OF_ALL_DOGS).toList()
+
+        then:
+        dogVs != null
+        dogVs.size() == 2
+        dogVs.contains(collieV)
+        dogVs.contains(shibaV)
+    }
+
+
+    def "get all instances from class"() {
+        when:
+        def collieV = VX3.COLLIE.instance().create(graph)
+        def shibaV = VX3.SHIBA_INU.instance().create(graph)
+
+        def dogVs = g.V(VX3.CLASS_OF_ALL_DOGS.vertex).instances().toList()
+
+        then:
+        dogVs != null
+        dogVs.size() == 2
+        dogVs.contains(collieV)
+        dogVs.contains(shibaV)
+    }
 
 
     def "all must be groupable"() {

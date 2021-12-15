@@ -21,7 +21,6 @@ import carnival.core.graph.CoreGraphTinker
 import carnival.graph.VertexDefinition
 import carnival.graph.PropertyDefinition
 import carnival.graph.EdgeDefinition
-import carnival.graph.EdgeDefinition
 import carnival.graph.Base
 import carnival.core.graph.GraphMethods
 import carnival.core.graph.GraphMethod
@@ -69,28 +68,19 @@ cg.addDefinitions(VX)
 Vertex spotV = VX.COLLIE.instance().create(graph)
 println "spotV: ${spotV} ${spotV.label()}"
 
-Vertex spotClassV = g.V(spotV)
-    .out(Base.EX.IS_INSTANCE_OF)
-.next()
+Vertex spotClassV = g.V(spotV).instanceClass().next()
 println "spotClassV: ${spotClassV} ${spotClassV.label()}"
 
-List<Vertex> spotClassVs = g.V(spotV)
-    .out(Base.EX.IS_INSTANCE_OF)
-    .has(Base.PX.IS_CLASS, true)
-    .emit()
-    .repeat(__.out(Base.EX.IS_SUBCLASS_OF))
-.toList()
+List<Vertex> spotClassVs = g.V(spotV).classes().toList()
 println "spotClassVs: ${spotClassVs} ${spotClassVs*.label()}"
-
 
 Vertex pepperV = VX.SHIBA_INU.instance().create(graph)
 println "pepperV: ${pepperV} ${pepperV.label()}"
 
-List<Vertex> dogVs = g.V(VX.CLASS_OF_ALL_DOGS.vertex)
-    .emit()
-    .repeat(
-        __.in(Base.EX.IS_SUBCLASS_OF)
-    )
-    .in(Base.EX.IS_INSTANCE_OF)
-.toList()
+List<Vertex> dogVs = g.V(VX.CLASS_OF_ALL_DOGS.vertex).instances().toList()
 println "dogVs: ${dogVs} ${dogVs*.label()}"
+
+List<Vertex> alsoDogVs = g.V()
+    .isInstanceOf(VX.CLASS_OF_ALL_DOGS)
+.toList()
+println "alsoDogVs: ${alsoDogVs} ${alsoDogVs*.label()}"

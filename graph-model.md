@@ -1,14 +1,17 @@
 # Graph Model
 
-Fundamental to Carnival is the ability to model graph elements. **Vertices**, **edges**, and **properties** can all be modelled.
+Fundamental to Carnival is the ability to model graph elements. **Vertices**, **edges**, and **properties** can all be modelled, and certian validation constraints and subclass/superclass relationships can be defined. The model is defined is defined by creating enums with specific annotations.
 
-## Examples
+## Example Scripts
 
 File | Description
 --- | ---
 [graph-model-1.groovy](groovy/graph-model-1.groovy) | Graph validation
 [graph-model-2.groovy](groovy/graph-model-2.groovy) | Name spaces
 [graph-model-3.groovy](groovy/graph-model-3.groovy) | Instances and classes
+
+## Model File Locations
+Models can be defined anywhere, as shown in the example scripts. In a larger application, the convention is to either create a file named in `GraphModel.groovy` the main source directory, or to create a subfolder named `model` that contains files with the model definitions.
 
 ## Property Definitions
 Both vertices and edges can contain properties.  The first step in graph modelling is to define the properties that will be used.  Property definitions are simple.  They enumerate the properties that will be used in the graph without any further descriptors of the properties.  In this version of Carnival, there is no concept of data type.

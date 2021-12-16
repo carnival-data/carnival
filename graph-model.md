@@ -8,7 +8,7 @@ File | Description
 --- | ---
 [graph-model-1.groovy](groovy/graph-model-1.groovy) | Graph validation
 [graph-model-2.groovy](groovy/graph-model-2.groovy) | Name spaces
-[graph-model-3.groovy](groovy/graph-model-3.groovy) | Classes
+[graph-model-3.groovy](groovy/graph-model-3.groovy) | Instances and classes
 
 ## Property Definitions
 Both vertices and edges can contain properties.  The first step in graph modelling is to define the properties that will be used.  Property definitions are simple.  They enumerate the properties that will be used in the graph without any further descriptors of the properties.  In this version of Carnival, there is no concept of data type.
@@ -104,7 +104,6 @@ Vertices can be used to represent class structures in the graph.
 ```groovy
 @VertexDefinition
 static enum VX {
-    
     // isClass tells Carnival CLASS_OF_DOGS is a class
     CLASS_OF_ALL_DOGS (
         isClass:true
@@ -112,7 +111,6 @@ static enum VX {
     
     // Carnival assumes a definition that ends in _CLASS is a class
     COLLIE_CLASS (
-        
         // set the superlass of COLLIE_CLASS
         superClass: CLASS_OF_ALL_DOGS
     ),
@@ -136,7 +134,7 @@ The `instanceOf` property of a vertex definition can be used to declare the clas
 static enum VX {    
     SHIBA_INU_CLASS,
     SHIBA_INU (
-        instanceOf:VX. SHIBA_INU_CLASS
+        instanceOf:VX.SHIBA_INU_CLASS
     )
 }
 

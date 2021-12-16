@@ -1,6 +1,6 @@
 # Graph Model
 
-Fundamental to Carnival is the ability to model graph elements. **Vertices**, **edges**, and **properties** can all be modelled, and certian validation constraints and subclass/superclass relationships can be defined. The model is defined is defined by creating enums with specific annotations.
+Fundamental to Carnival is the ability to model graph elements, and the framework is heavily influenced by the [Web Ontology Language (OWL)](https://www.w3.org/TR/2012/REC-owl2-primer-20121211/) specification. **Vertices**, **edges**, and **properties** can all be modelled, and certian validation constraints and class relationships can be specified. The model elements are defined in code by creating enums with specific AST annotations and properties.
 
 ## Example Scripts
 
@@ -93,7 +93,7 @@ static enum VX {
             NOTES
         ]
     ),
-    THING_WITH_ANY_PROPERTIES(propertiesMustBeDefined:false,
+    THING_WITH_ANY_PROPERTIES(propertiesMustBeDefined:false),
     THING_WITH_NO_PROPERTIES,
 }
 ```
@@ -102,7 +102,7 @@ static enum VX {
 - The `THING_WITH_NO_PROPERTIES` vertex has no defined properties and due to the default behavior will accept none.
 
 ### Class Vertices
-Vertices can be used to represent class structures in the graph.
+Vertices can be used to represent class structures (similar to [OWL classes](https://en.wikipedia.org/wiki/Web_Ontology_Language#Classes)) in the graph. Classes can have sub/super class relationships between each other, and other verticies can be defined that are "instances" of that class.
 
 ```groovy
 @VertexDefinition
@@ -123,7 +123,7 @@ static enum VX {
     ),
 }
 ```
-- When this model is instantiated in the graph, a singleton vertex will be created for `COLLIE_CLASS`, `CLASS_OF_ALL_DOGS`, and SHIBA_INU_CLASS 
+- When this model is instantiated in the graph, a singleton vertex will be created for `COLLIE_CLASS`, `CLASS_OF_ALL_DOGS`, and `SHIBA_INU_CLASS` 
 - A `Base.EX.IS_SUBCLASS_OF` relationship will be instantiated between `CLASS_OF_ALL_DOGS` and the sub-classes `COLLIE_CLASS` and `SHIBA_INU_CLASS`.
 
 There is no special handling of "class" vertices beyond what is described here.  Representing a class structure in a graph can be useful for computation and searching.  Given the above graph model, it would be straightforward to find all the shiba inus and collies even though their vertex labels do not denote that they are both dogs.  

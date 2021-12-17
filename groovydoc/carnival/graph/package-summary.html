@@ -72,6 +72,11 @@ function windowTitle()
 </div>
 
 
+<h2 title="Package carnival.graph Description" class="title">Package carnival.graph Description</h2>
+<div class="header"> Contains the framework for defining a graph model including properties, verticies, edges, validation and constraints.
+
+ </div>
+
 
 <div class="contentContainer">
 
@@ -93,7 +98,17 @@ function windowTitle()
                                     EdgeDefTrait
                                 </a></strong>
                             </td>
-                            <td></td>
+                            <td>Defines allowed edges in a graph model, automatically inherited by 
+ enums with the `@EdgeDefinition` annotation.</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="PropertyDefTrait.html" title="class in carnival/graph">
+                                    PropertyDefTrait
+                                </a></strong>
+                            </td>
+                            <td>Defines allowed properties in a graph model, automatically inherited by 
+ enums with the `@PropertyDefinition` annotation.</td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
@@ -101,7 +116,8 @@ function windowTitle()
                                     VertexDefTrait
                                 </a></strong>
                             </td>
-                            <td></td>
+                            <td>Defines allowed verticies in a graph model, automatically inherited by 
+ enums with the `@VertexDefinition` annotation.</td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
@@ -136,8 +152,8 @@ function windowTitle()
                                     Base
                                 </a></strong>
                             </td>
-                            <td><DL><DT><B>EdgeDefinition:</B></DT><DD>and</DD></DL><DL><DT><B>PropertyDefinition:</B></DT><DD>do not seem to work here... not sure
- why.</DD></DL>   </td>
+                            <td>Contains property and edge definitions used to express base concepts like class relationships 
+ and namespace in a Carnival graph. </td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
@@ -159,14 +175,6 @@ function windowTitle()
                             <td class="colOne">
                                 <strong><a href="EdgeBuilder.html" title="class in carnival/graph">
                                     EdgeBuilder
-                                </a></strong>
-                            </td>
-                            <td></td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="PropertyDefTraitHolder.html" title="class in carnival/graph">
-                                    PropertyDefTraitHolder
                                 </a></strong>
                             </td>
                             <td></td>
@@ -220,7 +228,7 @@ function windowTitle()
                                     Base.EX
                                 </a></strong>
                             </td>
-                            <td></td>
+                            <td>Defines edges used to express class relationships in Carnival graphs.</td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
@@ -228,7 +236,7 @@ function windowTitle()
                                     Base.PX
                                 </a></strong>
                             </td>
-                            <td></td>
+                            <td>Defines properties used to define class and namespace information in Carnival graphs.</td>
                         </tr>
 
                     </tbody>
@@ -283,7 +291,7 @@ function windowTitle()
                                     EdgeDefinition
                                 </a></strong>
                             </td>
-                            <td></td>
+                            <td>Used to specify edge definitions in a graph model.</td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
@@ -291,7 +299,7 @@ function windowTitle()
                                     PropertyDefinition
                                 </a></strong>
                             </td>
-                            <td></td>
+                            <td>Used to specify property definitions in a graph model.</td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
@@ -299,7 +307,7 @@ function windowTitle()
                                     VertexDefinition
                                 </a></strong>
                             </td>
-                            <td></td>
+                            <td>Used to specify vertex definitions in a graph model.</td>
                         </tr>
 
                     </tbody>

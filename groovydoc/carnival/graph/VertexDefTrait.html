@@ -107,8 +107,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 trait VertexDefTrait
 extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDefsTrait</a></pre>
 
-    <p>
-</p>
+    <p> Defines allowed verticies in a graph model, automatically inherited by 
+ enums with the `@VertexDefinition` annotation. <DL><DT><B>See Also:</B></DT><DD><a href='../../carnival/graph/VertexDefinition.html' title='VertexDefinition'>VertexDefinition</a></DD></DL></p>
 
           </li>
     </ul>
@@ -170,7 +170,9 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         
                         <tr class="altColor">
                             <td class="colFirst"><code><strong>boolean</strong></code>&nbsp;</td>
-                            <td class="colLast"><code><a href="#global">global</a></code><br></td>
+                            <td class="colLast"><code><a href="#global">global</a></code><br>if true, the `Base.PX.NAME_SPACE` property for verticies in the graph
+ will use a global namespace value instead of one generated from 
+ the package name.</td>
                         </tr>
                         
                         <tr class="rowColor">
@@ -180,7 +182,7 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         
                         <tr class="altColor">
                             <td class="colFirst"><code><strong><a href='../../carnival/graph/VertexDefTrait.html'>VertexDefTrait</a></strong></code>&nbsp;</td>
-                            <td class="colLast"><code><a href="#instanceOf">instanceOf</a></code><br></td>
+                            <td class="colLast"><code><a href="#instanceOf">instanceOf</a></code><br>optional, defines what class these verticies are instances of</td>
                         </tr>
                         
                         <tr class="rowColor">
@@ -190,17 +192,18 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         
                         <tr class="altColor">
                             <td class="colFirst"><code><strong>java.lang.Boolean</strong></code>&nbsp;</td>
-                            <td class="colLast"><code><a href="#isClass">isClass</a></code><br>Explicitly designate this definition as a class</td>
+                            <td class="colLast"><code><a href="#isClass">isClass</a></code><br>Explicitly designate this definition as a class. </td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code><strong>java.lang.Boolean</strong></code>&nbsp;</td>
-                            <td class="colLast"><code><a href="#propertiesMustBeDefined">propertiesMustBeDefined</a></code><br></td>
+                            <td class="colLast"><code><a href="#propertiesMustBeDefined">propertiesMustBeDefined</a></code><br>if false, verticies created by this definition can contain properties
+ that were not defined by this VertexDef</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code><strong><a href='../../carnival/graph/VertexDefTrait.html'>VertexDefTrait</a></strong></code>&nbsp;</td>
-                            <td class="colLast"><code><a href="#superClass">superClass</a></code><br></td>
+                            <td class="colLast"><code><a href="#superClass">superClass</a></code><br>optional, defines what the superclass of this class is</td>
                         </tr>
                         
                         <tr class="rowColor">
@@ -215,7 +218,7 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         </tr>
                         
                         <tr class="rowColor">
-                            <td class="colFirst"><code><strong>java.util.Set&lt;carnival.graph.PropertyDefTrait&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>java.util.Set&lt;<a href='../../carnival/graph/PropertyDefTrait.html' title='PropertyDefTrait'>PropertyDefTrait</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#vertexProperties">vertexProperties</a></code><br></td>
                         </tr>
                         
@@ -313,7 +316,7 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
-                            <td class="colLast"><code>java.util.Set&lt;carnival.graph.PropertyDefTrait&gt;</code></td>
+                            <td class="colLast"><code>java.util.Set&lt;<a href='../../carnival/graph/PropertyDefTrait.html' title='PropertyDefTrait'>PropertyDefTrait</a>&gt;</code></td>
                             <td class="colLast"><code><strong><a href="#getVertexProperties()">getVertexProperties</a></strong>()</code><br>Setter wrapper for propertyDefs</td>
                         </tr>
                         
@@ -392,7 +395,7 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
-                            <td class="colLast"><code><strong><a href="#setVertexProperties(Set)">setVertexProperties</a></strong>(java.util.Set&lt;carnival.graph.PropertyDefTrait&gt; propertyDefs)</code><br>Getter wrapper for propertyDefs</td>
+                            <td class="colLast"><code><strong><a href="#setVertexProperties(Set)">setVertexProperties</a></strong>(java.util.Set&lt;<a href='../../carnival/graph/PropertyDefTrait.html' title='PropertyDefTrait'>PropertyDefTrait</a>&gt; propertyDefs)</code><br>Getter wrapper for propertyDefs</td>
                         </tr>
                         
                         <tr class="rowColor">
@@ -474,7 +477,9 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>boolean <strong>global</strong></h4>
-                                <p></p>
+                                <p> if true, the `Base.PX.NAME_SPACE` property for verticies in the graph
+ will use a global namespace value instead of one generated from 
+ the package name.</p>
                             </li>
                         </ul>
                     
@@ -490,7 +495,8 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4><a href='../../carnival/graph/VertexDefTrait.html'>VertexDefTrait</a> <strong>instanceOf</strong></h4>
-                                <p></p>
+                                <p> optional, defines what class these verticies are instances of 
+</p>
                             </li>
                         </ul>
                     
@@ -506,7 +512,9 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.lang.Boolean <strong>isClass</strong></h4>
-                                <p>Explicitly designate this definition as a class</p>
+                                <p> Explicitly designate this definition as a class. A singleton vertex will
+ automatically be created in the graph 
+</p>
                             </li>
                         </ul>
                     
@@ -514,7 +522,9 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.lang.Boolean <strong>propertiesMustBeDefined</strong></h4>
-                                <p></p>
+                                <p> if false, verticies created by this definition can contain properties
+ that were not defined by this VertexDef
+</p>
                             </li>
                         </ul>
                     
@@ -522,7 +532,8 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4><a href='../../carnival/graph/VertexDefTrait.html'>VertexDefTrait</a> <strong>superClass</strong></h4>
-                                <p></p>
+                                <p> optional, defines what the superclass of this class is
+</p>
                             </li>
                         </ul>
                     
@@ -546,7 +557,7 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         <a name="vertexProperties"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>java.util.Set&lt;carnival.graph.PropertyDefTrait&gt; <strong>vertexProperties</strong></h4>
+                                <h4>java.util.Set&lt;<a href='../../carnival/graph/PropertyDefTrait.html' title='PropertyDefTrait'>PropertyDefTrait</a>&gt; <strong>vertexProperties</strong></h4>
                                 <p></p>
                             </li>
                         </ul>
@@ -659,7 +670,7 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         <a name="getVertexProperties()"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>java.util.Set&lt;carnival.graph.PropertyDefTrait&gt; <strong>getVertexProperties</strong>()</h4>
+                                <h4>java.util.Set&lt;<a href='../../carnival/graph/PropertyDefTrait.html' title='PropertyDefTrait'>PropertyDefTrait</a>&gt; <strong>getVertexProperties</strong>()</h4>
                                 <p>Setter wrapper for propertyDefs</p>
                             </li>
                         </ul>
@@ -766,7 +777,7 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         <a name="setVertexProperties(Set)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>void <strong>setVertexProperties</strong>(java.util.Set&lt;carnival.graph.PropertyDefTrait&gt; propertyDefs)</h4>
+                                <h4>void <strong>setVertexProperties</strong>(java.util.Set&lt;<a href='../../carnival/graph/PropertyDefTrait.html' title='PropertyDefTrait'>PropertyDefTrait</a>&gt; propertyDefs)</h4>
                                 <p>Getter wrapper for propertyDefs</p>
                             </li>
                         </ul>

@@ -107,6 +107,9 @@ if (location.href.indexOf('is-external=true') == -1) {
 trait EdgeDefTrait
 extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDefsTrait</a></pre>
 
+    <p> Defines allowed edges in a graph model, automatically inherited by 
+ enums with the `@EdgeDefinition` annotation. <DL><DT><B>See Also:</B></DT><DD><a href='../../carnival/graph/EdgeDefinition.html' title='EdgeDefinition'>EdgeDefinition</a></DD></DL></p>
+
           </li>
     </ul>
 </div>
@@ -146,13 +149,15 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong>java.util.List&lt;carnival.graph.PropertyDefTrait&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>java.util.List&lt;<a href='../../carnival/graph/PropertyDefTrait.html' title='PropertyDefTrait'>PropertyDefTrait</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#edgeProperties">edgeProperties</a></code><br></td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code><strong>boolean</strong></code>&nbsp;</td>
-                            <td class="colLast"><code><a href="#global">global</a></code><br></td>
+                            <td class="colLast"><code><a href="#global">global</a></code><br>if true, the `Base.PX.NAME_SPACE` property for edges in the graph
+ will use a global namespace value instead of one generated from 
+ the package name.</td>
                         </tr>
                         
                         <tr class="altColor">
@@ -224,7 +229,7 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
-                            <td class="colLast"><code>java.util.List&lt;carnival.graph.PropertyDefTrait&gt;</code></td>
+                            <td class="colLast"><code>java.util.List&lt;<a href='../../carnival/graph/PropertyDefTrait.html' title='PropertyDefTrait'>PropertyDefTrait</a>&gt;</code></td>
                             <td class="colLast"><code><strong><a href="#getEdgeProperties()">getEdgeProperties</a></strong>()</code><br>Setter wrapper for propertyDefs</td>
                         </tr>
                         
@@ -291,7 +296,7 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
-                            <td class="colLast"><code><strong><a href="#setEdgeProperties(ArrayList)">setEdgeProperties</a></strong>(java.util.ArrayList&lt;carnival.graph.PropertyDefTrait&gt; propertyDefs)</code><br>Getter wrapper for propertyDefs</td>
+                            <td class="colLast"><code><strong><a href="#setEdgeProperties(ArrayList)">setEdgeProperties</a></strong>(java.util.ArrayList&lt;<a href='../../carnival/graph/PropertyDefTrait.html' title='PropertyDefTrait'>PropertyDefTrait</a>&gt; propertyDefs)</code><br>Getter wrapper for propertyDefs</td>
                         </tr>
                         
                         <tr class="altColor">
@@ -374,7 +379,7 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         <a name="edgeProperties"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>java.util.List&lt;carnival.graph.PropertyDefTrait&gt; <strong>edgeProperties</strong></h4>
+                                <h4>java.util.List&lt;<a href='../../carnival/graph/PropertyDefTrait.html' title='PropertyDefTrait'>PropertyDefTrait</a>&gt; <strong>edgeProperties</strong></h4>
                                 <p></p>
                             </li>
                         </ul>
@@ -383,7 +388,10 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>boolean <strong>global</strong></h4>
-                                <p></p>
+                                <p> if true, the `Base.PX.NAME_SPACE` property for edges in the graph
+ will use a global namespace value instead of one generated from 
+ the package name.
+</p>
                             </li>
                         </ul>
                     
@@ -463,7 +471,7 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         <a name="getEdgeProperties()"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>java.util.List&lt;carnival.graph.PropertyDefTrait&gt; <strong>getEdgeProperties</strong>()</h4>
+                                <h4>java.util.List&lt;<a href='../../carnival/graph/PropertyDefTrait.html' title='PropertyDefTrait'>PropertyDefTrait</a>&gt; <strong>getEdgeProperties</strong>()</h4>
                                 <p>Setter wrapper for propertyDefs</p>
                             </li>
                         </ul>
@@ -551,7 +559,7 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         <a name="setEdgeProperties(ArrayList)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>void <strong>setEdgeProperties</strong>(java.util.ArrayList&lt;carnival.graph.PropertyDefTrait&gt; propertyDefs)</h4>
+                                <h4>void <strong>setEdgeProperties</strong>(java.util.ArrayList&lt;<a href='../../carnival/graph/PropertyDefTrait.html' title='PropertyDefTrait'>PropertyDefTrait</a>&gt; propertyDefs)</h4>
                                 <p>Getter wrapper for propertyDefs</p>
                             </li>
                         </ul>

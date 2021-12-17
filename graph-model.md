@@ -1,6 +1,6 @@
 # Graph Model
 
-Fundamental to Carnival is the ability to model graph elements, and the framework is heavily influenced by the [Web Ontology Language (OWL)](https://www.w3.org/TR/2012/REC-owl2-primer-20121211/) specification. **Vertices**, **edges**, and **properties** can all be modelled, and certian validation constraints and class relationships can be specified.
+Fundamental to Carnival is the ability to model graph elements, and the concepts in Carnival graph modeling are heavily influenced by the [Web Ontology Language (OWL)](https://www.w3.org/TR/2012/REC-owl2-primer-20121211/) specification. **Vertices**, **edges**, and **properties** can all be modelled, and certian validation constraints and class relationships can be specified.
 
 ## Example Scripts
 
@@ -13,9 +13,14 @@ File | Description
 ## Overview
 The graph model is specified by creating enums that are annotated with `@PropertyDefinition`, `@EdgeDefinition` or `@VertexDefinition`. Among other things, these annotations apply the traits `PropertyDefTrait`, `EdgeDefTrait`, or `VertexDefTrait` to the enums.
 
-Once `VertexDefinition` and `EdgeDefinition` enums have been defined, new instances can be added to the property graph using `create()` methods. Some properties and edges to specify things like the namespace of the element or superclass relationships will be automatically created.
+Once VertexDefinition and EdgeDefinition have been created they can be used to add new elements to the graph, for example:
+```
+Edge edge1 = EX.IS_FRIENDS_WITH.instance().from(person1).to(person2).create()
+```
+The `instance()` method invokes a builder class (`EdgeBuilder` or `ControlledInstance`) that the following methods (in this example `from()`, `to()` and `create()`) act on. Some properties and edges to indicate Carnival concepts like the namespace of the element 
+or superclass relationships will be automatically created in the graph.
 
-See the [carnival.graph API docs](https://carnival-data.github.io/carnival/groovydoc/carnival/graph/package-summary.html) for details.
+See the API docs for the [carnival.graph package](https://carnival-data.github.io/carnival/groovydoc/index.html?carnival/graph/package-summary.html) for reference.
 
 ### Model File Locations
 Models can be defined anywhere, as shown in the example scripts. However in a larger application, the convention is to either create a file named in `GraphModel.groovy` the main source directory or to create a subpackage named `model` that contains files with the model definitions.

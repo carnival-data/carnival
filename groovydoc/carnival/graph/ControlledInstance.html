@@ -106,8 +106,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 class ControlledInstance
 extends <a href='../../carnival/graph/PropertyValuesHolder.html' title='PropertyValuesHolder'>PropertyValuesHolder</a>&lt;<a href='../../carnival/graph/ControlledInstance.html' title='ControlledInstance'>ControlledInstance</a>&gt;</pre>
 
-    <p>
-</p>
+    <p> Builder class used when creating verticies from a VertexDefTrait object. <DL><DT><B>See Also:</B></DT><DD><a href='../../carnival/graph/VertexDefTrait.html' title='VertexDefTrait'>VertexDefTrait</a></DD></DL></p>
 
           </li>
     </ul>
@@ -139,7 +138,7 @@ extends <a href='../../carnival/graph/PropertyValuesHolder.html' title='Property
                         
                         <tr class="altColor">
                             <td class="colFirst"><code><strong><a href='../../carnival/graph/VertexDefTrait.html'>VertexDefTrait</a></strong></code>&nbsp;</td>
-                            <td class="colLast"><code><a href="#vertexDef">vertexDef</a></code><br></td>
+                            <td class="colLast"><code><a href="#vertexDef">vertexDef</a></code><br>Object that owns this builder.</td>
                         </tr>
                         
                     </table>
@@ -199,19 +198,22 @@ extends <a href='../../carnival/graph/PropertyValuesHolder.html' title='Property
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>org.apache.tinkerpop.gremlin.structure.Vertex</code></td>
-                            <td class="colLast"><code><strong><a href="#create(org.apache.tinkerpop.gremlin.structure.Graph)">create</a></strong>(org.apache.tinkerpop.gremlin.structure.Graph graph)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#create(org.apache.tinkerpop.gremlin.structure.Graph)">create</a></strong>(org.apache.tinkerpop.gremlin.structure.Graph graph)</code><br>Create a vertex with the specified properties.
+ </td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>org.apache.tinkerpop.gremlin.structure.Vertex</code></td>
-                            <td class="colLast"><code><strong><a href="#createVertex(org.apache.tinkerpop.gremlin.structure.Graph)">createVertex</a></strong>(org.apache.tinkerpop.gremlin.structure.Graph graph)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#createVertex(org.apache.tinkerpop.gremlin.structure.Graph)">createVertex</a></strong>(org.apache.tinkerpop.gremlin.structure.Graph graph)</code><br>Create a vertex with the specified properties.
+ </td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>org.apache.tinkerpop.gremlin.structure.Vertex</code></td>
-                            <td class="colLast"><code><strong><a href="#ensure(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)">ensure</a></strong>(org.apache.tinkerpop.gremlin.structure.Graph graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#ensure(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)">ensure</a></strong>(org.apache.tinkerpop.gremlin.structure.Graph graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g)</code><br>If the vertex with the specified properties exists return it, otherwise create it.
+ </td>
                         </tr>
                         
                         <tr class="altColor">
@@ -235,7 +237,8 @@ extends <a href='../../carnival/graph/PropertyValuesHolder.html' title='Property
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>org.apache.tinkerpop.gremlin.structure.Vertex</code></td>
-                            <td class="colLast"><code><strong><a href="#vertex(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)">vertex</a></strong>(org.apache.tinkerpop.gremlin.structure.Graph graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#vertex(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)">vertex</a></strong>(org.apache.tinkerpop.gremlin.structure.Graph graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g)</code><br>If the vertex with the specified properties exists return it, otherwise create it. 
+ </td>
                         </tr>
                         
                     </table>
@@ -267,7 +270,8 @@ extends <a href='../../carnival/graph/PropertyValuesHolder.html' title='Property
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4><a href='../../carnival/graph/VertexDefTrait.html'>VertexDefTrait</a> <strong>vertexDef</strong></h4>
-                                <p></p>
+                                <p> Object that owns this builder.
+</p>
                             </li>
                         </ul>
                     
@@ -318,7 +322,11 @@ extends <a href='../../carnival/graph/PropertyValuesHolder.html' title='Property
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>org.apache.tinkerpop.gremlin.structure.Vertex <strong>create</strong>(org.apache.tinkerpop.gremlin.structure.Graph graph)</h4>
-                                <p></p>
+                                <p> Create a vertex with the specified properties.
+ Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexDefinition':
+ <p>
+ <CODE>Vertex rover = VX.SHIBA_INU.instance().create(graph) </CODE><DL><DT><B>synonym:</B></DT><DD>carnival.graph.ControlledInstance.createVertex(Graph graph)</DD></DL>
+ </p>
                             </li>
                         </ul>
                     
@@ -326,7 +334,11 @@ extends <a href='../../carnival/graph/PropertyValuesHolder.html' title='Property
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>org.apache.tinkerpop.gremlin.structure.Vertex <strong>createVertex</strong>(org.apache.tinkerpop.gremlin.structure.Graph graph)</h4>
-                                <p></p>
+                                <p> Create a vertex with the specified properties.
+ Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexDefinition':
+ <p>
+ <CODE>Vertex rover = VX.SHIBA_INU.instance().create(graph) </CODE><DL><DT><B>synonym:</B></DT><DD>carnival.graph.ControlledInstance.create(Graph graph)</DD></DL> 
+ </p>
                             </li>
                         </ul>
                     
@@ -334,7 +346,11 @@ extends <a href='../../carnival/graph/PropertyValuesHolder.html' title='Property
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>org.apache.tinkerpop.gremlin.structure.Vertex <strong>ensure</strong>(org.apache.tinkerpop.gremlin.structure.Graph graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g)</h4>
-                                <p></p>
+                                <p> If the vertex with the specified properties exists return it, otherwise create it.
+ Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexDefinition':
+ <p>
+ <CODE>Vertex rover = VX.SHIBA_INU.instance().ensure(graph) </CODE><DL><DT><B>synonym:</B></DT><DD>carnival.graph.ControlledInstance.vertex(Graph graph, GraphTraversalSource g)</DD></DL>
+ </p>
                             </li>
                         </ul>
                     
@@ -366,7 +382,11 @@ extends <a href='../../carnival/graph/PropertyValuesHolder.html' title='Property
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>org.apache.tinkerpop.gremlin.structure.Vertex <strong>vertex</strong>(org.apache.tinkerpop.gremlin.structure.Graph graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g)</h4>
-                                <p></p>
+                                <p> If the vertex with the specified properties exists return it, otherwise create it. 
+ Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexDefinition':
+ <p>
+ <CODE>Vertex rover = VX.SHIBA_INU.instance().vertex(graph) </CODE><DL><DT><B>synonym:</B></DT><DD>carnival.graph.ControlledInstance.ensure(Graph graph, GraphTraversalSource g)</DD></DL>
+ </p>
                             </li>
                         </ul>
                     

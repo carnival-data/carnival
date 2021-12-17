@@ -106,8 +106,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 class EdgeBuilder
 extends <a href='../../carnival/graph/PropertyValuesHolder.html' title='PropertyValuesHolder'>PropertyValuesHolder</a>&lt;<a href='../../carnival/graph/EdgeBuilder.html' title='EdgeBuilder'>EdgeBuilder</a>&gt;</pre>
 
-    <p>
-</p>
+    <p> Builder class used when creating edges from an EdgeDefTrait object.</p>
 
           </li>
     </ul>
@@ -139,7 +138,7 @@ extends <a href='../../carnival/graph/PropertyValuesHolder.html' title='Property
                         
                         <tr class="altColor">
                             <td class="colFirst"><code><strong><a href='../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a></strong></code>&nbsp;</td>
-                            <td class="colLast"><code><a href="#edgeDef">edgeDef</a></code><br></td>
+                            <td class="colLast"><code><a href="#edgeDef">edgeDef</a></code><br>Object that owns this builder.</td>
                         </tr>
                         
                         <tr class="rowColor">
@@ -209,13 +208,15 @@ extends <a href='../../carnival/graph/PropertyValuesHolder.html' title='Property
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>org.apache.tinkerpop.gremlin.structure.Edge</code></td>
-                            <td class="colLast"><code><strong><a href="#create()">create</a></strong>()</code><br></td>
+                            <td class="colLast"><code><strong><a href="#create()">create</a></strong>()</code><br>Create new edge using previously specified 'from' and 'to' Vertex objects.
+ </td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>org.apache.tinkerpop.gremlin.structure.Edge</code></td>
-                            <td class="colLast"><code><strong><a href="#ensure(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)">ensure</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#ensure(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)">ensure</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g)</code><br>If the edge with the specified 'from', 'to', and properties exists return it, otherwise create it.
+ </td>
                         </tr>
                         
                         <tr class="rowColor">
@@ -271,7 +272,8 @@ extends <a href='../../carnival/graph/PropertyValuesHolder.html' title='Property
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4><a href='../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> <strong>edgeDef</strong></h4>
-                                <p></p>
+                                <p> Object that owns this builder.
+</p>
                             </li>
                         </ul>
                     
@@ -338,7 +340,11 @@ extends <a href='../../carnival/graph/PropertyValuesHolder.html' title='Property
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>org.apache.tinkerpop.gremlin.structure.Edge <strong>create</strong>()</h4>
-                                <p></p>
+                                <p> Create new edge using previously specified 'from' and 'to' Vertex objects.
+ Usage example, assuming EX.IS_FIRENDS_WITH is an enum decorated with '@EdgeDefinition':
+ <p>
+ <CODE>Edge edge1 = EX.IS_FRIENDS_WITH.instance().from(person1).to(person2).create() </CODE>
+</p>
                             </li>
                         </ul>
                     
@@ -346,7 +352,11 @@ extends <a href='../../carnival/graph/PropertyValuesHolder.html' title='Property
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>org.apache.tinkerpop.gremlin.structure.Edge <strong>ensure</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g)</h4>
-                                <p></p>
+                                <p> If the edge with the specified 'from', 'to', and properties exists return it, otherwise create it.
+ Usage example, assuming EX.IS_FIRENDS_WITH is an enum decorated with '@EdgeDefinition':
+ <p>
+ <CODE>Edge edge1 = EX.IS_FRIENDS_WITH.instance().from(person1).to(person2).ensure() </CODE>
+</p>
                             </li>
                         </ul>
                     

@@ -153,12 +153,18 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">Add the provided keys (field names) to the key set of this data table.</div></dd>
 <dt><span class="strong"><a href="carnival/util/FeatureReport.html#addKeyBefore(java.lang.String, java.lang.String)" title="Method in FeatureReport">addKeyBefore(java.lang.String, java.lang.String)</a></span> - Method in <a href="carnival/util/FeatureReport.html">FeatureReport</a>
 </dt><dd> <div class="block">Add a new key before an existing key in the key (feature set name) set.</div></dd>
+<dt><span class="strong"><a href="carnival/graph/DefinitionTransformation.html#addMapConstructor(org.codehaus.groovy.ast.ClassNode, BlockStatement)" title="Method in DefinitionTransformation">addMapConstructor(org.codehaus.groovy.ast.ClassNode, BlockStatement)</a></span> - Method in <a href="carnival/graph/DefinitionTransformation.html">DefinitionTransformation</a>
+</dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/util/FeatureReport.html#addMultiFeature(java.lang.String, java.lang.String, List<String>)" title="Method in FeatureReport">addMultiFeature(java.lang.String, java.lang.String, List&lt;String&gt;)</a></span> - Method in <a href="carnival/util/FeatureReport.html">FeatureReport</a>
 </dt><dd> <div class="block">Add a multi-feature to a subject.</div></dd>
+<dt><span class="strong"><a href="carnival/graph/DefinitionTransformation.html#addNoArgConstructor(org.codehaus.groovy.ast.ClassNode, Statement)" title="Method in DefinitionTransformation">addNoArgConstructor(org.codehaus.groovy.ast.ClassNode, Statement)</a></span> - Method in <a href="carnival/graph/DefinitionTransformation.html">DefinitionTransformation</a>
+</dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/util/DataTable.html#addOrderedKeys(List<String>)" title="Method in DataTable">addOrderedKeys(List&lt;String&gt;)</a></span> - Method in <a href="carnival/util/DataTable.html">DataTable</a>
 </dt><dd> <div class="block">Add/append ordered keys to the existing keySet via addFieldNamesToKeySet().</div></dd>
 <dt><span class="strong"><a href="carnival/util/FeatureReport.html#addSubject(java.lang.String, Map<String, String>)" title="Method in FeatureReport">addSubject(java.lang.String, Map&lt;String, String&gt;)</a></span> - Method in <a href="carnival/util/FeatureReport.html">FeatureReport</a>
 </dt><dd> <div class="block">Add a new subject along with some features associated with that subject.</div></dd>
+<dt><span class="strong"><a href="carnival/graph/DefinitionTransformation.html#addTrait(org.codehaus.groovy.ast.ClassNode, java.lang.Class)" title="Method in DefinitionTransformation">addTrait(org.codehaus.groovy.ast.ClassNode, java.lang.Class)</a></span> - Method in <a href="carnival/graph/DefinitionTransformation.html">DefinitionTransformation</a>
+</dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/core/graph/CoreGraph.html#addVertexDefinitions(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, Class<VertexDefTrait>)" title="Method in CoreGraph">addVertexDefinitions(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, Class&lt;VertexDefTrait&gt;)</a></span> - Method in <a href="carnival/core/graph/CoreGraph.html">CoreGraph</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/util/FirstOrLastDateComparator.html#All" title="Field in FirstOrLastDateComparator">All</a></span> - Field in <a href="carnival/util/FirstOrLastDateComparator.html">FirstOrLastDateComparator</a>
@@ -379,7 +385,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/util/FeatureReport.html#containsSubject(java.lang.String)" title="Method in FeatureReport">containsSubject(java.lang.String)</a></span> - Method in <a href="carnival/util/FeatureReport.html">FeatureReport</a>
 </dt><dd> <div class="block">Return true iff the subject has already been added to the report.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/ControlledInstance.html" title="Class in carnival.graph">ControlledInstance</a></span> - Class in <a href="./carnival/graph/package-summary.html">carnival.graph</a>
-</dt><dd><div class="block"></div></dd>
+</dt><dd><div class="block">Builder class used when creating verticies from a VertexDefTrait object.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/ControlledInstance.html#ControlledInstance(carnival.graph.VertexDefTrait)" title="Constructor in ControlledInstance">ControlledInstance(carnival.graph.VertexDefTrait)</a></span> - Constructor in <a href="carnival/graph/ControlledInstance.html">ControlledInstance</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/VertexDefTrait.html#controlledInstance()" title="Method in VertexDefTrait">controlledInstance()</a></span> - Method in <a href="carnival/graph/VertexDefTrait.html">VertexDefTrait</a>
@@ -429,7 +435,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/util/CodeRefGroup.html#create(java.util.Map)" title="Method in CodeRefGroup">create(java.util.Map)</a></span> - Method in <a href="carnival/util/CodeRefGroup.html">CodeRefGroup</a>
 </dt><dd> <div class="block">Convenience factory method to create a CodeRefGroup object.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/ControlledInstance.html#create(org.apache.tinkerpop.gremlin.structure.Graph)" title="Method in ControlledInstance">create(org.apache.tinkerpop.gremlin.structure.Graph)</a></span> - Method in <a href="carnival/graph/ControlledInstance.html">ControlledInstance</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Create a vertex with the specified properties.
+ </div></dd>
 <dt><span class="strong"><a href="carnival/core/graph/CoreGraphNeo4j.html#create(Collection<VertexInstanceDefinition>)" title="Method in CoreGraphNeo4j">create(Collection&lt;VertexInstanceDefinition&gt;)</a></span> - Method in <a href="carnival/core/graph/CoreGraphNeo4j.html">CoreGraphNeo4j</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/core/graph/CoreGraphTinker.html#create(Collection<VertexInstanceDefinition>)" title="Method in CoreGraphTinker">create(Collection&lt;VertexInstanceDefinition&gt;)</a></span> - Method in <a href="carnival/core/graph/CoreGraphTinker.html">CoreGraphTinker</a>
@@ -439,7 +446,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/util/DataTableFiles.html#create(java.io.File, java.lang.String)" title="Method in DataTableFiles">create(java.io.File, java.lang.String)</a></span> - Method in <a href="carnival/util/DataTableFiles.html">DataTableFiles</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/EdgeBuilder.html#create()" title="Method in EdgeBuilder">create()</a></span> - Method in <a href="carnival/graph/EdgeBuilder.html">EdgeBuilder</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Create new edge using previously specified 'from' and 'to' Vertex objects.
+ </div></dd>
 <dt><span class="strong"><a href="carnival/util/FieldName.html#create(java.lang.String)" title="Method in FieldName">create(java.lang.String)</a></span> - Method in <a href="carnival/util/FieldName.html">FieldName</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/util/IterativeCsvWriter.html#create(java.lang.String)" title="Method in IterativeCsvWriter">create(java.lang.String)</a></span> - Method in <a href="carnival/util/IterativeCsvWriter.html">IterativeCsvWriter</a>
@@ -483,7 +491,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/util/CsvUtil.html#createReaderHeaderAware(java.io.Reader)" title="Method in CsvUtil">createReaderHeaderAware(java.io.Reader)</a></span> - Method in <a href="carnival/util/CsvUtil.html">CsvUtil</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ControlledInstance.html#createVertex(org.apache.tinkerpop.gremlin.structure.Graph)" title="Method in ControlledInstance">createVertex(org.apache.tinkerpop.gremlin.structure.Graph)</a></span> - Method in <a href="carnival/graph/ControlledInstance.html">ControlledInstance</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Create a vertex with the specified properties.
+ </div></dd>
 <dt><span class="strong"><a href="carnival/graph/VertexDefTrait.html#createVertex(org.apache.tinkerpop.gremlin.structure.Graph)" title="Method in VertexDefTrait">createVertex(org.apache.tinkerpop.gremlin.structure.Graph)</a></span> - Method in <a href="carnival/graph/VertexDefTrait.html">VertexDefTrait</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/core/vine/Vine.html#createVineMethodInstance(java.lang.String)" title="Method in Vine">createVineMethodInstance(java.lang.String)</a></span> - Method in <a href="carnival/core/vine/Vine.html">Vine</a>
@@ -657,6 +666,11 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/WithPropertyDefsTrait.html#definedPropertiesOf(org.apache.tinkerpop.gremlin.structure.Element)" title="Method in WithPropertyDefsTrait">definedPropertiesOf(org.apache.tinkerpop.gremlin.structure.Element)</a></span> - Method in <a href="carnival/graph/WithPropertyDefsTrait.html">WithPropertyDefsTrait</a>
 </dt><dd> <div class="block"></div></dd>
+<dt><span class="strong"><a href="carnival/graph/DefinitionTransformation.html" title="Class in carnival.graph">DefinitionTransformation</a></span> - Class in <a href="./carnival/graph/package-summary.html">carnival.graph</a>
+</dt><dd><div class="block">Superclass for AST definition transformations that add traits to enum
+ definitions.  </div></dd>
+<dt><span class="strong"><a href="carnival/graph/DefinitionTransformation.html#DefinitionTransformation()" title="Constructor in DefinitionTransformation">DefinitionTransformation()</a></span> - Constructor in <a href="carnival/graph/DefinitionTransformation.html">DefinitionTransformation</a>
+</dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/util/DataTableFiles.html#delete()" title="Method in DataTableFiles">delete()</a></span> - Method in <a href="carnival/util/DataTableFiles.html">DataTableFiles</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/core/graph/Core.EX.html#DEPENDS_ON" title="Field in Core.EX">DEPENDS_ON</a></span> - Field in <a href="carnival/core/graph/Core.EX.html">Core.EX</a>
@@ -689,11 +703,11 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/util/DataTableFiles.html#each(groovy.lang.Closure)" title="Method in DataTableFiles">each(groovy.lang.Closure)</a></span> - Method in <a href="carnival/util/DataTableFiles.html">DataTableFiles</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/EdgeBuilder.html" title="Class in carnival.graph">EdgeBuilder</a></span> - Class in <a href="./carnival/graph/package-summary.html">carnival.graph</a>
-</dt><dd><div class="block"></div></dd>
+</dt><dd><div class="block">Builder class used when creating edges from an EdgeDefTrait object.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/EdgeBuilder.html#EdgeBuilder(carnival.graph.EdgeDefTrait)" title="Constructor in EdgeBuilder">EdgeBuilder(carnival.graph.EdgeDefTrait)</a></span> - Constructor in <a href="carnival/graph/EdgeBuilder.html">EdgeBuilder</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/EdgeBuilder.html#edgeDef" title="Property in EdgeBuilder">edgeDef</a></span> - Property in <a href="carnival/graph/EdgeBuilder.html">EdgeBuilder</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Object that owns this builder.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/EdgeDefinition.html" title="Annotation Type in carnival.graph">EdgeDefinition</a></span> - Annotation Type in <a href="./carnival/graph/package-summary.html">carnival.graph</a>
 </dt><dd><div class="block">Used to specify edge definitions in a graph model.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/EdgeDefTrait.html" title="Trait in carnival.graph">EdgeDefTrait</a></span> - Trait in <a href="./carnival/graph/package-summary.html">carnival.graph</a>
@@ -716,9 +730,11 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/util/TabularReport.html#elog" title="Property in TabularReport">elog</a></span> - Property in <a href="carnival/util/TabularReport.html">TabularReport</a>
 </dt><dd> <div class="block">error log</div></dd>
 <dt><span class="strong"><a href="carnival/graph/ControlledInstance.html#ensure(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)" title="Method in ControlledInstance">ensure(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)</a></span> - Method in <a href="carnival/graph/ControlledInstance.html">ControlledInstance</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">If the vertex with the specified properties exists return it, otherwise create it.
+ </div></dd>
 <dt><span class="strong"><a href="carnival/graph/EdgeBuilder.html#ensure(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)" title="Method in EdgeBuilder">ensure(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)</a></span> - Method in <a href="carnival/graph/EdgeBuilder.html">EdgeBuilder</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">If the edge with the specified 'from', 'to', and properties exists return it, otherwise create it.
+ </div></dd>
 <dt><span class="strong"><a href="carnival/core/graph/GraphMethod.html#ensure(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)" title="Method in GraphMethod">ensure(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)</a></span> - Method in <a href="carnival/core/graph/GraphMethod.html">GraphMethod</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/core/graph/GraphMethodDynamic.html#ensure(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, groovy.lang.Closure)" title="Method in GraphMethodDynamic">ensure(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, groovy.lang.Closure)</a></span> - Method in <a href="carnival/core/graph/GraphMethodDynamic.html">GraphMethodDynamic</a>
@@ -952,7 +968,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/WithPropertyDefsTrait.html#getDefaultProperties()" title="Method in WithPropertyDefsTrait">getDefaultProperties()</a></span> - Method in <a href="carnival/graph/WithPropertyDefsTrait.html">WithPropertyDefsTrait</a>
 </dt><dd> <div class="block"></div></dd>
-<dt><span class="strong"><a href="carnival/graph/VertexDefinitionTransformation.html#getDefTraitClass()" title="Method in VertexDefinitionTransformation">getDefTraitClass()</a></span> - Method in <a href="carnival/graph/VertexDefinitionTransformation.html">VertexDefinitionTransformation</a>
+<dt><span class="strong"><a href="carnival/graph/DefinitionTransformation.html#getDefTraitClass()" title="Method in DefinitionTransformation">getDefTraitClass()</a></span> - Method in <a href="carnival/graph/DefinitionTransformation.html">DefinitionTransformation</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/EdgeDefTrait.html#getDomainLabels()" title="Method in EdgeDefTrait">getDomainLabels()</a></span> - Method in <a href="carnival/graph/EdgeDefTrait.html">EdgeDefTrait</a>
 </dt><dd> <div class="block"></div></dd>
@@ -1060,7 +1076,7 @@ if (location.href.indexOf('is-external=true') == -1) {
  will use a global namespace value instead of one generated from 
  the package name.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/Base.html#GLOBAL_NAME_SPACE" title="Property in Base">GLOBAL_NAME_SPACE</a></span> - Property in <a href="carnival/graph/Base.html">Base</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Namespace used for VertexDefTrait or EdgeDefTraits instances where global = true.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/VertexDefinition.html#global()" title="Method in VertexDefinition">global()</a></span> - Method in <a href="carnival/graph/VertexDefinition.html">VertexDefinition</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/VertexDefTrait.html#global" title="Property in VertexDefTrait">global</a></span> - Property in <a href="carnival/graph/VertexDefTrait.html">VertexDefTrait</a>
@@ -1232,7 +1248,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#instanceClass(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal)" title="Method in TinkerpopTraversalExtension">instanceClass(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/VertexDefTrait.html#instanceOf" title="Property in VertexDefTrait">instanceOf</a></span> - Property in <a href="carnival/graph/VertexDefTrait.html">VertexDefTrait</a>
-</dt><dd> <div class="block">optional, defines what class these verticies are instances of</div></dd>
+</dt><dd> <div class="block">optional, defines what class these verticies are instances of.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#instances(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal)" title="Method in TinkerpopTraversalExtension">instances(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/util/Log.html#interval(org.slf4j.Logger, java.lang.String, java.util.Collection, java.lang.Integer)" title="Method in Log">interval(org.slf4j.Logger, java.lang.String, java.util.Collection, java.lang.Integer)</a></span> - Method in <a href="carnival/util/Log.html">Log</a>
@@ -1714,7 +1730,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/VertexDefTrait.html#propertiesMustBeDefined" title="Property in VertexDefTrait">propertiesMustBeDefined</a></span> - Property in <a href="carnival/graph/VertexDefTrait.html">VertexDefTrait</a>
 </dt><dd> <div class="block">if false, verticies created by this definition can contain properties
- that were not defined by this VertexDef</div></dd>
+ that were not defined by this VertexDefTrait.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/PropertyDefinition.html" title="Annotation Type in carnival.graph">PropertyDefinition</a></span> - Annotation Type in <a href="./carnival/graph/package-summary.html">carnival.graph</a>
 </dt><dd><div class="block">Used to specify property definitions in a graph model.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/WithPropertyDefsTrait.html#propertyDefs" title="Property in WithPropertyDefsTrait">propertyDefs</a></span> - Property in <a href="carnival/graph/WithPropertyDefsTrait.html">WithPropertyDefsTrait</a>
@@ -1725,7 +1741,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/graph/PropertyValuesHolder.html#propertyValues" title="Property in PropertyValuesHolder">propertyValues</a></span> - Property in <a href="carnival/graph/PropertyValuesHolder.html">PropertyValuesHolder</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/PropertyValuesHolder.html" title="Class in carnival.graph">PropertyValuesHolder</a></span> - Class in <a href="./carnival/graph/package-summary.html">carnival.graph</a>
-</dt><dd><div class="block"></div></dd>
+</dt><dd><div class="block">Inhertied by builder classes that create elements in the graph that can have properties.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/PropertyValuesHolder.html#PropertyValuesHolder()" title="Constructor in PropertyValuesHolder">PropertyValuesHolder()</a></span> - Constructor in <a href="carnival/graph/PropertyValuesHolder.html">PropertyValuesHolder</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/util/IterativeCsvWriter.html#pw" title="Property in IterativeCsvWriter">pw</a></span> - Property in <a href="carnival/util/IterativeCsvWriter.html">IterativeCsvWriter</a>
@@ -1971,7 +1987,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/core/graph/Core.PX.html#SUCCESS" title="Field in Core.PX">SUCCESS</a></span> - Field in <a href="carnival/core/graph/Core.PX.html">Core.PX</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/VertexDefTrait.html#superClass" title="Property in VertexDefTrait">superClass</a></span> - Property in <a href="carnival/graph/VertexDefTrait.html">VertexDefTrait</a>
-</dt><dd> <div class="block">optional, defines what the superclass of this class is</div></dd>
+</dt><dd> <div class="block">optional, defines what the superclass of this class is.</div></dd>
 <dt><span class="strong"><a href="carnival/util/AppUtil.html#sysPropFalse(java.lang.String)" title="Method in AppUtil">sysPropFalse(java.lang.String)</a></span> - Method in <a href="carnival/util/AppUtil.html">AppUtil</a>
 </dt><dd> <div class="block">Return true iff all of the following:
    - the given prop exists
@@ -2198,7 +2214,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/core/graph/Core.PX.html#VERSION" title="Field in Core.PX">VERSION</a></span> - Field in <a href="carnival/core/graph/Core.PX.html">Core.PX</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ControlledInstance.html#vertex(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)" title="Method in ControlledInstance">vertex(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)</a></span> - Method in <a href="carnival/graph/ControlledInstance.html">ControlledInstance</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">If the vertex with the specified properties exists return it, otherwise create it. 
+ </div></dd>
 <dt><span class="strong"><a href="carnival/graph/Base.PX.html#VERTEX_DEFINITION_CLASS" title="Field in Base.PX">VERTEX_DEFINITION_CLASS</a></span> - Field in <a href="carnival/graph/Base.PX.html">Base.PX</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/core/graph/GraphMethodProcess.html#vertex" title="Field in GraphMethodProcess">vertex</a></span> - Field in <a href="carnival/core/graph/GraphMethodProcess.html">GraphMethodProcess</a>
@@ -2209,15 +2226,11 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/graph/VertexDef.html" title="Class in carnival.graph">VertexDef</a></span> - Class in <a href="./carnival/graph/package-summary.html">carnival.graph</a>
 </dt><dd><div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ControlledInstance.html#vertexDef" title="Property in ControlledInstance">vertexDef</a></span> - Property in <a href="carnival/graph/ControlledInstance.html">ControlledInstance</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Object that owns this builder.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/VertexDef.html#VertexDef()" title="Constructor in VertexDef">VertexDef()</a></span> - Constructor in <a href="carnival/graph/VertexDef.html">VertexDef</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/VertexDefinition.html" title="Annotation Type in carnival.graph">VertexDefinition</a></span> - Annotation Type in <a href="./carnival/graph/package-summary.html">carnival.graph</a>
 </dt><dd><div class="block">Used to specify vertex definitions in a graph model.</div></dd>
-<dt><span class="strong"><a href="carnival/graph/VertexDefinitionTransformation.html" title="Class in carnival.graph">VertexDefinitionTransformation</a></span> - Class in <a href="./carnival/graph/package-summary.html">carnival.graph</a>
-</dt><dd><div class="block"></div></dd>
-<dt><span class="strong"><a href="carnival/graph/VertexDefinitionTransformation.html#VertexDefinitionTransformation()" title="Constructor in VertexDefinitionTransformation">VertexDefinitionTransformation()</a></span> - Constructor in <a href="carnival/graph/VertexDefinitionTransformation.html">VertexDefinitionTransformation</a>
-</dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/VertexDefTrait.html" title="Trait in carnival.graph">VertexDefTrait</a></span> - Trait in <a href="./carnival/graph/package-summary.html">carnival.graph</a>
 </dt><dd><div class="block">Defines allowed verticies in a graph model, automatically inherited by 
  enums with the `@VertexDefinition` annotation.</div></dd>
@@ -2245,7 +2258,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/core/vine/Vine.html#vineMethodResource(java.lang.String, java.lang.Object)" title="Method in Vine">vineMethodResource(java.lang.String, java.lang.Object)</a></span> - Method in <a href="carnival/core/vine/Vine.html">Vine</a>
 </dt><dd> <div class="block"></div></dd>
-<dt><span class="strong"><a href="carnival/graph/VertexDefinitionTransformation.html#visit(org.codehaus.groovy.ast.ASTNode, org.codehaus.groovy.control.SourceUnit)" title="Method in VertexDefinitionTransformation">visit(org.codehaus.groovy.ast.ASTNode, org.codehaus.groovy.control.SourceUnit)</a></span> - Method in <a href="carnival/graph/VertexDefinitionTransformation.html">VertexDefinitionTransformation</a>
+<dt><span class="strong"><a href="carnival/graph/DefinitionTransformation.html#visit(org.codehaus.groovy.ast.ASTNode, org.codehaus.groovy.control.SourceUnit)" title="Method in DefinitionTransformation">visit(org.codehaus.groovy.ast.ASTNode, org.codehaus.groovy.control.SourceUnit)</a></span> - Method in <a href="carnival/graph/DefinitionTransformation.html">DefinitionTransformation</a>
 </dt><dd> <div class="block"></div></dd>
 </dl>
 
@@ -2287,7 +2300,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/graph/WithPropertyDefsTrait.html#withPropertyDef(carnival.graph.PropertyDefTrait)" title="Method in WithPropertyDefsTrait">withPropertyDef(carnival.graph.PropertyDefTrait)</a></span> - Method in <a href="carnival/graph/WithPropertyDefsTrait.html">WithPropertyDefsTrait</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/WithPropertyDefsTrait.html" title="Trait in carnival.graph">WithPropertyDefsTrait</a></span> - Trait in <a href="./carnival/graph/package-summary.html">carnival.graph</a>
-</dt><dd><div class="block"></div></dd>
+</dt><dd><div class="block">Inherited by traits that can have PropertyDefs: VertexDefTrait and EdgedDefTrait</div></dd>
 <dt><span class="strong"><a href="carnival/core/graph/CoreGraph.html#withTransaction(groovy.lang.Closure)" title="Method in CoreGraph">withTransaction(groovy.lang.Closure)</a></span> - Method in <a href="carnival/core/graph/CoreGraph.html">CoreGraph</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/core/graph/CoreGraph.html#withTransactionIfSupported(org.apache.tinkerpop.gremlin.structure.Graph, groovy.lang.Closure)" title="Method in CoreGraph">withTransactionIfSupported(org.apache.tinkerpop.gremlin.structure.Graph, groovy.lang.Closure)</a></span> - Method in <a href="carnival/core/graph/CoreGraph.html">CoreGraph</a>

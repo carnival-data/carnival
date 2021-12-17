@@ -73,7 +73,65 @@ function windowTitle()
 
 
 <h2 title="Package carnival.graph Description" class="title">Package carnival.graph Description</h2>
-<div class="header"> Contains the framework for defining a graph model including properties, verticies, edges, validation and constraints.
+<div class="header"> Contains the framework for defining property, vertex and edge definitons of a Carnival graph model.
+ <p>
+ The graph model is specified by creating enums that are annotated with &#64;PropertyDefinition, &#64;EdgeDefinition 
+ or &#64;VertexDefinition. Among other things, these annotations apply the traits PropertyDefTrait, EdgeDefTrait, 
+ or VertexDefTrait to the enums.
+ <p>
+ Once VertexDefinition and EdgeDefinition have been created they can be used to add new elements to the 
+ graph, for example:
+ <TT>Edge edge1 = EX.IS_FRIENDS_WITH.instance().from(person1).to(person2).create()</TT>.
+ The 'instance()' method invokes a builder class (EdgeBuilder or ControlledInstance) that the following methods 
+ (in this example 'from()', 'to()' and 'create()') act on.
+ <p>
+ Some properties and edges to indicate Carnival concepts like the namespace of the element 
+ or superclass relationships will be automatically created in the graph.
+ <p>
+ Example of specifying verticies with class and instanceOf relationships:
+ 
+  <pre><TT>&#64;VertexDefinition
+ static enum VX {
+     CLASS_OF_ALL_DOGS (
+         isClass:true
+     ),
+     // Carnival assumes a definition that ends in _CLASS is a class
+     COLLIE_CLASS (
+         superClass: CLASS_OF_ALL_DOGS
+     ),
+     SHIBA_INU_CLASS (
+         superClass: CLASS_OF_ALL_DOGS
+     ),
+  &rbrace;
+ &#64;VertexDefinition
+ static enum VX {    
+     SHIBA_INU_CLASS,
+     SHIBA_INU (
+         instanceOf:VX.SHIBA_INU_CLASS
+     )
+  &rbrace;
+ Vertex rover = VX.SHIBA_INU.instance().create(graph)
+ </TT></pre>
+ 
+ <p>
+ Example of specifying edges with properties:
+
+ <pre><TT>&#64;EdgeDefinition
+ static enum EX {
+     IS_FRIENDS_WITH(
+         domain:[VX.PERSON],
+         range:[VX.PERSON]
+     ),
+     propertyDefs:[
+         PX.STRENGTH_OF_RELATIONSHIP.withConstraints(index:true)
+     ]
+ &rbrace;
+ &#64;PropertyDefinition
+ static enum PX {
+     STRENGTH_OF_RELATIONSHIP
+ &rbrace;
+ 
+ </TT></pre>
 
  </div>
 
@@ -125,7 +183,7 @@ function windowTitle()
                                     WithPropertyDefsTrait
                                 </a></strong>
                             </td>
-                            <td></td>
+                            <td>Inherited by traits that can have PropertyDefs: VertexDefTrait and EdgedDefTrait</td>
                         </tr>
 
                     </tbody>
@@ -161,7 +219,16 @@ function windowTitle()
                                     ControlledInstance
                                 </a></strong>
                             </td>
-                            <td></td>
+                            <td>Builder class used when creating verticies from a VertexDefTrait object.</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="DefinitionTransformation.html" title="class in carnival/graph">
+                                    DefinitionTransformation
+                                </a></strong>
+                            </td>
+                            <td>Superclass for AST definition transformations that add traits to enum
+ definitions.  </td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
@@ -177,7 +244,7 @@ function windowTitle()
                                     EdgeBuilder
                                 </a></strong>
                             </td>
-                            <td></td>
+                            <td>Builder class used when creating edges from an EdgeDefTrait object.</td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
@@ -185,20 +252,12 @@ function windowTitle()
                                     PropertyValuesHolder
                                 </a></strong>
                             </td>
-                            <td></td>
+                            <td>Inhertied by builder classes that create elements in the graph that can have properties.</td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
                                 <strong><a href="VertexDef.html" title="class in carnival/graph">
                                     VertexDef
-                                </a></strong>
-                            </td>
-                            <td></td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="VertexDefinitionTransformation.html" title="class in carnival/graph">
-                                    VertexDefinitionTransformation
                                 </a></strong>
                             </td>
                             <td></td>

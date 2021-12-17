@@ -10,7 +10,9 @@ import java.lang.reflect.Field
 import org.codehaus.groovy.transform.GroovyASTTransformationClass
 
 
-/** */
+/**
+ * Used to specify property definitions in a graph model. 
+ * */
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
 @GroovyASTTransformationClass(["carnival.graph.PropertyDefinitionTransformation"])

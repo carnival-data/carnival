@@ -16,28 +16,12 @@ import org.apache.tinkerpop.gremlin.structure.Property
 
 
 
-/** */
-@Slf4j
-class PropertyDefTraitHolder implements PropertyDefTrait {
-    PropertyDefTrait source
-
-    public PropertyDefTraitHolder(PropertyDefTrait source) {
-        assert source != null
-        this.source = source
-        this.defaultValue = source.defaultValue
-        this.unique = source.unique
-        this.required = source.required
-        this.index = source.index
-    }
-
-    def methodMissing(String name, def args) {
-        assert this.source != null
-        source.invokeMethod(name, args)
-    }
-}
-
-
-/** */
+/** 
+ * Defines allowed properties in a graph model, automatically inherited by 
+ * enums with the `@PropertyDefinition` annotation.
+ * 
+ * @see carnival.graph.PropertyDefinition
+ */
 @Slf4j
 trait PropertyDefTrait {
 
@@ -46,23 +30,26 @@ trait PropertyDefTrait {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Set by #withDefault()
+    */
     Object defaultValue = null
 
     /**
      * If true, then the values of this property must be unique across all
-     * elements.
+     * elements. Set by #withConstraints()
      */
     Boolean unique = false
 
     /**
-     * If true, then this property must be present in all elements.
+     * If true, then this property must be present in all elements. Set 
+     * by #withConstraints()
      */
     Boolean required = false
 
     /**
      * If true, then this property should be indexed by the underlying database
-     * system.
+     * system. Set by #withConstraints()
      */
     Boolean index = false
 
@@ -71,7 +58,17 @@ trait PropertyDefTrait {
 	// FACTORY METHODS
 	///////////////////////////////////////////////////////////////////////////
 
-	/** */
+	/** 
+     * Used to set constraints for properties when they are added to vertex or edge definitions.
+     * 
+     * @param m 
+     * @param m["unique"] <Boolean>   if true, then the values of this property must be unique across all elements.
+     * @param m["required"] <Boolean> if true, then this property must be present in all elements.
+     * @param m["index"] <Boolean>    if true, then this property should be indexed by the underlying database
+     * system.
+     * 
+     * 
+     * */
 	public PropertyDefTrait withConstraints(Map m) {
         def newObj = new PropertyDefTraitHolder(this)
 
@@ -186,3 +183,22 @@ trait PropertyDefTrait {
     
 }
 
+/** */
+@Slf4j
+class PropertyDefTraitHolder implements PropertyDefTrait {
+    PropertyDefTrait source
+
+    public PropertyDefTraitHolder(PropertyDefTrait source) {
+        assert source != null
+        this.source = source
+        this.defaultValue = source.defaultValue
+        this.unique = source.unique
+        this.required = source.required
+        this.index = source.index
+    }
+
+    def methodMissing(String name, def args) {
+        assert this.source != null
+        source.invokeMethod(name, args)
+    }
+}

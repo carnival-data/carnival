@@ -17,7 +17,13 @@ import org.apache.tinkerpop.gremlin.structure.Edge
 
 
 
-/** */
+/** 
+ * Defines allowed edges in a graph model, automatically inherited by 
+ * enums with the `@EdgeDefinition` annotation.
+ * 
+ * 
+ * @see carnival.graph.EdgeDefinition
+ */
 @Slf4j
 trait EdgeDefTrait extends WithPropertyDefsTrait {
 
@@ -26,16 +32,22 @@ trait EdgeDefTrait extends WithPropertyDefsTrait {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * */
     List<VertexDefTrait> domain = new ArrayList<VertexDefTrait>()
 
-    /** */
+    /** 
+     * */
     List<VertexDefTrait> range = new ArrayList<VertexDefTrait>()
 
     /** additional constraints, just represent as a string for now */
     String constraint
 
-    /** */
+    /** 
+     * if true, the `Base.PX.NAME_SPACE` property for edges in the graph
+     * will use a global namespace value instead of one generated from 
+     * the package name.
+     * */
     boolean global = false
 
 

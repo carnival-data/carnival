@@ -24,8 +24,10 @@ import carnival.graph.Base
 
 
 /** 
- *
- *
+ * Defines allowed verticies in a graph model, automatically inherited by 
+ * enums with the `@VertexDefinition` annotation.
+ * 
+ * @see carnival.graph.VertexDefinition
  */
 @Slf4j
 trait VertexDefTrait extends WithPropertyDefsTrait {
@@ -52,19 +54,33 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
      */
     Vertex vertex
     
-    /** */
+     /** 
+     * if true, the `Base.PX.NAME_SPACE` property for verticies in the graph
+     * will use a global namespace value instead of one generated from 
+     * the package name.
+     */
     boolean global = false
 
-    /** */
+    /** 
+     * optional, defines what the superclass of this class is
+     * */
     VertexDefTrait superClass
 
-    /** */
+    /** 
+     * optional, defines what class these verticies are instances of 
+     * */
     VertexDefTrait instanceOf
 
-    /** */
+    /** 
+     * if false, verticies created by this definition can contain properties
+     * that were not defined by this VertexDef
+     * */
     Boolean propertiesMustBeDefined = true
 
-    /** Explicitly designate this definition as a class */
+    /** 
+     * Explicitly designate this definition as a class. A singleton vertex will
+     * automatically be created in the graph 
+     *  */
     Boolean isClass = null
 
 

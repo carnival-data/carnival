@@ -15,7 +15,7 @@ The graph model is specified by creating enums that are annotated with `@Propert
 
 Once `VertexDefinition` and `EdgeDefinition` enums have been defined, new instances can be added to the property graph using `create()` methods. Some properties and edges to specify things like the namespace of the element or superclass relationships will be automatically created.
 
-See the [carnival.graph API docs](https://carnival-data.github.io/carnival/groovydoc/index.html) for details.
+See the [carnival.graph API docs](https://carnival-data.github.io/carnival/groovydoc/carnival/graph/package-summary.html) for details.
 
 ### Model File Locations
 Models can be defined anywhere, as shown in the example scripts. However in a larger application, the convention is to either create a file named in `GraphModel.groovy` the main source directory or to create a subpackage named `model` that contains files with the model definitions.

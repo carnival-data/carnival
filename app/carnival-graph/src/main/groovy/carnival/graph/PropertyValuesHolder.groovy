@@ -16,8 +16,7 @@ import org.apache.tinkerpop.gremlin.structure.Element
 
 
 /** 
- *
- *
+ * Inhertied by builder classes that create elements in the graph that can have properties.
  */
 @Slf4j
 class PropertyValuesHolder<T> {

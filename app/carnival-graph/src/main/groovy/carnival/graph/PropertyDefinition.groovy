@@ -12,6 +12,9 @@ import org.codehaus.groovy.transform.GroovyASTTransformationClass
 
 /**
  * Used to specify property definitions in a graph model. 
+ * 
+ * @see carnival.graph.PropertyDefTrait
+ * @see carnival.graph.DefinitionTransformation
  * */
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)

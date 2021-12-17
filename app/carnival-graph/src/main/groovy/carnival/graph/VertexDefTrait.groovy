@@ -62,24 +62,24 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
     boolean global = false
 
     /** 
-     * optional, defines what the superclass of this class is
+     * optional, defines what the superclass of this class is.
      * */
     VertexDefTrait superClass
 
     /** 
-     * optional, defines what class these verticies are instances of 
+     * optional, defines what class these verticies are instances of.
      * */
     VertexDefTrait instanceOf
 
     /** 
      * if false, verticies created by this definition can contain properties
-     * that were not defined by this VertexDef
+     * that were not defined by this VertexDefTrait.
      * */
     Boolean propertiesMustBeDefined = true
 
     /** 
      * Explicitly designate this definition as a class. A singleton vertex will
-     * automatically be created in the graph 
+     * automatically be created in the graph.
      *  */
     Boolean isClass = null
 

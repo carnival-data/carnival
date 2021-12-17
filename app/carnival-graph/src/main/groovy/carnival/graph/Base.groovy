@@ -26,7 +26,9 @@ class Base {
 	// STATIC FIELDS
 	///////////////////////////////////////////////////////////////////////////
 
-	/** */
+	/** 
+     * Namespace used for VertexDefTrait or EdgeDefTraits instances where global = true.
+     * */
 	static final String GLOBAL_NAME_SPACE = 'GlobalNameSpace'
 
 

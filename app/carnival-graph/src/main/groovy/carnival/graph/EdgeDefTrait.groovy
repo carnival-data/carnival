@@ -23,6 +23,7 @@ import org.apache.tinkerpop.gremlin.structure.Edge
  * 
  * 
  * @see carnival.graph.EdgeDefinition
+ * @see carnival.graph.EdgeBuilder
  */
 @Slf4j
 trait EdgeDefTrait extends WithPropertyDefsTrait {

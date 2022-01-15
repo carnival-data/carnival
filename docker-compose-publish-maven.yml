@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /appsrc/app
+    command: >
+      gradle publishAllPublicationsToCentralRepository
+      -Psigning.secretKeyRingFile=/appsrc/signing_private.gpg
+      -Psigning.password=${SIGNING_PRIVATE_KEY_PASSWORD}
+      -Psigning.keyId=${SIGNING_KEY_ID}
+      -Pcentral.user=${CENTRAL_USER}
+      -Pcentral.password=${CENTRAL_PASSWORD}
+      --no-daemon
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./:/appsrc
+      - ${SIGNING_PRIVATE_KEY}:/appsrc/signing_private.gpg

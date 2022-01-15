@@ -150,14 +150,14 @@ subprojects {
                 password = project.findProperty("central.password") ?: System.getenv("CENTRAL_PASSWORD")
               }
             }
-            // maven {
-            //     name = "GitHubPackages"
-            //     url = uri("https://maven.pkg.github.com/pmbb-ibi/carnival")
-            //     credentials {
-            //         username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USER")
-            //         password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
-            //     }
-            // }
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/pmbb-ibi/carnival")
+                credentials {
+                    username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USER")
+                    password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+                }
+            }
         }
     }
 }

@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     working_dir: /appsrc/app
-    command: bash -c "gradle testReport --stacktrace"
+    command: bash -c "gradle testReport --console=plain"
     tty: true
     stdin_open: true
     volumes:

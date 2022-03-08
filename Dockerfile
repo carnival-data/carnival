@@ -1,4 +1,4 @@
-FROM gradle:7-jdk11
+FROM gradle:7.4-jdk11
 
 ### Development Image
 ENV CARNIVAL_HOME /usr/carnival_home

@@ -1,6 +1,21 @@
 # Carnival
 
-## Summary
+
+## Contents
+
+### Introduction
+- [Summary](#summary)
+- [Statement of Need](#statement-need)
+- [Data Aggregation](#data-aggregation)
+- [Graph Modelling](#graph-model)
+- [Graph Algorithms](#graph-algo)
+
+### Development
+- [Core Development](#core-development)
+- [Application Development](#app-development)
+- [Application Programmer Interface](#api)
+
+## <a name="summary"></a>Summary
 Loading, cleansing, and organizing data can dominate the time spent on a data science project [[Forbes]](https://www.forbes.com/sites/gilpress/2016/03/23/data-preparation-most-time-consuming-least-enjoyable-data-science-task-survey-says/?sh=5eebf58e6f63)[[Anaconda]](https://www.anaconda.com/state-of-data-science-2020?utm_medium=press&utm_source=anaconda&utm_campaign=sods-2020&utm_content=report).  This phenomenon is exacerbated in human subjects research at an academic medical institution where data are very complex, reside in disparate repositories with varying levels of accesibility, are coded by separate yet overlapping coding systems, frequently rely on manual data entry, and change over time.  Data provenance and reproducibility of results are important factors in human subjects research.  It is no easy task to implement a robust consistent data pipeline with clear data provenance that can be rerun when source data change.  While there are several mature libraries and toolkits that enable visualization and statistical computation once the analytical data set is generated, there are comparatively fewer compelling informatics offerings to address these concerns.
 
 Knowledge bases in Resource Description Framework (RDF) triplestores can be valuable tools to harmonize and enrich complex data.  While there are relational to RDF mappers, transforming source relational data into RDF triples is challenging.  Property graphs offer a middle ground between relational and RDF.  They lack the native ability to benefit from ontologies represented in RDF, but are more friendly to algorithmic computation.  
@@ -8,7 +23,7 @@ Knowledge bases in Resource Description Framework (RDF) triplestores can be valu
 **Carnival** was developed to provide programmers with tools to go from source data to a well formatted property graph and onward to RDF.  
 
 
-## Statement of need
+## <a name="statement-need"></a>Statement of need
 
 **Carnival** is a semantically driven informatics toolkit that enables the aggregation of data from disparate sources into a unified property graph and provides mechanisms to model and interact with the graph in well-defined ways.
 
@@ -31,7 +46,7 @@ A key challenge of human subjects research is to locate patients to recruit to a
 
 
 
-## Data Aggregation
+## <a name="data-aggregation"></a>Data Aggregation
 Carnival supports data aggregation by caching the results of queries and API calls.    This can be beneficial during the development cycle by removing unnecessary and costly query operations.
 
 The following pseudo-code demonstrates how caching works.
@@ -117,7 +132,7 @@ The Yaml file contains information about the method invocation, such as the clas
 
 For more information about writing data aggregation methods, see the sections on [Data Tables](data-tables.md) and [Vines](vines.md).
 
-## Graph Modelling
+## <a name="graph-model"></a>Graph Modelling
 The schema-less nature of property graphs is both a strength and a weakness.  The lack of schema enforcement enables rapid development.  However, that same lack of enforcement can lead to data inconsistencies.  Carnival includes a graph modelling mechanism that seeks to balance flexibility and consistency.
 
 ```groovy
@@ -194,7 +209,7 @@ To learn more about graph modelling, see the section [Graph Model](graph-model.m
 
 
 
-## Graph Algorithms
+## <a name="graph-algo"></a>Graph Algorithms
 The ability to programmatically update a graph is part of what makes property graphs so powerful and useful for informatics.  However, it is easy to lose track of which routines were called and what their effects were.  Carnival provides a framework to wrap graph routines so that they can be called and tracked in standardized ways.
 
 **Mention that graph methods create Process vertices in the graph??**
@@ -248,13 +263,16 @@ To learn more about graph methods, see [Graph Methods](graph-method.md).
 
 
 
-## Core Development
+## <a name="core-development"></a>Core Development
 - [Developer Setup](developer-setup.md)
 - [Production Builds](production-buids.md)
 - [Building Documentation](documentation.md)
 - [Default Carnival Schemas](schema.md)
 
-## Application Development
+## <a name="app-development"></a>Application Development
+- [Getting Started](app-dev-getting-started.md)
+    - [Create a library](app-dev-library.md)
+    - [Create an application](app-dev-application.md)
 - [Data Tables](data-tables.md)
   - [Mapped Data Table](mapped-data-table.md)
   - [Generic Data Table](generic-data-table.md)
@@ -262,5 +280,5 @@ To learn more about graph methods, see [Graph Methods](graph-method.md).
 - [Graph Model](graph-model.md)
 - [Graph Methods](graph-method.md)
 
-## API Documentation
+## <a name="api"></a> Application Programmer Interface 
 - [Groovy API documentation](groovydoc/index.html)

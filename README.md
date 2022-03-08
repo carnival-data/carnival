@@ -37,7 +37,7 @@ Carnival’s property graph database:
 
 ## <a name="getting-started"></a> Getting Started
 
-See [developer setup](https://pmbb-ibi.github.io/carnival/#DeveloperSetup) for full documentation on how to set up a development environment, and a tutorial for getting started.
+See [developer setup](https://carnival-data.github.io/carnival/#DeveloperSetup) for full documentation on how to set up a development environment, and a tutorial for getting started.
 
 ## <a name="package-overview"></a> Packages
 

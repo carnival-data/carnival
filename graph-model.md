@@ -11,19 +11,27 @@ File | Description
 [graph-model-3.groovy](groovy/graph-model-3.groovy) | Instances and classes
 
 ## Overview
-The graph model is specified by creating enums that are annotated with `@PropertyDefinition`, `@EdgeDefinition` or `@VertexDefinition`. Among other things, these annotations apply the traits `PropertyDefTrait`, `EdgeDefTrait`, or `VertexDefTrait` to the enums.
+The graph model is specified by creating enums that are annotated with `@PropertyDefinition`, `@EdgeDefinition` or `@VertexDefinition`.  Once VertexDefinition and EdgeDefinition have been created they can be used to add new elements to the graph, for example:
 
-Once VertexDefinition and EdgeDefinition have been created they can be used to add new elements to the graph, for example:
 ```
 Edge edge1 = EX.IS_FRIENDS_WITH.instance().from(person1).to(person2).create()
 ```
+
 The `instance()` method invokes a builder class (`EdgeBuilder` or `ControlledInstance`) that the following methods (in this example `from()`, `to()` and `create()`) act on. Some properties and edges to indicate Carnival concepts like the namespace of the element 
 or superclass relationships will be automatically created in the graph.
 
 See the API docs for the [carnival.graph package](https://carnival-data.github.io/carnival/groovydoc/index.html?carnival/graph/package-summary.html) for reference.
 
 ### Model File Locations
-Models can be defined anywhere, as shown in the example scripts. However in a larger application, the convention is to either create a file named in `GraphModel.groovy` the main source directory or to create a subpackage named `model` that contains files with the model definitions.
+Models can be defined anywhere, as shown in the example scripts. However in a larger application, the convention is to either create a file named in `GraphModel.groovy` the main source directory or to create a subpackage named `model` that contains files with the model definitions.  
+
+See [CoreGraph.initializeGremlinGraph()](https://github.com/carnival-data/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/CoreGraph.groovy).
+
+### Annotation Processor
+Carnival contains a [Groovy AST transformation](https://groovy-lang.org/metaprogramming.html#developing-ast-xforms) that scans the source tree for `@PropertyDefinition`, `@EdgeDefinition` or `@VertexDefinition` annotations.
+Among other things, these transformation applies the traits `PropertyDefTrait`, `EdgeDefTrait`, or `VertexDefTrait` to the enums.  After the AST transformation, annotated enums become part of the Carnival machinery.
+
+See [DefinitionTransformation](https://github.com/carnival-data/carnival/blob/master/app/carnival-graph/src/main/groovy/carnival/graph/DefinitionTransformation.groovy).
 
 ## Property Definitions
 Both vertices and edges can contain properties.  The first step in graph modelling is to define the properties that will be used.  Property definitions are simple.  They enumerate the properties that will be used in the graph without any further descriptors of the properties.  In this version of Carnival, there is no concept of data type.

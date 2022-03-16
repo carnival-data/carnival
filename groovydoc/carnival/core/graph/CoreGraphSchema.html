@@ -193,7 +193,7 @@ implements <a href='../../../carnival/core/graph/GraphSchema.html'>GraphSchema</
                         <tr class="rowColor">
                             <td class="colFirst">
                                 <code><a href="#CoreGraphSchema(Collection)">CoreGraphSchema</a>
-                                (java.util.Collection&lt;ControlledInstance&gt; controlledInstances)</code><br></td>
+                                (java.util.Collection&lt;VertexBuilder&gt; controlledInstances)</code><br></td>
                         </tr>
                         
                     </table>
@@ -219,20 +219,20 @@ implements <a href='../../../carnival/core/graph/GraphSchema.html'>GraphSchema</
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
-                            <td class="colLast"><code>java.util.List&lt;ControlledInstance&gt;</code></td>
-                            <td class="colLast"><code><strong><a href="#getControlledInstances()">getControlledInstances</a></strong>()</code><br></td>
-                        </tr>
-                        
-                        <tr class="rowColor">
-                            <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.List&lt;VertexLabelDefinition&gt;</code></td>
                             <td class="colLast"><code><strong><a href="#getLabelDefinitions()">getLabelDefinitions</a></strong>()</code><br></td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.List&lt;RelationshipDefinition&gt;</code></td>
                             <td class="colLast"><code><strong><a href="#getRelationshipDefinitions()">getRelationshipDefinitions</a></strong>()</code><br></td>
+                        </tr>
+                        
+                        <tr class="altColor">
+                            <td class="colFirst"><code></code></td>
+                            <td class="colLast"><code>java.util.List&lt;VertexBuilder&gt;</code></td>
+                            <td class="colLast"><code><strong><a href="#getVertexBuilders()">getVertexBuilders</a></strong>()</code><br></td>
                         </tr>
                         
                     </table>
@@ -335,7 +335,7 @@ implements <a href='../../../carnival/core/graph/GraphSchema.html'>GraphSchema</
                         <a name="CoreGraphSchema(Collection)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4><strong>CoreGraphSchema</strong>(java.util.Collection&lt;ControlledInstance&gt; controlledInstances)</h4>
+                                <h4><strong>CoreGraphSchema</strong>(java.util.Collection&lt;VertexBuilder&gt; controlledInstances)</h4>
                                 <p></p>
                             </li>
                         </ul>
@@ -353,14 +353,6 @@ implements <a href='../../../carnival/core/graph/GraphSchema.html'>GraphSchema</
                 </a>
                     <h3>Method Detail</h3>
                     
-                        <a name="getControlledInstances()"><!-- --></a>
-                        <ul class="blockListLast">
-                            <li class="blockList">
-                                <h4>java.util.List&lt;ControlledInstance&gt; <strong>getControlledInstances</strong>()</h4>
-                                <p></p>
-                            </li>
-                        </ul>
-                    
                         <a name="getLabelDefinitions()"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
@@ -373,6 +365,14 @@ implements <a href='../../../carnival/core/graph/GraphSchema.html'>GraphSchema</
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.util.List&lt;RelationshipDefinition&gt; <strong>getRelationshipDefinitions</strong>()</h4>
+                                <p></p>
+                            </li>
+                        </ul>
+                    
+                        <a name="getVertexBuilders()"><!-- --></a>
+                        <ul class="blockListLast">
+                            <li class="blockList">
+                                <h4>java.util.List&lt;VertexBuilder&gt; <strong>getVertexBuilders</strong>()</h4>
                                 <p></p>
                             </li>
                         </ul>

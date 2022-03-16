@@ -143,21 +143,21 @@ if (location.href.indexOf('is-external=true') == -1) {
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
-                            <td class="colLast"><code>abstract&nbsp;java.util.Collection&lt;ControlledInstance&gt;</code></td>
-                            <td class="colLast"><code><strong><a href="#getControlledInstances()">getControlledInstances</a></strong>()</code><br>Controlled instances are singleton vertices that are governed by rules
- of cardinality and required properties.  </td>
-                        </tr>
-                        
-                        <tr class="rowColor">
-                            <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>abstract&nbsp;java.util.Collection&lt;VertexLabelDefinition&gt;</code></td>
                             <td class="colLast"><code><strong><a href="#getLabelDefinitions()">getLabelDefinitions</a></strong>()</code><br></td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>abstract&nbsp;java.util.Collection&lt;RelationshipDefinition&gt;</code></td>
                             <td class="colLast"><code><strong><a href="#getRelationshipDefinitions()">getRelationshipDefinitions</a></strong>()</code><br></td>
+                        </tr>
+                        
+                        <tr class="altColor">
+                            <td class="colFirst"><code></code></td>
+                            <td class="colLast"><code>abstract&nbsp;java.util.Collection&lt;VertexBuilder&gt;</code></td>
+                            <td class="colLast"><code><strong><a href="#getVertexBuilders()">getVertexBuilders</a></strong>()</code><br>Controlled instances are singleton vertices that are governed by rules
+ of cardinality and required properties.  </td>
                         </tr>
                         
                     </table>
@@ -192,22 +192,6 @@ if (location.href.indexOf('is-external=true') == -1) {
                 </a>
                     <h3>Method Detail</h3>
                     
-                        <a name="getControlledInstances()"><!-- --></a>
-                        <ul class="blockListLast">
-                            <li class="blockList">
-                                <h4>abstract&nbsp;java.util.Collection&lt;ControlledInstance&gt; <strong>getControlledInstances</strong>()</h4>
-                                <p> Controlled instances are singleton vertices that are governed by rules
- of cardinality and required properties.  There can be only a single
- instance of a vertex with the specific values for the defined required 
- properties.  For example, if there is a controlled instance with label
- IdentifierClass and required boolean property hasScope, there can be
- only a single vertex (IdentifierClass {hasScope:true}) and a single
- vertex (IdentifierClass {hasScope:false}).
-
-</p>
-                            </li>
-                        </ul>
-                    
                         <a name="getLabelDefinitions()"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
@@ -221,6 +205,22 @@ if (location.href.indexOf('is-external=true') == -1) {
                             <li class="blockList">
                                 <h4>abstract&nbsp;java.util.Collection&lt;RelationshipDefinition&gt; <strong>getRelationshipDefinitions</strong>()</h4>
                                 <p></p>
+                            </li>
+                        </ul>
+                    
+                        <a name="getVertexBuilders()"><!-- --></a>
+                        <ul class="blockListLast">
+                            <li class="blockList">
+                                <h4>abstract&nbsp;java.util.Collection&lt;VertexBuilder&gt; <strong>getVertexBuilders</strong>()</h4>
+                                <p> Controlled instances are singleton vertices that are governed by rules
+ of cardinality and required properties.  There can be only a single
+ instance of a vertex with the specific values for the defined required 
+ properties.  For example, if there is a controlled instance with label
+ IdentifierClass and required boolean property hasScope, there can be
+ only a single vertex (IdentifierClass {hasScope:true}) and a single
+ vertex (IdentifierClass {hasScope:false}).
+
+</p>
                             </li>
                         </ul>
                     

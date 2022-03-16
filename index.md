@@ -6,9 +6,7 @@
 ### Introduction
 - [Summary](#summary)
 - [Statement of Need](#statement-need)
-- [Data Aggregation](#data-aggregation)
-- [Graph Modelling](#graph-model)
-- [Graph Algorithms](#graph-algo)
+- [Features](#features)
 
 ### Development
 - [Core Development](#core-development)
@@ -49,8 +47,10 @@ A key challenge of human subjects research is to locate patients to recruit to a
 **Carnival's** ability to integrate data from disparate resources into a flexible computational resource enables data driven system integrations.  For example, **Carnival** has been used effectictively to integrate a custom help desk ticketing system with Monday.com.  The help desk ticketing system was developed locally with a back-end relational database.  Monday.com is accessible via its API for reads and writes.  By modelling the help desk and Monday.com data as separate graph models, then using a third graph model to integrate the two, a **Carnival** integration application was developed to integrate the two data sets and compute changes that needed to occur based on the state of the data.  In this example, **Carnival** was partnered with [Micronaut](https://micronaut.io) and deployed as a [Docker](https://www.docker.com) container on [Microsoft Azure](https://azure.microsoft.com/).  The service would build an in-memory graph at regular minute intervals, compute the changes that were required, then call the appropriate web services to execute the logic of the integration.
 
 
+## <a name="features"></a>Features
 
-## <a name="data-aggregation"></a>Data Aggregation
+
+### <a name="data-aggregation"></a>Data Aggregation
 Carnival supports data aggregation by caching the results of queries and API calls.    This can be beneficial during the development cycle by removing unnecessary and costly query operations.
 
 The following pseudo-code demonstrates how caching works.
@@ -136,7 +136,7 @@ The Yaml file contains information about the method invocation, such as the clas
 
 For more information about writing data aggregation methods, see the sections on [Data Tables](data-tables.md) and [Vines](vines.md).
 
-## <a name="graph-model"></a>Graph Modelling
+### <a name="graph-model"></a>Graph Modelling
 The schema-less nature of property graphs is both a strength and a weakness.  The lack of schema enforcement enables rapid development.  However, that same lack of enforcement can lead to data inconsistencies.  Carnival includes a graph modelling mechanism that seeks to balance flexibility and consistency.
 
 ```groovy
@@ -213,7 +213,7 @@ To learn more about graph modelling, see the section [Graph Model](graph-model.m
 
 
 
-## <a name="graph-algo"></a>Graph Algorithms
+### <a name="graph-algo"></a>Graph Algorithms
 The ability to programmatically update a graph is part of what makes property graphs so powerful and useful for informatics.  However, it is easy to lose track of which routines were called and what their effects were.  Carnival provides a framework to wrap graph routines so that they can be called and tracked in standardized ways.
 
 **Mention that graph methods create Process vertices in the graph??**

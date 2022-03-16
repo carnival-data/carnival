@@ -40,8 +40,8 @@ Carnival was initially developed to facilitate the production of analytical data
 #### Queries over enriched data
 A key challenge of human subjects research is to locate patients to recruit to a study, frequently done by searching a research data set containing raw patient data.  Potential recruits need to be stratified by attributes, such as age, race, and ethnicity, matched against inclusion criteria, such as the presence of a diagnosis code, and filtered by exclusion criteria, such as a treatment modality.  **Carnival** has been used effectively in this area by loading the relevant raw data into a graph, stratifying and categorizing patients by the relevant criteria, then using graph traversals to extract the patients who are potential recruits.
 
-[A novel tool for standardizing clinical data in a semantically rich model](https://doi.org/10.1016/j.yjbinx.2020.100086)
-[Carnival: A Graph-Based Data Integration and Query Tool to Support Patient Cohort Generation for Clinical Research](https://ebooks.iospress.nl/volumearticle/51943)
+- [A novel tool for standardizing clinical data in a semantically rich model](https://doi.org/10.1016/j.yjbinx.2020.100086)
+- [Carnival: A Graph-Based Data Integration and Query Tool to Support Patient Cohort Generation for Clinical Research](https://ebooks.iospress.nl/volumearticle/51943)
 
 #### System integrations
 **Carnival's** ability to integrate data from disparate resources into a flexible computational resource enables data driven system integrations.  For example, **Carnival** has been used effectictively to integrate a custom help desk ticketing system with Monday.com.  The help desk ticketing system was developed locally with a back-end relational database.  Monday.com is accessible via its API for reads and writes.  By modelling the help desk and Monday.com data as separate graph models, then using a third graph model to integrate the two, a **Carnival** integration application was developed to integrate the two data sets and compute changes that needed to occur based on the state of the data.  In this example, **Carnival** was partnered with [Micronaut](https://micronaut.io) and deployed as a [Docker](https://www.docker.com) container on [Microsoft Azure](https://azure.microsoft.com/).  The service would build an in-memory graph at regular minute intervals, compute the changes that were required, then call the appropriate web services to execute the logic of the integration.
@@ -209,14 +209,8 @@ MyDomain.EX.IS_NAMED.instance().from(personV).to(nameV).create()
 To learn more about graph modelling, see the section [Graph Model](graph-model.md).
 
 
-**Add a graph image?**
-
-
-
 ### <a name="graph-algo"></a>Graph Algorithms
-The ability to programmatically update a graph is part of what makes property graphs so powerful and useful for informatics.  However, it is easy to lose track of which routines were called and what their effects were.  Carnival provides a framework to wrap graph routines so that they can be called and tracked in standardized ways.
-
-**Mention that graph methods create Process vertices in the graph??**
+The ability to programmatically update a graph is part of what makes property graphs so powerful and useful for informatics.  However, it is easy to lose track of which routines were called and what their effects were.  Carnival provides a framework to wrap graph routines so that they can be called and tracked in standardized ways.  Each time a graph method is executed by Carnival, a tracking vertex is created in the graph that tracks the time of execution and optionally inputs and outputs.
 
 ```groovy
 /**
@@ -260,8 +254,6 @@ class Reasoners implements GraphMethods {
 
 }
 ```
-
-**Add a graph image?**
 
 To learn more about graph methods, see [Graph Methods](graph-method.md).
 

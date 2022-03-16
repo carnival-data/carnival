@@ -15,10 +15,10 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 
 
 /**
- * gradle test --tests "carnival.graph.ControlledInstanceSpec"
+ * gradle test --tests "carnival.graph.VertexBuilderSpec"
  *
  */
-class ControlledInstanceSpec extends Specification {
+class VertexBuilderSpec extends Specification {
 
     static enum VX implements VertexDefTrait {
         CIS_THING(

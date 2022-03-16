@@ -89,7 +89,7 @@ class CoreGraphSpec extends Specification {
     }
 
 
-    def "test initializeGraph for ControlledInstance creation"() {
+    def "test initializeGraph for VertexBuilder creation"() {
     	given:
     	def graph = coreGraph.graph
     	def g = graph.traversal()

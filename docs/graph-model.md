@@ -17,7 +17,7 @@ The graph model is specified by creating enums that are annotated with `@Propert
 Edge edge1 = EX.IS_FRIENDS_WITH.instance().from(person1).to(person2).create()
 ```
 
-The `instance()` method invokes a builder class (`EdgeBuilder` or `ControlledInstance`) that the following methods (in this example `from()`, `to()` and `create()`) act on. Some properties and edges to indicate Carnival concepts like the namespace of the element 
+The `instance()` method invokes a builder class (`EdgeBuilder` or `VertexBuilder`) that the following methods (in this example `from()`, `to()` and `create()`) act on. Some properties and edges to indicate Carnival concepts like the namespace of the element 
 or superclass relationships will be automatically created in the graph.
 
 See the API docs for the [carnival.graph package](https://carnival-data.github.io/carnival/groovydoc/index.html?carnival/graph/package-summary.html) for reference.

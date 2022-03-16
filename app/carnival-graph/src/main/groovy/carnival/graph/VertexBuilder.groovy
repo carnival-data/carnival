@@ -21,7 +21,7 @@ import org.apache.tinkerpop.gremlin.structure.Edge
  * @see carnival.graph.VertexDefTrait
  */
 @Slf4j
-class ControlledInstance extends PropertyValuesHolder<ControlledInstance> {
+class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
 
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS
@@ -38,7 +38,7 @@ class ControlledInstance extends PropertyValuesHolder<ControlledInstance> {
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    public ControlledInstance(VertexDefTrait vertexDef) {
+    public VertexBuilder(VertexDefTrait vertexDef) {
         assert vertexDef
         this.vertexDef = vertexDef
     }
@@ -70,7 +70,7 @@ class ControlledInstance extends PropertyValuesHolder<ControlledInstance> {
      * <p>
      * {@code Vertex rover = VX.SHIBA_INU.instance().ensure(graph) }
      * 
-     * @synonym carnival.graph.ControlledInstance.vertex(Graph graph, GraphTraversalSource g)
+     * @synonym carnival.graph.VertexBuilder.vertex(Graph graph, GraphTraversalSource g)
      * */
     public Vertex ensure(Graph graph, GraphTraversalSource g) {
         vertex(graph, g)
@@ -83,7 +83,7 @@ class ControlledInstance extends PropertyValuesHolder<ControlledInstance> {
      * <p>
      * {@code Vertex rover = VX.SHIBA_INU.instance().vertex(graph) }
      *
-     * @synonym carnival.graph.ControlledInstance.ensure(Graph graph, GraphTraversalSource g)
+     * @synonym carnival.graph.VertexBuilder.ensure(Graph graph, GraphTraversalSource g)
      * */
     public Vertex vertex(Graph graph, GraphTraversalSource g) {
         assert graph
@@ -130,7 +130,7 @@ class ControlledInstance extends PropertyValuesHolder<ControlledInstance> {
      * <p>
      * {@code Vertex rover = VX.SHIBA_INU.instance().create(graph) }
      * 
-     * @synonym carnival.graph.ControlledInstance.createVertex(Graph graph)
+     * @synonym carnival.graph.VertexBuilder.createVertex(Graph graph)
      * */
     public Vertex create(Graph graph) {
         createVertex(graph)
@@ -144,10 +144,10 @@ class ControlledInstance extends PropertyValuesHolder<ControlledInstance> {
      * <p>
      * {@code Vertex rover = VX.SHIBA_INU.instance().create(graph) }
      * 
-     * @synonym carnival.graph.ControlledInstance.create(Graph graph) 
+     * @synonym carnival.graph.VertexBuilder.create(Graph graph) 
      * */
     public Vertex createVertex(Graph graph) {
-        log.trace "ControlledInstance.createVertex graph:${graph}"
+        log.trace "VertexBuilder.createVertex graph:${graph}"
         assert graph
 
         assertRequiredProperties()

@@ -27,7 +27,7 @@ import carnival.util.Defaults
 import carnival.graph.EdgeDefTrait
 import carnival.graph.PropertyDefTrait
 import carnival.graph.VertexDefTrait
-import carnival.graph.ControlledInstance
+import carnival.graph.VertexBuilder
 
 
 
@@ -46,7 +46,7 @@ interface GraphSchema {
 	 *
 	 *
 	 */
-	Collection<ControlledInstance> getControlledInstances()
+	Collection<VertexBuilder> getVertexBuilders()
 
 
 	/** */

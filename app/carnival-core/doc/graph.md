@@ -31,7 +31,7 @@ Relationships are lower snake case. They should always be verb phrases.
 
 ### Controlled Instance
 
-Descriptor for graph labels. Vertexes with ControlledInstance labels behave in a way that is conceptually similar to Singleton classes. They must have at least one unique property and the allowed values for these properties are defined by controlled vocabulary that is not expected to change very often. These vertices will usually only be created in the initial graph setup, the controlled vocabulary will be maintained in Carnival (perhaps via enums) and the Carnival graph integrity QC will check that the controlled vocabulary matches the existing instances in the graph.
+Descriptor for graph labels. Vertexes with VertexBuilder labels behave in a way that is conceptually similar to Singleton classes. They must have at least one unique property and the allowed values for these properties are defined by controlled vocabulary that is not expected to change very often. These vertices will usually only be created in the initial graph setup, the controlled vocabulary will be maintained in Carnival (perhaps via enums) and the Carnival graph integrity QC will check that the controlled vocabulary matches the existing instances in the graph.
 
 An example of this is the label IdentifierClass. There is a static set of identifier types that can be used to represent patients and encounters (EMPIs, MRNs, collection packet IDs, etc). These identifier types will be defined by an enum elsewhere. This enum will be referenced during the graph set-up phase to create the IdentifierClass instances.
 
@@ -147,7 +147,7 @@ An instance that represents CRFs that were collected during a BiobankEncounter.
 
 ![Identifiers Model](graphviz/identifiers.png?raw=true)
 
-### IdentifierClass (ControlledInstance)
+### IdentifierClass (VertexBuilder)
 
 Instances with this label represent the types of identifiers used to represent patients or biobank encounters. Examples include EMPI or MRN for patients, and collection encounter id and collection packet id for encounters.
 IdentifierClass instances are unique by name, and should be created during the initial graph bootstrap step.
@@ -164,7 +164,7 @@ IdentifierClass instances are unique by name, and should be created during the i
 | hasScope            | yes      | no     | false   |
 | hasCreationFacility | yes      | no     | false   |
 
-### IdentifierFacility (ControlledInstance)
+### IdentifierFacility (VertexBuilder)
 
 Used with MRNs to indicate the facility where the MRN was generated (for example 'HUP' or 'PMC')
 IdentifierFacility instances are unique by name, and should be created during the initial graph bootstrap step.

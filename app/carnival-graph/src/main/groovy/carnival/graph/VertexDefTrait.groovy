@@ -201,14 +201,14 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
 
 
     /** */
-    public ControlledInstance instance() {
+    public VertexBuilder instance() {
         controlledInstance()
     }
 
 
     /** */
-    public ControlledInstance controlledInstance() {
-        def ci = new ControlledInstance(this)
+    public VertexBuilder controlledInstance() {
+        def ci = new VertexBuilder(this)
         ci.propertiesMustBeDefined = this.propertiesMustBeDefined
         ci
     }

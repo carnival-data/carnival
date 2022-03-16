@@ -8,7 +8,7 @@
 * Once VertexDefinition and EdgeDefinition have been created they can be used to add new elements to the 
 * graph, for example:
 * {@code Edge edge1 = EX.IS_FRIENDS_WITH.instance().from(person1).to(person2).create()}.
-* The 'instance()' method invokes a builder class (EdgeBuilder or ControlledInstance) that the following methods 
+* The 'instance()' method invokes a builder class (EdgeBuilder or VertexBuilder) that the following methods 
 * (in this example 'from()', 'to()' and 'create()') act on.
 * <p>
 * Some properties and edges to indicate Carnival concepts like the namespace of the element 

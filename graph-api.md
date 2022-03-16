@@ -67,17 +67,19 @@ To create a vertex only if a matching vertex does not already exist, use the `en
 Vertex p1 = VX.PERSON.instance().withProperties(  (1)
     PX.NAME, 'adam',
     PX.IS_ALIVE, true
-).create(graph)
+).create(graph)                                   (2)
 
-Vertex s1 = VX.SCHOOL.instance().withProperties(  (2)
+Vertex s1 = VX.SCHOOL.instance().withProperties(  (3)
     PX.NAME, 'School 1'
-).ensure(graph, g)
+).ensure(graph, g)                                (4)
 
-EX.ATTENDS.instance().from(p1).to(s1).create(g)  (3)
+EX.ATTENDS.instance().from(p1).to(s1).create()    (5)
 ```
 1. Create a person vertex to represent the student
-2. Look-up or create the vertex representing School 1
-3. Connect the student with the school via a relationship
+2. Pass in the graph where the vertex is to be created
+3. Look-up or create the vertex representing School 1
+4. The `ensure()` method requires a graph traversal source to use to search for pre-existing vertex
+3. Connect the student with the school via a relationship.  Since the person vertex is new, we know there is no pre-existing relationship.  The `EdgeBuilder create()` method does not require any parameters.
 
 There are similar uses for edges between vertices that express relationships.  Onlye a single `ATTENDS` edge between `p1` and `s1` is necessary to express the relationship.  There is an `ensure` method on edges to prevent the creation of multiple edges, which can needlessly complicate graph traversals.
 

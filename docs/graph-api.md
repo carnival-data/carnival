@@ -51,7 +51,7 @@ Vertex v1 = VX.PERSON.instance()     (1)
 3. The `create()` method instructs the builder to create the vertex in the supplied graph and return it.
 
 ```groovy
-Vertex v1 = VX.PERSON.instance().withProperties( (1)
+Vertex v1 = VX.PERSON.instance().withProperties(  (1)
     PX.NAME, 'adam',
     PX.IS_ALIVE, true
 ).create(graph)
@@ -59,3 +59,30 @@ Vertex v1 = VX.PERSON.instance().withProperties( (1)
 
 1. `withProperties` allows multiple properties to be set at once
 
+### Singleton Vertices
+
+To create a vertex only if a matching vertex does not already exist, use the `ensure()` method.  This can be useful for vertices that will be used throughout an application that are not closely tied to inputs.  For example, an application that models students in school might rely on singleton vertices to represent the schools that are known entities.  
+
+```groovy
+Vertex p1 = VX.PERSON.instance().withProperties(  (1)
+    PX.NAME, 'adam',
+    PX.IS_ALIVE, true
+).create(graph)
+
+Vertex s1 = VX.SCHOOL.instance().withProperties(  (2)
+    PX.NAME, 'School 1'
+).ensure(graph, g)
+
+EX.ATTENDS.instance().from(p1).to(s1).create(g)  (3)
+```
+1. Create a person vertex to represent the student
+2. Look-up or create the vertex representing School 1
+3. Connect the student with the school via a relationship
+
+There are similar uses for edges between vertices that express relationships.  Onlye a single `ATTENDS` edge between `p1` and `s1` is necessary to express the relationship.  There is an `ensure` method on edges to prevent the creation of multiple edges, which can needlessly complicate graph traversals.
+
+See the following for more details:
+
+- [VertexDefTrait](https://carnival-data.github.io/carnival/groovydoc/carnival/graph/VertexDefTrait.html)
+- [VertexBuilder](https://carnival-data.github.io/carnival/groovydoc/carnival/graph/VertexBuilder.html)
+- [WithPropertyDefsTrait](https://carnival-data.github.io/carnival/groovydoc/carnival/graph/WithPropertyDefsTrait.html)

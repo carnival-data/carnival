@@ -278,6 +278,7 @@ To learn more about graph methods, see [Graph Methods](graph-method.md).
   - [Generic Data Table](generic-data-table.md)
 - [Vines](vines.md)
 - [Graph Model](graph-model.md)
+- [Graph API](graph-api.md)
 - [Graph Methods](graph-method.md)
 
 ## <a name="api"></a> Application Programmer Interface 

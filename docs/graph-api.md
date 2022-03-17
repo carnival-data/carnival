@@ -4,7 +4,12 @@ Carnival defines a graph API layered over the standard Tinkerpop API whose goal 
 
 The underlying Tinkerpop classes, including Vertex and Edge, are always available.  A Carnival graph is just a property graph.  The facilities of the graph database engine and the full Tinkerpop API can be used to operate over the graph.  However, in order to keep the graph properly formatted, using the Carnival API is recommended.
 
-## Vertices
+## Contents
+- [Vertices](#vertices)
+- [Edges](#edges)
+- [Gremlin Extensions](#gremlin)
+
+## <a name="vertices">Vertices</a>
 
 ### Creating a vertex
 
@@ -124,7 +129,7 @@ See the following for more details:
 - [WithPropertyDefsTrait](https://carnival-data.github.io/carnival/groovydoc/carnival/graph/WithPropertyDefsTrait.html)
 
 
-## Edges
+## <a name="edges">Edges</a>
 
 ### Creating an edge
 
@@ -207,3 +212,27 @@ See the following for more details:
 - [EdgeDefTrait](https://carnival-data.github.io/carnival/groovydoc/carnival/graph/EdgeDefTrait.html)
 - [EdgeBuilder](https://carnival-data.github.io/carnival/groovydoc/carnival/graph/EdgeBuilder.html)
 - [WithPropertyDefsTrait](https://carnival-data.github.io/carnival/groovydoc/carnival/graph/WithPropertyDefsTrait.html)
+
+
+## <a name="gremlin">Gremlin Extensions</a>
+
+Carnival implements a number of extensions to the Tinkerpop Gremlin graph traversal language that enable the use of Carnival objects in Gremlin treversals.
+
+### isa
+
+`isa` matches against vertices or edges of a given definition.
+
+```groovy
+// all person vertices
+g.V().isa(VX.PERSON).toList()
+
+// all EX.ATTENDS edges
+g.V().bothE().isa(EX.ATTENDS).toList()
+```
+
+See the following for more details:
+
+- [Groovy Extension Modules](https://groovy-lang.org/metaprogramming.html#_extension_modules)
+- [TinkerpopTraversalExtension](https://carnival-data.github.io/carnival/groovydoc/carnival/graph/ext/TinkerpopTraversalExtension.html)
+- [TinkerpopAnonTraversalExtension](https://carnival-data.github.io/carnival/groovydoc/carnival/graph/ext/TinkerpopAnonTraversalExtension.html)
+

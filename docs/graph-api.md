@@ -198,16 +198,7 @@ Property graphs can have multiple duplicate graphs between vertices.  In the exa
 EX.ATTENDS.instance().from(p1).to(s1).create()
 ```
 
-would result in multiple duplicate edges between the vertices `p1` and `s1`.  
-
-```mermaid
-graph TD;
-    P1-->S1;
-    P1-->S1;
-    P1-->S1;
-```
-
-This behavior is likely not desired in a knowledge graph.  To overcome this difficulty, Carnival includes an `ensure()` method on `EdgeBuilder` analogous to the `ensure()` method of `VertexBuilder`.
+would result in multiple duplicate edges between the vertices `p1` and `s1`. This behavior is likely not desired in a knowledge graph.  To overcome this difficulty, Carnival includes an `ensure()` method on `EdgeBuilder` analogous to the `ensure()` method of `VertexBuilder`.
 
 ```groovy
 EX.ATTENDS.instance().from(p1).to(s1).ensure(g)  (1)

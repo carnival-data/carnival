@@ -231,7 +231,7 @@ Carnival implements a number of extensions to the Tinkerpop Gremlin graph traver
 `isa` matches against vertices or edges of a given definition.
 
 ```groovy
-// all person vertices
+// all VX.PERSON vertices
 g.V().isa(VX.PERSON).toList()
 
 // all EX.ATTENDS edges

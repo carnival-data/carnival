@@ -226,6 +226,27 @@ See the following for more details:
 
 Carnival implements a number of extensions to the Tinkerpop Gremlin graph traversal language that enable the use of Carnival objects in Gremlin treversals.
 
+
+### in, out, both
+The in(), out(), and both() traversal steps have been extended to work with Carnival graph model objects.  The following example demonstrates out().  in() and both() honor the logic of the corresponding Gremlin traversals.
+
+```groovy
+@VertexDefinition
+static enum VX { THING }
+
+@EdgeDefinition
+static enum EX { IS_NOT }
+
+def v1 = VX.THING.instance().create(graph, g)
+def v2 = VX.THING.instance().create(graph, g)
+EX.IS_NOT.instance().from(v1).to(v2).create()
+
+g.V(v1).out(EX.IS_NOT).tryNext().isPresent()
+g.V(v1).out(EX.IS_NOT).next() == v2
+!g.V(v2).out(EX.IS_NOT).tryNext().isPresent()
+```
+
+
 ### isa
 
 `isa` matches against vertices or edges of a given definition.
@@ -236,6 +257,92 @@ g.V().isa(VX.PERSON).toList()
 
 // all EX.ATTENDS edges
 g.V().bothE().isa(EX.ATTENDS).toList()
+```
+
+
+### has, hasNot
+
+The has() and hasNot() traversal steps have been extended to work with Carnival property definitions and enums.
+
+```groovy
+@VertexDefinition
+static enum VX {
+    THING(
+        vertexProperties:[PX.ID]
+    )
+}
+
+@PropertyDefinition
+static enum PX { ID }
+
+static enum LOCAL_ID { ID1 }
+```
+
+#### has
+```groovy
+def v1 = VX.THING.instance().withProperty(PX.ID, LOCAL_ID.ID1).create(graph, g)
+g.V(v1).has(PX.ID).tryNext().isPresent()
+```
+
+```groovy
+def v1 = VX.THING.instance().withProperty(PX.ID, 'someval').create(graph)
+g.V(v1).has(PX.ID, 'someval').tryNext().isPresent()
+```
+
+```groovy
+def v1 = VX.THING.instance().withProperty(PX.ID, LOCAL_ID.ID1).create(graph)
+g.V(v1).has(PX.ID, LOCAL_ID.ID1).tryNext().isPresent()
+```
+
+#### hasNot
+```groovy
+def v1 = VX.THING.instance().withProperty(PX.ID, LOCAL_ID.ID1).create(graph)
+def v2 = VX.THING.instance().create(graph)
+!g.V(v1).hasNot(PX.ID).tryNext().isPresent()
+g.V(v2).hasNot(PX.ID).tryNext().isPresent() 
+```
+
+### matchesOn
+
+matchesOn() is a traversal step that matches on property values.  If the property is present, matches must have the property with the same value.  If the property is not present, matches must not have the property -- a null value will not match.
+
+```groovy
+@VertexDefinition
+static enum VX {
+    THING(
+        vertexProperties:[PX.ID]
+    )
+}
+
+def v1 = VX.THING.instance().withProperty(PX.ID, '58').create(graph)
+def v2 = VX.THING.instance().withProperty(PX.ID, '59').create(graph)
+def v3 = VX.THING.instance().withProperty(PX.ID, '58').create(graph)
+def v4 = VX.THING.instance().create(graph)
+
+def matches = g.V().matchesOn(PX.ID, v1).toList()
+
+matches.size() == 2
+matches.contains(v1)
+matches.contains(v3)
+```
+
+```groovy
+@VertexDefinition
+static enum VX {
+    THING(
+        vertexProperties:[PX.ID, PX.NAME]
+)
+}
+
+def v1 = VX.THING.instance().withProperty(PX.ID, '58').create(graph)
+def v2 = VX.THING.instance().withProperty(PX.ID, '59').create(graph)
+def v3 = VX.THING.instance().withProperty(PX.NAME, '58').create(graph)
+def v4 = VX.THING.instance().create(graph)
+
+def matches = g.V().matchesOn(PX.NAME, v1, PX.ID).toList()
+
+matches.size() == 1
+matches.contains(v3)
 ```
 
 See the following for more details:

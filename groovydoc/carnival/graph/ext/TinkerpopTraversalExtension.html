@@ -105,6 +105,10 @@ if (location.href.indexOf('is-external=true') == -1) {
 <pre>class TinkerpopTraversalExtension
 extends java.lang.Object</pre>
 
+    <p> Extensions to the Tinkerpop Gremlin graph traversal language that enable the use of 
+ Carnival objects in Gremlin treversals.
+</p>
+
           </li>
     </ul>
 </div>
@@ -168,121 +172,145 @@ extends java.lang.Object</pre>
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal</code></td>
-                            <td class="colLast"><code><strong><a href="#both(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)">both</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> edef)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#both(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)">both</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> edef)</code><br>Extension of the Both step that traverses edges matching the given edge
+ definition.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal</code></td>
-                            <td class="colLast"><code><strong><a href="#bothE(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)">bothE</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> edef)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#bothE(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)">bothE</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> edef)</code><br>Extension of the BothE step that traverses edges matching the given edge
+ definition.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal</code></td>
-                            <td class="colLast"><code><strong><a href="#classes(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal)">classes</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#classes(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal)">classes</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal)</code><br>Finds all the class vertices relevant to the current elements in the 
+ traversal by traversing IS_INSTANCE_OF and IS_SUBCLASS_OF edges.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal</code></td>
-                            <td class="colLast"><code><strong><a href="#has(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait)">has</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> pdef)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#has(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait)">has</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> pdef)</code><br>Extension of the Has step that accepts a property definition.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal</code></td>
-                            <td class="colLast"><code><strong><a href="#has(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait, java.lang.Enum)">has</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> pdef, java.lang.Enum value)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#has(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait, java.lang.Enum)">has</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> pdef, java.lang.Enum value)</code><br>Extension of the Has step that accepts a property definition and an enum
+ whose name() will be used as the property value.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal</code></td>
-                            <td class="colLast"><code><strong><a href="#has(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait, java.lang.Object)">has</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> pdef, java.lang.Object value)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#has(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait, java.lang.Object)">has</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> pdef, java.lang.Object value)</code><br>Extension of the Has step that accepts a property definition and a 
+ value.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal</code></td>
-                            <td class="colLast"><code><strong><a href="#hasNot(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait)">hasNot</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> pdef)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#hasNot(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait)">hasNot</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> pdef)</code><br>Extension of the HasNot step that accepts a property definition.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal</code></td>
-                            <td class="colLast"><code><strong><a href="#in(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)">in</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> edef)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#in(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)">in</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> edef)</code><br>Extension of the In step that traverses edges matching the given edge
+ definition.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal</code></td>
-                            <td class="colLast"><code><strong><a href="#inE(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)">inE</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> edef)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#inE(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)">inE</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> edef)</code><br>Extension of the InE step that traverses edges matching the given edge
+ definition.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal</code></td>
-                            <td class="colLast"><code><strong><a href="#instanceClass(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal)">instanceClass</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#instanceClass(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal)">instanceClass</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal)</code><br>Find the class vertices of the current elements in the traversal by
+ looking for an IS_INSTANCE_OF edge that points to a class vertex.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal</code></td>
-                            <td class="colLast"><code><strong><a href="#instances(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal)">instances</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#instances(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal)">instances</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal)</code><br>This step can be applied to vertices that represent classes finding
+ all vertices that represent instances of the class or any of its sub-
+ classes.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal</code></td>
-                            <td class="colLast"><code><strong><a href="#isInstanceOf(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.VertexDefTrait)">isInstanceOf</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/VertexDefTrait.html'>VertexDefTrait</a> vdef)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#isInstanceOf(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.VertexDefTrait)">isInstanceOf</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/VertexDefTrait.html'>VertexDefTrait</a> vdef)</code><br>Filters elements to include only  instances of the given
+ vertex definition by traversing IS_INSTANCE_OF and IS_SUBCLASS_OF
+ edges.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal</code></td>
-                            <td class="colLast"><code><strong><a href="#isa(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.VertexDefTrait)">isa</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/VertexDefTrait.html'>VertexDefTrait</a> vdef)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#isa(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.VertexDefTrait)">isa</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/VertexDefTrait.html'>VertexDefTrait</a> vdef)</code><br>Filters the elements in the traversal to include only those that match
+ the given vertex definition.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal</code></td>
-                            <td class="colLast"><code><strong><a href="#isa(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)">isa</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> edef)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#isa(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)">isa</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> edef)</code><br>Filters the elements in the traversal to include only those that match
+ the given edge definition.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal</code></td>
-                            <td class="colLast"><code><strong><a href="#matchesOn(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait, org.apache.tinkerpop.gremlin.structure.Vertex)">matchesOn</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> pdef, org.apache.tinkerpop.gremlin.structure.Vertex vertex)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#matchesOn(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait, org.apache.tinkerpop.gremlin.structure.Vertex)">matchesOn</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> pdef, org.apache.tinkerpop.gremlin.structure.Vertex vertex)</code><br>Filter the elements in the traversal to include only those that have the
+ same value as the provided vertex for the provided property or if the 
+ provided vertex does not have the property then include elements that
+ likewise do not have that property.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal</code></td>
-                            <td class="colLast"><code><strong><a href="#matchesOn(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait, org.apache.tinkerpop.gremlin.structure.Vertex, carnival.graph.PropertyDefTrait)">matchesOn</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> traversalPdef, org.apache.tinkerpop.gremlin.structure.Vertex vertex, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> vertexPdef)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#matchesOn(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait, org.apache.tinkerpop.gremlin.structure.Vertex, carnival.graph.PropertyDefTrait)">matchesOn</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> traversalPdef, org.apache.tinkerpop.gremlin.structure.Vertex vertex, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> vertexPdef)</code><br>Filter the elements in the traversal to include only those that have the
+ same value as the provided vertex for the provided property or if the 
+ provided vertex does not have the property then include elements that
+ likewise do not have that property using one property definition for the
+ traversal elements and another for the provided vertex.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;java.lang.Object</code></td>
-                            <td class="colLast"><code><strong><a href="#nextOne(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal)">nextOne</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#nextOne(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal)">nextOne</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal)</code><br>Extension of the next() terminal step that throws an exception if the
+ traversal yields more than one element.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal</code></td>
-                            <td class="colLast"><code><strong><a href="#out(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)">out</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> edef)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#out(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)">out</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> edef)</code><br>Extension of the Out step that traverses edges matching the given edge
+ definition.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal</code></td>
-                            <td class="colLast"><code><strong><a href="#outE(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)">outE</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> edef)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#outE(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)">outE</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> edef)</code><br>Extension of the OutE step that traverses edges matching the given edge
+ definition.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal</code></td>
-                            <td class="colLast"><code><strong><a href="#properties(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait)">properties</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> pdef)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#properties(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait)">properties</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> pdef)</code><br>Extension of the Properties step tp accept a property definition.</td>
                         </tr>
                         
                     </table>
@@ -357,7 +385,8 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal <strong>both</strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> edef)</h4>
-                                <p></p>
+                                <p> Extension of the Both step that traverses edges matching the given edge
+ definition. <DL><DT><B>Parameters:</B></DT><DD><code>traversal</code> -  The traversal this method will modify.</DD><DD><code>edef</code> -       The edge definition</DD></DL><DL><DT><B>Returns:</B></DT><DD>The modified traversal</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -365,7 +394,8 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal <strong>bothE</strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> edef)</h4>
-                                <p></p>
+                                <p> Extension of the BothE step that traverses edges matching the given edge
+ definition. <DL><DT><B>Parameters:</B></DT><DD><code>traversal</code> -  The traversal this method will modify.</DD><DD><code>edef</code> -       The edge definition</DD></DL><DL><DT><B>Returns:</B></DT><DD>The modified traversal</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -373,7 +403,8 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal <strong>classes</strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal)</h4>
-                                <p></p>
+                                <p> Finds all the class vertices relevant to the current elements in the 
+ traversal by traversing IS_INSTANCE_OF and IS_SUBCLASS_OF edges. <DL><DT><B>Parameters:</B></DT><DD><code>traversal</code> -  The traversal this method will modify.</DD></DL><DL><DT><B>Returns:</B></DT><DD>The modified traversal</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -381,7 +412,7 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal <strong>has</strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> pdef)</h4>
-                                <p></p>
+                                <p> Extension of the Has step that accepts a property definition. <DL><DT><B>Parameters:</B></DT><DD><code>traversal</code> -  The traversal this method will modify.</DD><DD><code>pdef</code> -       The property definition</DD></DL><DL><DT><B>Returns:</B></DT><DD>The modified traversal</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -389,7 +420,8 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal <strong>has</strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> pdef, java.lang.Enum value)</h4>
-                                <p></p>
+                                <p> Extension of the Has step that accepts a property definition and an enum
+ whose name() will be used as the property value. <DL><DT><B>Parameters:</B></DT><DD><code>traversal</code> -  The traversal this method will modify.</DD><DD><code>pdef</code> -       The property definition</DD><DD><code>value</code> -      The enum whose name() will be used as the property value</DD></DL><DL><DT><B>Returns:</B></DT><DD>The modified traversal</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -397,7 +429,8 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal <strong>has</strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> pdef, java.lang.Object value)</h4>
-                                <p></p>
+                                <p> Extension of the Has step that accepts a property definition and a 
+ value. <DL><DT><B>Parameters:</B></DT><DD><code>traversal</code> -  The traversal this method will modify.</DD><DD><code>pdef</code> -       The property definition</DD><DD><code>value</code> -      The value to use as the property value</DD></DL><DL><DT><B>Returns:</B></DT><DD>The modified traversal</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -405,7 +438,7 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal <strong>hasNot</strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> pdef)</h4>
-                                <p></p>
+                                <p> Extension of the HasNot step that accepts a property definition. <DL><DT><B>Parameters:</B></DT><DD><code>traversal</code> -  The traversal this method will modify.</DD><DD><code>pdef</code> -       The property definition</DD></DL><DL><DT><B>Returns:</B></DT><DD>The modified traversal</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -413,7 +446,8 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal <strong>in</strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> edef)</h4>
-                                <p></p>
+                                <p> Extension of the In step that traverses edges matching the given edge
+ definition. <DL><DT><B>Parameters:</B></DT><DD><code>traversal</code> -  The traversal this method will modify.</DD><DD><code>edef</code> -       The edge definition</DD></DL><DL><DT><B>Returns:</B></DT><DD>The modified traversal</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -421,7 +455,8 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal <strong>inE</strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> edef)</h4>
-                                <p></p>
+                                <p> Extension of the InE step that traverses edges matching the given edge
+ definition. <DL><DT><B>Parameters:</B></DT><DD><code>traversal</code> -  The traversal this method will modify.</DD><DD><code>edef</code> -       The edge definition</DD></DL><DL><DT><B>Returns:</B></DT><DD>The modified traversal</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -429,7 +464,8 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal <strong>instanceClass</strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal)</h4>
-                                <p></p>
+                                <p> Find the class vertices of the current elements in the traversal by
+ looking for an IS_INSTANCE_OF edge that points to a class vertex. <DL><DT><B>Parameters:</B></DT><DD><code>traversal</code> -  The traversal this method will modify.</DD></DL><DL><DT><B>Returns:</B></DT><DD>The modified traversal</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -437,7 +473,10 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal <strong>instances</strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal)</h4>
-                                <p></p>
+                                <p> This step can be applied to vertices that represent classes finding
+ all vertices that represent instances of the class or any of its sub-
+ classes.
+ <DL><DT><B>Parameters:</B></DT><DD><code>traversal</code> -  The traversal this method will modify.</DD></DL><DL><DT><B>Returns:</B></DT><DD>The modified traversal</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -445,7 +484,9 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal <strong>isInstanceOf</strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/VertexDefTrait.html'>VertexDefTrait</a> vdef)</h4>
-                                <p></p>
+                                <p> Filters elements to include only  instances of the given
+ vertex definition by traversing IS_INSTANCE_OF and IS_SUBCLASS_OF
+ edges. <DL><DT><B>Parameters:</B></DT><DD><code>traversal</code> -  The traversal this method will modify.</DD><DD><code>vdef</code> -       The vertex definition</DD></DL><DL><DT><B>Returns:</B></DT><DD>The modified traversal</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -453,7 +494,8 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal <strong>isa</strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/VertexDefTrait.html'>VertexDefTrait</a> vdef)</h4>
-                                <p></p>
+                                <p> Filters the elements in the traversal to include only those that match
+ the given vertex definition. <DL><DT><B>Parameters:</B></DT><DD><code>traversal</code> -  The traversal this method will modify.</DD><DD><code>vdef</code> -       The vertex definition</DD></DL><DL><DT><B>Returns:</B></DT><DD>The modified traversal</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -461,7 +503,8 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal <strong>isa</strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> edef)</h4>
-                                <p></p>
+                                <p> Filters the elements in the traversal to include only those that match
+ the given edge definition. <DL><DT><B>Parameters:</B></DT><DD><code>traversal</code> -  The traversal this method will modify.</DD><DD><code>edef</code> -       The edge definition</DD></DL><DL><DT><B>Returns:</B></DT><DD>The modified traversal</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -469,7 +512,10 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal <strong>matchesOn</strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> pdef, org.apache.tinkerpop.gremlin.structure.Vertex vertex)</h4>
-                                <p></p>
+                                <p> Filter the elements in the traversal to include only those that have the
+ same value as the provided vertex for the provided property or if the 
+ provided vertex does not have the property then include elements that
+ likewise do not have that property. <DL><DT><B>Parameters:</B></DT><DD><code>traversal</code> -  The traversal this method will modify.</DD><DD><code>pdef</code> -       The property definition</DD><DD><code>vertex</code> -     THe vertex from which to get the property value</DD></DL><DL><DT><B>Returns:</B></DT><DD>The modified traversal</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -477,7 +523,11 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal <strong>matchesOn</strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> traversalPdef, org.apache.tinkerpop.gremlin.structure.Vertex vertex, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> vertexPdef)</h4>
-                                <p></p>
+                                <p> Filter the elements in the traversal to include only those that have the
+ same value as the provided vertex for the provided property or if the 
+ provided vertex does not have the property then include elements that
+ likewise do not have that property using one property definition for the
+ traversal elements and another for the provided vertex. <DL><DT><B>Parameters:</B></DT><DD><code>traversal</code> -       The traversal this method will modify.</DD><DD><code>traversalPdef</code> -   The property definition to use with traversal elements.</DD><DD><code>vertex</code> -          The vertex from which to get the property value</DD><DD><code>vertexPdef</code> -      The property definition to use with the provided vertex</DD></DL><DL><DT><B>Returns:</B></DT><DD>The modified traversal</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -485,7 +535,8 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;java.lang.Object <strong>nextOne</strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal)</h4>
-                                <p></p>
+                                <p> Extension of the next() terminal step that throws an exception if the
+ traversal yields more than one element. <DL><DT><B>Parameters:</B></DT><DD><code>traversal</code> -       The traversal this method will modify.</DD></DL><DL><DT><B>Returns:</B></DT><DD>The modified traversal</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -493,7 +544,8 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal <strong>out</strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> edef)</h4>
-                                <p></p>
+                                <p> Extension of the Out step that traverses edges matching the given edge
+ definition. <DL><DT><B>Parameters:</B></DT><DD><code>traversal</code> -  The traversal this method will modify.</DD><DD><code>edef</code> -       The edge definition</DD></DL><DL><DT><B>Returns:</B></DT><DD>The modified traversal</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -501,7 +553,8 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal <strong>outE</strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> edef)</h4>
-                                <p></p>
+                                <p> Extension of the OutE step that traverses edges matching the given edge
+ definition. <DL><DT><B>Parameters:</B></DT><DD><code>traversal</code> -  The traversal this method will modify.</DD><DD><code>edef</code> -       The edge definition</DD></DL><DL><DT><B>Returns:</B></DT><DD>The modified traversal</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -509,7 +562,8 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal <strong>properties</strong>(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal traversal, <a href='../../../carnival/graph/PropertyDefTrait.html'>PropertyDefTrait</a> pdef)</h4>
-                                <p></p>
+                                <p> Extension of the Properties step tp accept a property definition.
+ <DL><DT><B>Parameters:</B></DT><DD><code>traversal</code> -  The traversal this method will modify.</DD><DD><code>pdef</code> -       The proprty definition</DD></DL><DL><DT><B>Returns:</B></DT><DD>The modified traversal</DD></DL></p>
                             </li>
                         </ul>
                     

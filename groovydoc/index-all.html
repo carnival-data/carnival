@@ -260,9 +260,11 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html#both(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__, carnival.graph.EdgeDefTrait)" title="Method in TinkerpopAnonTraversalExtension">both(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__, carnival.graph.EdgeDefTrait)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html">TinkerpopAnonTraversalExtension</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#both(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)" title="Method in TinkerpopTraversalExtension">both(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Extension of the Both step that traverses edges matching the given edge
+ definition.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#bothE(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)" title="Method in TinkerpopTraversalExtension">bothE(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Extension of the BothE step that traverses edges matching the given edge
+ definition.</div></dd>
 <dt><span class="strong"><a href="carnival/util/TabularReport.html#buildLookup(java.lang.String)" title="Method in TabularReport">buildLookup(java.lang.String)</a></span> - Method in <a href="carnival/util/TabularReport.html">TabularReport</a>
 </dt><dd> <div class="block">Create a lookup map from identifier value to the record for the given
  identifier field.</div></dd>
@@ -338,7 +340,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/graph/VertexDefTrait.html#CLASS_SUFFIX" title="Field in VertexDefTrait">CLASS_SUFFIX</a></span> - Field in <a href="carnival/graph/VertexDefTrait.html">VertexDefTrait</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#classes(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal)" title="Method in TinkerpopTraversalExtension">classes(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Finds all the class vertices relevant to the current elements in the 
+ traversal by traversing IS_INSTANCE_OF and IS_SUBCLASS_OF edges.</div></dd>
 <dt><span class="strong"><a href="carnival/core/graph/CoreGraphNeo4j.html#clearGraph()" title="Method in CoreGraphNeo4j">clearGraph()</a></span> - Method in <a href="carnival/core/graph/CoreGraphNeo4j.html">CoreGraphNeo4j</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/core/graph/CoreGraphNeo4j.html#close()" title="Method in CoreGraphNeo4j">close()</a></span> - Method in <a href="carnival/core/graph/CoreGraphNeo4j.html">CoreGraphNeo4j</a>
@@ -1153,13 +1156,14 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html#has(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__, carnival.graph.PropertyDefTrait, java.lang.Object)" title="Method in TinkerpopAnonTraversalExtension">has(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__, carnival.graph.PropertyDefTrait, java.lang.Object)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html">TinkerpopAnonTraversalExtension</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#has(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait, java.lang.Object)" title="Method in TinkerpopTraversalExtension">has(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait, java.lang.Object)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Extension of the Has step that accepts a property definition and a 
+ value.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/VertexDefTrait.html#hasLabel(org.apache.tinkerpop.gremlin.structure.Vertex)" title="Method in VertexDefTrait">hasLabel(org.apache.tinkerpop.gremlin.structure.Vertex)</a></span> - Method in <a href="carnival/graph/VertexDefTrait.html">VertexDefTrait</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/util/CsvUtil.html#hasNext(com.opencsv.CSVReader)" title="Method in CsvUtil">hasNext(com.opencsv.CSVReader)</a></span> - Method in <a href="carnival/util/CsvUtil.html">CsvUtil</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#hasNot(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait)" title="Method in TinkerpopTraversalExtension">hasNot(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Extension of the HasNot step that accepts a property definition.</div></dd>
 </dl>
 
     
@@ -1215,14 +1219,16 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html#in(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__, carnival.graph.EdgeDefTrait)" title="Method in TinkerpopAnonTraversalExtension">in(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__, carnival.graph.EdgeDefTrait)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html">TinkerpopAnonTraversalExtension</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#in(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)" title="Method in TinkerpopTraversalExtension">in(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Extension of the In step that traverses edges matching the given edge
+ definition.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/PropertyDefTrait.html#index" title="Property in PropertyDefTrait">index</a></span> - Property in <a href="carnival/graph/PropertyDefTrait.html">PropertyDefTrait</a>
 </dt><dd> <div class="block">If true, then this property should be indexed by the underlying database
  system. </div></dd>
 <dt><span class="strong"><a href="carnival/util/ExcelUtil.html#indexMap(List<String>)" title="Method in ExcelUtil">indexMap(List&lt;String&gt;)</a></span> - Method in <a href="carnival/util/ExcelUtil.html">ExcelUtil</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#inE(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)" title="Method in TinkerpopTraversalExtension">inE(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Extension of the InE step that traverses edges matching the given edge
+ definition.</div></dd>
 <dt><span class="strong"><a href="carnival/util/Defaults.html#initDirectories()" title="Method in Defaults">initDirectories()</a></span> - Method in <a href="carnival/util/Defaults.html">Defaults</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/util/Defaults.html#initDirectory(java.io.File)" title="Method in Defaults">initDirectory(java.io.File)</a></span> - Method in <a href="carnival/util/Defaults.html">Defaults</a>
@@ -1242,11 +1248,14 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/graph/VertexDefTrait.html#instance()" title="Method in VertexDefTrait">instance()</a></span> - Method in <a href="carnival/graph/VertexDefTrait.html">VertexDefTrait</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#instanceClass(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal)" title="Method in TinkerpopTraversalExtension">instanceClass(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Find the class vertices of the current elements in the traversal by
+ looking for an IS_INSTANCE_OF edge that points to a class vertex.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/VertexDefTrait.html#instanceOf" title="Property in VertexDefTrait">instanceOf</a></span> - Property in <a href="carnival/graph/VertexDefTrait.html">VertexDefTrait</a>
 </dt><dd> <div class="block">optional, defines what class these verticies are instances of.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#instances(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal)" title="Method in TinkerpopTraversalExtension">instances(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">This step can be applied to vertices that represent classes finding
+ all vertices that represent instances of the class or any of its sub-
+ classes.</div></dd>
 <dt><span class="strong"><a href="carnival/util/Log.html#interval(org.slf4j.Logger, java.lang.String, java.util.Collection, java.lang.Integer)" title="Method in Log">interval(org.slf4j.Logger, java.lang.String, java.util.Collection, java.lang.Integer)</a></span> - Method in <a href="carnival/util/Log.html">Log</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/core/graph/Core.EX.html#IS_ASSOCIATED_WITH" title="Field in Core.EX">IS_ASSOCIATED_WITH</a></span> - Field in <a href="carnival/core/graph/Core.EX.html">Core.EX</a>
@@ -1280,7 +1289,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html#isa(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__, carnival.graph.EdgeDefTrait)" title="Method in TinkerpopAnonTraversalExtension">isa(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__, carnival.graph.EdgeDefTrait)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html">TinkerpopAnonTraversalExtension</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#isa(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)" title="Method in TinkerpopTraversalExtension">isa(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Filters the elements in the traversal to include only those that match
+ the given edge definition.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/VertexDefTrait.html#isa(org.apache.tinkerpop.gremlin.structure.Vertex)" title="Method in VertexDefTrait">isa(org.apache.tinkerpop.gremlin.structure.Vertex)</a></span> - Method in <a href="carnival/graph/VertexDefTrait.html">VertexDefTrait</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/VertexDefTrait.html#isClass" title="Property in VertexDefTrait">isClass</a></span> - Property in <a href="carnival/graph/VertexDefTrait.html">VertexDefTrait</a>
@@ -1290,7 +1300,9 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/graph/VertexDefTrait.html#isGlobal()" title="Method in VertexDefTrait">isGlobal()</a></span> - Method in <a href="carnival/graph/VertexDefTrait.html">VertexDefTrait</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#isInstanceOf(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.VertexDefTrait)" title="Method in TinkerpopTraversalExtension">isInstanceOf(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.VertexDefTrait)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Filters elements to include only  instances of the given
+ vertex definition by traversing IS_INSTANCE_OF and IS_SUBCLASS_OF
+ edges.</div></dd>
 <dt><span class="strong"><a href="carnival/util/IterativeCsvWriter.html" title="Class in carnival.util">IterativeCsvWriter</a></span> - Class in <a href="./carnival/util/package-summary.html">carnival.util</a>
 </dt><dd><div class="block">IterativeCsvWriter is designed to work with iterators that operate over query
  result sets.  </div></dd>
@@ -1439,7 +1451,11 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">Mark as completed the provided identifiers for the provided identifier
  field.  </div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#matchesOn(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait, org.apache.tinkerpop.gremlin.structure.Vertex, carnival.graph.PropertyDefTrait)" title="Method in TinkerpopTraversalExtension">matchesOn(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait, org.apache.tinkerpop.gremlin.structure.Vertex, carnival.graph.PropertyDefTrait)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Filter the elements in the traversal to include only those that have the
+ same value as the provided vertex for the provided property or if the 
+ provided vertex does not have the property then include elements that
+ likewise do not have that property using one property definition for the
+ traversal elements and another for the provided vertex.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/Base.EX.html#MAX_VALUE" title="Field in Base.EX">MAX_VALUE</a></span> - Field in <a href="carnival/graph/Base.EX.html">Base.EX</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/Base.PX.html#MAX_VALUE" title="Field in Base.PX">MAX_VALUE</a></span> - Field in <a href="carnival/graph/Base.PX.html">Base.PX</a>
@@ -1606,7 +1622,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="test/TestModel.VX.html#next()" title="Method in TestModel.VX">next()</a></span> - Method in <a href="test/TestModel.VX.html">TestModel.VX</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#nextOne(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal)" title="Method in TinkerpopTraversalExtension">nextOne(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Extension of the next() terminal step that throws an exception if the
+ traversal yields more than one element.</div></dd>
 <dt><span class="strong"><a href="carnival/util/DataTable.html#NULL" title="Field in DataTable">NULL</a></span> - Field in <a href="carnival/util/DataTable.html">DataTable</a>
 </dt><dd> <div class="block">canonical string representing null data</div></dd>
 </dl>
@@ -1625,9 +1642,11 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html#out(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__, carnival.graph.EdgeDefTrait)" title="Method in TinkerpopAnonTraversalExtension">out(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__, carnival.graph.EdgeDefTrait)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html">TinkerpopAnonTraversalExtension</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#out(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)" title="Method in TinkerpopTraversalExtension">out(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Extension of the Out step that traverses edges matching the given edge
+ definition.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#outE(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)" title="Method in TinkerpopTraversalExtension">outE(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefTrait)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Extension of the OutE step that traverses edges matching the given edge
+ definition.</div></dd>
 <dt><span class="strong"><a href="carnival/core/graph/GraphMethodProcess.html#outputs(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)" title="Method in GraphMethodProcess">outputs(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)</a></span> - Method in <a href="carnival/core/graph/GraphMethodProcess.html">GraphMethodProcess</a>
 </dt><dd> <div class="block"></div></dd>
 </dl>
@@ -1717,7 +1736,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">Convenience method to call the more general progress(...) using the log
  method 'info'.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#properties(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait)" title="Method in TinkerpopTraversalExtension">properties(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefTrait)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Extension of the Properties step tp accept a property definition.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/PropertyValuesHolder.html#propertiesMustBeDefined" title="Property in PropertyValuesHolder">propertiesMustBeDefined</a></span> - Property in <a href="carnival/graph/PropertyValuesHolder.html">PropertyValuesHolder</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/VertexDefTrait.html#propertiesMustBeDefined" title="Property in VertexDefTrait">propertiesMustBeDefined</a></span> - Property in <a href="carnival/graph/VertexDefTrait.html">VertexDefTrait</a>
@@ -2021,11 +2040,13 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/core/vine/JsonVineMethodCall.Meta.html#thisClass" title="Property in JsonVineMethodCall.Meta">thisClass</a></span> - Property in <a href="carnival/core/vine/JsonVineMethodCall.Meta.html">JsonVineMethodCall.Meta</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html" title="Class in carnival.graph.ext">TinkerpopAnonTraversalExtension</a></span> - Class in <a href="./carnival/graph/ext/package-summary.html">carnival.graph.ext</a>
-</dt><dd><div class="block"></div></dd>
+</dt><dd><div class="block">Extensions to the Tinkerpop Gremlin graph traversal language that enable the use of 
+ Carnival objects in anonymous Gremlin treversals.  </div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html#TinkerpopAnonTraversalExtension()" title="Constructor in TinkerpopAnonTraversalExtension">TinkerpopAnonTraversalExtension()</a></span> - Constructor in <a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html">TinkerpopAnonTraversalExtension</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html" title="Class in carnival.graph.ext">TinkerpopTraversalExtension</a></span> - Class in <a href="./carnival/graph/ext/package-summary.html">carnival.graph.ext</a>
-</dt><dd><div class="block"></div></dd>
+</dt><dd><div class="block">Extensions to the Tinkerpop Gremlin graph traversal language that enable the use of 
+ Carnival objects in Gremlin treversals.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#TinkerpopTraversalExtension()" title="Constructor in TinkerpopTraversalExtension">TinkerpopTraversalExtension()</a></span> - Constructor in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/EdgeBuilder.html#to(org.apache.tinkerpop.gremlin.structure.Vertex)" title="Method in EdgeBuilder">to(org.apache.tinkerpop.gremlin.structure.Vertex)</a></span> - Method in <a href="carnival/graph/EdgeBuilder.html">EdgeBuilder</a>

@@ -20,7 +20,8 @@ class GremlinTraitUtilities {
 
 
     /**
-     * cl(g)
+     * Call the supplied closure passing in the graph and traversal source if
+     * they are present.
      *
      */
     static public Object withTraversal(Graph graph, GraphTraversalSource g, Closure cl) {
@@ -135,10 +136,25 @@ trait GremlinTrait  {
 
 
     /**
-     * cl(g)
+     * Given a closure that can accept one or two parameters, call the closure
+     * passing the gremlin graph and optionally a graph traversal source as
+     * parameters.  Note that in Groovy, if the final argument of a method is a
+     * closure, the method can optionally be invoked by passing in the closure
+     * argument outside the parenthesis containing the other arguments.  If
+     * there are no arguments, the method can be called as follows.
+     *
+     * Example.
+     *  carnival.coreGraph.withTraversal { graph, g ->
+     *      totalVertices = g.V().count().next()
+     *  }
+     *
+     * @parameter cl A Closure that accepts one or two parameters. {graph -> }
+     * or { graph, g -> }.
      *
      */
     public Object withTraversal(Closure cl) {
+        assert cl != null
+        
         GraphTraversalSource g = traversal()
         assert g
 
@@ -150,7 +166,11 @@ trait GremlinTrait  {
 
 
     /**
-     * cl(graph, g)
+     * Given a closure that accepts two parameters, call the closure passing
+     * the graph as the first parameter and a traversal source as the second.
+     * When the closure terminates, if transactions are supported by the
+     * underlying graph, commit the transaction.  If an exception is thrown,
+     * then there will be an attempt to roll back the transaction.
      *
      */
     public Object withGremlin(Closure cl) {

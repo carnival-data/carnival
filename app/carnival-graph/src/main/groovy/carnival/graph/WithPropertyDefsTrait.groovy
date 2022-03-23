@@ -20,8 +20,10 @@ import carnival.graph.Base
 
 
 /** 
+ * Inherited by traits that can have PropertyDefs: VertexDefTrait and EdgedDefTrait
  *
- *
+ * @see carnival.graph.PropertyDefTrait
+ * @see carnival.graph.EdgeDefTrait
  */
 @Slf4j
 trait WithPropertyDefsTrait {

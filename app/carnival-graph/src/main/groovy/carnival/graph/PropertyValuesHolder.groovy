@@ -16,8 +16,7 @@ import org.apache.tinkerpop.gremlin.structure.Element
 
 
 /** 
- *
- *
+ * Inhertied by builder classes that create elements in the graph that can have properties.
  */
 @Slf4j
 class PropertyValuesHolder<T> {
@@ -108,8 +107,13 @@ class PropertyValuesHolder<T> {
     }
 
 
-    /** */
+    /** 
+     * Matches a map of data against the properties of this element by name and
+     * assignes the property value on match.
+     *
+     */
     public T withMatchingProperties(Map args) {
+        assert args != null
         assert this.respondsTo("getElementDef")
         WithPropertyDefsTrait eDef = getElementDef()
 
@@ -120,6 +124,18 @@ class PropertyValuesHolder<T> {
         return this
     }
 
+
+    /** 
+     * Matches a map of data against the properties of this element by name and
+     * assignes the property value on match ignoring data records where the
+     * value is null.
+     *
+     */
+    public T withNonNullMatchingProperties(Map args) {
+        assert args != null
+        def nunNullArgs = args.findAll { k, v -> v != null }
+        withMatchingProperties(nunNullArgs)
+    }
 
 
     /** */

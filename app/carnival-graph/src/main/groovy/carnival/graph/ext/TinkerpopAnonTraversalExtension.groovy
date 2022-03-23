@@ -21,7 +21,14 @@ import carnival.graph.Base
 
 
 
-/** */
+/** 
+ * Extensions to the Tinkerpop Gremlin graph traversal language that enable the use of 
+ * Carnival objects in anonymous Gremlin treversals.  See TinkerpopTraversalExtension
+ * for descriptions of the step logic.
+ *
+ * @see TinkerpopTraversalExtension
+ *
+ */
 class TinkerpopAnonTraversalExtension {
 
     /** */

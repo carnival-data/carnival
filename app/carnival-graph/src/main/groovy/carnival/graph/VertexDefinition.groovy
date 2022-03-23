@@ -10,7 +10,12 @@ import java.lang.reflect.Field
 import org.codehaus.groovy.transform.GroovyASTTransformationClass
 
 
-/** */
+/** 
+ * Used to specify vertex definitions in a graph model.
+ * 
+ * @see carnival.graph.VertexDefTrait
+ * @see carnival.graph.DefinitionTransformation
+ * */
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
 @GroovyASTTransformationClass(["carnival.graph.VertexDefinitionTransformation"])

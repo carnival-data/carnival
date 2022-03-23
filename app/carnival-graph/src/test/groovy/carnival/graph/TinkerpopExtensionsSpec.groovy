@@ -7,12 +7,16 @@ import spock.lang.Unroll
 import spock.lang.Shared
 
 import org.apache.tinkerpop.gremlin.structure.T
-
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
+
+import carnival.graph.VertexDefinition
+import carnival.graph.PropertyDefinition
+import carnival.graph.EdgeDefinition
+import carnival.graph.Base
 
 
 
@@ -26,34 +30,58 @@ class TinkerpopExtensionsSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
-    static enum VX implements VertexDefTrait {
+
+    @VertexDefinition
+    static enum VX {
+        THING(
+            vertexProperties:[PX.ID, PX.NAME]
+        )
+    }
+
+    @VertexDefinition
+    static enum VX2 {
         THING(
             vertexProperties:[PX.ID]
         )
-
-        VX() {}
-        VX(Map m) {m.each { k,v -> this."$k" = v }}
     }
 
-    static enum VX2 implements VertexDefTrait {
-        THING(
-            vertexProperties:[PX.ID]
+    @EdgeDefinition
+    static enum EX {
+        IS_NOT
+    }
+
+    @EdgeDefinition
+    static enum EX2{
+        IS_NOT
+    }
+
+    @PropertyDefinition
+    static enum PX {
+        ID,
+        NAME
+    }
+
+    @VertexDefinition
+    static enum VX3 {
+        CLASS_OF_ALL_DOGS (
+            isClass:true
+        ),
+        
+        COLLIE_CLASS (
+            superClass: CLASS_OF_ALL_DOGS
+        ),
+
+        SHIBA_INU_CLASS (
+            superClass: CLASS_OF_ALL_DOGS
+        ),
+
+        SHIBA_INU (
+            instanceOf: SHIBA_INU_CLASS
+        ),
+
+        COLLIE (
+            instanceOf: COLLIE_CLASS
         )
-
-        VX2() {}
-        VX2(Map m) {m.each { k,v -> this."$k" = v }}
-    }
-
-    static enum EX implements EdgeDefTrait {
-        IS_NOT
-    }
-
-    static enum EX2 implements EdgeDefTrait {
-        IS_NOT
-    }
-
-    static enum PX implements PropertyDefTrait {
-        ID
     }
 
     static enum LOCAL_ID { ID1 }
@@ -70,13 +98,17 @@ class TinkerpopExtensionsSpec extends Specification {
     // SET UP
     ///////////////////////////////////////////////////////////////////////////
     
-    def setupSpec() {
+    def setup() {
         graph = TinkerGraph.open()
         g = graph.traversal()
+
+        [VX3.CLASS_OF_ALL_DOGS, VX3.COLLIE_CLASS, VX3.SHIBA_INU_CLASS].each {
+            it.applyTo(graph, g)
+        }
     } 
 
 
-    def cleanupSpec() {
+    def cleanup() {
         if (g) g.close()
         if (graph) graph.close()
     }
@@ -87,6 +119,62 @@ class TinkerpopExtensionsSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+    def "get class of an instance vertex"() {
+        when:
+        def collieV = VX3.COLLIE.instance().create(graph)
+
+        def classVs = g.V(collieV).instanceClass().toList()
+
+        then:
+        classVs != null
+        classVs.size() == 1
+        classVs.contains(VX3.COLLIE_CLASS.vertex)
+    }
+
+
+    def "get classes of an instance vertex"() {
+        when:
+        def collieV = VX3.COLLIE.instance().create(graph)
+
+        def classVs = g.V(collieV).classes().toList()
+
+        then:
+        classVs != null
+        classVs.size() == 2
+        classVs.contains(VX3.COLLIE_CLASS.vertex)
+        classVs.contains(VX3.CLASS_OF_ALL_DOGS.vertex)
+    }
+
+
+    def "vertices that are instancef of a class"() {
+        when:
+        def collieV = VX3.COLLIE.instance().create(graph)
+        def shibaV = VX3.SHIBA_INU.instance().create(graph)
+
+        def dogVs = g.V().isInstanceOf(VX3.CLASS_OF_ALL_DOGS).toList()
+
+        then:
+        dogVs != null
+        dogVs.size() == 2
+        dogVs.contains(collieV)
+        dogVs.contains(shibaV)
+    }
+
+
+    def "get all instances from class"() {
+        when:
+        def collieV = VX3.COLLIE.instance().create(graph)
+        def shibaV = VX3.SHIBA_INU.instance().create(graph)
+
+        def dogVs = g.V(VX3.CLASS_OF_ALL_DOGS.vertex).instances().toList()
+
+        then:
+        dogVs != null
+        dogVs.size() == 2
+        dogVs.contains(collieV)
+        dogVs.contains(shibaV)
+    }
 
 
     def "all must be groupable"() {
@@ -105,55 +193,99 @@ class TinkerpopExtensionsSpec extends Specification {
     }
 
 
-    def "anonymous traversal isa"() {
+    def "match on differing properties"() {
         when:
-        def v1 = VX.THING.instance().withProperty(PX.ID, '58').ensure(graph, g)
-        def v2 = VX.THING.instance().withProperty(PX.ID, '59').ensure(graph, g)
-        def v3 = VX.THING.instance().withProperty(PX.ID, '60').ensure(graph, g)
-        EX.IS_NOT.instance().from(v1).to(v2).create()
-        EX.IS_NOT.instance().from(v3).to(v2).create()
-        println "$v1 $v2 $v3"        
-        def op = g.V(v1).repeat(__.both()).until(__.isa(VX.THING)).tryNext()
+        def v1 = VX.THING.instance().withProperty(PX.ID, '58').create(graph)
+        def v2 = VX.THING.instance().withProperty(PX.ID, '59').create(graph)
+        def v3 = VX.THING.instance().withProperty(PX.NAME, '58').create(graph)
+        def v4 = VX.THING.instance().create(graph)
+
+        def matches = g.V().matchesOn(PX.NAME, v1, PX.ID).toList()
 
         then:
-        op.isPresent()
+        matches.size() == 1
+        matches.contains(v3)
     }
 
 
-
-    def "anonymous traversal out"() {
+    def "match on same property"() {
         when:
-        def v1 = VX.THING.instance().withProperty(PX.ID, '58').ensure(graph, g)
-        def v2 = VX.THING.instance().withProperty(PX.ID, '59').ensure(graph, g)
-        def v3 = VX.THING.instance().withProperty(PX.ID, '60').ensure(graph, g)
-        EX.IS_NOT.instance().from(v1).to(v2).create()
-        EX.IS_NOT.instance().from(v3).to(v2).create()
-        println "$v1 $v2 $v3"        
-        def op = g.V(v1,v3).group().by(__.out(EX.IS_NOT)).tryNext()
+        def v1 = VX.THING.instance().withProperty(PX.ID, '58').create(graph)
+        def v2 = VX.THING.instance().withProperty(PX.ID, '59').create(graph)
+        def v3 = VX.THING.instance().withProperty(PX.ID, '58').create(graph)
+        def v4 = VX.THING.instance().create(graph)
+
+        def matches = g.V().matchesOn(PX.ID, v1).toList()
 
         then:
-        op.isPresent()
-
-        when:
-        def groups = op.get()
-        groups.each { m -> println "$m" }
-
-        then:
-        groups.size() == 1
-        groups.get(v2).size() == 2
-        groups.get(v2).contains(v1)
-        groups.get(v2).contains(v3)
+        matches.size() == 2
+        matches.contains(v1)
+        matches.contains(v3)
     }
 
 
-    def "has enum"() {
+    def "has pdef value"() {
         when:
-        def vc = VX.THING.instance().withProperty(PX.ID, LOCAL_ID.ID1).ensure(graph, g)
-        def vf = g.V().isa(VX.THING).has(PX.ID, LOCAL_ID.ID1).tryNext()
+        def v1 = VX.THING.instance().withProperty(PX.ID, 'someval').create(graph)
 
         then:
-        vf.isPresent()
-        vf.get() == vc
+        g.V(v1).has(PX.ID, 'someval').tryNext().isPresent()
+    }
+
+
+    def "has pdef enum"() {
+        when:
+        def v1 = VX.THING.instance().withProperty(PX.ID, LOCAL_ID.ID1).create(graph)
+
+        then:
+        g.V(v1).has(PX.ID, LOCAL_ID.ID1).tryNext().isPresent()
+    }
+
+
+    def "hasNot pdef"() {
+        when:
+        def v1 = VX.THING.instance().withProperty(PX.ID, LOCAL_ID.ID1).create(graph)
+        def v2 = VX.THING.instance().create(graph)
+
+        then:
+        !g.V(v1).hasNot(PX.ID).tryNext().isPresent()
+        g.V(v2).hasNot(PX.ID).tryNext().isPresent()
+    }
+
+
+    def "has pdef"() {
+        when:
+        def v1 = VX.THING.instance().withProperty(PX.ID, LOCAL_ID.ID1).create(graph)
+
+        then:
+        g.V(v1).has(PX.ID).tryNext().isPresent()
+    }
+
+
+    def "both basic"() {
+        when:
+        def v1 = VX.THING.instance().withProperty(PX.ID, '58').ensure(graph, g)
+        def v2 = VX.THING.instance().withProperty(PX.ID, '59').ensure(graph, g)
+        EX.IS_NOT.instance().from(v1).to(v2).create()
+
+        then:
+        g.V(v2).both(EX.IS_NOT).tryNext().isPresent()
+        g.V(v1).both(EX.IS_NOT).tryNext().isPresent()
+        g.V(v2).both(EX.IS_NOT).next() == v1
+        g.V(v1).both(EX.IS_NOT).next() == v2
+    }
+
+
+    def "in basic"() {
+        when:
+        def v1 = VX.THING.instance().withProperty(PX.ID, '58').ensure(graph, g)
+        def v2 = VX.THING.instance().withProperty(PX.ID, '59').ensure(graph, g)
+        EX.IS_NOT.instance().from(v1).to(v2).create()
+
+        then:
+        g.V(v2).in(EX.IS_NOT).tryNext().isPresent()
+        g.V(v2).in(EX.IS_NOT).next() == v1
+        !g.V(v1).in(EX.IS_NOT).tryNext().isPresent()
     }
 
 
@@ -166,7 +298,7 @@ class TinkerpopExtensionsSpec extends Specification {
         then:
         g.V(v1).out(EX.IS_NOT).tryNext().isPresent()
         g.V(v1).out(EX.IS_NOT).next() == v2
-        !g.V(v1).out(EX2.IS_NOT).tryNext().isPresent()
+        !g.V(v2).out(EX.IS_NOT).tryNext().isPresent()
     }
 
 

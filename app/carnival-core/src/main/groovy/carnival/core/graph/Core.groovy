@@ -105,7 +105,6 @@ class Core {
     	IS_IDENTIFIED_BY,
         WAS_IDENTIFIED_BY,
 
-    	IS_INSTANCE_OF,
     	IS_INPUT_OF,
     	IS_OUTPUT_OF,
         

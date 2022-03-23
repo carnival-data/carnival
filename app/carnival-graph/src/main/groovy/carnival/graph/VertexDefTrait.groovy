@@ -24,8 +24,10 @@ import carnival.graph.Base
 
 
 /** 
- *
- *
+ * Defines allowed verticies in a graph model, automatically inherited by 
+ * enums with the `@VertexDefinition` annotation.
+ * 
+ * @see carnival.graph.VertexDefinition
  */
 @Slf4j
 trait VertexDefTrait extends WithPropertyDefsTrait {
@@ -52,14 +54,34 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
      */
     Vertex vertex
     
-    /** */
+     /** 
+     * if true, the `Base.PX.NAME_SPACE` property for verticies in the graph
+     * will use a global namespace value instead of one generated from 
+     * the package name.
+     */
     boolean global = false
 
-    /** */
+    /** 
+     * optional, defines what the superclass of this class is.
+     * */
     VertexDefTrait superClass
 
-    /** */
+    /** 
+     * optional, defines what class these verticies are instances of.
+     * */
+    VertexDefTrait instanceOf
+
+    /** 
+     * if false, verticies created by this definition can contain properties
+     * that were not defined by this VertexDefTrait.
+     * */
     Boolean propertiesMustBeDefined = true
+
+    /** 
+     * Explicitly designate this definition as a class. A singleton vertex will
+     * automatically be created in the graph.
+     *  */
+    Boolean isClass = null
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -79,6 +101,9 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
 
     /** */
     void setSuperClass(VertexDefTrait vDef) {
+        assert vDef != null
+        if (!isClass()) throw new RuntimeException("cannot set superClass when isClass() is false")
+        
         this.superClass = vDef
     }
 
@@ -88,6 +113,17 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
     /** */
     void setGlobal(boolean val) {
         this.global = val
+    }
+
+    /** */
+    VertexDefTrait getInstanceOf() { this.instanceOf }
+
+    /** */
+    void setInstanceOf(VertexDefTrait vDef) {
+        assert vDef != null
+        if (isClass()) throw new RuntimeException("cannot set instanceOf when isClass() is true")
+        
+        this.instanceOf = vDef
     }
 
 
@@ -114,7 +150,14 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
 
 
     /** */
+    boolean getIsClass() {
+        isClass()        
+    }
+
+
+    /** */
     public boolean isClass() {
+        if (this.isClass != null) return this.isClass
         name().toLowerCase().endsWith(CLASS_SUFFIX)
     }
 
@@ -158,14 +201,14 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
 
 
     /** */
-    public ControlledInstance instance() {
+    public VertexBuilder instance() {
         controlledInstance()
     }
 
 
     /** */
-    public ControlledInstance controlledInstance() {
-        def ci = new ControlledInstance(this)
+    public VertexBuilder controlledInstance() {
+        def ci = new VertexBuilder(this)
         ci.propertiesMustBeDefined = this.propertiesMustBeDefined
         ci
     }
@@ -182,6 +225,8 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
             Base.PX.NAME_SPACE.label, ns
         )
         if (isGlobal()) v.property(Base.PX.VERTEX_DEFINITION_CLASS.label, getVertexDefinitionClass())
+        
+        //if (instanceOf != null) Base.EX.IS_INSTANCE_OF.instance().from(v).to(instanceOf).create()
 
         //log.trace "createVertex ${v} ${v.label()}"
         return v
@@ -209,6 +254,22 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
     ///////////////////////////////////////////////////////////////////////////
     // KNOWLEDGE GRAPH METHODS
     ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    public void applyTo(Graph graph, GraphTraversalSource g) {
+        if (this.isClass() && this.requiredProperties.size() == 0) {
+            this.vertex = this.instance().ensure(graph, g)
+        }
+
+		if (this.superClass) {
+			assert this.isClass()
+			assert this.superClass.isClass()
+			assert this.vertex
+			assert this.superClass.vertex
+			this.setSubclassOf(g, this.superClass)
+		}
+    }
+
 
     /** 
      *

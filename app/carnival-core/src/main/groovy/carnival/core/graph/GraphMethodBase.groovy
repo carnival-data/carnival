@@ -159,7 +159,7 @@ class GraphMethodBase {
         ).create(graph)
         
         // the process vertex is an instance of the process class
-        Core.EX.IS_INSTANCE_OF.instance()
+        Base.EX.IS_INSTANCE_OF.instance()
             .from(procV)
             .to(pcvDef.vertex)
         .create()

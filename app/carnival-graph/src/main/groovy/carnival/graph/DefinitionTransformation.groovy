@@ -22,83 +22,15 @@ import org.codehaus.groovy.ast.expr.*
 
 
 
-
-/** */
-@GroovyASTTransformation(phase = CompilePhase.SEMANTIC_ANALYSIS)
-class VertexDefinitionTransformation extends DefinitionTransformation {
-
-    Class getDefTraitClass() { return carnival.graph.VertexDefTrait }
-
-
-    @Override
-    void visit(ASTNode[] nodes, SourceUnit source) {
-        // do the superclass stuff
-        super.visit(nodes, source)
-
-        // get the relevant nodes
-        AnnotationNode annotNode = nodes[0]
-        ClassNode classNode = (ClassNode) nodes[1]
-
-        // statement to add all defs in the enum
-        BlockStatement propDefsAssignmentStmt = macro(true) {
-            if (enumClass.isEnum()) {
-                def vals = enumClass.values()
-                for (int i=0; i<vals.size(); i++) {
-                    this.propertyDefs.add(vals[i])
-                }
-            } 
-        }
-
-        // statement to call no-arg constructor
-        BlockStatement noArgConstStmt = macro(true) {
-            this()
-        }
-
-        // add all properties constructor
-        BlockStatement constructorStmt = new BlockStatement()
-        constructorStmt.addStatement(noArgConstStmt)
-        constructorStmt.addStatement(propDefsAssignmentStmt)
-
-        Parameter enumClassParam = new Parameter(
-            new ClassNode(Class), 
-            "enumClass", 
-        )
-        ConstructorNode constructor = 
-            new ConstructorNode(
-                ClassNode.ACC_PRIVATE, 
-                [enumClassParam] as Parameter[],
-                [] as ClassNode[],
-                constructorStmt
-        ) 
-        classNode.addConstructor(constructor) 
-
-    }
-
-}
-
-
-/** */
-@GroovyASTTransformation(phase = CompilePhase.SEMANTIC_ANALYSIS)
-class EdgeDefinitionTransformation extends DefinitionTransformation {
-
-    Class getDefTraitClass() { return carnival.graph.EdgeDefTrait }
-
-}
-
-
-/** */
-@GroovyASTTransformation(phase = CompilePhase.SEMANTIC_ANALYSIS)
-class PropertyDefinitionTransformation extends DefinitionTransformation {
-
-    Class getDefTraitClass() { return carnival.graph.PropertyDefTrait }
-
-}
-
 /** 
- * Superclass for definition transformations that add traits to enum
+ * Superclass for AST definition transformations that add traits to enum
  * definitions.  NOTE - the compile phase must be at least as early
  * as SEMANTIC_ANALYSIS. Any later, and the groovy machinery will not
  * apply the trait, only the interface.
+ * 
+ * @see carnival.graph.VertexDefinitionTransformation
+ * @see carnival.graph.EdgeDefinitionTransformation
+ * @see carnival.graph.PropertyDefinitionTransformation
  *
  */
 abstract class DefinitionTransformation extends AbstractASTTransformation {
@@ -202,6 +134,78 @@ abstract class DefinitionTransformation extends AbstractASTTransformation {
 
 }
 
+
+
+/** */
+@GroovyASTTransformation(phase = CompilePhase.SEMANTIC_ANALYSIS)
+class VertexDefinitionTransformation extends DefinitionTransformation {
+
+    Class getDefTraitClass() { return carnival.graph.VertexDefTrait }
+
+
+    @Override
+    void visit(ASTNode[] nodes, SourceUnit source) {
+        // do the superclass stuff
+        super.visit(nodes, source)
+
+        // get the relevant nodes
+        AnnotationNode annotNode = nodes[0]
+        ClassNode classNode = (ClassNode) nodes[1]
+
+        // statement to add all defs in the enum
+        BlockStatement propDefsAssignmentStmt = macro(true) {
+            if (enumClass.isEnum()) {
+                def vals = enumClass.values()
+                for (int i=0; i<vals.size(); i++) {
+                    this.propertyDefs.add(vals[i])
+                }
+            } 
+        }
+
+        // statement to call no-arg constructor
+        BlockStatement noArgConstStmt = macro(true) {
+            this()
+        }
+
+        // add all properties constructor
+        BlockStatement constructorStmt = new BlockStatement()
+        constructorStmt.addStatement(noArgConstStmt)
+        constructorStmt.addStatement(propDefsAssignmentStmt)
+
+        Parameter enumClassParam = new Parameter(
+            new ClassNode(Class), 
+            "enumClass", 
+        )
+        ConstructorNode constructor = 
+            new ConstructorNode(
+                ClassNode.ACC_PRIVATE, 
+                [enumClassParam] as Parameter[],
+                [] as ClassNode[],
+                constructorStmt
+        ) 
+        classNode.addConstructor(constructor) 
+
+    }
+
+}
+
+
+/** */
+@GroovyASTTransformation(phase = CompilePhase.SEMANTIC_ANALYSIS)
+class EdgeDefinitionTransformation extends DefinitionTransformation {
+
+    Class getDefTraitClass() { return carnival.graph.EdgeDefTrait }
+
+}
+
+
+/** */
+@GroovyASTTransformation(phase = CompilePhase.SEMANTIC_ANALYSIS)
+class PropertyDefinitionTransformation extends DefinitionTransformation {
+
+    Class getDefTraitClass() { return carnival.graph.PropertyDefTrait }
+
+}
 
 
 /** 

@@ -16,17 +16,20 @@ import org.apache.tinkerpop.gremlin.structure.Edge
 
 
 /** 
- *
- *
+ * Builder class used when creating verticies from a VertexDefTrait object.
+ * 
+ * @see carnival.graph.VertexDefTrait
  */
 @Slf4j
-class ControlledInstance extends PropertyValuesHolder<ControlledInstance> {
+class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
 
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Object that owns this builder.
+     * */
     VertexDefTrait vertexDef
 
 
@@ -35,7 +38,7 @@ class ControlledInstance extends PropertyValuesHolder<ControlledInstance> {
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    public ControlledInstance(VertexDefTrait vertexDef) {
+    public VertexBuilder(VertexDefTrait vertexDef) {
         assert vertexDef
         this.vertexDef = vertexDef
     }
@@ -61,13 +64,27 @@ class ControlledInstance extends PropertyValuesHolder<ControlledInstance> {
     }
 
 
-    /** */
+     /** 
+     * If the vertex with the specified properties exists return it, otherwise create it.
+     * Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexDefinition':
+     * <p>
+     * {@code Vertex rover = VX.SHIBA_INU.instance().ensure(graph) }
+     * 
+     * @synonym carnival.graph.VertexBuilder.vertex(Graph graph, GraphTraversalSource g)
+     * */
     public Vertex ensure(Graph graph, GraphTraversalSource g) {
         vertex(graph, g)
     }
 
 
-    /** */
+     /** 
+     * If the vertex with the specified properties exists return it, otherwise create it. 
+     * Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexDefinition':
+     * <p>
+     * {@code Vertex rover = VX.SHIBA_INU.instance().vertex(graph) }
+     *
+     * @synonym carnival.graph.VertexBuilder.ensure(Graph graph, GraphTraversalSource g)
+     * */
     public Vertex vertex(Graph graph, GraphTraversalSource g) {
         assert graph
         assert g
@@ -107,15 +124,30 @@ class ControlledInstance extends PropertyValuesHolder<ControlledInstance> {
     }
 
 
-    /** */
+    /** 
+     * Create a vertex with the specified properties.
+     * Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexDefinition':
+     * <p>
+     * {@code Vertex rover = VX.SHIBA_INU.instance().create(graph) }
+     * 
+     * @synonym carnival.graph.VertexBuilder.createVertex(Graph graph)
+     * */
     public Vertex create(Graph graph) {
         createVertex(graph)
     }
 
 
 
-    /** */
+    /** 
+     * Create a vertex with the specified properties.
+     * Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexDefinition':
+     * <p>
+     * {@code Vertex rover = VX.SHIBA_INU.instance().create(graph) }
+     * 
+     * @synonym carnival.graph.VertexBuilder.create(Graph graph) 
+     * */
     public Vertex createVertex(Graph graph) {
+        log.trace "VertexBuilder.createVertex graph:${graph}"
         assert graph
 
         assertRequiredProperties()
@@ -131,10 +163,13 @@ class ControlledInstance extends PropertyValuesHolder<ControlledInstance> {
         
         if (vertexDef.isClass()) v.property(Base.PX.IS_CLASS.label, vertexDef.isClass())
         if (vertexDef.isGlobal()) v.property(Base.PX.VERTEX_DEFINITION_CLASS.label, vertexDef.vertexDefinitionClass)
+        if (vertexDef.instanceOf != null) {
+            assert vertexDef.instanceOf.vertex
+            Base.EX.IS_INSTANCE_OF.instance().from(v).to(vertexDef.instanceOf.vertex).create()
+        }
 
         setElementProperties(v)
 
-        //log.debug "added vertex $v with label ${v.label()} and props $propertyValues"
         return v
     }
 

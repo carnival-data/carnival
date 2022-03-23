@@ -27,7 +27,7 @@ import carnival.graph.EdgeDefTrait
 import carnival.graph.PropertyDefTrait
 import carnival.graph.VertexDefTrait
 import carnival.graph.DynamicVertexDef
-import carnival.graph.ControlledInstance
+import carnival.graph.VertexBuilder
 
 
 
@@ -152,7 +152,7 @@ abstract class CoreGraph implements GremlinTrait {
 
 		initializeDefinedVertices(graph, g, packageName)
 		initializeDefinedEdges(graph, g, packageName)
-		createControlledInstances(graph, g)
+		createVertexBuilders(graph, g)
 	}
 
 	/** */
@@ -425,16 +425,16 @@ abstract class CoreGraph implements GremlinTrait {
 	///////////////////////////////////////////////////////////////////////////
 
 	/** */
-	public List<Vertex> createControlledInstances(Graph graph, GraphTraversalSource g) {
-		log.trace "createControlledInstances controlledInstances:${graphSchema.controlledInstances}"
+	public List<Vertex> createVertexBuilders(Graph graph, GraphTraversalSource g) {
+		log.trace "createVertexBuilders controlledInstances:${graphSchema.controlledInstances}"
 
 		def verts = []
 		
 		withTransactionIfSupported(graph) {
 			graphSchema.controlledInstances.each { ci ->
 				log.trace "creating controlled instance ${ci.class.simpleName} $ci"
-				if (ci instanceof ControlledInstance) verts << ci.vertex(graph, g)
-				else verts << createControlledInstanceVertex(graph, g, ci)
+				if (ci instanceof VertexBuilder) verts << ci.vertex(graph, g)
+				else verts << createVertexBuilderVertex(graph, g, ci)
 			}
 		}
 
@@ -443,7 +443,7 @@ abstract class CoreGraph implements GremlinTrait {
 
 
 	/** */
-	public void createControlledInstanceVertex(Graph graph, GraphTraversalSource g, VertexInstanceDefinition instance) {
+	public void createVertexBuilderVertex(Graph graph, GraphTraversalSource g, VertexInstanceDefinition instance) {
 		log.trace "controlled instance: $instance"
 
 		def trv = g.V().hasLabel(instance.label)

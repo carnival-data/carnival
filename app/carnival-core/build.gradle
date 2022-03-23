@@ -166,7 +166,7 @@ compileGroovy {
 task carnivalLocalDirInit (type: JavaExec) {
     description 'Run CarnivalLocalDirInit script to initilize the CARNIVAL_HOME directory'
 
-    main = 'carnival.core.cli.CarnivalLocalDirInit'
+    mainClass = 'carnival.core.cli.CarnivalLocalDirInit'
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
 

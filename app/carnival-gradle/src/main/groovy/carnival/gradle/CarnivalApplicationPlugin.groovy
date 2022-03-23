@@ -10,7 +10,9 @@ import org.gradle.api.Project
 class CarnivalApplicationPlugin implements Plugin<Project> {
 
     void apply(Project project) {
-        def pn = project.name
+        def pn = project.rootProject.name
+        println "[CarnivalApplication] root project name: $pn"
+        
         def ev = pn.split('-').collect({it.toUpperCase()}).join('_') + "_HOME"
         println "[CarnivalApplication] environment variable: $ev"
 

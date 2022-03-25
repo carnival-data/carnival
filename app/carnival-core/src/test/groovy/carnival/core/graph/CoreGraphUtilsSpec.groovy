@@ -60,7 +60,7 @@ class CoreGraphUtilsSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
- def "test populateIdMap for existing ids"() {
+    def "test populateIdMap for existing ids"() {
         given:
         def graph = coreGraph.graph
         def g = coreGraph.graph.traversal()

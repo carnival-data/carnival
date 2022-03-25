@@ -109,7 +109,7 @@ class GraphMethodBase {
      */
     public Set<GraphMethodProcess> processes(GraphTraversalSource g) {
         assert g != null
-        String argsHash = CoreUtil.standardizedUniquifier(String.valueOf(this.arguments))
+        String argsHash = CoreUtil.argumentsUniquifier(this.arguments)
         Set<Vertex> procVs = g.V()
             .isa(getProcessVertexDef())
             .has(Core.PX.NAME, getName())
@@ -141,7 +141,7 @@ class GraphMethodBase {
         assert startTime != null
         
         // compute a hash to record in the process vertex
-        String argsHash = CoreUtil.standardizedUniquifier(String.valueOf(this.arguments))
+        String argsHash = CoreUtil.argumentsUniquifier(this.arguments)
 
         // grab the defs
         def pcvDef = getProcessClassVertexDef()

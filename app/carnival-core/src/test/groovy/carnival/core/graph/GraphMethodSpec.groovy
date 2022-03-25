@@ -322,6 +322,37 @@ public class GraphMethodSpec extends Specification {
     }
 
 
+    void "processes() differentiates on arguments"() {
+        expect:
+        new TestGraphMethod().processes(g).size() == 0
+        new TestGraphMethod().arguments(a:'1').processes(g).size() == 0
+
+        when:
+        new TestGraphMethod().call(graph, g)
+
+        then:
+        new TestGraphMethod().processes(g).size() == 1
+        new TestGraphMethod().arguments(a:'1').processes(g).size() == 0
+
+        when:
+        new TestGraphMethod().arguments(a:'1').call(graph, g)
+
+        then:
+        new TestGraphMethod().processes(g).size() == 1
+        new TestGraphMethod().arguments(a:'1').processes(g).size() == 1
+
+        when:
+        new TestGraphMethod().arguments(a:'1').call(graph, g)
+        new TestGraphMethod().arguments(a:'2').call(graph, g)
+
+        then:
+        new TestGraphMethod().processes(g).size() == 1
+        new TestGraphMethod().arguments(a:'1').processes(g).size() == 2
+        new TestGraphMethod().arguments(a:'2').processes(g).size() == 1
+    }
+
+
+
     void "processes()"() {
         when:
         def gm = new TestGraphMethod()

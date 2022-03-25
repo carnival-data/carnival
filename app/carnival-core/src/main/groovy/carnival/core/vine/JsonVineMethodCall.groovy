@@ -133,8 +133,7 @@ class JsonVineMethodCall<T> implements VineMethodCall<T> {
         String name = CoreUtil.standardizedFileName(vineMethodClass)
 
         if (arguments != null && arguments.size() > 0) {
-            String str = String.valueOf(arguments)
-            String uniquifier = CoreUtil.standardizedUniquifier(str)
+            String uniquifier = CoreUtil.argumentsUniquifier(arguments)
             name += "-${uniquifier}"
         }
 

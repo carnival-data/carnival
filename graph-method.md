@@ -93,7 +93,7 @@ def gmc = gms
 2. Pass the arguments `[a:1]` to SomeGraphMethod
 
 
-## GraphMethod provenance
+## Graph method provenance
 
 ### Process vertex
 ```groovy
@@ -201,3 +201,31 @@ gms.method('SomeGraphMethod').name('custom-name').processes(g).size() == 1  (3)
 1. Set a custom name for the process
 2. One process called with no arguments and no custom name
 3. One process called with no arguments and the custom name
+
+
+## Singleton graph methods
+
+In applications that aggregate and prepare data for consumption, it is often useful to be able to run a data process if it has not already been run.  Carnival provides an ensure() method for this functionality.
+
+```groovy
+class MyGraphMethods implements GraphMethods {                      
+    class SomeGraphMethod extends GraphMethod {                       
+        public void execute(graph, g) {
+            // graph operations go here
+        }
+    }
+}
+
+def gms = new MyGraphMethods()                                      
+
+gms.method('SomeGraphMethod').processes(g).size() == 0  (1)
+gms.method('SomeGraphMethod').ensure(graph, g)          (2)                   
+gms.method('SomeGraphMethod').processes(g).size() == 1  (3)                  
+gms.method('SomeGraphMethod').ensure(graph, g)          (4)
+gms.method('SomeGraphMethod').processes(g).size() == 1  (5)
+```
+1. There have been no processes run to start
+2. Call ensure() to run the method if it has not been run
+3. The method has been run
+4. Call ensure() again
+5. The method is not re-run

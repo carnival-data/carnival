@@ -131,3 +131,6 @@ app/carnival-core/data
 
 # scratch code
 *.groovy_
+
+.env
+*.gpg

@@ -26,6 +26,7 @@ buildscript {
 plugins {
     id 'groovy'
     id 'maven-publish'
+    id 'signing'
     id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
     
     // code coverage
@@ -131,7 +132,6 @@ subprojects {
     }
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////
 // Github Publish
 ///////////////////////////////////////////////////////////////////////////////
@@ -139,6 +139,16 @@ subprojects {
     apply plugin: "maven-publish"
     publishing {
         repositories {
+            maven {
+              name = "Central"
+              def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+              def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+              url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+              credentials {
+                username = project.findProperty("central.user") ?: System.getenv("CENTRAL_USER")
+                password = project.findProperty("central.password") ?: System.getenv("CENTRAL_PASSWORD")
+              }
+            }
             maven {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/pmbb-ibi/carnival")

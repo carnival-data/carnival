@@ -18,3 +18,5 @@
 **/gradle
 **/gradlew
 **/gradlew.bat
+
+.env

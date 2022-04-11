@@ -85,6 +85,29 @@ class MappedDataTableSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
 
 
+    def "trim keyset of keys with no data"() {
+        def mdt
+
+        when:
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
+        mdt.addKey('f1')
+        mdt.addKey('f2')
+        mdt.dataAdd(['id':'id1', 'f1':'v1'])
+        println "mdt.keySet: ${mdt.keySet}"
+
+        then:
+        mdt.containsKey('f1')
+        mdt.containsKey('f2')
+
+        when:
+        mdt.trimColumns()
+        println "mdt.keySet: ${mdt.keySet}"
+
+        then:
+        mdt.containsKey('f1')
+        !mdt.containsKey('f2')
+    }
+
 
     // containsIdentifier
     def "containsIdentifier case sensitivity"() {

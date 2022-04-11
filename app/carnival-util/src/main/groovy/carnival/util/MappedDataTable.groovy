@@ -372,6 +372,31 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
 
 
     ///////////////////////////////////////////////////////////////////////////
+    // METHODS - DATA UTILITY
+    ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     *
+     *
+     */
+    public void trimColumns() {
+        Map<String,Boolean> keysHaveData = new HashMap<String,Boolean>()
+        keySet.each { keysHaveData.put(toFieldName(it), false) }
+        dataIterator().each { rec ->
+            if (!keysHaveData.find({ k, v -> !v})) return
+            rec.each { k, v ->
+                if (v == null) return
+                keysHaveData.put(toFieldName(k), true)
+            }
+        }
+        keysHaveData.each { k, v ->
+            if (v) return
+            keySet.remove(k)
+        }
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////
     // METHODS - DATA ADD
     ///////////////////////////////////////////////////////////////////////////
 

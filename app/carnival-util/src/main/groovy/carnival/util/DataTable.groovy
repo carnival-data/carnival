@@ -871,6 +871,33 @@ abstract class DataTable {
     // METHODS KEY SET
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     *
+     *
+     */
+    public boolean addKey(String k) {
+        this.keySet.add(toFieldName(k))
+    }
+
+
+    /**
+     *
+     *
+     */
+    public boolean removeKey(String k) {
+        this.keySet.remove(toFieldName(k))
+    }
+
+
+    /**
+     *
+     *
+     */
+    public boolean containsKey(String k) {
+        keySetContains(k)
+    }
+
+
     /** 
      * Return true iff the key set of this data table contains the input string
      * formatted as a field name.

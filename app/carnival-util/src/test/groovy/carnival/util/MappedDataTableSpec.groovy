@@ -84,8 +84,59 @@ class MappedDataTableSpec extends Specification {
     // CASE SENSITIVITY
     ///////////////////////////////////////////////////////////////////////////
 
+    def "trim columns and rows"() {
+        def mdt
 
-    def "trim keyset of keys with no data"() {
+        when:
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
+        mdt.addKey('f1')
+        mdt.addKey('f2')
+        mdt.dataAdd(['id':'id1', 'f1':'v1'])
+        mdt.dataAdd(['id':'id2'])
+        println "mdt.keySet: ${mdt.keySet}"
+
+        then:
+        mdt.containsKey('f1')
+        mdt.containsKey('f2')
+        mdt.dataGet('id1')
+        mdt.dataGet('id2')
+
+        when:
+        mdt.trim()
+        println "mdt.keySet: ${mdt.keySet}"
+
+        then:
+        mdt.containsKey('f1')
+        !mdt.containsKey('f2')
+        mdt.dataGet('id1')
+        !mdt.dataGet('id2')
+    }
+
+
+    def "trim rows"() {
+        def mdt
+
+        when:
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
+        mdt.dataAdd(['id':'id1', 'f1':'v1'])
+        mdt.dataAdd(['id':'id2'])
+        println "mdt.data: ${mdt.data}"
+
+        then:
+        mdt.dataGet('id1')
+        mdt.dataGet('id2')
+
+        when:
+        mdt.trimRows()
+        println "mdt.data: ${mdt.data}"
+
+        then:
+        mdt.dataGet('id1')
+        !mdt.dataGet('id2')
+    }
+
+
+    def "trim columns"() {
         def mdt
 
         when:

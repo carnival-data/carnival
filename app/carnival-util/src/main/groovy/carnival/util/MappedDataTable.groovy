@@ -376,9 +376,20 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
     ///////////////////////////////////////////////////////////////////////////
 
     /**
-     *
+     * Convenience method to call trimColumns() and trimRows().
      *
      */
+    public void trim() {
+        trimColumns()
+        trimRows()
+    }
+
+
+    /**
+     * Remove columns (fields) that have no data associated with them.
+     *
+     */
+    @WithWriteLock
     public void trimColumns() {
         Map<String,Boolean> keysHaveData = new HashMap<String,Boolean>()
         keySet.each { keysHaveData.put(toFieldName(it), false) }
@@ -392,6 +403,22 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
         keysHaveData.each { k, v ->
             if (v) return
             keySet.remove(k)
+        }
+    }
+
+
+    /**
+     * Remove rows that have no data associated with them besides the ID value.
+     *
+     */
+    @WithWriteLock
+    public void trimRows() {
+        Set<String> toRemove = new HashSet<String>()
+        this.data.each { k, v ->
+            if (v == null || v.size() <= 1) toRemove << k
+        }
+        toRemove.each { k ->
+            this.data.remove(k)
         }
     }
 

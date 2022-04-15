@@ -76,6 +76,17 @@ allprojects {
 subprojects {
     apply plugin: 'groovy'
 
+    apply plugin: "signing"
+    //ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+    signing {
+        required { 
+            //isReleaseVersion && 
+            gradle.taskGraph.hasTask("publish") &&
+            !gradle.taskGraph.hasTask("publishToMavenLocal")
+        }
+        sign publishing.publications
+    }
+
     dependencies {
         // see gradle.properties for versions
 

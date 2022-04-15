@@ -37,11 +37,6 @@ task javadocJar(type: Jar) {
     classifier = 'javadoc'
 }
 
-apply plugin: "signing"
-signing {
-    sign publishing.publications
-}
-
 publishing {
     publications {
         mavenGroovy(MavenPublication) {

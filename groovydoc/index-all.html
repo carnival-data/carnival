@@ -151,6 +151,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/util/DataTable.html#addFieldNamesToKeySet(List<String>)" title="Method in DataTable">addFieldNamesToKeySet(List&lt;String&gt;)</a></span> - Method in <a href="carnival/util/DataTable.html">DataTable</a>
 </dt><dd> <div class="block">Add the provided keys (field names) to the key set of this data table.</div></dd>
+<dt><span class="strong"><a href="carnival/util/DataTable.html#addKey(java.lang.String)" title="Method in DataTable">addKey(java.lang.String)</a></span> - Method in <a href="carnival/util/DataTable.html">DataTable</a>
+</dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/util/FeatureReport.html#addKeyBefore(java.lang.String, java.lang.String)" title="Method in FeatureReport">addKeyBefore(java.lang.String, java.lang.String)</a></span> - Method in <a href="carnival/util/FeatureReport.html">FeatureReport</a>
 </dt><dd> <div class="block">Add a new key before an existing key in the key (feature set name) set.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/DefinitionTransformation.html#addMapConstructor(org.codehaus.groovy.ast.ClassNode, BlockStatement)" title="Method in DefinitionTransformation">addMapConstructor(org.codehaus.groovy.ast.ClassNode, BlockStatement)</a></span> - Method in <a href="carnival/graph/DefinitionTransformation.html">DefinitionTransformation</a>
@@ -387,6 +389,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">Return true iff the given identifier exists in the data.</div></dd>
 <dt><span class="strong"><a href="carnival/util/MappedDataTable.html#containsIdentifier(java.lang.String)" title="Method in MappedDataTable">containsIdentifier(java.lang.String)</a></span> - Method in <a href="carnival/util/MappedDataTable.html">MappedDataTable</a>
 </dt><dd> <div class="block">Implementation of MappedDataInterface method.</div></dd>
+<dt><span class="strong"><a href="carnival/util/DataTable.html#containsKey(java.lang.String)" title="Method in DataTable">containsKey(java.lang.String)</a></span> - Method in <a href="carnival/util/DataTable.html">DataTable</a>
+</dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/util/FeatureReport.html#containsSubject(java.lang.String)" title="Method in FeatureReport">containsSubject(java.lang.String)</a></span> - Method in <a href="carnival/util/FeatureReport.html">FeatureReport</a>
 </dt><dd> <div class="block">Return true iff the subject has already been added to the report.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/VertexDefTrait.html#controlledInstance()" title="Method in VertexDefTrait">controlledInstance()</a></span> - Method in <a href="carnival/graph/VertexDefTrait.html">VertexDefTrait</a>
@@ -1831,6 +1835,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/util/FeatureReport.html#removeFeatureSet(java.lang.String)" title="Method in FeatureReport">removeFeatureSet(java.lang.String)</a></span> - Method in <a href="carnival/util/FeatureReport.html">FeatureReport</a>
 </dt><dd> <div class="block">Remove a feature set by name from this report.</div></dd>
+<dt><span class="strong"><a href="carnival/util/DataTable.html#removeKey(java.lang.String)" title="Method in DataTable">removeKey(java.lang.String)</a></span> - Method in <a href="carnival/util/DataTable.html">DataTable</a>
+</dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/util/DataTable.html#removeTimeFromDate(java.util.Date)" title="Method in DataTable">removeTimeFromDate(java.util.Date)</a></span> - Method in <a href="carnival/util/DataTable.html">DataTable</a>
 </dt><dd> <div class="block">Given a Date object, remove the time components of the Date, which
  means setting hour, minute, second, and millisecond to zero.</div></dd>
@@ -2111,6 +2117,12 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/VertexBuilder.html#traversal(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)" title="Method in VertexBuilder">traversal(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)</a></span> - Method in <a href="carnival/graph/VertexBuilder.html">VertexBuilder</a>
 </dt><dd> <div class="block"></div></dd>
+<dt><span class="strong"><a href="carnival/util/MappedDataTable.html#trim()" title="Method in MappedDataTable">trim()</a></span> - Method in <a href="carnival/util/MappedDataTable.html">MappedDataTable</a>
+</dt><dd> <div class="block">Convenience method to call trimColumns() and trimRows().</div></dd>
+<dt><span class="strong"><a href="carnival/util/MappedDataTable.html#trimColumns()" title="Method in MappedDataTable">trimColumns()</a></span> - Method in <a href="carnival/util/MappedDataTable.html">MappedDataTable</a>
+</dt><dd> <div class="block">Remove columns (fields) that have no data associated with them.</div></dd>
+<dt><span class="strong"><a href="carnival/util/MappedDataTable.html#trimRows()" title="Method in MappedDataTable">trimRows()</a></span> - Method in <a href="carnival/util/MappedDataTable.html">MappedDataTable</a>
+</dt><dd> <div class="block">Remove rows that have no data associated with them besides the ID value.</div></dd>
 <dt><span class="strong"><a href="carnival/core/config/RedcapConfig.html#trustAllSSLCertificates" title="Property in RedcapConfig">trustAllSSLCertificates</a></span> - Property in <a href="carnival/core/config/RedcapConfig.html">RedcapConfig</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/util/FeatureReport.html#tryParseDate(List<DateFormat>, java.lang.String)" title="Method in FeatureReport">tryParseDate(List&lt;DateFormat&gt;, java.lang.String)</a></span> - Method in <a href="carnival/util/FeatureReport.html">FeatureReport</a>

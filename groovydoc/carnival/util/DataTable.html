@@ -327,17 +327,23 @@ extends java.lang.Object</pre>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
+                            <td class="colLast"><code>boolean</code></td>
+                            <td class="colLast"><code><strong><a href="#addKey(java.lang.String)">addKey</a></strong>(java.lang.String k)</code><br></td>
+                        </tr>
+                        
+                        <tr class="altColor">
+                            <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#addOrderedKeys(List)">addOrderedKeys</a></strong>(java.util.List&lt;java.lang.String&gt; fieldNameStrs)</code><br>Add/append ordered keys to the existing keySet via addFieldNamesToKeySet().</td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;java.lang.String</code></td>
                             <td class="colLast"><code><strong><a href="#applyFilenameModifications(java.lang.String, java.util.Map)">applyFilenameModifications</a></strong>(java.lang.String fileName, java.util.Map args)</code><br>Given a file name, apply modifications to it as per the args.</td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;boolean</code></td>
                             <td class="colLast"><code><strong><a href="#areEqual(java.lang.Object, java.lang.Object)">areEqual</a></strong>(java.lang.Object a, java.lang.Object b)</code><br>Returns true iff:
@@ -345,18 +351,24 @@ extends java.lang.Object</pre>
      a.equals(b)</td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;java.util.Date</code></td>
                             <td class="colLast"><code><strong><a href="#computeDataSetDate(java.util.Map, java.lang.String)">computeDataSetDate</a></strong>(java.util.Map args, java.lang.String key)</code><br>Compute the data set date given a map of args and the key that should
  contain the data set date in args.  </td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;java.util.Date</code></td>
                             <td class="colLast"><code><strong><a href="#computeDataSourceDate(java.util.Map, java.lang.String)">computeDataSourceDate</a></strong>(java.util.Map args, java.lang.String key)</code><br>Compute the data source date given a map of args and the key that should
  contain the data source date.  </td>
+                        </tr>
+                        
+                        <tr class="rowColor">
+                            <td class="colFirst"><code></code></td>
+                            <td class="colLast"><code>boolean</code></td>
+                            <td class="colLast"><code><strong><a href="#containsKey(java.lang.String)">containsKey</a></strong>(java.lang.String k)</code><br></td>
                         </tr>
                         
                         <tr class="altColor">
@@ -604,120 +616,126 @@ extends java.lang.Object</pre>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
+                            <td class="colLast"><code>boolean</code></td>
+                            <td class="colLast"><code><strong><a href="#removeKey(java.lang.String)">removeKey</a></strong>(java.lang.String k)</code><br></td>
+                        </tr>
+                        
+                        <tr class="altColor">
+                            <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;java.util.Date</code></td>
                             <td class="colLast"><code><strong><a href="#removeTimeFromDate(java.util.Date)">removeTimeFromDate</a></strong>(java.util.Date date)</code><br>Given a Date object, remove the time components of the Date, which
  means setting hour, minute, second, and millisecond to zero.</td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#setKeySetComparator(Comparator)">setKeySetComparator</a></strong>(java.util.Comparator&lt;java.lang.String&gt; comp)</code><br>Set the comparator for keySet.</td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#setKeySetComparator(List)">setKeySetComparator</a></strong>(java.util.List&lt;groovy.lang.Closure&gt; cs)</code><br>Set the comparator for keySet to an OrderBy comprised of the given
  list of closures.  </td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#setOrderKeysByInsertion()">setOrderKeysByInsertion</a></strong>()</code><br></td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#setOrderedKeys(List)">setOrderedKeys</a></strong>(java.util.List&lt;java.lang.String&gt; keys)</code><br>Set the keySet to be a LinkedHashSet with the keys provided in the
  given order.  </td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#setOrderedKeys(java.lang.String)">setOrderedKeys</a></strong>(java.lang.String[] keys)</code><br>Convenience method to setOrderedKeys by variable arguments.</td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#setOrderedKeysAlphabetical()">setOrderedKeysAlphabetical</a></strong>()</code><br>Convenience method to order keys by alphabetical order.</td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#setOrderedKeysBooleanCriteria(List)">setOrderedKeysBooleanCriteria</a></strong>(java.util.List&lt;groovy.lang.Closure&gt; booleanClosures)</code><br></td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#setOrderedKeysBooleanCriteria(groovy.lang.Closure)">setOrderedKeysBooleanCriteria</a></strong>(groovy.lang.Closure[] booleanClosures)</code><br></td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.Map</code></td>
                             <td class="colLast"><code><strong><a href="#stringHandlingArgs()">stringHandlingArgs</a></strong>()</code><br></td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>protected&nbsp;static&nbsp;java.lang.String</code></td>
                             <td class="colLast"><code><strong><a href="#toCleanValue(java.lang.String, java.lang.Object)">toCleanValue</a></strong>(java.lang.String fn, java.lang.Object v)</code><br>Return a String representation of v suitable to be added to the
  data as a value.</td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.lang.String</code></td>
                             <td class="colLast"><code><strong><a href="#toFieldName(java.lang.String)">toFieldName</a></strong>(java.lang.String val)</code><br></td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;java.lang.String</code></td>
                             <td class="colLast"><code><strong><a href="#toIdValue(java.lang.String, java.util.Map)">toIdValue</a></strong>(java.lang.String val, java.util.Map args)</code><br>Given a string, return the id key compliant version of that string,
  trimmed and to lower case.  </td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;java.lang.String</code></td>
                             <td class="colLast"><code><strong><a href="#toIdValue(java.math.BigDecimal, java.util.Map)">toIdValue</a></strong>(java.math.BigDecimal val, java.util.Map args)</code><br>Convenience method to convert a BigDecimal to an id value by first
  converting it to a String and then passing it to toIdValue(String)</td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.io.File</code></td>
                             <td class="colLast"><code><strong><a href="#writeDataFile(java.io.File, java.util.Map)">writeDataFile</a></strong>(java.io.File destDir, java.util.Map args)</code><br>Write the data file for this DataTable object in the given
  directory.  </td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code><a href='../../carnival/util/DataTableFiles.html'>DataTableFiles</a></code></td>
                             <td class="colLast"><code><strong><a href="#writeDataTableFiles(java.io.File, java.util.Map)">writeDataTableFiles</a></strong>(java.io.File destDir, java.util.Map args)</code><br></td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>protected&nbsp;java.io.File</code></td>
                             <td class="colLast"><code><strong><a href="#writeDataToCsvFile(java.io.File, java.util.Map)">writeDataToCsvFile</a></strong>(java.io.File destFile, java.util.Map args)</code><br>Helper method to write the data to a specific file.</td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.List&lt;java.io.File&gt;</code></td>
                             <td class="colLast"><code><strong><a href="#writeFiles(java.io.File, java.util.Map)">writeFiles</a></strong>(java.io.File destDir, java.util.Map args)</code><br>Write this DataTable to disk.  </td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>abstract&nbsp;java.io.File</code></td>
                             <td class="colLast"><code><strong><a href="#writeMetaFile(java.io.File, java.util.Map)">writeMetaFile</a></strong>(java.io.File destDir, java.util.Map args)</code><br>Write the meta-data file in the given directory.</td>
@@ -937,6 +955,15 @@ extends java.lang.Object</pre>
                             </li>
                         </ul>
                     
+                        <a name="addKey(java.lang.String)"><!-- --></a>
+                        <ul class="blockListLast">
+                            <li class="blockList">
+                                <h4>boolean <strong>addKey</strong>(java.lang.String k)</h4>
+                                <p>
+</p>
+                            </li>
+                        </ul>
+                    
                         <a name="addOrderedKeys(List)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
@@ -991,6 +1018,15 @@ extends java.lang.Object</pre>
  the value from args.
  <DL><DT><B>Parameters:</B></DT><DD><code>args</code> -  The map of args</DD><DD><code>key</code> -  The key within args whose value should contain the data
             source date.</DD></DL></p>
+                            </li>
+                        </ul>
+                    
+                        <a name="containsKey(java.lang.String)"><!-- --></a>
+                        <ul class="blockListLast">
+                            <li class="blockList">
+                                <h4>boolean <strong>containsKey</strong>(java.lang.String k)</h4>
+                                <p>
+</p>
                             </li>
                         </ul>
                     
@@ -1357,6 +1393,15 @@ extends java.lang.Object</pre>
                                 <h4>static&nbsp;java.util.List&lt;java.util.Map&gt; <strong>readDataFromCsvFile</strong>(java.io.File file)</h4>
                                 <p> Generic read from CSV file.
  <DL><DT><B>Parameters:</B></DT><DD><code>file</code> -  The CSV File.</DD></DL><DL><DT><B>Returns:</B></DT><DD>A list of maps containing the CSV data.</DD></DL></p>
+                            </li>
+                        </ul>
+                    
+                        <a name="removeKey(java.lang.String)"><!-- --></a>
+                        <ul class="blockListLast">
+                            <li class="blockList">
+                                <h4>boolean <strong>removeKey</strong>(java.lang.String k)</h4>
+                                <p>
+</p>
                             </li>
                         </ul>
                     

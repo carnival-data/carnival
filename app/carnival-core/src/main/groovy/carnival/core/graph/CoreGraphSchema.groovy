@@ -21,7 +21,7 @@ import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.structure.Edge
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 
-import carnival.util.Defaults
+import carnival.core.config.Defaults
 import carnival.graph.EdgeDefTrait
 import carnival.graph.PropertyDefTrait
 import carnival.graph.VertexDefTrait

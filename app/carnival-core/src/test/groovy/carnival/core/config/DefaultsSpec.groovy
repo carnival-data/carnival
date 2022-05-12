@@ -1,4 +1,4 @@
-package carnival.util
+package carnival.core.config
 
 
 import groovy.sql.*
@@ -97,6 +97,18 @@ class DefaultsSpec extends Specification {
         then:
         Defaults.getDataDirectoryPath() == "${existingDataDir}_"
         Defaults.getTargetDirectoryPath() == existingTargetDir
+
+        cleanup:
+        m = [
+            carnival: [
+                directories: [
+                    data: [
+                        root: "${existingDataDir}".toString()
+                    ]
+                ]
+            ]
+        ]
+        Defaults.setConfigData(m)
     }
 
 

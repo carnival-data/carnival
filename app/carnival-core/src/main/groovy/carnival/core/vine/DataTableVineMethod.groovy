@@ -5,7 +5,7 @@ package carnival.core.vine
 import groovy.util.logging.Slf4j
 import org.apache.commons.codec.digest.DigestUtils
 
-import carnival.util.Defaults
+import carnival.core.config.Defaults
 import carnival.core.util.CoreUtil
 import carnival.util.GenericDataTable
 import carnival.util.MappedDataTable

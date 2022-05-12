@@ -1,4 +1,4 @@
-package carnival.util
+package carnival.core.config
 
 
 

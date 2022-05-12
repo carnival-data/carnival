@@ -7,7 +7,7 @@ import spock.lang.Shared
 
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 
-import carnival.util.Defaults
+import carnival.core.config.Defaults
 import static carnival.util.AppUtil.sysPropFalse
 
 

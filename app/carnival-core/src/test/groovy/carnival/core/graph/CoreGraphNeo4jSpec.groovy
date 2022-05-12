@@ -18,7 +18,7 @@ import org.neo4j.configuration.connectors.BoltConnector
 import org.neo4j.configuration.helpers.SocketAddress*/
 
 import carnival.graph.*
-import carnival.util.Defaults
+import carnival.core.config.Defaults
 
 
 

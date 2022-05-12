@@ -97,11 +97,6 @@ if (location.href.indexOf('is-external=true') == -1) {
     <ul class="blockList">
         <li class="blockList">
 
-            <dl>
-                <dt>All Implemented Interfaces and Traits:</dt>
-                <dd><a href='../../carnival/util/MappedDataInterface.html'>MappedDataInterface</a></dd>
-            </dl>
-    
 
             <!-- todo: direct known subclasses -->
             <hr>
@@ -109,8 +104,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 
 <pre>@groovy.transform.ToString(excludes: [data], includeNames: true)
 class MappedDataTable
-extends <a href='../../carnival/util/DataTable.html'>DataTable</a>
-implements <a href='../../carnival/util/MappedDataInterface.html'>MappedDataInterface</a></pre>
+extends <a href='../../carnival/util/DataTable.html'>DataTable</a></pre>
 
     <p> MappedDataTable is a semi-generalized structure storing key/value data
  associated with a single entity that has a unique identifier.  
@@ -245,8 +239,8 @@ implements <a href='../../carnival/util/MappedDataInterface.html'>MappedDataInte
                         
                         <tr class="rowColor">
                             <td class="colFirst">
-                                <code><a href="#MappedDataTable(carnival.util.MappedDataTable.MetaData)">MappedDataTable</a>
-                                (<a href='../../carnival/util/MappedDataTable.MetaData.html'>MappedDataTable.MetaData</a> args)</code><br>Make from MetaData.</td>
+                                <code><a href="#MappedDataTable(carnival.util.TabularReport.MetaData)">MappedDataTable</a>
+                                (<a href='../../carnival/util/TabularReport.MetaData.html'>TabularReport.MetaData</a> args)</code><br>Make from MetaData.</td>
                         </tr>
                         
                         <tr class="altColor">
@@ -310,22 +304,16 @@ implements <a href='../../carnival/util/MappedDataInterface.html'>MappedDataInte
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
-                            <td class="colLast"><code><strong><a href="#dataAdd(java.sql.ResultSet, java.lang.String, java.lang.String)">dataAdd</a></strong>(java.sql.ResultSet row, java.lang.String idField, java.lang.String dataFieldPrefix)</code><br>Implementation of MappedDataInterface method.</td>
-                        </tr>
-                        
-                        <tr class="altColor">
-                            <td class="colFirst"><code></code></td>
-                            <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#dataAdd(GroovyRowResult)">dataAdd</a></strong>(<a href='../../GroovyRowResult.html'>GroovyRowResult</a> row)</code><br>Add a single row of data from a Groovy SQL query result.</td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#dataAdd(Map)">dataAdd</a></strong>(java.util.Map&lt;java.lang.String, java.lang.Object&gt; vals)</code><br>Add the given key value pairs to the data for the given identifier. </td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#dataAddWithModifications(Map, java.util.Map)">dataAddWithModifications</a></strong>(java.util.Map&lt;java.lang.String, java.lang.Object&gt; vals, java.util.Map modifications)</code><br>Special dataAdd method that takes an optional map of modifications that 
@@ -333,56 +321,56 @@ implements <a href='../../carnival/util/MappedDataInterface.html'>MappedDataInte
  dataAdd(Map) method.</td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#dataAppend(java.lang.String, java.lang.String, java.lang.String)">dataAppend</a></strong>(java.lang.String id, java.lang.String key, java.lang.String value)</code><br>Add a single key value pair for a given id.</td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#dataAppend(java.lang.String, Map)">dataAppend</a></strong>(java.lang.String id, java.util.Map&lt;java.lang.String, java.lang.String&gt; vals)</code><br>Add the given key value pairs to the data for the given identifier. </td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.Map</code></td>
                             <td class="colLast"><code><strong><a href="#dataGet(java.lang.String, java.util.Map)">dataGet</a></strong>(java.lang.String idVal, java.util.Map args)</code><br>Convenience method that converts the given String to an id value and
  returns the data for that id value.</td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.lang.String</code></td>
                             <td class="colLast"><code><strong><a href="#dataGet(java.lang.String, java.lang.String, java.util.Map)">dataGet</a></strong>(java.lang.String idVal, java.lang.String fieldName, java.util.Map args)</code><br>Get a single value given an identifier and field name.</td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.Iterator&lt;java.util.Map&gt;</code></td>
                             <td class="colLast"><code><strong><a href="#dataIterator()">dataIterator</a></strong>()</code><br>Return an iterator over all the data in this object.</td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>boolean</code></td>
                             <td class="colLast"><code><strong><a href="#equals(java.lang.Object)">equals</a></strong>(java.lang.Object obj)</code><br>Implementation of equals() that compares based on property values.</td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.lang.String</code></td>
                             <td class="colLast"><code><strong><a href="#findFieldName(java.lang.String, Map)">findFieldName</a></strong>(java.lang.String qFieldName, java.util.Map&lt;java.lang.String, java.lang.String&gt; vals)</code><br></td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
-                            <td class="colLast"><code><a href='../../carnival/util/MappedDataTable.MetaData.html'>MappedDataTable.MetaData</a></code></td>
+                            <td class="colLast"><code><a href='../../carnival/util/TabularReport.MetaData.html'>TabularReport.MetaData</a></code></td>
                             <td class="colLast"><code><strong><a href="#getMetaData()">getMetaData</a></strong>()</code><br>Return a MappedDataTable.MetaData object for this MappedDataTable.</td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#setOrderedKeysMappedDataTableDefault()">setOrderedKeysMappedDataTableDefault</a></strong>()</code><br>Retore the key (field) ordering to the default, which orders keys:
@@ -391,48 +379,41 @@ implements <a href='../../carnival/util/MappedDataInterface.html'>MappedDataInte
    all other fields</td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.lang.String</code></td>
                             <td class="colLast"><code><strong><a href="#toIdValue(java.lang.String)">toIdValue</a></strong>(java.lang.String val)</code><br></td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>protected&nbsp;java.util.Map&lt;java.lang.String, java.lang.Object&gt;</code></td>
                             <td class="colLast"><code><strong><a href="#toMap(java.sql.ResultSet)">toMap</a></strong>(java.sql.ResultSet row)</code><br>Convert a java.sql.ResultSet to a Map<String,Object>.</td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#trim()">trim</a></strong>()</code><br>Convenience method to call trimColumns() and trimRows().</td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#trimColumns()">trimColumns</a></strong>()</code><br>Remove columns (fields) that have no data associated with them.</td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#trimRows()">trimRows</a></strong>()</code><br>Remove rows that have no data associated with them besides the ID value.</td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.io.File</code></td>
                             <td class="colLast"><code><strong><a href="#writeMetaFile(java.io.File, java.util.Map)">writeMetaFile</a></strong>(java.io.File destDir, java.util.Map args)</code><br>Write the meta-data file for this MappedDataTable in the given
  directory.</td>
-                        </tr>
-                        
-                        <tr class="altColor">
-                            <td class="colFirst"><code></code></td>
-                            <td class="colLast"><code>void</code></td>
-                            <td class="colLast"><code><strong><a href="#writeToFile(java.util.Map)">writeToFile</a></strong>(java.util.Map args)</code><br>Implementation of MappedDataInterface method.
- </td>
                         </tr>
                         
                     </table>
@@ -533,10 +514,10 @@ implements <a href='../../carnival/util/MappedDataInterface.html'>MappedDataInte
                             </li>
                         </ul>
                     
-                        <a name="MappedDataTable(carnival.util.MappedDataTable.MetaData)"><!-- --></a>
+                        <a name="MappedDataTable(carnival.util.TabularReport.MetaData)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4><strong>MappedDataTable</strong>(<a href='../../carnival/util/MappedDataTable.MetaData.html'>MappedDataTable.MetaData</a> args)</h4>
+                                <h4><strong>MappedDataTable</strong>(<a href='../../carnival/util/TabularReport.MetaData.html'>TabularReport.MetaData</a> args)</h4>
                                 <p> Make from MetaData.
 </p>
                             </li>
@@ -608,15 +589,6 @@ implements <a href='../../carnival/util/MappedDataInterface.html'>MappedDataInte
                                 <p> Add a single row of data from a java.sql.ResultSet.<DL><DT><B>throws:</B></DT><DD>IllegalArgumentException if the row does not contain the a field
          named idKey.</DD></DL>
  <DL><DT><B>Parameters:</B></DT><DD><code>row</code> -  The row of data</DD></DL></p>
-                            </li>
-                        </ul>
-                    
-                        <a name="dataAdd(java.sql.ResultSet, java.lang.String, java.lang.String)"><!-- --></a>
-                        <ul class="blockListLast">
-                            <li class="blockList">
-                                <h4>void <strong>dataAdd</strong>(java.sql.ResultSet row, java.lang.String idField, java.lang.String dataFieldPrefix)</h4>
-                                <p> Implementation of MappedDataInterface method.
-</p>
                             </li>
                         </ul>
                     
@@ -730,7 +702,7 @@ void <strong>dataAppend</strong>(java.lang.String id, java.util.Map&lt;java.lang
                         <a name="getMetaData()"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4><a href='../../carnival/util/MappedDataTable.MetaData.html'>MappedDataTable.MetaData</a> <strong>getMetaData</strong>()</h4>
+                                <h4><a href='../../carnival/util/TabularReport.MetaData.html'>TabularReport.MetaData</a> <strong>getMetaData</strong>()</h4>
                                 <p> Return a MappedDataTable.MetaData object for this MappedDataTable.
 </p>
                             </li>
@@ -802,16 +774,6 @@ java.io.File <strong>writeMetaFile</strong>(java.io.File destDir, java.util.Map 
                                 <p> Write the meta-data file for this MappedDataTable in the given
  directory. 
  <DL><DT><B>See Also:</B></DT><DD>fileName(java.lang.String, java.lang.String, java.util.Map)</DD></DL><DL><DT><B>Parameters:</B></DT><DD><code>destDir</code> -  The directory in which to write the file.</DD><DD><code>args</code> -  Optional args passed to fileName().</DD></DL><DL><DT><B>Returns:</B></DT><DD>The meta-data file.</DD></DL></p>
-                            </li>
-                        </ul>
-                    
-                        <a name="writeToFile(java.util.Map)"><!-- --></a>
-                        <ul class="blockListLast">
-                            <li class="blockList">
-                                <h4>void <strong>writeToFile</strong>(java.util.Map args)</h4>
-                                <p> Implementation of MappedDataInterface method.
- Is expected to be called only be legacy code.
-</p>
                             </li>
                         </ul>
                     

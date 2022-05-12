@@ -35,7 +35,7 @@ import org.yaml.snakeyaml.representer.Representer
  *
  */
 @ToString(excludes=['data'], includeNames=true)
-class MappedDataTable extends DataTable implements MappedDataInterface {
+class MappedDataTable extends DataTable {
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -443,18 +443,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
 
 
     /**
-     * Implementation of MappedDataInterface method.
-     *
-     */
-    public void dataAdd(java.sql.ResultSet row, String idField, String dataFieldPrefix) {
-        assert toFieldName(idField) == this.idFieldName
-
-        def vals = toMap(row)
-        dataAddWithModifications(vals, [dataFieldPrefix:dataFieldPrefix])
-    }
-
-
-    /**
      * Convert a java.sql.ResultSet to a Map<String,Object>.
      *
      * @param row A row of data as a ResultSet.
@@ -741,20 +729,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
         return destFile
     }
   
-
-
-    /**
-     * Implementation of MappedDataInterface method.
-     * Is expected to be called only be legacy code.
-     *
-     */
-    public void writeToFile(Map args = [:]) {
-        log.warn "MappedDataTable writeToFile ignoring args: $args"
-        log.warn "MappedDataTable writing to ${Defaults.dataCacheDirectory}"
-        writeFiles(Defaults.dataCacheDirectory)
-    }
-
-
 }
 
 

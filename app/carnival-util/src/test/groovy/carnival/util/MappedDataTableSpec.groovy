@@ -265,7 +265,7 @@ class MappedDataTableSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
 
 
-    def "dataAdd ResultSet dataFieldPrefix"() {
+    /*def "dataAdd ResultSet dataFieldPrefix"() {
         given:
         def mdt
         def res
@@ -321,7 +321,7 @@ class MappedDataTableSpec extends Specification {
 
         then:
         mdt.data['id2'].size() == 2
-    }
+    }*/
 
 
 

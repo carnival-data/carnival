@@ -26,30 +26,21 @@ import org.apache.tinkerpop.gremlin.structure.Edge
  * @see carnival.graph.EdgeBuilder
  */
 @Slf4j
-trait EdgeDefTrait extends WithPropertyDefsTrait {
+trait EdgeDefTrait extends ElementDefTrait {
 
 
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** 
-     * */
+    /** */
     List<VertexDefTrait> domain = new ArrayList<VertexDefTrait>()
 
-    /** 
-     * */
+    /** */
     List<VertexDefTrait> range = new ArrayList<VertexDefTrait>()
 
     /** additional constraints, just represent as a string for now */
     String constraint
-
-    /** 
-     * if true, the `Base.PX.NAME_SPACE` property for edges in the graph
-     * will use a global namespace value instead of one generated from 
-     * the package name.
-     * */
-    boolean global = false
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -76,21 +67,6 @@ trait EdgeDefTrait extends WithPropertyDefsTrait {
     }
 
 
-    /** */
-    public boolean isGlobal() {
-        return global
-    }
-
-
-    /** */
-    public String getNameSpace() {
-        //log.debug "\n\ngetNameSpace ${this} ${this.metaClass} ${this.metaClass.theClass} ${this.metaClass.theClass.name} \n\n\n"
-
-        if (this instanceof Enum) return "${this.declaringClass.name}"
-        else return "${this.metaClass.theClass.name}"
-    }
-
-
     ///////////////////////////////////////////////////////////////////////////
     // TYPE CHECKING
     ///////////////////////////////////////////////////////////////////////////
@@ -98,7 +74,7 @@ trait EdgeDefTrait extends WithPropertyDefsTrait {
     /** */
     public boolean isa(Edge e) {
         assert e != null
-        (e.label() == getLabel() && Base.PX.NAME_SPACE.valueOf(e) == getNameSpace())   
+        (e.label() == getLabel() && Base.PX.NAME_SPACE._valueOf(e) == getNameSpace())   
     }
 
     /** */
@@ -172,7 +148,9 @@ trait EdgeDefTrait extends WithPropertyDefsTrait {
 
     /** */
     public EdgeBuilder instance() {
-        return new EdgeBuilder(this)
+        def ci = new EdgeBuilder(this)
+        ci.propertiesMustBeDefined = this.propertiesMustBeDefined
+        return ci
     }
 
 

@@ -52,7 +52,7 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    public WithPropertyDefsTrait getElementDef() { edgeDef }
+    public ElementDefTrait getElementDef() { edgeDef }
 
 
     ///////////////////////////////////////////////////////////////////////////

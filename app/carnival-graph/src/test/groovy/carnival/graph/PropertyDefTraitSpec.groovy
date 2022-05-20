@@ -80,6 +80,16 @@ class PropertyDefTraitSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
+    def "valueOf throws an exception for undefined property"() {
+        when:
+        def v1 = VX.THING_2.instance().create(graph)
+        PX.PROP_B.valueOf(v1)
+
+        then:
+        Exception e = thrown()
+    }
+
+
     def "valueOf returns null if property not present"() {
         when:
         def v1 = VX.THING_2.instance().create(graph)
@@ -87,7 +97,6 @@ class PropertyDefTraitSpec extends Specification {
         then:
         !PX.PROP_A.of(v1).isPresent()
         PX.PROP_A.valueOf(v1) == null
-
     }
 
 

@@ -49,7 +49,7 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    public WithPropertyDefsTrait getElementDef() { vertexDef }
+    public ElementDefTrait getElementDef() { vertexDef }
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -162,7 +162,7 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
         )
         
         if (vertexDef.isClass()) v.property(Base.PX.IS_CLASS.label, vertexDef.isClass())
-        if (vertexDef.isGlobal()) v.property(Base.PX.VERTEX_DEFINITION_CLASS.label, vertexDef.vertexDefinitionClass)
+        if (vertexDef.isGlobal()) v.property(Base.PX.VERTEX_DEFINITION_CLASS.label, vertexDef.elementDefinitionClass)
         if (vertexDef.instanceOf != null) {
             assert vertexDef.instanceOf.vertex
             Base.EX.IS_INSTANCE_OF.instance().from(v).to(vertexDef.instanceOf.vertex).create()

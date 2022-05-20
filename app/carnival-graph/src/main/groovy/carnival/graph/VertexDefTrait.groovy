@@ -30,7 +30,7 @@ import carnival.graph.Base
  * @see carnival.graph.VertexDefinition
  */
 @Slf4j
-trait VertexDefTrait extends WithPropertyDefsTrait {
+trait VertexDefTrait extends ElementDefTrait {
 
     ///////////////////////////////////////////////////////////////////////////
     // STATIC
@@ -54,13 +54,6 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
      */
     Vertex vertex
     
-     /** 
-     * if true, the `Base.PX.NAME_SPACE` property for verticies in the graph
-     * will use a global namespace value instead of one generated from 
-     * the package name.
-     */
-    boolean global = false
-
     /** 
      * optional, defines what the superclass of this class is.
      * */
@@ -70,12 +63,6 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
      * optional, defines what class these verticies are instances of.
      * */
     VertexDefTrait instanceOf
-
-    /** 
-     * if false, verticies created by this definition can contain properties
-     * that were not defined by this VertexDefTrait.
-     * */
-    Boolean propertiesMustBeDefined = true
 
     /** 
      * Explicitly designate this definition as a class. A singleton vertex will
@@ -105,14 +92,6 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
         if (!isClass()) throw new RuntimeException("cannot set superClass when isClass() is false")
         
         this.superClass = vDef
-    }
-
-    /** */
-    boolean getGlobal() { this.global }
-
-    /** */
-    void setGlobal(boolean val) {
-        this.global = val
     }
 
     /** */
@@ -163,12 +142,6 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
 
 
     /** */
-    public boolean isGlobal() {
-        return global
-    }
-
-
-    /** */
     public Set<VertexProperty> definedPropertiesOf(Vertex v) {
         Set<VertexProperty> vProps = new HashSet<VertexProperty>()
         propertyDefs.each { pDef ->
@@ -185,20 +158,6 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
     ///////////////////////////////////////////////////////////////////////////
     // SINGLETON VERTEX METHODS
     ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    public String getNameSpace() {
-        if (this.global) return Base.GLOBAL_NAME_SPACE
-        return getVertexDefinitionClass()
-    }
-
-
-    /** */
-    public String getVertexDefinitionClass() {
-        if (this instanceof Enum) return "${this.declaringClass.name}"
-        return "${this.metaClass.theClass.name}"
-    }
-
 
     /** */
     public VertexBuilder instance() {
@@ -247,7 +206,7 @@ trait VertexDefTrait extends WithPropertyDefsTrait {
     /** */
     public boolean isa(Vertex v) {
         assert v != null
-        (v.label() == getLabel() && Base.PX.NAME_SPACE.valueOf(v) == getNameSpace())
+        (v.label() == getLabel() && Base.PX.NAME_SPACE._valueOf(v) == getNameSpace())
     }
 
 

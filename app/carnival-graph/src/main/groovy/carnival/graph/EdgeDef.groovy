@@ -18,12 +18,12 @@ import carnival.graph.Base
 
 
 @Slf4j
-class VertexDef extends ElementDef {
+class EdgeDef extends ElementDef {
 
     /** */
-    static public VertexDefTrait lookup(Vertex v) {
-        assert v != null
-        super.lookup(v)
+    static public EdgeDefTrait lookup(Edge e) {
+        assert e != null
+        super.lookup(e)
     }
 
 }

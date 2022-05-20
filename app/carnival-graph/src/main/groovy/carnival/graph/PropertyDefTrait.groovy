@@ -101,12 +101,30 @@ trait PropertyDefTrait {
     /** */
     public Property of(Element el) {
         assert el
+        assertPropertyIsDefined(el)
+
+        _of(el)
+    }
+
+
+    /** */
+    Property _of(Element el) {
+        assert el
         el.property(getLabel())
     }
 
 
     /** */
     public Object valueOf(Element el) {
+        assert el
+        assertPropertyIsDefined(el)
+
+        _valueOf(el)
+    }
+
+
+    /** */
+    Object _valueOf(Element el) {
         assert el
         el.property(getLabel()).isPresent() ? el.value(getLabel()) : null
     }
@@ -116,19 +134,41 @@ trait PropertyDefTrait {
     public PropertyDefTrait set(Element el, Object value) {
         assert el
         assert value != null
-
-        VertexDefTrait vdt = VertexDef.lookup(el)
-        if (vdt != null && !(vdt instanceof DynamicVertexDef)) {
-            if (vdt.propertiesMustBeDefined) {
-                boolean found = vdt.propertyDefs.find({it.label == getLabel()})
-                if (!found) {
-                    throw new IllegalArgumentException("${this} is not a property of ${vdt.label}: ${vdt.propertyDefs}")
-                }
-            }
-        }
+        assertPropertyIsDefined(el)
 
         el.property(getLabel(), value)
         this
+    }
+
+
+    /** */
+    void assertPropertyIsDefined(Element el) {
+        boolean isDefined = false
+        
+        ElementDefTrait edt = ElementDef.lookup(el)
+        if (edt != null && !(edt instanceof DynamicVertexDef)) {
+            if (edt.propertiesMustBeDefined) {
+                isDefined = edt.propertyDefs.find({it.label == getLabel()})
+            }
+        }
+        
+        if (!isDefined) {
+            throw new IllegalArgumentException("${this} is not a property of ${edt.label}: ${edt.propertyDefs}")
+
+        }
+    }
+
+
+    /** */
+    boolean propertyIsDefined(Element el) {
+        boolean isDefined = false
+        ElementDefTrait edt = ElementDef.lookup(el)
+        if (edt != null && !(edt instanceof DynamicVertexDef)) {
+            if (edt.propertiesMustBeDefined) {
+                isDefined = edt.propertyDefs.find({it.label == getLabel()})
+            }
+        }
+        isDefined
     }
 
 

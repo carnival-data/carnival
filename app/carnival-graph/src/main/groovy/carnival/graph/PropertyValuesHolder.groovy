@@ -39,7 +39,7 @@ class PropertyValuesHolder<T> {
     /** */
     public T withProperty(PropertyDefTrait propDef, Object propValue) {
         assert this.respondsTo("getElementDef")
-        WithPropertyDefsTrait eDef = getElementDef()
+        ElementDefTrait eDef = getElementDef()
 
         if (propertiesMustBeDefined) {
             boolean found = eDef.propertyDefs.find({it.label == propDef.label})
@@ -64,7 +64,7 @@ class PropertyValuesHolder<T> {
     /** */
     public T withProperties(Map args) {
         assert this.respondsTo("getElementDef")
-        WithPropertyDefsTrait eDef = getElementDef()
+        ElementDefTrait eDef = getElementDef()
 
         args.each { k, v ->
             def propertyDef = eDef.propertyDefs.find { it.name() == k }
@@ -115,7 +115,7 @@ class PropertyValuesHolder<T> {
     public T withMatchingProperties(Map args) {
         assert args != null
         assert this.respondsTo("getElementDef")
-        WithPropertyDefsTrait eDef = getElementDef()
+        ElementDefTrait eDef = getElementDef()
 
         args.each { k, v ->
             def propertyDef = eDef.propertyDefs.find { it.name() == k }
@@ -155,7 +155,7 @@ class PropertyValuesHolder<T> {
     /** */
     public Map<PropertyDefTrait,Object> allPropertyValues() {
         assert this.respondsTo("getElementDef")
-        WithPropertyDefsTrait eDef = getElementDef()
+        ElementDefTrait eDef = getElementDef()
 
         def pvs = [:]
         pvs.putAll(propertyValues)

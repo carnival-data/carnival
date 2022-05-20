@@ -91,7 +91,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
-<li><ul class="inheritance"></ul></li><li><ul class="inheritance"></ul></li><li>carnival.graph.VertexDefTrait
+<li><ul class="inheritance"></ul></li><li><ul class="inheritance"></ul></li><li><ul class="inheritance"></ul></li><li>carnival.graph.VertexDefTrait
 </ul>
 <div class="description">
     <ul class="blockList">
@@ -105,7 +105,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <pre>@groovy.transform.Trait
 @groovy.util.logging.Slf4j
 trait VertexDefTrait
-extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDefsTrait</a></pre>
+extends <a href='../../carnival/graph/ElementDefTrait.html'>ElementDefTrait</a></pre>
 
     <p> Defines allowed verticies in a graph model, automatically inherited by 
  enums with the `@VertexDefinition` annotation. <DL><DT><B>See Also:</B></DT><DD><a href='../../carnival/graph/VertexDefinition.html' title='VertexDefinition'>VertexDefinition</a></DD></DL></p>
@@ -169,18 +169,6 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong>boolean</strong></code>&nbsp;</td>
-                            <td class="colLast"><code><a href="#global">global</a></code><br>if true, the `Base.PX.NAME_SPACE` property for verticies in the graph
- will use a global namespace value instead of one generated from 
- the package name.</td>
-                        </tr>
-                        
-                        <tr class="rowColor">
-                            <td class="colFirst"><code><strong>boolean</strong></code>&nbsp;</td>
-                            <td class="colLast"><code><a href="#global">global</a></code><br></td>
-                        </tr>
-                        
-                        <tr class="altColor">
                             <td class="colFirst"><code><strong><a href='../../carnival/graph/VertexDefTrait.html'>VertexDefTrait</a></strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#instanceOf">instanceOf</a></code><br>optional, defines what class these verticies are instances of.</td>
                         </tr>
@@ -196,28 +184,22 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         </tr>
                         
                         <tr class="rowColor">
-                            <td class="colFirst"><code><strong>java.lang.Boolean</strong></code>&nbsp;</td>
-                            <td class="colLast"><code><a href="#propertiesMustBeDefined">propertiesMustBeDefined</a></code><br>if false, verticies created by this definition can contain properties
- that were not defined by this VertexDefTrait.</td>
-                        </tr>
-                        
-                        <tr class="altColor">
                             <td class="colFirst"><code><strong><a href='../../carnival/graph/VertexDefTrait.html'>VertexDefTrait</a></strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#superClass">superClass</a></code><br>optional, defines what the superclass of this class is.</td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code><strong><a href='../../carnival/graph/VertexDefTrait.html'>VertexDefTrait</a></strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#superClass">superClass</a></code><br></td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code><strong>org.apache.tinkerpop.gremlin.structure.Vertex</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#vertex">vertex</a></code><br>The singleton vertex, if applicable, for this vertex definition. 
  </td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code><strong>java.util.Set&lt;<a href='../../carnival/graph/PropertyDefTrait.html' title='PropertyDefTrait'>PropertyDefTrait</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#vertexProperties">vertexProperties</a></code><br></td>
                         </tr>
@@ -274,32 +256,20 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
-                            <td class="colLast"><code>boolean</code></td>
-                            <td class="colLast"><code><strong><a href="#getGlobal()">getGlobal</a></strong>()</code><br></td>
-                        </tr>
-                        
-                        <tr class="rowColor">
-                            <td class="colFirst"><code></code></td>
                             <td class="colLast"><code><a href='../../carnival/graph/VertexDefTrait.html'>VertexDefTrait</a></code></td>
                             <td class="colLast"><code><strong><a href="#getInstanceOf()">getInstanceOf</a></strong>()</code><br></td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>boolean</code></td>
                             <td class="colLast"><code><strong><a href="#getIsClass()">getIsClass</a></strong>()</code><br></td>
                         </tr>
                         
-                        <tr class="rowColor">
-                            <td class="colFirst"><code></code></td>
-                            <td class="colLast"><code>java.lang.String</code></td>
-                            <td class="colLast"><code><strong><a href="#getLabel()">getLabel</a></strong>()</code><br></td>
-                        </tr>
-                        
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.lang.String</code></td>
-                            <td class="colLast"><code><strong><a href="#getNameSpace()">getNameSpace</a></strong>()</code><br></td>
+                            <td class="colLast"><code><strong><a href="#getLabel()">getLabel</a></strong>()</code><br></td>
                         </tr>
                         
                         <tr class="rowColor">
@@ -310,38 +280,26 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
-                            <td class="colLast"><code>java.lang.String</code></td>
-                            <td class="colLast"><code><strong><a href="#getVertexDefinitionClass()">getVertexDefinitionClass</a></strong>()</code><br></td>
-                        </tr>
-                        
-                        <tr class="rowColor">
-                            <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.Set&lt;<a href='../../carnival/graph/PropertyDefTrait.html' title='PropertyDefTrait'>PropertyDefTrait</a>&gt;</code></td>
                             <td class="colLast"><code><strong><a href="#getVertexProperties()">getVertexProperties</a></strong>()</code><br>Setter wrapper for propertyDefs</td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>boolean</code></td>
                             <td class="colLast"><code><strong><a href="#hasLabel(org.apache.tinkerpop.gremlin.structure.Vertex)">hasLabel</a></strong>(org.apache.tinkerpop.gremlin.structure.Vertex v)</code><br></td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code><a href='../../carnival/graph/VertexBuilder.html'>VertexBuilder</a></code></td>
                             <td class="colLast"><code><strong><a href="#instance()">instance</a></strong>()</code><br></td>
                         </tr>
                         
-                        <tr class="altColor">
-                            <td class="colFirst"><code></code></td>
-                            <td class="colLast"><code>boolean</code></td>
-                            <td class="colLast"><code><strong><a href="#isClass()">isClass</a></strong>()</code><br></td>
-                        </tr>
-                        
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>boolean</code></td>
-                            <td class="colLast"><code><strong><a href="#isGlobal()">isGlobal</a></strong>()</code><br></td>
+                            <td class="colLast"><code><strong><a href="#isClass()">isClass</a></strong>()</code><br></td>
                         </tr>
                         
                         <tr class="altColor">
@@ -359,46 +317,40 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
-                            <td class="colLast"><code><strong><a href="#setGlobal(boolean)">setGlobal</a></strong>(boolean val)</code><br></td>
-                        </tr>
-                        
-                        <tr class="rowColor">
-                            <td class="colFirst"><code></code></td>
-                            <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#setInstanceOf(carnival.graph.VertexDefTrait)">setInstanceOf</a></strong>(<a href='../../carnival/graph/VertexDefTrait.html'>VertexDefTrait</a> vDef)</code><br></td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#setRelationship(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.graph.EdgeDefTrait, carnival.graph.VertexDefTrait)">setRelationship</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, <a href='../../carnival/graph/EdgeDefTrait.html'>EdgeDefTrait</a> rel, <a href='../../carnival/graph/VertexDefTrait.html'>VertexDefTrait</a> targetClassDef)</code><br></td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#setSubclassOf(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.graph.VertexDefTrait)">setSubclassOf</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, <a href='../../carnival/graph/VertexDefTrait.html'>VertexDefTrait</a> superClassDef)</code><br></td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#setSuperClass(carnival.graph.VertexDefTrait)">setSuperClass</a></strong>(<a href='../../carnival/graph/VertexDefTrait.html'>VertexDefTrait</a> vDef)</code><br></td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#setSuperclassOf(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, org.apache.tinkerpop.gremlin.structure.Vertex)">setSuperclassOf</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, org.apache.tinkerpop.gremlin.structure.Vertex subclassV)</code><br></td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
                             <td class="colLast"><code><strong><a href="#setVertexProperties(Set)">setVertexProperties</a></strong>(java.util.Set&lt;<a href='../../carnival/graph/PropertyDefTrait.html' title='PropertyDefTrait'>PropertyDefTrait</a>&gt; propertyDefs)</code><br>Getter wrapper for propertyDefs</td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.lang.String</code></td>
                             <td class="colLast"><code><strong><a href="#toString()">toString</a></strong>()</code><br></td>
@@ -418,6 +370,10 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                             <th class="colLast" scope="col">Name</th>
                         </tr>
                         
+                        <tr class="altColor">
+                            <td class="colFirst"><code>trait <a href='../../carnival/graph/ElementDefTrait.html'>ElementDefTrait</a></code></td>
+                            <td class="colLast"><code><a href='../../carnival/graph/ElementDefTrait.html#getElementDefinitionClass()'>getElementDefinitionClass</a>, <a href='../../carnival/graph/ElementDefTrait.html#getGlobal()'>getGlobal</a>, <a href='../../carnival/graph/ElementDefTrait.html#getNameSpace()'>getNameSpace</a>, <a href='../../carnival/graph/ElementDefTrait.html#isGlobal()'>isGlobal</a>, <a href='../../carnival/graph/ElementDefTrait.html#setGlobal(boolean)'>setGlobal</a></code></td>
+                        </tr>
                         <tr class="altColor">
                             <td class="colFirst"><code>trait <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDefsTrait</a></code></td>
                             <td class="colLast"><code><a href='../../carnival/graph/WithPropertyDefsTrait.html#definedPropertiesOf(org.apache.tinkerpop.gremlin.structure.Element)'>definedPropertiesOf</a>, <a href='../../carnival/graph/WithPropertyDefsTrait.html#getDefaultProperties()'>getDefaultProperties</a>, <a href='../../carnival/graph/WithPropertyDefsTrait.html#getIndexedProperties()'>getIndexedProperties</a>, <a href='../../carnival/graph/WithPropertyDefsTrait.html#getIndexedPropertyLabels()'>getIndexedPropertyLabels</a>, <a href='../../carnival/graph/WithPropertyDefsTrait.html#getRequiredProperties()'>getRequiredProperties</a>, <a href='../../carnival/graph/WithPropertyDefsTrait.html#getRequiredPropertyLabels()'>getRequiredPropertyLabels</a>, <a href='../../carnival/graph/WithPropertyDefsTrait.html#getUniqueProperties()'>getUniqueProperties</a>, <a href='../../carnival/graph/WithPropertyDefsTrait.html#getUniquePropertyLabels()'>getUniquePropertyLabels</a>, <a href='../../carnival/graph/WithPropertyDefsTrait.html#withPropertyDef(carnival.graph.PropertyDefTrait)'>withPropertyDef</a></code></td>
@@ -473,24 +429,6 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                 </a>
                     <h3>Property Detail</h3>
                     
-                        <a name="global"><!-- --></a>
-                        <ul class="blockListLast">
-                            <li class="blockList">
-                                <h4>boolean <strong>global</strong></h4>
-                                <p> if true, the `Base.PX.NAME_SPACE` property for verticies in the graph
- will use a global namespace value instead of one generated from 
- the package name.</p>
-                            </li>
-                        </ul>
-                    
-                        <a name="global"><!-- --></a>
-                        <ul class="blockListLast">
-                            <li class="blockList">
-                                <h4>boolean <strong>global</strong></h4>
-                                <p></p>
-                            </li>
-                        </ul>
-                    
                         <a name="instanceOf"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
@@ -514,16 +452,6 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                                 <h4>java.lang.Boolean <strong>isClass</strong></h4>
                                 <p> Explicitly designate this definition as a class. A singleton vertex will
  automatically be created in the graph.
-</p>
-                            </li>
-                        </ul>
-                    
-                        <a name="propertiesMustBeDefined"><!-- --></a>
-                        <ul class="blockListLast">
-                            <li class="blockList">
-                                <h4>java.lang.Boolean <strong>propertiesMustBeDefined</strong></h4>
-                                <p> if false, verticies created by this definition can contain properties
- that were not defined by this VertexDefTrait.
 </p>
                             </li>
                         </ul>
@@ -611,14 +539,6 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                             </li>
                         </ul>
                     
-                        <a name="getGlobal()"><!-- --></a>
-                        <ul class="blockListLast">
-                            <li class="blockList">
-                                <h4>boolean <strong>getGlobal</strong>()</h4>
-                                <p></p>
-                            </li>
-                        </ul>
-                    
                         <a name="getInstanceOf()"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
@@ -643,26 +563,10 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                             </li>
                         </ul>
                     
-                        <a name="getNameSpace()"><!-- --></a>
-                        <ul class="blockListLast">
-                            <li class="blockList">
-                                <h4>java.lang.String <strong>getNameSpace</strong>()</h4>
-                                <p></p>
-                            </li>
-                        </ul>
-                    
                         <a name="getSuperClass()"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4><a href='../../carnival/graph/VertexDefTrait.html'>VertexDefTrait</a> <strong>getSuperClass</strong>()</h4>
-                                <p></p>
-                            </li>
-                        </ul>
-                    
-                        <a name="getVertexDefinitionClass()"><!-- --></a>
-                        <ul class="blockListLast">
-                            <li class="blockList">
-                                <h4>java.lang.String <strong>getVertexDefinitionClass</strong>()</h4>
                                 <p></p>
                             </li>
                         </ul>
@@ -699,14 +603,6 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                             </li>
                         </ul>
                     
-                        <a name="isGlobal()"><!-- --></a>
-                        <ul class="blockListLast">
-                            <li class="blockList">
-                                <h4>boolean <strong>isGlobal</strong>()</h4>
-                                <p></p>
-                            </li>
-                        </ul>
-                    
                         <a name="isa(org.apache.tinkerpop.gremlin.structure.Edge)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
@@ -719,14 +615,6 @@ extends <a href='../../carnival/graph/WithPropertyDefsTrait.html'>WithPropertyDe
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>boolean <strong>isa</strong>(org.apache.tinkerpop.gremlin.structure.Vertex v)</h4>
-                                <p></p>
-                            </li>
-                        </ul>
-                    
-                        <a name="setGlobal(boolean)"><!-- --></a>
-                        <ul class="blockListLast">
-                            <li class="blockList">
-                                <h4>void <strong>setGlobal</strong>(boolean val)</h4>
                                 <p></p>
                             </li>
                         </ul>

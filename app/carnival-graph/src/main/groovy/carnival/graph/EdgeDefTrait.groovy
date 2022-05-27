@@ -39,9 +39,6 @@ trait EdgeDefTrait extends ElementDefTrait {
     /** */
     List<VertexDefTrait> range = new ArrayList<VertexDefTrait>()
 
-    /** additional constraints, just represent as a string for now */
-    String constraint
-
 
     ///////////////////////////////////////////////////////////////////////////
     // GETTERS / SETTERS

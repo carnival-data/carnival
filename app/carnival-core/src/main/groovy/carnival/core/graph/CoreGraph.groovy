@@ -96,7 +96,7 @@ abstract class CoreGraph implements GremlinTrait {
 
 
 	/** */
-	static protected void combine(RelationshipDefinition relDef, EdgeDefTrait edgeDef) {
+	static protected void combine(EdgeConstraint relDef, EdgeDefTrait edgeDef) {
 		assert relDef
 		assert edgeDef
 
@@ -201,7 +201,7 @@ abstract class CoreGraph implements GremlinTrait {
 		assert g
 		assert packageName
 
-		List<VertexLabelDefinition> newDefinitions = findNewVertexLabelDefinitions(packageName)
+		List<VertexConstraint> newDefinitions = findNewVertexConstraints(packageName)
 
 		withTransactionIfSupported(graph) {
 	        newDefinitions.each { vld ->
@@ -212,7 +212,7 @@ abstract class CoreGraph implements GremlinTrait {
 
 
 	/** */
-	public void addDefinition(Graph graph, GraphTraversalSource g, VertexLabelDefinition vld) {
+	public void addDefinition(Graph graph, GraphTraversalSource g, VertexConstraint vld) {
 		log.trace "addDefinition vld: ${vld.label} $vld"
 
 		log.trace "adding vertex definition to graph schema ${vld.label} ${vld}"
@@ -250,13 +250,13 @@ abstract class CoreGraph implements GremlinTrait {
 
 	/** */
 	public void addVertexDefinitions(Graph graph, GraphTraversalSource g, Class<VertexDefTrait> vdc) {
-		List<VertexLabelDefinition> existingDefinitions = graphSchema.getLabelDefinitions()
+		List<VertexConstraint> existingDefinitions = graphSchema.getVertexConstraints()
 		vdc.values().each { VertexDefTrait vdef ->
 			def found = existingDefinitions.find {
 				it.label == vdef.label && it.nameSpace == vdef.nameSpace
 			}
 			if (!found) {
-				def vld = VertexLabelDefinition.create(vdef)
+				def vld = VertexConstraint.create(vdef)
 				addDefinition(graph, g, vld)
 			}
 		}
@@ -264,36 +264,36 @@ abstract class CoreGraph implements GremlinTrait {
 
 
     /** */
-    public Collection<VertexLabelDefinition> findNewVertexLabelDefinitions(String packageName) {
-		log.info "CoreGraph findNewVertexLabelDefinitions packageName:$packageName"
+    public Collection<VertexConstraint> findNewVertexConstraints(String packageName) {
+		log.info "CoreGraph findNewVertexConstraints packageName:$packageName"
 		assert packageName
 
     	Set<Class<VertexDefTrait>> vertexDefClasses = findVertexDefClases(packageName)
-		if (!vertexDefClasses) return new ArrayList<VertexLabelDefinition>()
+		if (!vertexDefClasses) return new ArrayList<VertexConstraint>()
 
-		findNewVertexLabelDefinitions(vertexDefClasses)
+		findNewVertexConstraints(vertexDefClasses)
 	}
 
 
     /** */
-    public Collection<VertexLabelDefinition> findNewVertexLabelDefinitions(Set<Class<VertexDefTrait>> vertexDefClasses) {
+    public Collection<VertexConstraint> findNewVertexConstraints(Set<Class<VertexDefTrait>> vertexDefClasses) {
 		assert vertexDefClasses
     	
-		List<VertexLabelDefinition> existingDefinitions = graphSchema.getLabelDefinitions()
-		List<VertexLabelDefinition> newDefinitions = new ArrayList<VertexLabelDefinition>()
+		List<VertexConstraint> existingDefinitions = graphSchema.getVertexConstraints()
+		List<VertexConstraint> newDefinitions = new ArrayList<VertexConstraint>()
 
         vertexDefClasses.each { Class vdc ->
-        	log.trace "findNewVertexLabelDefinitions vdc: $vdc"
+        	log.trace "findNewVertexConstraints vdc: $vdc"
 
             vdc.values().each { VertexDefTrait vdef ->
-            	log.trace "findNewVertexLabelDefinitions vdef: $vdef"
+            	log.trace "findNewVertexConstraints vdef: $vdef"
 
             	// check if already defined
             	def found = existingDefinitions.find {
             		it.label == vdef.label && it.nameSpace == vdef.nameSpace
             	}
             	if (!found) {
-					def vld = VertexLabelDefinition.create(vdef)
+					def vld = VertexConstraint.create(vdef)
 					log.trace "found new vertex definition ${vld.label} ${vld}"
 	            	newDefinitions << vld
             	}
@@ -324,23 +324,23 @@ abstract class CoreGraph implements GremlinTrait {
 	// GRAPH MODEL - EDGES
 	///////////////////////////////////////////////////////////////////////////
 
-	public void addDefinition(Graph graph, GraphTraversalSource g, RelationshipDefinition relDef) {
+	public void addDefinition(Graph graph, GraphTraversalSource g, EdgeConstraint relDef) {
 		log.trace "addDefinition relDef: ${relDef.label} $relDef"
 
 		log.trace "adding edge definition to graph schema ${relDef.label} ${relDef}"
-		graphSchema.dynamicRelationshipDefinitions << relDef
+		graphSchema.dynamicEdgeConstraints << relDef
 	}
 
 
 	/** */
 	public void addEdgeDefinitions(Graph graph, GraphTraversalSource g, Class<EdgeDefTrait> edc) {
-		List<RelationshipDefinition> existingDefinitions = graphSchema.getRelationshipDefinitions()
+		List<EdgeConstraint> existingDefinitions = graphSchema.getEdgeConstraints()
 		edc.values().each { EdgeDefTrait edef ->
 			def found = existingDefinitions.find {
 				it.label == edef.label && it.nameSpace == edef.nameSpace
 			}
 			if (!found) {
-				def relDef = RelationshipDefinition.create(edef)
+				def relDef = EdgeConstraint.create(edef)
 				addDefinition(graph, g, relDef)
 			}
 		}
@@ -353,7 +353,7 @@ abstract class CoreGraph implements GremlinTrait {
 		assert g
 		assert packageName
 
-		List<RelationshipDefinition> newDefinitions = findNewRelationshipDefinitions(packageName)
+		List<EdgeConstraint> newDefinitions = findNewEdgeConstraints(packageName)
 
 		withTransactionIfSupported(graph) {
 	        newDefinitions.each { eld ->
@@ -364,36 +364,36 @@ abstract class CoreGraph implements GremlinTrait {
 
 
     /** */
-    public Collection<RelationshipDefinition> findNewRelationshipDefinitions(String packageName) {
-		log.info "CoreGraph findNewRelationshipDefinitions packageName:$packageName"
+    public Collection<EdgeConstraint> findNewEdgeConstraints(String packageName) {
+		log.info "CoreGraph findNewEdgeConstraints packageName:$packageName"
 		assert packageName
     	
 		Set<Class<EdgeDefTrait>> defClasses = findEdgeDefClases(packageName)
-		if (!defClasses) return new ArrayList<RelationshipDefinition>()
+		if (!defClasses) return new ArrayList<EdgeConstraint>()
 		
-		findNewRelationshipDefinitions(defClasses)
+		findNewEdgeConstraints(defClasses)
 	}
 
 
 	/** */
-    public Collection<RelationshipDefinition> findNewRelationshipDefinitions(Set<Class<EdgeDefTrait>> edgeDefClasses) {
+    public Collection<EdgeConstraint> findNewEdgeConstraints(Set<Class<EdgeDefTrait>> edgeDefClasses) {
 		assert edgeDefClasses
     	
-		List<RelationshipDefinition> existingDefinitions = graphSchema.getRelationshipDefinitions()
-		List<RelationshipDefinition> newDefinitions = new ArrayList<RelationshipDefinition>()
+		List<EdgeConstraint> existingDefinitions = graphSchema.getEdgeConstraints()
+		List<EdgeConstraint> newDefinitions = new ArrayList<EdgeConstraint>()
 
         edgeDefClasses.each { Class edc ->
-        	log.trace "findNewRelationshipDefinitions edc: $edc"
+        	log.trace "findNewEdgeConstraints edc: $edc"
 
             edc.values().each { EdgeDefTrait edef ->
-            	log.trace "findNewRelationshipDefinitions edef: $edef"
+            	log.trace "findNewEdgeConstraints edef: $edef"
 
             	// check if already defined
             	def found = existingDefinitions.find {
             		it.label == edef.label && it.nameSpace == edef.nameSpace
             	}
             	if (!found) {
-					def relDef = RelationshipDefinition.create(edef)
+					def relDef = EdgeConstraint.create(edef)
 					log.trace "found new relationship definition ${relDef.label} ${relDef}"
 	            	newDefinitions << relDef
             	}

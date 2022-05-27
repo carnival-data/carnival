@@ -57,8 +57,8 @@ public class GremlinGraphValidator implements GraphValidator {
 		List<GraphValidationError> errors = new ArrayList<GraphValidationError>()
 
 		// check all property existence constraints
-		def filteredVertexLabelDefinitions = filteredModels(graphSchema.labelDefinitions.toSet())
-		filteredVertexLabelDefinitions.each { labelDef ->
+		def filteredVertexConstraints = filteredModels(graphSchema.vertexConstraints.toSet())
+		filteredVertexConstraints.each { labelDef ->
 			labelDef.requiredPropertyKeys.each { property ->
 				def traversal = g.V()
 					.hasLabel(labelDef.label)
@@ -108,8 +108,8 @@ public class GremlinGraphValidator implements GraphValidator {
 		}
 
 		// check relationship domain and range constraints
-		//def relationshipDefsByLabel = modelsByLabel(graphSchema.relationshipDefinitions)
-		def filteredRelationshipModels = filteredModels(graphSchema.relationshipDefinitions.toSet())
+		//def relationshipDefsByLabel = modelsByLabel(graphSchema.edgeConstraints)
+		def filteredRelationshipModels = filteredModels(graphSchema.edgeConstraints.toSet())
 		filteredRelationshipModels.each { edgeDef ->
 			edges = []
 			def ns = edgeDef.nameSpace
@@ -188,7 +188,7 @@ public class GremlinGraphValidator implements GraphValidator {
 		
 		def unmodeledRelTypes = unmodeledElements(
 			g.E(), 
-			graphSchema.relationshipDefinitions
+			graphSchema.edgeConstraints
 		)
 
 		if (unmodeledRelTypes) warnings << "Unmodeled relationshipTypes: $unmodeledRelTypes"
@@ -210,7 +210,7 @@ public class GremlinGraphValidator implements GraphValidator {
 		// that key is still returned.  This causes tests to fail, so commenting out for now.
 
 		def modeledPropertyKeys = []
-		labelDefinitions.each {modeledPropertyKeys.addAll(it.properties*.name ?: [])}
+		vertexConstraints.each {modeledPropertyKeys.addAll(it.properties*.name ?: [])}
 		def dbPropertyKeys = graph.cypher("CALL db.propertyKeys()").toList()*.propertyKey
 		def unmodeledPropertyKeys = dbPropertyKeys - modeledPropertyKeys
 		unmodeledPropertyKeys = unmodeledPropertyKeys - ["~gremlin.neo4j.multiProperties", "~gremlin.neo4j.metaProperties"] // default properties
@@ -231,7 +231,7 @@ public class GremlinGraphValidator implements GraphValidator {
 
 		def unmodeledVertices = unmodeledElements(
 			g.V(), 
-			graphSchema.labelDefinitions
+			graphSchema.vertexConstraints
 		)
 
 		if (unmodeledVertices) warnings << "Unmodeled vertex labels: $unmodeledVertices"
@@ -244,24 +244,24 @@ public class GremlinGraphValidator implements GraphValidator {
 	///////////////////////////////////////////////////////////////////////////
 
 	/** */
-	Set<String> unmodeledElements(Traversal traversal, Collection<ElementDef> allModels) {
+	Set<String> unmodeledElements(Traversal traversal, Collection<ElementConstraint> allModels) {
 
 		def modelsByLabel = modelsByLabel(allModels)
 		log.debug "modelsByLabel: $modelsByLabel"
 
-		Set<DefaultElementDef> dbElementDefs = new HashSet<DefaultElementDef>()
+		Set<DefaultElementConstraint> dbElementConstraints = new HashSet<DefaultElementConstraint>()
 		traversal.each { e ->
 			def lbl = e.label()
 			def ns = e.property(Base.PX.NAME_SPACE.label).orElse(Base.GLOBAL_NAME_SPACE)
-			dbElementDefs << new DefaultElementDef(label:lbl, nameSpace:ns)
+			dbElementConstraints << new DefaultElementConstraint(label:lbl, nameSpace:ns)
 		}
 
-		//Set<DefaultElementDef> dbElementDefs = new HashSet<DefaultElementDef>()
-		//dbElementDefs.addAll(dbElementDefMap.values())
-		log.trace "dbElementDefs: ${dbElementDefs?.size()} ${dbElementDefs?.take(100)}"
+		//Set<DefaultElementConstraint> dbElementConstraints = new HashSet<DefaultElementConstraint>()
+		//dbElementConstraints.addAll(dbElementConstraintMap.values())
+		log.trace "dbElementConstraints: ${dbElementConstraints?.size()} ${dbElementConstraints?.take(100)}"
 
 		Set<String> unmodeledElements = new HashSet<String>()
-		dbElementDefs.each { dbr ->
+		dbElementConstraints.each { dbr ->
 			if (!modelsByLabel.containsKey(dbr.label)) {
 				unmodeledElements << "${dbr.nameSpace}.${dbr.label}"
 				return
@@ -279,9 +279,9 @@ public class GremlinGraphValidator implements GraphValidator {
 	}
 
 	/** */
-	Map<String,Set<ElementDef>> modelsByLabel(Collection<ElementDef> allElementDefs) {
-		Map<String,List<ElementDef>> mds = new HashMap<String,List<ElementDef>>()
-		allElementDefs.each { ElementDef edef ->
+	Map<String,Set<ElementConstraint>> modelsByLabel(Collection<ElementConstraint> allElementConstraints) {
+		Map<String,List<ElementConstraint>> mds = new HashMap<String,List<ElementConstraint>>()
+		allElementConstraints.each { ElementConstraint edef ->
 			if (!mds.containsKey(edef.label)) {
 				mds.put(edef.label, [edef])
 				return
@@ -294,15 +294,15 @@ public class GremlinGraphValidator implements GraphValidator {
 
 
 	/** */
-	Set<ElementDef> filteredModels(Set<ElementDef> allModels) {
+	Set<ElementConstraint> filteredModels(Set<ElementConstraint> allModels) {
 		def modelsByLabel = modelsByLabel(allModels)
 		filteredModels(modelsByLabel)
 	}
 
 
 	/** */
-	Set<ElementDef> filteredModels(Map<String,Set<ElementDef>> modelsByLabel) {
-		List<ElementDef> filteredModels = new ArrayList<ElementDef>()
+	Set<ElementConstraint> filteredModels(Map<String,Set<ElementConstraint>> modelsByLabel) {
+		List<ElementConstraint> filteredModels = new ArrayList<ElementConstraint>()
 		modelsByLabel.each { lbl, edefs ->
 			if (edefs.size() == 1) {
 				filteredModels << edefs.first()

@@ -251,7 +251,7 @@ class DefinitionTransformationPost extends AbstractASTTransformation {
 
 /**
 @GroovyASTTransformation(phase = CompilePhase.CLASS_GENERATION)
-class GlobalElementDefinitionTransformation extends AbstractASTTransformation {
+class GlobalElementConstraintinitionTransformation extends AbstractASTTransformation {
 
     @Override
     void visit(ASTNode[] nodes, SourceUnit source) {

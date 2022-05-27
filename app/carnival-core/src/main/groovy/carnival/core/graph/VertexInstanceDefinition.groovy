@@ -32,31 +32,48 @@ import carnival.graph.VertexBuilder
 
 
 
-/** */
-interface GraphSchema {
-
-	/** 
-	 * Controlled instances are singleton vertices that are governed by rules
-	 * of cardinality and required properties.  There can be only a single
-	 * instance of a vertex with the specific values for the defined required 
-	 * properties.  For example, if there is a controlled instance with label
-	 * IdentifierClass and required boolean property hasScope, there can be
-	 * only a single vertex (IdentifierClass {hasScope:true}) and a single
-	 * vertex (IdentifierClass {hasScope:false}).
-	 *
-	 *
-	 */
-	Collection<VertexBuilder> getVertexBuilders()
-
+/**
+ * Defined a single vertex instance.
+ * For example, the definition of a vertex that represents the
+ * class of EMPI identifiers may be defined:
+ *   VertexInstanceDefinition {
+ *     label: 'IdentifierClass'
+ *     properties:[name:'empi']
+ *   }
+ * 
+ */
+@ToString
+class VertexInstanceDefinition {
 
 	/** */
-	Collection<VertexConstraint> getVertexConstraints()
-
+	String label
 
 	/** */
-	Collection<EdgeConstraint> getEdgeConstraints()
+	Map<String,Object> properties
+
+	/** */
+	public VertexInstanceDefinition(Map m) {
+		assert m.label != null
+		this.label = m.label
+		if (m.properties) this.properties = m.properties
+	}
+
+	/** */
+	public VertexInstanceDefinition(String label, Map<String,Object> properties = [:]) {
+		assert label != null
+		this.label = label
+		this.properties = properties
+	}
+
+	/** */
+	public VertexInstanceDefinition(VertexDefTrait labelDef, Map<String,Object> properties = [:]) {
+		assert labelDef != null
+		this.label = labelDef.label
+		this.properties = properties
+	}
 
 }
+
 
 
 

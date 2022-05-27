@@ -140,7 +140,7 @@ class CoreGraphNeo4j extends CoreGraph {
 
 		// create uniqueness constraints
 		withTransaction(graph) {
-	    	graphSchema.labelDefinitions.each { labelDef ->
+	    	graphSchema.vertexConstraints.each { labelDef ->
 					labelDef.uniquePropertyKeys.each { property ->
 						log.trace "attempting to create constraint: ${labelDef.label}.${property}"
 	    			graph.cypher("CREATE CONSTRAINT ON (class:${labelDef.label}) ASSERT class.${property} IS UNIQUE")
@@ -151,7 +151,7 @@ class CoreGraphNeo4j extends CoreGraph {
 
         // create indexes
         withTransaction(graph) {
-	    	graphSchema.labelDefinitions.each { labelDef ->
+	    	graphSchema.vertexConstraints.each { labelDef ->
 					labelDef.indexedPropertyKeys.each { property ->
 	    			graph.cypher("CREATE INDEX ON :${labelDef.label}(${property})")
 	    			log.trace "graph initilization: created index on :${labelDef.label}(${property}"

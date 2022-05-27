@@ -70,18 +70,18 @@ class CoreGraphSchema implements GraphSchema {
 	///////////////////////////////////////////////////////////////////////////
 
 	/* all label defs */
-	public List<VertexLabelDefinition> getLabelDefinitions() {
-		def ldefs = new ArrayList<VertexLabelDefinition>()
+	public List<VertexConstraint> getVertexConstraints() {
+		def ldefs = new ArrayList<VertexConstraint>()
 		ldefs.addAll(staticLabelDefinitions)
 		ldefs.addAll(dynamicLabelDefinitions)
 		return ldefs
 	}
 
 	/** dynamic label defs */
-	Set<VertexLabelDefinition> dynamicLabelDefinitions = new HashSet<VertexLabelDefinition>()
+	Set<VertexConstraint> dynamicLabelDefinitions = new HashSet<VertexConstraint>()
 
 	/** static label definitions */
-	final List<VertexLabelDefinition> staticLabelDefinitions = []
+	final List<VertexConstraint> staticLabelDefinitions = []
 
 
 	///////////////////////////////////////////////////////////////////////////
@@ -89,19 +89,19 @@ class CoreGraphSchema implements GraphSchema {
 	///////////////////////////////////////////////////////////////////////////
 
 	/* all label defs */
-	public List<RelationshipDefinition> getRelationshipDefinitions() {
-		def defs = new ArrayList<RelationshipDefinition>()
-		defs.addAll(staticRelationshipDefinitions)
-		defs.addAll(dynamicRelationshipDefinitions)
+	public List<EdgeConstraint> getEdgeConstraints() {
+		def defs = new ArrayList<EdgeConstraint>()
+		defs.addAll(staticEdgeConstraints)
+		defs.addAll(dynamicEdgeConstraints)
 		return defs
 	}
 	
 
 	/** dynamic label defs */
-	Set<RelationshipDefinition> dynamicRelationshipDefinitions = new HashSet<RelationshipDefinition>()
+	Set<EdgeConstraint> dynamicEdgeConstraints = new HashSet<EdgeConstraint>()
 
 
 	/** */
-	List<RelationshipDefinition> staticRelationshipDefinitions = []
+	List<EdgeConstraint> staticEdgeConstraints = []
 
 }

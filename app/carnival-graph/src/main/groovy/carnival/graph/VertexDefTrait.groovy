@@ -161,15 +161,9 @@ trait VertexDefTrait extends ElementDefTrait {
 
     /** */
     public VertexBuilder instance() {
-        controlledInstance()
-    }
-
-
-    /** */
-    public VertexBuilder controlledInstance() {
-        def ci = new VertexBuilder(this)
-        ci.propertiesMustBeDefined = this.propertiesMustBeDefined
-        ci
+        def vb = new VertexBuilder(this)
+        vb.propertiesMustBeDefined = this.propertiesMustBeDefined
+        vb
     }
 
 

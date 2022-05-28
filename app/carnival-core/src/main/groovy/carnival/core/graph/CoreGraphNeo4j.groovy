@@ -54,7 +54,7 @@ class CoreGraphNeo4j extends CoreGraph {
     	def graph = openGremlinGraph()
 
 		def graphSchema
-        if (args.controlledInstances) graphSchema = new CoreGraphSchema(args.controlledInstances)
+        if (args.vertexBuilders) graphSchema = new CoreGraphSchema(args.vertexBuilders)
         else graphSchema = new CoreGraphSchema()
 
         def graphValidator = new CoreGraphValidator()
@@ -73,13 +73,6 @@ class CoreGraphNeo4j extends CoreGraph {
 		return coreGraph
     }
 
-
-    /** */
-    public static CoreGraphNeo4j create(Collection<VertexInstanceDefinition> controlledInstances) {
-    	assert controlledInstances
-    	assert controlledInstances.size() > 0
-    	create(controlledInstances:controlledInstances)
-    }
 
 
 

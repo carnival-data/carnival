@@ -45,63 +45,50 @@ class CoreGraphSchema implements GraphSchema {
 	public CoreGraphSchema() { }
 
 	/** */
-	public CoreGraphSchema(Collection<VertexBuilder> controlledInstances) {
-		assert controlledInstances
-		assert controlledInstances.size() > 0
-		this.controlledInstances = controlledInstances
+	public CoreGraphSchema(Collection<VertexBuilder> vertexBuilders) {
+		assert vertexBuilders
+		assert vertexBuilders.size() > 0
+		this.vertexBuilders.addAll(vertexBuilders)
 	}
 
 
 	///////////////////////////////////////////////////////////////////////////
-	// CONTROLLED INSTANCES
+	// SINGLETON VERTEX BUILDERS
 	///////////////////////////////////////////////////////////////////////////
 
 	/** */
-	private List<VertexBuilder> controlledInstances = new ArrayList<VertexBuilder>()
+	private Set<VertexBuilder> vertexBuilders = new HashSet<VertexBuilder>()
 
 	/** */
-	public List<VertexBuilder> getVertexBuilders() {
-		return controlledInstances
+	public Set<VertexBuilder> getVertexBuilders() {
+		return vertexBuilders
 	}
 	
 
 	///////////////////////////////////////////////////////////////////////////
-	// LABEL DEFINITIONS
+	// VERTEX CONSTRAINTS
 	///////////////////////////////////////////////////////////////////////////
 
-	/* all label defs */
-	public List<VertexConstraint> getVertexConstraints() {
-		def ldefs = new ArrayList<VertexConstraint>()
-		ldefs.addAll(staticLabelDefinitions)
-		ldefs.addAll(dynamicLabelDefinitions)
-		return ldefs
+	/** vertex constraints */
+	private Set<VertexConstraint> vertexConstraints = new HashSet<VertexConstraint>()
+
+	/* get vertex constraints */
+	public Set<VertexConstraint> getVertexConstraints() {
+		return vertexConstraints
 	}
 
-	/** dynamic label defs */
-	Set<VertexConstraint> dynamicLabelDefinitions = new HashSet<VertexConstraint>()
-
-	/** static label definitions */
-	final List<VertexConstraint> staticLabelDefinitions = []
-
 
 	///////////////////////////////////////////////////////////////////////////
-	// RELATIONSHIP DEFINITIONS
+	// EDGE CONSTRAINTS
 	///////////////////////////////////////////////////////////////////////////
 
-	/* all label defs */
-	public List<EdgeConstraint> getEdgeConstraints() {
-		def defs = new ArrayList<EdgeConstraint>()
-		defs.addAll(staticEdgeConstraints)
-		defs.addAll(dynamicEdgeConstraints)
-		return defs
+	/** edge constraints */
+	private Set<EdgeConstraint> edgeConstraints = new HashSet<EdgeConstraint>()
+
+	/* get edge constraints */
+	public Set<EdgeConstraint> getEdgeConstraints() {
+		return edgeConstraints
 	}
-	
 
-	/** dynamic label defs */
-	Set<EdgeConstraint> dynamicEdgeConstraints = new HashSet<EdgeConstraint>()
-
-
-	/** */
-	List<EdgeConstraint> staticEdgeConstraints = []
 
 }

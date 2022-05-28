@@ -43,7 +43,7 @@ public class GremlinGraphValidator implements GraphValidator {
 	/**
 	 * Check property existence constraints
 	 * Check relationship constraints
-	 * Check that controlledInstances exist only once
+	 * Check that singleton vertices exist only once
 	 * Check that the combinaiton of identifier.value/identifierClass/IdentifierScope is unique
 	 */
 	public List<GraphValidationError> checkConstraints(GraphTraversalSource g, GraphSchema graphSchema) {
@@ -72,8 +72,8 @@ public class GremlinGraphValidator implements GraphValidator {
     		}
     	}
 
-		// check that controlledInstances exist only once
-		graphSchema.controlledInstances.each { instance ->
+		// check that singleton vertices exist only once
+		graphSchema.vertexBuilders.each { instance ->
 
 	        def lbl = instance.vertexDef.label
 	        //log.debug "GraphValidator lbl: $lbl"

@@ -48,9 +48,9 @@ class DataSetDescriptorGraphSpec extends Specification {
     @Shared graph
     @Shared g
     
-    @Shared controlledInstances = [
-        Core.VX.IDENTIFIER.controlledInstance().withProperty(Core.PX.VALUE, "1"),
-        Core.VX.IDENTIFIER.controlledInstance().withProperty(Core.PX.VALUE, "2"),
+    @Shared vertexBuilders = [
+        Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, "1"),
+        Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, "2"),
     ]
 
 
@@ -61,7 +61,7 @@ class DataSetDescriptorGraphSpec extends Specification {
 
     def setupSpec() {
         CoreGraphNeo4j.clearGraph()
-        appGraph = CoreGraphNeo4j.create(controlledInstances:controlledInstances)
+        appGraph = CoreGraphNeo4j.create(vertexBuilders:vertexBuilders)
         graph = appGraph.graph
     } 
 

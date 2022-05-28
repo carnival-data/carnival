@@ -30,7 +30,7 @@ class DynamicVertexDef implements VertexDefTrait {
      */
     static public DynamicVertexDef singletonFromScreamingSnakeCase(Graph graph, GraphTraversalSource g, String name) {
         def dvf = new DynamicVertexDef(name)
-        if (dvf.isClass()) dvf.vertex = dvf.controlledInstance().vertex(graph, g)
+        if (dvf.isClass()) dvf.vertex = dvf.instance().vertex(graph, g)
         return dvf
     }
 

@@ -201,12 +201,15 @@ abstract class CoreGraph implements GremlinTrait {
 		assert g
 		assert packageName
 
-		List<VertexConstraint> newDefinitions = findNewVertexConstraints(packageName)
+		Set<VertexConstraint> newDefinitions = findNewVertexConstraints(packageName)
 
 		withTransactionIfSupported(graph) {
 	        newDefinitions.each { vld ->
 				addDefinition(graph, g, vld)
 	        }
+	        newDefinitions.each { vld ->
+				connectClassVertices(graph, g, vld)
+			}
 		}
     }
 
@@ -216,27 +219,32 @@ abstract class CoreGraph implements GremlinTrait {
 		log.trace "addDefinition vld: ${vld.label} $vld"
 
 		log.trace "adding vertex definition to graph schema ${vld.label} ${vld}"
-		graphSchema.dynamicLabelDefinitions << vld
+		graphSchema.vertexConstraints << vld
 
 		// add the controlled instance, which can only be done if there
 		// are no required properties
 		def vdef = vld.vertexDef
 		if (vdef.isClass() && vdef.requiredProperties.size() == 0) {
-			def ci = graphSchema.controlledInstances.find {
+			def ci = graphSchema.vertexBuilders.find {
 				it instanceof VertexDefTrait && it.vertexDef == vdef
 			}
 
 			if (!ci) {
-				ci = vdef.controlledInstance()
+				ci = vdef.instance()
 				log.trace "created controlled instance ${ci.vertexDef.label} ${ci}"
-				graphSchema.controlledInstances << ci
+				graphSchema.vertexBuilders << ci
 			}
 			
 			vdef.vertex = ci.vertex(graph, g)
 			log.trace "created controlled instance vertex ${vdef.label} ${vdef.nameSpace} ${vdef.vertex}"
 		}
+	}
 
-		// attempt to set super/sub class relationship
+
+	/** */
+	public void connectClassVertices(Graph graph, GraphTraversalSource g, VertexConstraint vld) {
+		def vdef = vld.vertexDef
+
 		if (vdef.superClass) {
 			log.trace "set superclass to ${vdef.superClass}"
 			assert vdef.isClass()
@@ -248,9 +256,10 @@ abstract class CoreGraph implements GremlinTrait {
 	}
 
 
+
 	/** */
 	public void addVertexDefinitions(Graph graph, GraphTraversalSource g, Class<VertexDefTrait> vdc) {
-		List<VertexConstraint> existingDefinitions = graphSchema.getVertexConstraints()
+		Set<VertexConstraint> existingDefinitions = graphSchema.getVertexConstraints()
 		vdc.values().each { VertexDefTrait vdef ->
 			def found = existingDefinitions.find {
 				it.label == vdef.label && it.nameSpace == vdef.nameSpace
@@ -269,7 +278,7 @@ abstract class CoreGraph implements GremlinTrait {
 		assert packageName
 
     	Set<Class<VertexDefTrait>> vertexDefClasses = findVertexDefClases(packageName)
-		if (!vertexDefClasses) return new ArrayList<VertexConstraint>()
+		if (!vertexDefClasses) return new HashSet<VertexConstraint>()
 
 		findNewVertexConstraints(vertexDefClasses)
 	}
@@ -279,8 +288,8 @@ abstract class CoreGraph implements GremlinTrait {
     public Collection<VertexConstraint> findNewVertexConstraints(Set<Class<VertexDefTrait>> vertexDefClasses) {
 		assert vertexDefClasses
     	
-		List<VertexConstraint> existingDefinitions = graphSchema.getVertexConstraints()
-		List<VertexConstraint> newDefinitions = new ArrayList<VertexConstraint>()
+		Set<VertexConstraint> existingDefinitions = graphSchema.getVertexConstraints()
+		Set<VertexConstraint> newDefinitions = new HashSet<VertexConstraint>()
 
         vertexDefClasses.each { Class vdc ->
         	log.trace "findNewVertexConstraints vdc: $vdc"
@@ -295,7 +304,7 @@ abstract class CoreGraph implements GremlinTrait {
             	if (!found) {
 					def vld = VertexConstraint.create(vdef)
 					log.trace "found new vertex definition ${vld.label} ${vld}"
-	            	newDefinitions << vld
+	            	newDefinitions.add(vld)
             	}
             }
         }
@@ -328,13 +337,13 @@ abstract class CoreGraph implements GremlinTrait {
 		log.trace "addDefinition relDef: ${relDef.label} $relDef"
 
 		log.trace "adding edge definition to graph schema ${relDef.label} ${relDef}"
-		graphSchema.dynamicEdgeConstraints << relDef
+		graphSchema.edgeConstraints.add(relDef)
 	}
 
 
 	/** */
 	public void addEdgeDefinitions(Graph graph, GraphTraversalSource g, Class<EdgeDefTrait> edc) {
-		List<EdgeConstraint> existingDefinitions = graphSchema.getEdgeConstraints()
+		Set<EdgeConstraint> existingDefinitions = graphSchema.getEdgeConstraints()
 		edc.values().each { EdgeDefTrait edef ->
 			def found = existingDefinitions.find {
 				it.label == edef.label && it.nameSpace == edef.nameSpace
@@ -353,7 +362,7 @@ abstract class CoreGraph implements GremlinTrait {
 		assert g
 		assert packageName
 
-		List<EdgeConstraint> newDefinitions = findNewEdgeConstraints(packageName)
+		Set<EdgeConstraint> newDefinitions = findNewEdgeConstraints(packageName)
 
 		withTransactionIfSupported(graph) {
 	        newDefinitions.each { eld ->
@@ -369,7 +378,7 @@ abstract class CoreGraph implements GremlinTrait {
 		assert packageName
     	
 		Set<Class<EdgeDefTrait>> defClasses = findEdgeDefClases(packageName)
-		if (!defClasses) return new ArrayList<EdgeConstraint>()
+		if (!defClasses) return new HashSet<EdgeConstraint>()
 		
 		findNewEdgeConstraints(defClasses)
 	}
@@ -379,8 +388,8 @@ abstract class CoreGraph implements GremlinTrait {
     public Collection<EdgeConstraint> findNewEdgeConstraints(Set<Class<EdgeDefTrait>> edgeDefClasses) {
 		assert edgeDefClasses
     	
-		List<EdgeConstraint> existingDefinitions = graphSchema.getEdgeConstraints()
-		List<EdgeConstraint> newDefinitions = new ArrayList<EdgeConstraint>()
+		Set<EdgeConstraint> existingDefinitions = graphSchema.getEdgeConstraints()
+		Set<EdgeConstraint> newDefinitions = new HashSet<EdgeConstraint>()
 
         edgeDefClasses.each { Class edc ->
         	log.trace "findNewEdgeConstraints edc: $edc"
@@ -395,7 +404,7 @@ abstract class CoreGraph implements GremlinTrait {
             	if (!found) {
 					def relDef = EdgeConstraint.create(edef)
 					log.trace "found new relationship definition ${relDef.label} ${relDef}"
-	            	newDefinitions << relDef
+	            	newDefinitions.add(relDef)
             	}
             }
         }
@@ -426,15 +435,15 @@ abstract class CoreGraph implements GremlinTrait {
 
 	/** */
 	public List<Vertex> createVertexBuilders(Graph graph, GraphTraversalSource g) {
-		log.trace "createVertexBuilders controlledInstances:${graphSchema.controlledInstances}"
+		log.trace "createVertexBuilders vertexBuilders:${graphSchema.vertexBuilders}"
 
-		def verts = []
+		List<Vertex> verts = new ArrayList<Vertex>()
 		
 		withTransactionIfSupported(graph) {
-			graphSchema.controlledInstances.each { ci ->
+			graphSchema.vertexBuilders.each { ci ->
 				log.trace "creating controlled instance ${ci.class.simpleName} $ci"
-				if (ci instanceof VertexBuilder) verts << ci.vertex(graph, g)
-				else verts << createVertexBuilderVertex(graph, g, ci)
+				assert ci instanceof VertexBuilder
+				verts.add(ci.vertex(graph, g))
 			}
 		}
 
@@ -442,25 +451,6 @@ abstract class CoreGraph implements GremlinTrait {
 	}
 
 
-	/** */
-	public void createVertexBuilderVertex(Graph graph, GraphTraversalSource g, VertexInstanceDefinition instance) {
-		log.trace "controlled instance: $instance"
-
-		def trv = g.V().hasLabel(instance.label)
-		instance.properties.each {k, v -> trv.has(k, v)}
-		def verts = trv.toList()
-		def vert = verts.size() > 0 ? verts[0] : null
-
-		if (vert) {
-			log.trace "graph initilization: vertex already exists ${vert} ${vert.label()} ${vert.keys()}"
-		}
-		else {
-			vert = graph.addVertex(T.label, instance.label)
-			instance.properties.each {k, v -> vert.property(k, v)}
-
-			log.trace "graph initilization: created vertex ${vert} ${vert.label()} ${vert.keys()}"
-		}
-	}
 
 	///////////////////////////////////////////////////////////////////////////
 	// GRAPH VALIDATION

@@ -27,9 +27,9 @@ class CoreGraphGraphModelExtensionSpec extends Specification {
     
     @Shared coreGraph
     
-    @Shared controlledInstances = [
-        Core.VX.IDENTIFIER.controlledInstance().withProperty(Core.PX.VALUE, "1"),
-        Core.VX.IDENTIFIER.controlledInstance().withProperty(Core.PX.VALUE, "2"),
+    @Shared vertexBuilders = [
+        Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, "1"),
+        Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, "2"),
     ]
 
 
@@ -44,7 +44,7 @@ class CoreGraphGraphModelExtensionSpec extends Specification {
 
     def setupSpec() {
         CoreGraphNeo4j.clearGraph()
-        coreGraph = CoreGraphNeo4j.create(controlledInstances:controlledInstances)
+        coreGraph = CoreGraphNeo4j.create(vertexBuilders:vertexBuilders)
     } 
 
 

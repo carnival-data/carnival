@@ -351,8 +351,8 @@ class GremlinGraphValidatorSpec extends Specification {
         graphValidator.checkConstraints(g, graphSchema).size() == 0
 
         when:
-        v1 = VX1.GGV_THING.controlledInstance().vertex(graph, g)
-        v2 = VX1.GGV_THING.controlledInstance().vertex(graph, g)
+        v1 = VX1.GGV_THING.instance().vertex(graph, g)
+        v2 = VX1.GGV_THING.instance().vertex(graph, g)
         e1 = EX1.GGV_RELATION.setRelationship(g, v1, v2)
 
         then:
@@ -378,13 +378,13 @@ class GremlinGraphValidatorSpec extends Specification {
         graphValidator.checkConstraints(g, graphSchema).size() == 0
 
         when:
-        VX1.GGV_THING.controlledInstance().vertex(graph, g)
+        VX1.GGV_THING.instance().vertex(graph, g)
 
         then:
         graphValidator.checkConstraints(g, graphSchema).size() == 0
 
         when:
-        def lv = VX2.GGV_THING.controlledInstance()
+        def lv = VX2.GGV_THING.instance()
             .withProperty(Core.PX.NAME, 'some name')
             .vertex(graph, g)
 

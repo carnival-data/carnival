@@ -41,12 +41,11 @@ class CoreGraphTinker extends CoreGraph {
     /** */
     public static CoreGraphTinker create(Map args = [:]) {
 		log.info "CoreGraphTinker create args:$args"
-		log.info "CoreGraphTinker create controlledInstances(${args.controlledInstances?.size()}): ${args.controlledInstances}"
 
     	def graph = TinkerGraph.open()
 
 		def graphSchema
-        if (args.controlledInstances) graphSchema = new CoreGraphSchema(args.controlledInstances)
+        if (args.vertexBuilders) graphSchema = new CoreGraphSchema(args.vertexBuilders)
         else graphSchema = new CoreGraphSchema()
 
         def graphValidator = new CoreGraphValidator()
@@ -64,14 +63,6 @@ class CoreGraphTinker extends CoreGraph {
 		return coreGraph
     }
 
-
-    /** */
-    public static CoreGraphTinker create(Collection<VertexInstanceDefinition> controlledInstances) {
-    	log.ingo "CoreGraphTinker create controlledInstances(${controlledInstances?.size()}):$controlledInstances"
-		assert controlledInstances
-    	assert controlledInstances.size() > 0
-    	create(controlledInstances:controlledInstances)
-    }
 
 
 

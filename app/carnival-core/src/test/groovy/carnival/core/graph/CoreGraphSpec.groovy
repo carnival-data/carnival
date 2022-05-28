@@ -35,9 +35,9 @@ class CoreGraphSpec extends Specification {
     
     @Shared coreGraph
     
-    @Shared controlledInstances = [
-        Core.VX.IDENTIFIER.controlledInstance().withProperty(Core.PX.VALUE, "1"),
-        Core.VX.IDENTIFIER.controlledInstance().withProperty(Core.PX.VALUE, "2"),
+    @Shared vertexBuilders = [
+        Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, "1"),
+        Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, "2"),
     ]
 
 
@@ -47,12 +47,12 @@ class CoreGraphSpec extends Specification {
     
 
     def setup() {
-        coreGraph = CoreGraphTinker.create(controlledInstances:controlledInstances)
+        coreGraph = CoreGraphTinker.create(vertexBuilders:vertexBuilders)
     }
 
     def setupSpec() {
         //CoreGraphNeo4j.clearGraph()
-        //coreGraph = CoreGraphNeo4j.create(controlledInstances:controlledInstances)
+        //coreGraph = CoreGraphNeo4j.create(vertexBuilders:vertexBuilders)
     } 
 
 
@@ -99,8 +99,8 @@ class CoreGraphSpec extends Specification {
     	//CoreGraphUtils.printGraph(g)
 
 
-    	expect:
-    	coreGraph.graphSchema.controlledInstances?.size() == controlledInstances?.size()
+    	//expect:
+    	//coreGraph.graphSchema.vertexBuilders?.size() == vertexBuilders?.size()
 
     	when:
     	vs = g.V().hasLabel('Identifier').toList()
@@ -131,7 +131,7 @@ class CoreGraphSpec extends Specification {
     }
 
 
-    def "test checkConstraints for exactly one controlledInstance vertex"() {
+    def "test checkConstraints for exactly one singleton vertex"() {
 		given:
     	def graph = coreGraph.graph
     	def g = graph.traversal()
@@ -150,7 +150,7 @@ class CoreGraphSpec extends Specification {
     	//println coreGraph.checkConstraints()
 
     	when:
-        Core.VX.IDENTIFIER.controlledInstance().withProperty(Core.PX.VALUE, "1").vertex(graph, g)
+        Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, "1").vertex(graph, g)
     	//graph.addVertex(T.label, "Identifier", "value", "1")
     	vs = g.V().hasLabel('Identifier').has("value", "1").toList()
 
@@ -206,11 +206,11 @@ class CoreGraphSpec extends Specification {
         coreGraph.checkConstraints().size() == 0
 
         when:
-        identifierFacility = Core.VX.IDENTIFIER_FACILITY.controlledInstance().withProperty(Core.PX.NAME, "f1").vertex(graph, g)
+        identifierFacility = Core.VX.IDENTIFIER_FACILITY.instance().withProperty(Core.PX.NAME, "f1").vertex(graph, g)
         //identifierFacility = graph.addVertex(T.label, "IdentifierFacility", "name", "f1")
-        identifier = Core.VX.IDENTIFIER.controlledInstance().withProperty(Core.PX.VALUE, "abc123").vertex(graph, g)
+        identifier = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, "abc123").vertex(graph, g)
         //identifier = graph.addVertex(T.label, "Identifier", "value", "abc123")
-        identifierClass = Core.VX.IDENTIFIER_CLASS.controlledInstance().withProperties(
+        identifierClass = Core.VX.IDENTIFIER_CLASS.instance().withProperties(
             Core.PX.NAME, "testIdClass",
             Core.PX.HAS_SCOPE, false,
             Core.PX.HAS_CREATION_FACILITY, true
@@ -222,7 +222,7 @@ class CoreGraphSpec extends Specification {
         //    "hasScope", false, 
         //    "hasCreationFacility", true
         //)
-        suitcase = VX.CGS_SUITCASE.controlledInstance().vertex(graph, g)
+        suitcase = VX.CGS_SUITCASE.instance().vertex(graph, g)
 
         then:
         coreGraph.checkConstraints().size() == 0
@@ -260,14 +260,14 @@ class CoreGraphSpec extends Specification {
         coreGraph.checkConstraints().size() == 0
 
         when:
-        identifierFacility = Core.VX.IDENTIFIER_FACILITY.controlledInstance().withProperty(Core.PX.NAME, "f1").vertex(graph, g)
-        identifier = Core.VX.IDENTIFIER.controlledInstance().withProperty(Core.PX.VALUE, "abc123").vertex(graph, g)
-        identifierClass = Core.VX.IDENTIFIER_CLASS.controlledInstance().withProperties(
+        identifierFacility = Core.VX.IDENTIFIER_FACILITY.instance().withProperty(Core.PX.NAME, "f1").vertex(graph, g)
+        identifier = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, "abc123").vertex(graph, g)
+        identifierClass = Core.VX.IDENTIFIER_CLASS.instance().withProperties(
             Core.PX.NAME, "testIdClass",
             Core.PX.HAS_SCOPE, false,
             Core.PX.HAS_CREATION_FACILITY, true
         ).vertex(graph, g)
-        suitcase = VX.CGS_SUITCASE.controlledInstance().vertex(graph, g)
+        suitcase = VX.CGS_SUITCASE.instance().vertex(graph, g)
 
         then:
         coreGraph.checkConstraints().size() == 0

@@ -259,7 +259,7 @@ class VertexDefTraitSpec extends Specification {
         def v
 
         when:
-        v = VX.THING.controlledInstance().vertex(graph, g)
+        v = VX.THING.instance().vertex(graph, g)
 
         then:
         v
@@ -288,7 +288,7 @@ class VertexDefTraitSpec extends Specification {
         vDef.nameSpace == 'some.custom.NameSpace'
 
         when:
-        v = vDef.controlledInstance().vertex(graph, g)
+        v = vDef.instance().vertex(graph, g)
 
         then:
         v

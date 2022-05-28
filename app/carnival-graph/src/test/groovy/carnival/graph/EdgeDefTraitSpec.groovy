@@ -190,8 +190,8 @@ class EdgeDefTraitSpec extends Specification {
         Throwable t
 
         when:
-        v1 = VX.THING.controlledInstance().vertex(graph, g)
-        v2 = VX2.ANOTHER_THING.controlledInstance().vertex(graph, g)
+        v1 = VX.THING.instance().vertex(graph, g)
+        v2 = VX2.ANOTHER_THING.instance().vertex(graph, g)
         e = EX2.RELATION.setRelationship(g, v1, v2)
 
         println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
@@ -216,8 +216,8 @@ class EdgeDefTraitSpec extends Specification {
         Throwable t
 
         when:
-        v1 = VX2.THING.controlledInstance().vertex(graph, g)
-        v2 = VX.ANOTHER_THING.controlledInstance().vertex(graph, g)
+        v1 = VX2.THING.instance().vertex(graph, g)
+        v2 = VX.ANOTHER_THING.instance().vertex(graph, g)
         e = EX2.RELATION.setRelationship(g, v1, v2)
 
         println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
@@ -242,8 +242,8 @@ class EdgeDefTraitSpec extends Specification {
         Throwable t
 
         when:
-        v1 = DYNAMIC_THING.controlledInstance().vertex(graph, g)
-        v2 = VX.ANOTHER_THING.controlledInstance().vertex(graph, g)
+        v1 = DYNAMIC_THING.instance().vertex(graph, g)
+        v2 = VX.ANOTHER_THING.instance().vertex(graph, g)
         e = EX3.RELATION.setRelationship(g, v1, v2)
 
         println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
@@ -268,8 +268,8 @@ class EdgeDefTraitSpec extends Specification {
         Throwable t
 
         when:
-        v1 = VX.THING.controlledInstance().vertex(graph, g)
-        v2 = VX.ANOTHER_THING.controlledInstance().vertex(graph, g)
+        v1 = VX.THING.instance().vertex(graph, g)
+        v2 = VX.ANOTHER_THING.instance().vertex(graph, g)
         e = EX2.RELATION.setRelationship(g, v1, v2)
 
         println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
@@ -294,8 +294,8 @@ class EdgeDefTraitSpec extends Specification {
         Throwable t
 
         when:
-        v1 = VX.THING.controlledInstance().vertex(graph, g)
-        v2 = VX.ANOTHER_THING.controlledInstance().vertex(graph, g)
+        v1 = VX.THING.instance().vertex(graph, g)
+        v2 = VX.ANOTHER_THING.instance().vertex(graph, g)
         e = EX2.RELATION.setRelationship(g, v1, v2)
 
         println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
@@ -320,8 +320,8 @@ class EdgeDefTraitSpec extends Specification {
         def e
 
         when:
-        v1 = VX.THING.controlledInstance().vertex(graph, g)
-        v2 = VX.THING.controlledInstance().vertex(graph, g)
+        v1 = VX.THING.instance().vertex(graph, g)
+        v2 = VX.THING.instance().vertex(graph, g)
         e = EX1.RELATION.setRelationship(g, v1, v2)
 
         then:

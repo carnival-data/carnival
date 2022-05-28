@@ -27,7 +27,7 @@ public class CoreGraphValidator extends GremlinGraphValidator {
 	/**
 	 * Check property existence constraints
 	 * Check relationship constraints
-	 * Check that controlledInstances exist only once
+	 * Check that singleton vertices exist only once
 	 * Check that the combinaiton of identifier.value/identifierClass/IdentifierScope is unique
 	 */
 	public List<GraphValidationError> checkConstraints(GraphTraversalSource g, GraphSchema graphSchema) {

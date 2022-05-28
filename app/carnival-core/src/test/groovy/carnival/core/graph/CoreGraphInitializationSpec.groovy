@@ -79,7 +79,7 @@ class CoreGraphInitializationSpec extends Specification {
         coreGraph.checkModel().size() == 0
 
         when:
-        coreGraph.addDefinitions(GraphModel.VX)
+        coreGraph.addConstraints(GraphModel.VX)
         def d1 = GraphModel.VX.DOG.instance().create(graph)
         def d2 = GraphModel.VX.DOG.instance().create(graph)
         modelErrs = coreGraph.checkModel()
@@ -95,7 +95,7 @@ class CoreGraphInitializationSpec extends Specification {
         modelErrs.size() == 1
 
         when:
-        coreGraph.addDefinitions(GraphModel.EX)
+        coreGraph.addConstraints(GraphModel.EX)
         modelErrs = coreGraph.checkModel()
 
         then:
@@ -110,7 +110,7 @@ class CoreGraphInitializationSpec extends Specification {
         coreGraph.checkModel().size() == 0
 
         when:
-        coreGraph.addDefinitions(graph, g, GraphModel.VX)
+        coreGraph.addConstraints(graph, g, GraphModel.VX)
         def d1 = GraphModel.VX.DOG.instance().create(graph)
         def d2 = GraphModel.VX.DOG.instance().create(graph)
         modelErrs = coreGraph.checkModel()
@@ -126,7 +126,7 @@ class CoreGraphInitializationSpec extends Specification {
         modelErrs.size() == 1
 
         when:
-        coreGraph.addDefinitions(graph, g, GraphModel.EX)
+        coreGraph.addConstraints(graph, g, GraphModel.EX)
         modelErrs = coreGraph.checkModel()
 
         then:
@@ -150,7 +150,7 @@ class CoreGraphInitializationSpec extends Specification {
         modelErrs.size() == 1
 
         when:
-        coreGraph.addDefinitions(GraphModel.VX)
+        coreGraph.addConstraints(GraphModel.VX)
         modelErrs = coreGraph.checkModel()
 
         then:
@@ -172,7 +172,7 @@ class CoreGraphInitializationSpec extends Specification {
         modelErrs.size() == 1
 
         when:
-        coreGraph.addDefinitions(graph, g, GraphModel.VX)
+        coreGraph.addConstraints(graph, g, GraphModel.VX)
         modelErrs = coreGraph.checkModel()
 
         then:

@@ -167,7 +167,7 @@ abstract class CoreGraph implements GremlinTrait {
 	///////////////////////////////////////////////////////////////////////////
 
 	/** */
-	public void addDefinitions(Graph graph, GraphTraversalSource g, Class defClass) {
+	public void addConstraints(Graph graph, GraphTraversalSource g, Class defClass) {
 		assert graph
 		assert g
 		assert defClass
@@ -180,10 +180,10 @@ abstract class CoreGraph implements GremlinTrait {
 
 
 	/** */
-	public void addDefinitions(Class defClass) {
+	public void addConstraints(Class defClass) {
 		assert defClass
 		withGremlin { graph, g ->
-			addDefinitions(graph, g, defClass)
+			addConstraints(graph, g, defClass)
 		}
 	}
 
@@ -205,8 +205,11 @@ abstract class CoreGraph implements GremlinTrait {
 
 		withTransactionIfSupported(graph) {
 	        newDefinitions.each { vld ->
-				addDefinition(graph, g, vld)
+				addConstraint(graph, g, vld)
 	        }
+	        newDefinitions.each { vld ->
+				createClassVertex(graph, g, vld)
+			}
 	        newDefinitions.each { vld ->
 				connectClassVertices(graph, g, vld)
 			}
@@ -215,13 +218,19 @@ abstract class CoreGraph implements GremlinTrait {
 
 
 	/** */
-	public void addDefinition(Graph graph, GraphTraversalSource g, VertexConstraint vld) {
-		log.trace "addDefinition vld: ${vld.label} $vld"
+	public void addConstraint(Graph graph, GraphTraversalSource g, VertexConstraint vld) {
+		log.trace "addConstraint vld: ${vld.label} $vld"
 
 		log.trace "adding vertex definition to graph schema ${vld.label} ${vld}"
 		graphSchema.vertexConstraints << vld
+	}
 
-		// add the controlled instance, which can only be done if there
+
+	/** */
+	public void createClassVertex(Graph graph, GraphTraversalSource g, VertexConstraint vld) {
+		log.trace "createClassVertex vld: ${vld.label} $vld"
+
+		// create class singleton vertex, which can only be done if there
 		// are no required properties
 		def vdef = vld.vertexDef
 		if (vdef.isClass() && vdef.requiredProperties.size() == 0) {
@@ -266,7 +275,7 @@ abstract class CoreGraph implements GremlinTrait {
 			}
 			if (!found) {
 				def vld = VertexConstraint.create(vdef)
-				addDefinition(graph, g, vld)
+				addConstraint(graph, g, vld)
 			}
 		}
 	}
@@ -333,8 +342,8 @@ abstract class CoreGraph implements GremlinTrait {
 	// GRAPH MODEL - EDGES
 	///////////////////////////////////////////////////////////////////////////
 
-	public void addDefinition(Graph graph, GraphTraversalSource g, EdgeConstraint relDef) {
-		log.trace "addDefinition relDef: ${relDef.label} $relDef"
+	public void addConstraint(Graph graph, GraphTraversalSource g, EdgeConstraint relDef) {
+		log.trace "addConstraint relDef: ${relDef.label} $relDef"
 
 		log.trace "adding edge definition to graph schema ${relDef.label} ${relDef}"
 		graphSchema.edgeConstraints.add(relDef)
@@ -350,7 +359,7 @@ abstract class CoreGraph implements GremlinTrait {
 			}
 			if (!found) {
 				def relDef = EdgeConstraint.create(edef)
-				addDefinition(graph, g, relDef)
+				addConstraint(graph, g, relDef)
 			}
 		}
 	}
@@ -366,7 +375,7 @@ abstract class CoreGraph implements GremlinTrait {
 
 		withTransactionIfSupported(graph) {
 	        newDefinitions.each { eld ->
-				addDefinition(graph, g, eld)
+				addConstraint(graph, g, eld)
 	        }
 		}
     }	

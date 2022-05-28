@@ -173,8 +173,8 @@ abstract class CoreGraph implements GremlinTrait {
 		assert defClass
 
 		def defInterfaces = defClass.getInterfaces()
-		if (defInterfaces.contains(VertexDefTrait)) addVertexDefinitions(graph, g, defClass)
-		else if (defInterfaces.contains(EdgeDefTrait)) addEdgeDefinitions(graph, g, defClass)
+		if (defInterfaces.contains(VertexDefTrait)) addVertexConstraints(graph, g, defClass)
+		else if (defInterfaces.contains(EdgeDefTrait)) addEdgeConstraints(graph, g, defClass)
 		else throw new RuntimeException("unrecognized definition class: $defClass")
 	}
 
@@ -267,7 +267,7 @@ abstract class CoreGraph implements GremlinTrait {
 
 
 	/** */
-	public void addVertexDefinitions(Graph graph, GraphTraversalSource g, Class<VertexDefTrait> vdc) {
+	public void addVertexConstraints(Graph graph, GraphTraversalSource g, Class<VertexDefTrait> vdc) {
 		Set<VertexConstraint> existingDefinitions = graphSchema.getVertexConstraints()
 		vdc.values().each { VertexDefTrait vdef ->
 			def found = existingDefinitions.find {
@@ -351,7 +351,7 @@ abstract class CoreGraph implements GremlinTrait {
 
 
 	/** */
-	public void addEdgeDefinitions(Graph graph, GraphTraversalSource g, Class<EdgeDefTrait> edc) {
+	public void addEdgeConstraints(Graph graph, GraphTraversalSource g, Class<EdgeDefTrait> edc) {
 		Set<EdgeConstraint> existingDefinitions = graphSchema.getEdgeConstraints()
 		edc.values().each { EdgeDefTrait edef ->
 			def found = existingDefinitions.find {

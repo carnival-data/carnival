@@ -2,8 +2,8 @@
 * Contains the framework for defining property, vertex and edge definitons of a Carnival graph model.
 * <p>
 * The graph model is specified by creating enums that are annotated with &#64;PropertyModel, &#64;EdgeModel 
-* or &#64;VertexModel. Among other things, these annotations apply the traits PropertyDefTrait, EdgeDefTrait, 
-* or VertexDefTrait to the enums.
+* or &#64;VertexModel. Among other things, these annotations apply the traits PropertyDefinition, EdgeDefinition, 
+* or VertexDefinition to the enums.
 * <p>
 * Once VertexModel and EdgeModel have been created they can be used to add new elements to the 
 * graph, for example:

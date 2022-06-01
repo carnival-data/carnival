@@ -23,7 +23,7 @@ import org.apache.tinkerpop.gremlin.structure.Property
  * @see carnival.graph.PropertyModel
  */
 @Slf4j
-trait PropertyDefTrait {
+trait PropertyDefinition {
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -69,8 +69,8 @@ trait PropertyDefTrait {
      * 
      * 
      * */
-	public PropertyDefTrait withConstraints(Map m) {
-        def newObj = new PropertyDefTraitHolder(this)
+	public PropertyDefinition withConstraints(Map m) {
+        def newObj = new PropertyDefinitionHolder(this)
 
 		if (m.unique) newObj.unique = m.unique
 		if (m.required) newObj.required = m.required
@@ -81,14 +81,14 @@ trait PropertyDefTrait {
 
 
 	/** */
-	public PropertyDefTrait constraints(Map m) {
+	public PropertyDefinition constraints(Map m) {
         withConstraints(m)
     }
 
 
     /** */
-    public PropertyDefTrait defaultValue(Object o) {
-        def newObj = new PropertyDefTraitHolder(this)
+    public PropertyDefinition defaultValue(Object o) {
+        def newObj = new PropertyDefinitionHolder(this)
         newObj.defaultValue = o
         return newObj
     }
@@ -131,7 +131,7 @@ trait PropertyDefTrait {
 
 
     /** */
-    public PropertyDefTrait set(Element el, Object value) {
+    public PropertyDefinition set(Element el, Object value) {
         assert el
         assert value != null
         assertPropertyIsDefined(el)
@@ -145,7 +145,7 @@ trait PropertyDefTrait {
     void assertPropertyIsDefined(Element el) {
         boolean isDefined = false
         
-        ElementDefTrait edt = ElementDefinition.lookup(el)
+        ElementDefinition edt = Definition.lookup(el)
         if (edt != null && !(edt instanceof DynamicVertexDef)) {
             if (edt.propertiesMustBeDefined) {
                 isDefined = edt.propertyDefs.find({it.label == getLabel()})
@@ -162,7 +162,7 @@ trait PropertyDefTrait {
     /** */
     boolean propertyIsDefined(Element el) {
         boolean isDefined = false
-        ElementDefTrait edt = ElementDefinition.lookup(el)
+        ElementDefinition edt = Definition.lookup(el)
         if (edt != null && !(edt instanceof DynamicVertexDef)) {
             if (edt.propertiesMustBeDefined) {
                 isDefined = edt.propertyDefs.find({it.label == getLabel()})
@@ -173,7 +173,7 @@ trait PropertyDefTrait {
 
 
     /** */
-    public PropertyDefTrait set(Element el, Closure value) {
+    public PropertyDefinition set(Element el, Closure value) {
         assert el
         assert value != null
         set(el, value())
@@ -181,7 +181,7 @@ trait PropertyDefTrait {
 
 
     /** */
-    public PropertyDefTrait setIf(Element el, Object value, Closure cl) {
+    public PropertyDefinition setIf(Element el, Object value, Closure cl) {
         assert el
         assert value != null
         assert cl != null
@@ -191,7 +191,7 @@ trait PropertyDefTrait {
 
 
     /** */
-    public PropertyDefTrait setIf(Element el, Closure cl) {
+    public PropertyDefinition setIf(Element el, Closure cl) {
         assert el
         assert cl != null
         def val = cl()
@@ -225,10 +225,10 @@ trait PropertyDefTrait {
 
 /** */
 @Slf4j
-class PropertyDefTraitHolder implements PropertyDefTrait {
-    PropertyDefTrait source
+class PropertyDefinitionHolder implements PropertyDefinition {
+    PropertyDefinition source
 
-    public PropertyDefTraitHolder(PropertyDefTrait source) {
+    public PropertyDefinitionHolder(PropertyDefinition source) {
         assert source != null
         this.source = source
         this.defaultValue = source.defaultValue

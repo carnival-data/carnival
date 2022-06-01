@@ -12,70 +12,77 @@ import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.structure.Element
 import org.apache.tinkerpop.gremlin.structure.Edge
+import org.apache.tinkerpop.gremlin.structure.Property
 
 import carnival.util.StringUtils
 import carnival.graph.Base
 
 
 
+/** 
+ * Inherited by traits that can have PropertyDefs: VertexDefinition and EdgedDefTrait
+ *
+ * @see carnival.graph.PropertyDefinition
+ * @see carnival.graph.EdgeDefinition
+ */
 @Slf4j
-class ElementDefinition {
+trait ElementDefinition extends WithPropertyDefsTrait {
+
+    ///////////////////////////////////////////////////////////////////////////
+    // GLOBAL
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** 
+     * if true, the `Base.PX.NAME_SPACE` property for verticies in the graph
+     * will use a global namespace value instead of one generated from 
+     * the package name.
+     */
+    boolean global = false
 
     /** */
-    static public ElementDefTrait lookupElementDefinition(Element v) {
-        assert v != null
-        assert (v instanceof Edge || v instanceof Vertex)
+    boolean getGlobal() { this.global }
 
-        String label = v.label()
-        //log.trace "label: ${label}"
-
-        def defName
-        if (v instanceof Vertex) defName = StringUtils.toScreamingSnakeCase(label)
-        else if (v instanceof Edge) defName = label.toUpperCase()
-        //log.trace "defName: $defName"
-
-        def defClassName
-        if (Base.PX.VERTEX_DEFINITION_CLASS._of(v).isPresent()) {
-            defClassName = Base.PX.VERTEX_DEFINITION_CLASS._valueOf(v)
-        } else {
-            defClassName = Base.PX.NAME_SPACE._valueOf(v)
-        }
-        //log.trace "defClassName: $defClassName"
-
-        def defClass = Class.forName(defClassName)
-        //log.trace "defClass: $defClass"
-
-        def isEnum = Enum.isAssignableFrom(defClass)
-        //log.trace "is enum ${isEnum}"
-
-        def defInstance
-        if (isEnum) {
-            defInstance = Enum.valueOf(defClass, defName) 
-        } else {
-            defInstance = defClass.newInstance()
-            defInstance.name = defName
-        }
-        //log.trace "defInstance: $defInstance"
-
-        return defInstance
+    /** */
+    void setGlobal(boolean val) {
+        this.global = val
     }
 
-    
     /** */
-    static public VertexDefTrait lookup(Vertex v) {
-        assert v != null
-        lookupElementDefinition(v)
-    }    
-
-
-    /** */
-    static public EdgeDefTrait lookup(Edge e) {
-        assert e != null
-        lookupElementDefinition(e)
+    public boolean isGlobal() {
+        return global
     }
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // PROPERTIES MUST BE DEFINED
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** 
+     * if false, verticies created by this definition can contain properties
+     * that were not defined by this VertexDefinition.
+     * */
+    Boolean propertiesMustBeDefined = true
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // NAME SPACE
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    public String getNameSpace() {
+        if (this.global) return Base.GLOBAL_NAME_SPACE
+        return getElementDefinitionClass()
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // ELEMENT DEFINITION
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    public String getElementDefinitionClass() {
+        if (this instanceof Enum) return "${this.declaringClass.name}"
+        return "${this.metaClass.theClass.name}"
+    }
+
 }
-
-
-
-
-

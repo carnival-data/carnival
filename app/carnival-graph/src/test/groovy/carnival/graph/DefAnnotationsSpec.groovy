@@ -52,7 +52,7 @@ class DefAnnotationsSpec extends Specification {
 
 
     @PropertyModel
-    static enum PX_REDUNDANT_DEF_TRAIT implements PropertyDefTrait {
+    static enum PX_REDUNDANT_DEF_TRAIT implements PropertyDefinition {
         PROP_A
     }
 

@@ -13,7 +13,7 @@ import org.codehaus.groovy.transform.GroovyASTTransformationClass
 /** 
  * Used to specify edge definitions in a graph model.
  * 
- * @see carnival.graph.EdgeDefTrait
+ * @see carnival.graph.EdgeDefinition
  * @see carnival.graph.ModelTransformation
  * */
 @Retention(RetentionPolicy.SOURCE)

@@ -140,7 +140,7 @@ abstract class ModelTransformation extends AbstractASTTransformation {
 @GroovyASTTransformation(phase = CompilePhase.SEMANTIC_ANALYSIS)
 class VertexModelTransformation extends ModelTransformation {
 
-    Class getDefTraitClass() { return carnival.graph.VertexDefTrait }
+    Class getDefTraitClass() { return carnival.graph.VertexDefinition }
 
 
     @Override
@@ -194,7 +194,7 @@ class VertexModelTransformation extends ModelTransformation {
 @GroovyASTTransformation(phase = CompilePhase.SEMANTIC_ANALYSIS)
 class EdgeModelTransformation extends ModelTransformation {
 
-    Class getDefTraitClass() { return carnival.graph.EdgeDefTrait }
+    Class getDefTraitClass() { return carnival.graph.EdgeDefinition }
 
 }
 
@@ -203,7 +203,7 @@ class EdgeModelTransformation extends ModelTransformation {
 @GroovyASTTransformation(phase = CompilePhase.SEMANTIC_ANALYSIS)
 class PropertyModelTransformation extends ModelTransformation {
 
-    Class getDefTraitClass() { return carnival.graph.PropertyDefTrait }
+    Class getDefTraitClass() { return carnival.graph.PropertyDefinition }
 
 }
 
@@ -234,7 +234,7 @@ class ModelTransformationPost extends AbstractASTTransformation {
             println "[DTP] globalExp.value: ${globalExp.value}"
             println "[DTP] globalExp.value (boolean): ${Boolean.valueOf(globalExp.value)}"
 
-            FieldNode fieldGlobal = classNode.getField("carnival_graph_VertexDefTrait__global")
+            FieldNode fieldGlobal = classNode.getField("carnival_graph_VertexDefinition__global")
             println "[DTP] fieldGlobal: ${fieldGlobal}"
             println "[DTP] fieldGlobal.initialExpression: ${fieldGlobal?.initialExpression}"
             println "[DTP] fieldGlobal.initialValueExpression: ${fieldGlobal?.initialValueExpression}"
@@ -261,7 +261,7 @@ class GlobalElementConstraintinitionTransformation extends AbstractASTTransforma
         ClassNode[] interfaces = classNode.getInterfaces()
         println "[GEDT] interfaces: $interfaces"
 
-        ClassNode traitClassNode = new ClassNode(carnival.graph.VertexDefTrait)
+        ClassNode traitClassNode = new ClassNode(carnival.graph.VertexDefinition)
         if (!interfaces.contains(traitClassNode)) return
 
         println "[GEDT] traitClassNode: ${traitClassNode}"

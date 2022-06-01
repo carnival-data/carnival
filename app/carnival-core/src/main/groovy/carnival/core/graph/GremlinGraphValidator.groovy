@@ -15,7 +15,7 @@ import org.apache.tinkerpop.gremlin.structure.Element
 import org.apache.tinkerpop.gremlin.structure.Edge
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 
-import carnival.graph.PropertyDefTrait
+import carnival.graph.PropertyDefinition
 import carnival.graph.Base
 
 
@@ -84,7 +84,7 @@ public class GremlinGraphValidator implements GraphValidator {
 
 			//log.debug "GraphValidator.checkConstraints instance.propertyValues: ${instance.propertyValues}"
 
-	        instance.propertyValues.each { PropertyDefTrait vp, Object val -> 
+	        instance.propertyValues.each { PropertyDefinition vp, Object val -> 
 	        	//log.debug "GraphValidator.checkConstraints instance.propertyValues.each ${vp.label} $val"
 	        	traversal.has(vp.label, val) 
 	        }

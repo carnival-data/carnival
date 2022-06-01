@@ -7,9 +7,9 @@ import groovy.transform.CompileStatic
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import carnival.graph.EdgeDefTrait
-import carnival.graph.PropertyDefTrait
-import carnival.graph.VertexDefTrait
+import carnival.graph.EdgeDefinition
+import carnival.graph.PropertyDefinition
+import carnival.graph.VertexDefinition
 import carnival.core.graph.Core
 
 
@@ -17,7 +17,7 @@ import carnival.core.graph.Core
 class TestModel {
 
     /** */
-    static enum VX implements VertexDefTrait {
+    static enum VX implements VertexDefinition {
         APPLICATION(
             vertexProperties:[
                 Core.PX.NAME.withConstraints(required:true, index:true),
@@ -36,7 +36,7 @@ class TestModel {
 
 
     /** */
-    static enum EX implements EdgeDefTrait {
+    static enum EX implements EdgeDefinition {
         TEST_RELATIONSHIP (
             domain:[VX.TEST_THING], 
             range:[VX.TEST_THING]
@@ -48,7 +48,7 @@ class TestModel {
 
 
     /** */
-    static enum PX implements PropertyDefTrait {
+    static enum PX implements PropertyDefinition {
         TEST_PROP
     }
 

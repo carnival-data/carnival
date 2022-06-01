@@ -26,7 +26,7 @@ class CoreGraphInitializationSpec extends Specification {
     // DEFS
     ///////////////////////////////////////////////////////////////////////////
 
-    static enum VX implements VertexDefTrait {
+    static enum VX implements VertexDefinition {
         CGS_SUITCASE
     }
 

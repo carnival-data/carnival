@@ -25,9 +25,9 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 
 import carnival.core.config.Defaults
 
-import carnival.graph.EdgeDefTrait
-import carnival.graph.PropertyDefTrait
-import carnival.graph.VertexDefTrait
+import carnival.graph.EdgeDefinition
+import carnival.graph.PropertyDefinition
+import carnival.graph.VertexDefinition
 import carnival.graph.VertexBuilder
 
 
@@ -44,9 +44,9 @@ class VertexConstraint implements ElementConstraint {
 	///////////////////////////////////////////////////////////////////////////
 	// STATIC
 	///////////////////////////////////////////////////////////////////////////
-	static public VertexConstraint create(VertexDefTrait vdef) {
+	static public VertexConstraint create(VertexDefinition vdef) {
 		def propDefs = []
-		vdef.vertexProperties.each { PropertyDefTrait pdef ->
+		vdef.vertexProperties.each { PropertyDefinition pdef ->
 			propDefs << new VertexPropertyConstraint(
 				name: pdef.label,
 				unique: pdef.unique,
@@ -71,7 +71,7 @@ class VertexConstraint implements ElementConstraint {
 	///////////////////////////////////////////////////////////////////////////
 	String label
 	String nameSpace
-	VertexDefTrait vertexDef
+	VertexDefinition vertexDef
 	List<VertexPropertyConstraint> properties
 
 

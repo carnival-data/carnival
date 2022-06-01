@@ -26,7 +26,7 @@ import org.apache.tinkerpop.gremlin.structure.Edge
  * @see carnival.graph.EdgeBuilder
  */
 @Slf4j
-trait EdgeDefTrait extends ElementDefTrait {
+trait EdgeDefinition extends ElementDefinition {
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -34,10 +34,10 @@ trait EdgeDefTrait extends ElementDefTrait {
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    List<VertexDefTrait> domain = new ArrayList<VertexDefTrait>()
+    List<VertexDefinition> domain = new ArrayList<VertexDefinition>()
 
     /** */
-    List<VertexDefTrait> range = new ArrayList<VertexDefTrait>()
+    List<VertexDefinition> range = new ArrayList<VertexDefinition>()
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -45,10 +45,10 @@ trait EdgeDefTrait extends ElementDefTrait {
     ///////////////////////////////////////////////////////////////////////////
 
     /** Setter wrapper for propertyDefs */
-    List<PropertyDefTrait> getEdgeProperties() { propertyDefs }
+    List<PropertyDefinition> getEdgeProperties() { propertyDefs }
     
     /** Getter wrapper for propertyDefs */
-    void setEdgeProperties(ArrayList<PropertyDefTrait> propertyDefs) {
+    void setEdgeProperties(ArrayList<PropertyDefinition> propertyDefs) {
         assert propertyDefs != null
         propertyDefs = propertyDefs
     }
@@ -100,7 +100,7 @@ trait EdgeDefTrait extends ElementDefTrait {
 
 
     /** */
-    public void assertDomain(VertexDefTrait fromDef) {
+    public void assertDomain(VertexDefinition fromDef) {
         assert fromDef != null
         if (this.domain.size() > 0) {
             if (this.domain.contains(fromDef)) return
@@ -114,13 +114,13 @@ trait EdgeDefTrait extends ElementDefTrait {
     /** */
     public void assertDomain(Vertex from) {
         assert from != null
-        def fromDef = ElementDefinition.lookup(from)
+        def fromDef = Definition.lookup(from)
         assertDomain(fromDef)
     }
 
 
     /** */
-    public void assertRange(VertexDefTrait toDef) {
+    public void assertRange(VertexDefinition toDef) {
         assert toDef != null
         if (this.range.size() > 0) {
             if (this.range.contains(toDef)) return
@@ -134,7 +134,7 @@ trait EdgeDefTrait extends ElementDefTrait {
     /** */
     public void assertRange(Vertex to) {
         assert to != null
-        def toDef = ElementDefinition.lookup(to)
+        def toDef = Definition.lookup(to)
         assertRange(toDef)        
     }
 
@@ -156,13 +156,13 @@ trait EdgeDefTrait extends ElementDefTrait {
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    public Edge relate(GraphTraversalSource g, VertexDefTrait from, VertexDefTrait to) {
+    public Edge relate(GraphTraversalSource g, VertexDefinition from, VertexDefinition to) {
         setRelationship(g, from, to)
     }
 
 
     /** */
-    public Edge setRelationship(GraphTraversalSource g, VertexDefTrait from, VertexDefTrait to) {
+    public Edge setRelationship(GraphTraversalSource g, VertexDefinition from, VertexDefinition to) {
         assert g != null
         assert from != null
         assert to != null
@@ -191,13 +191,13 @@ trait EdgeDefTrait extends ElementDefTrait {
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    public Edge relate(GraphTraversalSource g, Vertex from, VertexDefTrait to) {
+    public Edge relate(GraphTraversalSource g, Vertex from, VertexDefinition to) {
         setRelationship(g, from, to)
     }
 
 
     /** */
-    public Edge setRelationship(GraphTraversalSource g, Vertex from, VertexDefTrait to) {
+    public Edge setRelationship(GraphTraversalSource g, Vertex from, VertexDefinition to) {
         assert g != null
         assert from != null
         assert to != null

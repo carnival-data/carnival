@@ -2,9 +2,9 @@ package test.coregraphspec
 
 
 
-import carnival.graph.VertexDefTrait
-import carnival.graph.PropertyDefTrait
-import carnival.graph.EdgeDefTrait
+import carnival.graph.VertexDefinition
+import carnival.graph.PropertyDefinition
+import carnival.graph.EdgeDefinition
 import carnival.core.graph.Core
 import carnival.graph.VertexModel
 import carnival.graph.EdgeModel
@@ -20,7 +20,7 @@ import carnival.graph.EdgeModel
  */
 class GraphModel {
 
-    static enum VX implements VertexDefTrait {
+    static enum VX implements VertexDefinition {
         DOG_CLASS,
         COLLIE_CLASS (
             superClass:VX.DOG_CLASS
@@ -43,10 +43,10 @@ class GraphModel {
 
 
     /*
-    static enum PX implements PropertyDefTrait {
+    static enum PX implements PropertyDefinition {
     }
 
-    static enum EX implements EdgeDefTrait {
+    static enum EX implements EdgeDefinition {
     }
     */
 

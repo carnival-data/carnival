@@ -15,7 +15,7 @@ import org.apache.tinkerpop.gremlin.structure.Edge
 
 
 /** 
- * Builder class used when creating edges from an EdgeDefTrait object.
+ * Builder class used when creating edges from an EdgeDefinition object.
  */
 @Slf4j
 class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
@@ -27,7 +27,7 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
     /** 
      * Object that owns this builder.
      * */
-    EdgeDefTrait edgeDef
+    EdgeDefinition edgeDef
 
     /** */
     Vertex fromVertex
@@ -41,7 +41,7 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    public EdgeBuilder(EdgeDefTrait edgeDef) {
+    public EdgeBuilder(EdgeDefinition edgeDef) {
         assert edgeDef
         this.edgeDef = edgeDef
     }
@@ -52,7 +52,7 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    public ElementDefTrait getElementDef() { edgeDef }
+    public ElementDefinition getElementDef() { edgeDef }
 
 
     ///////////////////////////////////////////////////////////////////////////

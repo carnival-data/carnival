@@ -20,10 +20,10 @@ import carnival.graph.Base
 
 
 /** 
- * Inherited by traits that can have PropertyDefs: VertexDefTrait and EdgedDefTrait
+ * Inherited by traits that can have PropertyDefs: VertexDefinition and EdgedDefTrait
  *
- * @see carnival.graph.PropertyDefTrait
- * @see carnival.graph.EdgeDefTrait
+ * @see carnival.graph.PropertyDefinition
+ * @see carnival.graph.EdgeDefinition
  */
 @Slf4j
 trait WithPropertyDefsTrait {
@@ -33,7 +33,7 @@ trait WithPropertyDefsTrait {
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    Set<PropertyDefTrait> propertyDefs = new LinkedHashSet<PropertyDefTrait>()
+    Set<PropertyDefinition> propertyDefs = new LinkedHashSet<PropertyDefinition>()
 
 
 
@@ -42,7 +42,7 @@ trait WithPropertyDefsTrait {
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    public WithPropertyDefsTrait withPropertyDef(PropertyDefTrait propertyDef) {
+    public WithPropertyDefsTrait withPropertyDef(PropertyDefinition propertyDef) {
         propertyDefs.add(propertyDef)
         return this
     }
@@ -73,7 +73,7 @@ trait WithPropertyDefsTrait {
 
 
     /** */
-    public Set<PropertyDefTrait> getUniqueProperties() {
+    public Set<PropertyDefinition> getUniqueProperties() {
         return propertyDefs.findAll {
             it.unique
         }
@@ -81,7 +81,7 @@ trait WithPropertyDefsTrait {
 
 
     /** */
-    public Set<PropertyDefTrait> getRequiredProperties() {
+    public Set<PropertyDefinition> getRequiredProperties() {
         return propertyDefs.findAll {
             it.required
         }
@@ -89,7 +89,7 @@ trait WithPropertyDefsTrait {
 
 
     /** */
-    public Set<PropertyDefTrait> getIndexedProperties() {
+    public Set<PropertyDefinition> getIndexedProperties() {
         return propertyDefs.findAll {
             it.index
         }
@@ -97,7 +97,7 @@ trait WithPropertyDefsTrait {
 
 
     /** */
-    public Set<PropertyDefTrait> getDefaultProperties() {
+    public Set<PropertyDefinition> getDefaultProperties() {
         return propertyDefs.findAll {
             it.defaultValue != null
         }

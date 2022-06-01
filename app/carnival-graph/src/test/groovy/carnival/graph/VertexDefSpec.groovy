@@ -20,7 +20,7 @@ import org.apache.tinkerpop.gremlin.structure.Vertex
  */
 class VertexDefSpec extends Specification {
 
-    static enum VX implements VertexDefTrait {
+    static enum VX implements VertexDefinition {
         THING,
 
         THING_1(
@@ -35,7 +35,7 @@ class VertexDefSpec extends Specification {
     }
 
 
-    static enum PX implements PropertyDefTrait {
+    static enum PX implements PropertyDefinition {
         PROP_A,
         PROP_B
     }
@@ -81,7 +81,7 @@ class VertexDefSpec extends Specification {
     def "lookup"() {
         when:
         Vertex v1 = VX.THING.instance().create(graph)
-        VertexDefTrait d1 = ElementDefinition.lookup(v1)
+        VertexDefinition d1 = Definition.lookup(v1)
 
         then:
         d1 == VX.THING

@@ -17,10 +17,10 @@ import org.apache.tinkerpop.gremlin.process.traversal.P
 
 import carnival.util.Log
 import carnival.core.graph.GraphValidationError
-import carnival.graph.VertexDefTrait
-import carnival.graph.PropertyDefTrait
-import carnival.graph.PropertyDefTrait
-import carnival.graph.EdgeDefTrait
+import carnival.graph.VertexDefinition
+import carnival.graph.PropertyDefinition
+import carnival.graph.PropertyDefinition
+import carnival.graph.EdgeDefinition
 import carnival.core.graph.Core
 import carnival.core.graph.CoreGraph
 
@@ -81,7 +81,7 @@ class GraphEntityCache {
 	///////////////////////////////////////////////////////////////////////////
 
     /** */
-    Vertex subjectByIdValue(GraphTraversalSource g, VertexDefTrait subjectDef, PropertyDefTrait idPropertyDef, String idValue) {
+    Vertex subjectByIdValue(GraphTraversalSource g, VertexDefinition subjectDef, PropertyDefinition idPropertyDef, String idValue) {
         String key = "${subjectDef.label}-${idPropertyDef.label}-${idValue}"
         if (subjectByIdValueCache.containsKey(key)) return subjectByIdValueCache.get(key)
 
@@ -101,7 +101,7 @@ class GraphEntityCache {
 
 
     /** */
-    Vertex subjectByIdentifier(GraphTraversalSource g, VertexDefTrait subjectDef, Vertex identifierV) {
+    Vertex subjectByIdentifier(GraphTraversalSource g, VertexDefinition subjectDef, Vertex identifierV) {
         String key = "${subjectDef.label}-${identifierV.id()}"
         if (subjectByIdentifierCache.containsKey(key)) return subjectByIdentifierCache.get(key)
 
@@ -155,7 +155,7 @@ class GraphEntityCache {
 
 
     /** */
-    Vertex linkSubject(GraphTraversalSource g, VertexDefTrait subjectDef, Vertex identifierV) {
+    Vertex linkSubject(GraphTraversalSource g, VertexDefinition subjectDef, Vertex identifierV) {
         String key = "${subjectDef.label}-${identifierV.id()}"
         if (linkedSubjectCache.containsKey(key)) return linkedSubjectCache.get(key)
 
@@ -175,7 +175,7 @@ class GraphEntityCache {
 
 
     /** */
-    Edge setRelationship(GraphTraversalSource g, Vertex subjectV, EdgeDefTrait predicateDef, Vertex objectV) {
+    Edge setRelationship(GraphTraversalSource g, Vertex subjectV, EdgeDefinition predicateDef, Vertex objectV) {
         g.V(subjectV)
             .outE(predicateDef.label).as('e')
             .inV()

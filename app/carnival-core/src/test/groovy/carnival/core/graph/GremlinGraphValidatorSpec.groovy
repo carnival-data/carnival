@@ -22,21 +22,21 @@ import test.TestModel
  */
 class GremlinGraphValidatorSpec extends Specification {
 
-    static enum VX1 implements VertexDefTrait {
+    static enum VX1 implements VertexDefinition {
         GGV_THING,
         GGV_ANOTHER_THING,
         GGV_SUITCASE,
         GGV_SALESMAN
     }
 
-    static enum VX2 implements VertexDefTrait {
+    static enum VX2 implements VertexDefinition {
         GGV_THING(vertexProperties:[Core.PX.NAME.withConstraints(required:true, unique:true)])
 
         private VX2() {}
         private VX2(Map m) {m.each { k,v -> this."$k" = v } }
     }
 
-    static enum VX3 implements VertexDefTrait {
+    static enum VX3 implements VertexDefinition {
         GGV_ANOTHER_THING(
             global:true,
             vertexProperties:[Core.PX.NAME.withConstraints(required:true, unique:true)]
@@ -46,11 +46,11 @@ class GremlinGraphValidatorSpec extends Specification {
         private VX3(Map m) {m.each { k,v -> this."$k" = v } }
     }
 
-    static enum EX1 implements EdgeDefTrait {
+    static enum EX1 implements EdgeDefinition {
         GGV_RELATION
     }
 
-    static enum EX2 implements EdgeDefTrait {
+    static enum EX2 implements EdgeDefinition {
         GGV_RELATION(
             domain: [VX1.GGV_THING], 
             range: [VX1.GGV_ANOTHER_THING]
@@ -60,7 +60,7 @@ class GremlinGraphValidatorSpec extends Specification {
         private EX2(Map m) {m.each { k,v -> this."$k" = v } }
     }
 
-    static enum EX3 implements EdgeDefTrait {
+    static enum EX3 implements EdgeDefinition {
         GGV_GLOBAL_RELATION(
             global:true,
             domain: [VX1.GGV_THING], 
@@ -71,7 +71,7 @@ class GremlinGraphValidatorSpec extends Specification {
         private EX3(Map m) {m.each { k,v -> this."$k" = v } }
     }
 
-    static enum EX4 implements EdgeDefTrait {
+    static enum EX4 implements EdgeDefinition {
         GGV_GLOBAL_RELATION
     }
 

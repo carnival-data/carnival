@@ -22,9 +22,9 @@ import org.apache.tinkerpop.gremlin.structure.Edge
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 
 import carnival.core.config.Defaults
-import carnival.graph.EdgeDefTrait
-import carnival.graph.PropertyDefTrait
-import carnival.graph.VertexDefTrait
+import carnival.graph.EdgeDefinition
+import carnival.graph.PropertyDefinition
+import carnival.graph.VertexDefinition
 import carnival.graph.VertexBuilder
 
 

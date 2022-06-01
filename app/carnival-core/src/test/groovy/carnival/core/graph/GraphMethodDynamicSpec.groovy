@@ -11,7 +11,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 import carnival.core.graph.Core
 import carnival.graph.Base
 import carnival.graph.VertexModel
-import carnival.graph.VertexDefTrait
+import carnival.graph.VertexDefinition
 import static carnival.core.graph.GraphMethodDynamic.GM
 
 

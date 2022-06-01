@@ -30,7 +30,7 @@ import carnival.graph.Base
  * @see carnival.graph.VertexModel
  */
 @Slf4j
-trait VertexDefTrait extends ElementDefTrait {
+trait VertexDefinition extends ElementDefinition {
 
     ///////////////////////////////////////////////////////////////////////////
     // STATIC
@@ -57,12 +57,12 @@ trait VertexDefTrait extends ElementDefTrait {
     /** 
      * optional, defines what the superclass of this class is.
      * */
-    VertexDefTrait superClass
+    VertexDefinition superClass
 
     /** 
      * optional, defines what class these verticies are instances of.
      * */
-    VertexDefTrait instanceOf
+    VertexDefinition instanceOf
 
     /** 
      * Explicitly designate this definition as a class. A singleton vertex will
@@ -76,18 +76,18 @@ trait VertexDefTrait extends ElementDefTrait {
     ///////////////////////////////////////////////////////////////////////////
 
     /** Setter wrapper for propertyDefs */
-    Set<PropertyDefTrait> getVertexProperties() { this.propertyDefs }
+    Set<PropertyDefinition> getVertexProperties() { this.propertyDefs }
     
     /** Getter wrapper for propertyDefs */
-    void setVertexProperties(Set<PropertyDefTrait> propertyDefs) {
+    void setVertexProperties(Set<PropertyDefinition> propertyDefs) {
         this.propertyDefs = propertyDefs
     }
 
     /** */
-    VertexDefTrait getSuperClass() { this.superClass }
+    VertexDefinition getSuperClass() { this.superClass }
 
     /** */
-    void setSuperClass(VertexDefTrait vDef) {
+    void setSuperClass(VertexDefinition vDef) {
         assert vDef != null
         if (!isClass()) throw new RuntimeException("cannot set superClass when isClass() is false")
         
@@ -95,10 +95,10 @@ trait VertexDefTrait extends ElementDefTrait {
     }
 
     /** */
-    VertexDefTrait getInstanceOf() { this.instanceOf }
+    VertexDefinition getInstanceOf() { this.instanceOf }
 
     /** */
-    void setInstanceOf(VertexDefTrait vDef) {
+    void setInstanceOf(VertexDefinition vDef) {
         assert vDef != null
         if (isClass()) throw new RuntimeException("cannot set instanceOf when isClass() is true")
         
@@ -228,7 +228,7 @@ trait VertexDefTrait extends ElementDefTrait {
      *
      *
      */
-    public void setSubclassOf(GraphTraversalSource g, VertexDefTrait superClassDef) {
+    public void setSubclassOf(GraphTraversalSource g, VertexDefinition superClassDef) {
         assert g
         assert superClassDef
         if (superClassDef.vertex == null) throw new IllegalArgumentException("superClassDef.vertex is null: $superClassDef")
@@ -263,7 +263,7 @@ trait VertexDefTrait extends ElementDefTrait {
      *
      *
      */
-    public void setRelationship(GraphTraversalSource g, EdgeDefTrait rel, VertexDefTrait targetClassDef) {
+    public void setRelationship(GraphTraversalSource g, EdgeDefinition rel, VertexDefinition targetClassDef) {
         //log.debug "setRelationship rel:$rel"
         g.V(vertex)
             .outE(rel.label).as('r')

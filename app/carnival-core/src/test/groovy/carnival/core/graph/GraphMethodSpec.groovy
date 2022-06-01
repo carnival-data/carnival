@@ -11,7 +11,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 import carnival.core.graph.Core
 import carnival.graph.Base
 import carnival.graph.VertexModel
-import carnival.graph.VertexDefTrait
+import carnival.graph.VertexDefinition
 
 
 
@@ -31,13 +31,13 @@ public class GraphMethodSpec extends Specification {
     }
 
     static class TestGraphMethodProcessClassOveride extends GraphMethod {
-        VertexDefTrait processVertexDef = GraphMethodSpec.VX.SOME_REAPER_PROCESS
-        VertexDefTrait processClassVertexDef = GraphMethodSpec.VX.SOME_REAPER_PROCESS_CLASS
+        VertexDefinition processVertexDef = GraphMethodSpec.VX.SOME_REAPER_PROCESS
+        VertexDefinition processClassVertexDef = GraphMethodSpec.VX.SOME_REAPER_PROCESS_CLASS
         public void execute(Graph graph, GraphTraversalSource g) {}
     }
 
     static class TestGraphMethodProcessOveride extends GraphMethod {
-        VertexDefTrait processVertexDef = GraphMethodSpec.VX.SOME_REAPER_PROCESS
+        VertexDefinition processVertexDef = GraphMethodSpec.VX.SOME_REAPER_PROCESS
         public void execute(Graph graph, GraphTraversalSource g) {}
     }
 

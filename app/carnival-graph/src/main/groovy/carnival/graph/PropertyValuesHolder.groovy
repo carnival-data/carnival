@@ -22,14 +22,14 @@ import org.apache.tinkerpop.gremlin.structure.Element
 class PropertyValuesHolder<T> {
 
     /** */
-    Map<PropertyDefTrait,Object> propertyValues = new HashMap<PropertyDefTrait,Object>()
+    Map<PropertyDefinition,Object> propertyValues = new HashMap<PropertyDefinition,Object>()
 
     /** */
     Boolean propertiesMustBeDefined = true
 
 
     /** */
-    public T withProperty(PropertyDefTrait propDef, Enum propValue) {
+    public T withProperty(PropertyDefinition propDef, Enum propValue) {
         assert propDef != null
         assert propValue != null
         withProperty(propDef, propValue.name())
@@ -37,9 +37,9 @@ class PropertyValuesHolder<T> {
 
 
     /** */
-    public T withProperty(PropertyDefTrait propDef, Object propValue) {
+    public T withProperty(PropertyDefinition propDef, Object propValue) {
         assert this.respondsTo("getElementDef")
-        ElementDefTrait eDef = getElementDef()
+        ElementDefinition eDef = getElementDef()
 
         if (propertiesMustBeDefined) {
             boolean found = eDef.propertyDefs.find({it.label == propDef.label})
@@ -64,7 +64,7 @@ class PropertyValuesHolder<T> {
     /** */
     public T withProperties(Map args) {
         assert this.respondsTo("getElementDef")
-        ElementDefTrait eDef = getElementDef()
+        ElementDefinition eDef = getElementDef()
 
         args.each { k, v ->
             def propertyDef = eDef.propertyDefs.find { it.name() == k }
@@ -115,7 +115,7 @@ class PropertyValuesHolder<T> {
     public T withMatchingProperties(Map args) {
         assert args != null
         assert this.respondsTo("getElementDef")
-        ElementDefTrait eDef = getElementDef()
+        ElementDefinition eDef = getElementDef()
 
         args.each { k, v ->
             def propertyDef = eDef.propertyDefs.find { it.name() == k }
@@ -140,27 +140,27 @@ class PropertyValuesHolder<T> {
 
     /** */
     private void holdPropertyPairs(List<List> pairs) {
-        Map<PropertyDefTrait,Object> props = new HashMap<PropertyDefTrait,Object>()
+        Map<PropertyDefinition,Object> props = new HashMap<PropertyDefinition,Object>()
         pairs.each { p ->
             def propDef = p[0]
             def propVal = p[1]
             props.put(propDef, propVal)
         }
-        props.each { PropertyDefTrait vp, Object val ->
+        props.each { PropertyDefinition vp, Object val ->
             withProperty(vp, val)
         }
     }
 
 
     /** */
-    public Map<PropertyDefTrait,Object> allPropertyValues() {
+    public Map<PropertyDefinition,Object> allPropertyValues() {
         assert this.respondsTo("getElementDef")
-        ElementDefTrait eDef = getElementDef()
+        ElementDefinition eDef = getElementDef()
 
         def pvs = [:]
         pvs.putAll(propertyValues)
 
-        eDef.defaultProperties.each { PropertyDefTrait defVp ->
+        eDef.defaultProperties.each { PropertyDefinition defVp ->
             def found = pvs.find({ vp, val -> vp.label == defVp.label})
             //log.debug "found: $found"
             
@@ -175,7 +175,7 @@ class PropertyValuesHolder<T> {
     /** */
     public Element setElementProperties(Element el) {
         def pvs = allPropertyValues()
-        pvs.each { PropertyDefTrait vp, Object val ->
+        pvs.each { PropertyDefinition vp, Object val ->
             if (val instanceof org.codehaus.groovy.runtime.GStringImpl) val = val.toString()
             el.property(vp.label, val) 
         }

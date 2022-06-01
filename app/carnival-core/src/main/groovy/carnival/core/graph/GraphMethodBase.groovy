@@ -9,7 +9,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 
 import carnival.core.util.CoreUtil
 import carnival.graph.Base
-import carnival.graph.VertexDefTrait
+import carnival.graph.VertexDefinition
 
 
 
@@ -31,10 +31,10 @@ class GraphMethodBase {
     Map arguments = new HashMap()
 
     /** */
-    VertexDefTrait processVertexDef = Core.VX.GRAPH_PROCESS
+    VertexDefinition processVertexDef = Core.VX.GRAPH_PROCESS
 
     /** */
-    VertexDefTrait processClassVertexDef = Core.VX.GRAPH_PROCESS_CLASS
+    VertexDefinition processClassVertexDef = Core.VX.GRAPH_PROCESS_CLASS
 
     /** */
     String name = this.class.name
@@ -69,7 +69,7 @@ class GraphMethodBase {
      *
      *
      */
-    public GraphMethodBase processDefinition(VertexDefTrait vdt) {
+    public GraphMethodBase processDefinition(VertexDefinition vdt) {
         assert vdt != null
         this.setProcessVertexDef(vdt)
         this
@@ -80,7 +80,7 @@ class GraphMethodBase {
      *
      *
      */
-    public GraphMethodBase processClassDefinition(VertexDefTrait vdt) {
+    public GraphMethodBase processClassDefinition(VertexDefinition vdt) {
         assert vdt != null
         this.setProcessClassVertexDef(vdt)
         this

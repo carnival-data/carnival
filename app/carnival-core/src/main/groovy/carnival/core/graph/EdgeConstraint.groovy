@@ -24,9 +24,9 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 
 import carnival.core.config.Defaults
 
-import carnival.graph.EdgeDefTrait
-import carnival.graph.PropertyDefTrait
-import carnival.graph.VertexDefTrait
+import carnival.graph.EdgeDefinition
+import carnival.graph.PropertyDefinition
+import carnival.graph.VertexDefinition
 import carnival.graph.VertexBuilder
 
 
@@ -42,7 +42,7 @@ class EdgeConstraint implements ElementConstraint {
 	///////////////////////////////////////////////////////////////////////////
 	// STATIC
 	///////////////////////////////////////////////////////////////////////////
-	static public EdgeConstraint create(EdgeDefTrait edgeDef) {
+	static public EdgeConstraint create(EdgeDefinition edgeDef) {
 		assert edgeDef
 		EdgeConstraint rd = new EdgeConstraint(
 			edgeDef:edgeDef,
@@ -60,7 +60,7 @@ class EdgeConstraint implements ElementConstraint {
 	///////////////////////////////////////////////////////////////////////////
 	String label
 	String nameSpace
-	EdgeDefTrait edgeDef
+	EdgeDefinition edgeDef
 	List<String> domainLabels // null indicates any allowed
 	List<String> rangeLabels // null indicates any allowed
 

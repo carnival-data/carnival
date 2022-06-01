@@ -22,7 +22,7 @@ import carnival.util.StringUtils
 /** */
 @ToString
 @EqualsAndHashCode(allProperties=true)
-class DynamicVertexDef implements VertexDefTrait {
+class DynamicVertexDef implements VertexDefinition {
 
     /** 
      * @param name The name of the vertex def formatted as per Java enum convention, eg. SOME_NAME

@@ -27,7 +27,7 @@ class Base {
 	///////////////////////////////////////////////////////////////////////////
 
 	/** 
-     * Namespace used for VertexDefTrait or EdgeDefTraits instances where global = true.
+     * Namespace used for VertexDefinition or EdgeDefinitions instances where global = true.
      * */
 	static final String GLOBAL_NAME_SPACE = 'GlobalNameSpace'
 
@@ -39,7 +39,7 @@ class Base {
     /** 
      * Defines edges used to express class relationships in Carnival graphs.
      * */
-    static enum EX implements EdgeDefTrait {
+    static enum EX implements EdgeDefinition {
         IS_SUBCLASS_OF,
         IS_INSTANCE_OF
     }
@@ -48,7 +48,7 @@ class Base {
     /** 
      * Defines properties used to define class and namespace information in Carnival graphs.
      * */
-    static enum PX implements PropertyDefTrait {
+    static enum PX implements PropertyDefinition {
         IS_CLASS,
         NAME_SPACE,
         VERTEX_DEFINITION_CLASS

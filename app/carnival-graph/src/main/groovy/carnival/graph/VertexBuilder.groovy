@@ -16,9 +16,9 @@ import org.apache.tinkerpop.gremlin.structure.Edge
 
 
 /** 
- * Builder class used when creating verticies from a VertexDefTrait object.
+ * Builder class used when creating verticies from a VertexDefinition object.
  * 
- * @see carnival.graph.VertexDefTrait
+ * @see carnival.graph.VertexDefinition
  */
 @Slf4j
 class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
@@ -30,7 +30,7 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
     /** 
      * Object that owns this builder.
      * */
-    VertexDefTrait vertexDef
+    VertexDefinition vertexDef
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -38,7 +38,7 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    public VertexBuilder(VertexDefTrait vertexDef) {
+    public VertexBuilder(VertexDefinition vertexDef) {
         assert vertexDef
         this.vertexDef = vertexDef
     }
@@ -49,7 +49,7 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    public ElementDefTrait getElementDef() { vertexDef }
+    public ElementDefinition getElementDef() { vertexDef }
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -92,7 +92,7 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
         def traversal = traversal(graph, g)
 
         def pvs = allPropertyValues()
-        pvs.each { PropertyDefTrait vp, Object val -> 
+        pvs.each { PropertyDefinition vp, Object val -> 
             traversal.has(vp.label, val) 
         }
 

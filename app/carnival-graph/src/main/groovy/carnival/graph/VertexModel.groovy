@@ -13,7 +13,7 @@ import org.codehaus.groovy.transform.GroovyASTTransformationClass
 /** 
  * Used to specify vertex definitions in a graph model.
  * 
- * @see carnival.graph.VertexDefTrait
+ * @see carnival.graph.VertexDefinition
  * @see carnival.graph.ModelTransformation
  * */
 @Retention(RetentionPolicy.SOURCE)

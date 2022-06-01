@@ -63,7 +63,7 @@ class CoreGraphGraphModelExtensionSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
     
-    static enum VX implements VertexDefTrait {
+    static enum VX implements VertexDefinition {
         PORTAL_GUN,
         RICKS_LAB
 
@@ -72,7 +72,7 @@ class CoreGraphGraphModelExtensionSpec extends Specification {
     }
 
 
-    static enum EX implements EdgeDefTrait {
+    static enum EX implements EdgeDefinition {
         WAS_CREATED_BY (domain:[VX.PORTAL_GUN], range:[VX.RICKS_LAB])
 
         private EX() {}

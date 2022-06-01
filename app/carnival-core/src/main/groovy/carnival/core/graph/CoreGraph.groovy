@@ -23,9 +23,9 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 import org.apache.tinkerpop.gremlin.structure.Graph.Features.GraphFeatures
 
 import carnival.core.config.Defaults
-import carnival.graph.EdgeDefTrait
-import carnival.graph.PropertyDefTrait
-import carnival.graph.VertexDefTrait
+import carnival.graph.EdgeDefinition
+import carnival.graph.PropertyDefinition
+import carnival.graph.VertexDefinition
 import carnival.graph.DynamicVertexDef
 import carnival.graph.VertexBuilder
 
@@ -96,7 +96,7 @@ abstract class CoreGraph implements GremlinTrait {
 
 
 	/** */
-	static protected void combine(EdgeConstraint relDef, EdgeDefTrait edgeDef) {
+	static protected void combine(EdgeConstraint relDef, EdgeDefinition edgeDef) {
 		assert relDef
 		assert edgeDef
 
@@ -173,8 +173,8 @@ abstract class CoreGraph implements GremlinTrait {
 		assert defClass
 
 		def defInterfaces = defClass.getInterfaces()
-		if (defInterfaces.contains(VertexDefTrait)) addVertexConstraints(graph, g, defClass)
-		else if (defInterfaces.contains(EdgeDefTrait)) addEdgeConstraints(graph, g, defClass)
+		if (defInterfaces.contains(VertexDefinition)) addVertexConstraints(graph, g, defClass)
+		else if (defInterfaces.contains(EdgeDefinition)) addEdgeConstraints(graph, g, defClass)
 		else throw new RuntimeException("unrecognized definition class: $defClass")
 	}
 
@@ -235,7 +235,7 @@ abstract class CoreGraph implements GremlinTrait {
 		def vdef = vld.vertexDef
 		if (vdef.isClass() && vdef.requiredProperties.size() == 0) {
 			def ci = graphSchema.vertexBuilders.find {
-				it instanceof VertexDefTrait && it.vertexDef == vdef
+				it instanceof VertexDefinition && it.vertexDef == vdef
 			}
 
 			if (!ci) {
@@ -267,9 +267,9 @@ abstract class CoreGraph implements GremlinTrait {
 
 
 	/** */
-	public void addVertexConstraints(Graph graph, GraphTraversalSource g, Class<VertexDefTrait> vdc) {
+	public void addVertexConstraints(Graph graph, GraphTraversalSource g, Class<VertexDefinition> vdc) {
 		Set<VertexConstraint> existingDefinitions = graphSchema.getVertexConstraints()
-		vdc.values().each { VertexDefTrait vdef ->
+		vdc.values().each { VertexDefinition vdef ->
 			def found = existingDefinitions.find {
 				it.label == vdef.label && it.nameSpace == vdef.nameSpace
 			}
@@ -286,7 +286,7 @@ abstract class CoreGraph implements GremlinTrait {
 		log.info "CoreGraph findNewVertexConstraints packageName:$packageName"
 		assert packageName
 
-    	Set<Class<VertexDefTrait>> vertexDefClasses = findVertexDefClases(packageName)
+    	Set<Class<VertexDefinition>> vertexDefClasses = findVertexDefClases(packageName)
 		if (!vertexDefClasses) return new HashSet<VertexConstraint>()
 
 		findNewVertexConstraints(vertexDefClasses)
@@ -294,7 +294,7 @@ abstract class CoreGraph implements GremlinTrait {
 
 
     /** */
-    public Collection<VertexConstraint> findNewVertexConstraints(Set<Class<VertexDefTrait>> vertexDefClasses) {
+    public Collection<VertexConstraint> findNewVertexConstraints(Set<Class<VertexDefinition>> vertexDefClasses) {
 		assert vertexDefClasses
     	
 		Set<VertexConstraint> existingDefinitions = graphSchema.getVertexConstraints()
@@ -303,7 +303,7 @@ abstract class CoreGraph implements GremlinTrait {
         vertexDefClasses.each { Class vdc ->
         	log.trace "findNewVertexConstraints vdc: $vdc"
 
-            vdc.values().each { VertexDefTrait vdef ->
+            vdc.values().each { VertexDefinition vdef ->
             	log.trace "findNewVertexConstraints vdef: $vdef"
 
             	// check if already defined
@@ -323,10 +323,10 @@ abstract class CoreGraph implements GremlinTrait {
 
 
     /** */
-    public Set<Class<VertexDefTrait>> findVertexDefClases(String packageName) {
+    public Set<Class<VertexDefinition>> findVertexDefClases(String packageName) {
     	// find all vertex defs
     	Reflections reflections = new Reflections(packageName)
-    	Set<Class<VertexDefTrait>> classes = reflections.getSubTypesOf(VertexDefTrait.class)
+    	Set<Class<VertexDefinition>> classes = reflections.getSubTypesOf(VertexDefinition.class)
     	log.trace "findVertexDefClases classes(${classes?.size()}): $classes"
 
     	// remove genralized classes
@@ -351,9 +351,9 @@ abstract class CoreGraph implements GremlinTrait {
 
 
 	/** */
-	public void addEdgeConstraints(Graph graph, GraphTraversalSource g, Class<EdgeDefTrait> edc) {
+	public void addEdgeConstraints(Graph graph, GraphTraversalSource g, Class<EdgeDefinition> edc) {
 		Set<EdgeConstraint> existingDefinitions = graphSchema.getEdgeConstraints()
-		edc.values().each { EdgeDefTrait edef ->
+		edc.values().each { EdgeDefinition edef ->
 			def found = existingDefinitions.find {
 				it.label == edef.label && it.nameSpace == edef.nameSpace
 			}
@@ -386,7 +386,7 @@ abstract class CoreGraph implements GremlinTrait {
 		log.info "CoreGraph findNewEdgeConstraints packageName:$packageName"
 		assert packageName
     	
-		Set<Class<EdgeDefTrait>> defClasses = findEdgeDefClases(packageName)
+		Set<Class<EdgeDefinition>> defClasses = findEdgeDefClases(packageName)
 		if (!defClasses) return new HashSet<EdgeConstraint>()
 		
 		findNewEdgeConstraints(defClasses)
@@ -394,7 +394,7 @@ abstract class CoreGraph implements GremlinTrait {
 
 
 	/** */
-    public Collection<EdgeConstraint> findNewEdgeConstraints(Set<Class<EdgeDefTrait>> edgeDefClasses) {
+    public Collection<EdgeConstraint> findNewEdgeConstraints(Set<Class<EdgeDefinition>> edgeDefClasses) {
 		assert edgeDefClasses
     	
 		Set<EdgeConstraint> existingDefinitions = graphSchema.getEdgeConstraints()
@@ -403,7 +403,7 @@ abstract class CoreGraph implements GremlinTrait {
         edgeDefClasses.each { Class edc ->
         	log.trace "findNewEdgeConstraints edc: $edc"
 
-            edc.values().each { EdgeDefTrait edef ->
+            edc.values().each { EdgeDefinition edef ->
             	log.trace "findNewEdgeConstraints edef: $edef"
 
             	// check if already defined
@@ -423,10 +423,10 @@ abstract class CoreGraph implements GremlinTrait {
 
     
     /** */
-    public Set<Class<EdgeDefTrait>> findEdgeDefClases(String packageName) {
+    public Set<Class<EdgeDefinition>> findEdgeDefClases(String packageName) {
     	// find all vertex defs
     	Reflections reflections = new Reflections(packageName)
-    	Set<Class<EdgeDefTrait>> classes = reflections.getSubTypesOf(EdgeDefTrait.class)
+    	Set<Class<EdgeDefinition>> classes = reflections.getSubTypesOf(EdgeDefinition.class)
     	log.trace "findEdgeDefClases classes: $classes"
 
     	// remove genralized classes

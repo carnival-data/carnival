@@ -15,10 +15,10 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 
 
 /**
- * gradle test --tests "carnival.graph.PropertyDefTraitSpec"
+ * gradle test --tests "carnival.graph.PropertyDefinitionSpec"
  *
  */
-class PropertyDefTraitSpec extends Specification {
+class PropertyDefinitionSpec extends Specification {
 
     @PropertyModel
     static enum PX {

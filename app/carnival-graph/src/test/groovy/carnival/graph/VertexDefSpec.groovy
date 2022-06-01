@@ -81,7 +81,7 @@ class VertexDefSpec extends Specification {
     def "lookup"() {
         when:
         Vertex v1 = VX.THING.instance().create(graph)
-        VertexDefTrait d1 = VertexDef.lookup(v1)
+        VertexDefTrait d1 = ElementDefinition.lookup(v1)
 
         then:
         d1 == VX.THING

@@ -114,7 +114,7 @@ trait EdgeDefTrait extends ElementDefTrait {
     /** */
     public void assertDomain(Vertex from) {
         assert from != null
-        def fromDef = VertexDef.lookup(from)
+        def fromDef = ElementDefinition.lookup(from)
         assertDomain(fromDef)
     }
 
@@ -134,7 +134,7 @@ trait EdgeDefTrait extends ElementDefTrait {
     /** */
     public void assertRange(Vertex to) {
         assert to != null
-        def toDef = VertexDef.lookup(to)
+        def toDef = ElementDefinition.lookup(to)
         assertRange(toDef)        
     }
 

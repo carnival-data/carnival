@@ -145,7 +145,7 @@ trait PropertyDefTrait {
     void assertPropertyIsDefined(Element el) {
         boolean isDefined = false
         
-        ElementDefTrait edt = ElementDef.lookup(el)
+        ElementDefTrait edt = ElementDefinition.lookup(el)
         if (edt != null && !(edt instanceof DynamicVertexDef)) {
             if (edt.propertiesMustBeDefined) {
                 isDefined = edt.propertyDefs.find({it.label == getLabel()})
@@ -162,7 +162,7 @@ trait PropertyDefTrait {
     /** */
     boolean propertyIsDefined(Element el) {
         boolean isDefined = false
-        ElementDefTrait edt = ElementDef.lookup(el)
+        ElementDefTrait edt = ElementDefinition.lookup(el)
         if (edt != null && !(edt instanceof DynamicVertexDef)) {
             if (edt.propertiesMustBeDefined) {
                 isDefined = edt.propertyDefs.find({it.label == getLabel()})

@@ -19,10 +19,10 @@ import carnival.graph.Base
 
 
 @Slf4j
-class ElementDef {
+class ElementDefinition {
 
     /** */
-    static public ElementDefTrait lookup(Element v) {
+    static public ElementDefTrait lookupElementDefinition(Element v) {
         assert v != null
         assert (v instanceof Edge || v instanceof Vertex)
 
@@ -60,6 +60,19 @@ class ElementDef {
         return defInstance
     }
 
+    
+    /** */
+    static public VertexDefTrait lookup(Vertex v) {
+        assert v != null
+        lookupElementDefinition(v)
+    }    
+
+
+    /** */
+    static public EdgeDefTrait lookup(Edge e) {
+        assert e != null
+        lookupElementDefinition(e)
+    }
 }
 
 

@@ -21,7 +21,7 @@ import org.apache.tinkerpop.gremlin.structure.Edge
  */
 class DefAnnotationsSpec extends Specification {
 
-    @VertexDefinition
+    @VertexModel
     static enum VX {
         THING,
 
@@ -34,7 +34,7 @@ class DefAnnotationsSpec extends Specification {
     }
 
 
-    @EdgeDefinition
+    @EdgeModel
     static enum EX {
     	IS_NOT(
             domain:[VX.THING], 
@@ -43,7 +43,7 @@ class DefAnnotationsSpec extends Specification {
     }
 
 
-    @PropertyDefinition
+    @PropertyModel
     static enum PX {
         PROP_A,
         PROP_B,
@@ -51,7 +51,7 @@ class DefAnnotationsSpec extends Specification {
     }
 
 
-    @PropertyDefinition
+    @PropertyModel
     static enum PX_REDUNDANT_DEF_TRAIT implements PropertyDefTrait {
         PROP_A
     }

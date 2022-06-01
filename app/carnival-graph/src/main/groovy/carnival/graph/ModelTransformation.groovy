@@ -28,12 +28,12 @@ import org.codehaus.groovy.ast.expr.*
  * as SEMANTIC_ANALYSIS. Any later, and the groovy machinery will not
  * apply the trait, only the interface.
  * 
- * @see carnival.graph.VertexDefinitionTransformation
- * @see carnival.graph.EdgeDefinitionTransformation
- * @see carnival.graph.PropertyDefinitionTransformation
+ * @see carnival.graph.VertexModelTransformation
+ * @see carnival.graph.EdgeModelTransformation
+ * @see carnival.graph.PropertyModelTransformation
  *
  */
-abstract class DefinitionTransformation extends AbstractASTTransformation {
+abstract class ModelTransformation extends AbstractASTTransformation {
 
     ///////////////////////////////////////////////////////////////////////////
     // STATIC
@@ -138,7 +138,7 @@ abstract class DefinitionTransformation extends AbstractASTTransformation {
 
 /** */
 @GroovyASTTransformation(phase = CompilePhase.SEMANTIC_ANALYSIS)
-class VertexDefinitionTransformation extends DefinitionTransformation {
+class VertexModelTransformation extends ModelTransformation {
 
     Class getDefTraitClass() { return carnival.graph.VertexDefTrait }
 
@@ -192,7 +192,7 @@ class VertexDefinitionTransformation extends DefinitionTransformation {
 
 /** */
 @GroovyASTTransformation(phase = CompilePhase.SEMANTIC_ANALYSIS)
-class EdgeDefinitionTransformation extends DefinitionTransformation {
+class EdgeModelTransformation extends ModelTransformation {
 
     Class getDefTraitClass() { return carnival.graph.EdgeDefTrait }
 
@@ -201,7 +201,7 @@ class EdgeDefinitionTransformation extends DefinitionTransformation {
 
 /** */
 @GroovyASTTransformation(phase = CompilePhase.SEMANTIC_ANALYSIS)
-class PropertyDefinitionTransformation extends DefinitionTransformation {
+class PropertyModelTransformation extends ModelTransformation {
 
     Class getDefTraitClass() { return carnival.graph.PropertyDefTrait }
 
@@ -210,7 +210,7 @@ class PropertyDefinitionTransformation extends DefinitionTransformation {
 
 /** 
 @GroovyASTTransformation(phase = CompilePhase.CANONICALIZATION)
-class DefinitionTransformationPost extends AbstractASTTransformation {
+class ModelTransformationPost extends AbstractASTTransformation {
 
     @Override
     void visit(ASTNode[] nodes, SourceUnit source) {

@@ -20,13 +20,13 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
  */
 class PropertyDefTraitSpec extends Specification {
 
-    @PropertyDefinition
+    @PropertyModel
     static enum PX {
         PROP_A,
         PROP_B
     }
 
-    @VertexDefinition
+    @VertexModel
     static enum VX {
         THING_1,
 

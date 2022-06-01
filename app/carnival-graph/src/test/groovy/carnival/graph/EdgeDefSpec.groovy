@@ -19,13 +19,13 @@ import org.apache.tinkerpop.gremlin.structure.Edge
 class EdgeDefSpec extends Specification {
 
 
-    @VertexDefinition
+    @VertexModel
     static enum VX {
         THING,
         THING_1
     }
 
-    @EdgeDefinition
+    @EdgeModel
     static enum EX {
     	IS_NOT(
             domain:[VX.THING], 

@@ -25,9 +25,9 @@ import carnival.graph.Base
 
 /** 
  * Defines allowed verticies in a graph model, automatically inherited by 
- * enums with the `@VertexDefinition` annotation.
+ * enums with the `@VertexModel` annotation.
  * 
- * @see carnival.graph.VertexDefinition
+ * @see carnival.graph.VertexModel
  */
 @Slf4j
 trait VertexDefTrait extends ElementDefTrait {
@@ -177,7 +177,7 @@ trait VertexDefTrait extends ElementDefTrait {
             T.label, lbl,
             Base.PX.NAME_SPACE.label, ns
         )
-        if (isGlobal()) v.property(Base.PX.VERTEX_DEFINITION_CLASS.label, getVertexDefinitionClass())
+        if (isGlobal()) v.property(Base.PX.VERTEX_DEFINITION_CLASS.label, getVertexModelClass())
         
         //if (instanceOf != null) Base.EX.IS_INSTANCE_OF.instance().from(v).to(instanceOf).create()
 

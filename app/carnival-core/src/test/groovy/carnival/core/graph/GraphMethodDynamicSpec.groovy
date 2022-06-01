@@ -10,7 +10,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 
 import carnival.core.graph.Core
 import carnival.graph.Base
-import carnival.graph.VertexDefinition
+import carnival.graph.VertexModel
 import carnival.graph.VertexDefTrait
 import static carnival.core.graph.GraphMethodDynamic.GM
 
@@ -20,7 +20,7 @@ import static carnival.core.graph.GraphMethodDynamic.GM
 public class GraphMethodDynamicSpec extends Specification {
 
 
-    @VertexDefinition
+    @VertexModel
     static enum VX {
         SOME_REAPER_PROCESS_CLASS,
         SOME_REAPER_PROCESS,

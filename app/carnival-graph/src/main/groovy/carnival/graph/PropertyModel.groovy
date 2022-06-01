@@ -10,16 +10,15 @@ import java.lang.reflect.Field
 import org.codehaus.groovy.transform.GroovyASTTransformationClass
 
 
-/** 
- * Used to specify vertex definitions in a graph model.
+/**
+ * Used to specify property definitions in a graph model. 
  * 
- * @see carnival.graph.VertexDefTrait
- * @see carnival.graph.DefinitionTransformation
+ * @see carnival.graph.PropertyDefTrait
+ * @see carnival.graph.ModelTransformation
  * */
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
-@GroovyASTTransformationClass(["carnival.graph.VertexDefinitionTransformation"])
-public @interface VertexDefinition {
-    public String global() default "";
+@GroovyASTTransformationClass(["carnival.graph.PropertyModelTransformation"])
+public @interface PropertyModel {
+    //public String value() default "";
 }
-

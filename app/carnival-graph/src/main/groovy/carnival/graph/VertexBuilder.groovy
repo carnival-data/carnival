@@ -66,7 +66,7 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
 
      /** 
      * If the vertex with the specified properties exists return it, otherwise create it.
-     * Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexDefinition':
+     * Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexModel':
      * <p>
      * {@code Vertex rover = VX.SHIBA_INU.instance().ensure(graph) }
      * 
@@ -79,7 +79,7 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
 
      /** 
      * If the vertex with the specified properties exists return it, otherwise create it. 
-     * Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexDefinition':
+     * Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexModel':
      * <p>
      * {@code Vertex rover = VX.SHIBA_INU.instance().vertex(graph) }
      *
@@ -126,7 +126,7 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
 
     /** 
      * Create a vertex with the specified properties.
-     * Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexDefinition':
+     * Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexModel':
      * <p>
      * {@code Vertex rover = VX.SHIBA_INU.instance().create(graph) }
      * 
@@ -140,7 +140,7 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
 
     /** 
      * Create a vertex with the specified properties.
-     * Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexDefinition':
+     * Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexModel':
      * <p>
      * {@code Vertex rover = VX.SHIBA_INU.instance().create(graph) }
      * 

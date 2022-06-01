@@ -16,12 +16,12 @@ import org.apache.tinkerpop.gremlin.structure.Edge
 
 
 /**
- * gradle test --tests "carnival.graph.VertexDefinitionSpec"
+ * gradle test --tests "carnival.graph.VertexModelSpec"
  *
  */
-class VertexDefinitionSpec extends Specification {
+class VertexModelSpec extends Specification {
 
-    @VertexDefinition
+    @VertexModel
     static enum VX {
         THING_1(PX)
 
@@ -53,7 +53,7 @@ class VertexDefinitionSpec extends Specification {
     }
 
 
-    /*@EdgeDefinition
+    /*@EdgeModel
     static enum EX {
     	IS_NOT(
             domain:[VX.THING], 
@@ -62,7 +62,7 @@ class VertexDefinitionSpec extends Specification {
     }*/
 
 
-    @PropertyDefinition
+    @PropertyModel
     static enum PX {
         PROP_A,
         PROP_B,

@@ -18,9 +18,9 @@ import org.apache.tinkerpop.gremlin.structure.Property
 
 /** 
  * Defines allowed properties in a graph model, automatically inherited by 
- * enums with the `@PropertyDefinition` annotation.
+ * enums with the `@PropertyModel` annotation.
  * 
- * @see carnival.graph.PropertyDefinition
+ * @see carnival.graph.PropertyModel
  */
 @Slf4j
 trait PropertyDefTrait {

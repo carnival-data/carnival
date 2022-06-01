@@ -100,7 +100,7 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
 
     /** 
      * Create new edge using previously specified 'from' and 'to' Vertex objects.
-     * Usage example, assuming EX.IS_FIRENDS_WITH is an enum decorated with '@EdgeDefinition':
+     * Usage example, assuming EX.IS_FIRENDS_WITH is an enum decorated with '@EdgeModel':
      * <p>
      * {@code Edge edge1 = EX.IS_FRIENDS_WITH.instance().from(person1).to(person2).create() }
      * */
@@ -115,7 +115,7 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
 
     /** 
      * If the edge with the specified 'from', 'to', and properties exists return it, otherwise create it.
-     * Usage example, assuming EX.IS_FIRENDS_WITH is an enum decorated with '@EdgeDefinition':
+     * Usage example, assuming EX.IS_FIRENDS_WITH is an enum decorated with '@EdgeModel':
      * <p>
      * {@code Edge edge1 = EX.IS_FRIENDS_WITH.instance().from(person1).to(person2).ensure() }
      * */

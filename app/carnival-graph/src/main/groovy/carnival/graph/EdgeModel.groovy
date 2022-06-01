@@ -14,11 +14,11 @@ import org.codehaus.groovy.transform.GroovyASTTransformationClass
  * Used to specify edge definitions in a graph model.
  * 
  * @see carnival.graph.EdgeDefTrait
- * @see carnival.graph.DefinitionTransformation
+ * @see carnival.graph.ModelTransformation
  * */
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
-@GroovyASTTransformationClass(["carnival.graph.EdgeDefinitionTransformation"])
-public @interface EdgeDefinition {
+@GroovyASTTransformationClass(["carnival.graph.EdgeModelTransformation"])
+public @interface EdgeModel {
     //public String value() default "";
 }

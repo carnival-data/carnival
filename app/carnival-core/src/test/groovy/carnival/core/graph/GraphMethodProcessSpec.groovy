@@ -7,14 +7,14 @@ import spock.lang.Unroll
 import spock.lang.Shared
 
 import carnival.core.graph.Core
-import carnival.graph.VertexDefinition
+import carnival.graph.VertexModel
 
 
 
 public class GraphMethodProcessSpec extends Specification {
 
 
-    @VertexDefinition
+    @VertexModel
     static enum VX {
         SOME_REAPER_PROCESS,
         SOME_REAPER_OUTPUT

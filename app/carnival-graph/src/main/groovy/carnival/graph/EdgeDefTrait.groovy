@@ -19,10 +19,10 @@ import org.apache.tinkerpop.gremlin.structure.Edge
 
 /** 
  * Defines allowed edges in a graph model, automatically inherited by 
- * enums with the `@EdgeDefinition` annotation.
+ * enums with the `@EdgeModel` annotation.
  * 
  * 
- * @see carnival.graph.EdgeDefinition
+ * @see carnival.graph.EdgeModel
  * @see carnival.graph.EdgeBuilder
  */
 @Slf4j

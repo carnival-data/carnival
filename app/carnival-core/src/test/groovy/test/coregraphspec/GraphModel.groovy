@@ -6,8 +6,8 @@ import carnival.graph.VertexDefTrait
 import carnival.graph.PropertyDefTrait
 import carnival.graph.EdgeDefTrait
 import carnival.core.graph.Core
-import carnival.graph.VertexDefinition
-import carnival.graph.EdgeDefinition
+import carnival.graph.VertexModel
+import carnival.graph.EdgeModel
 
 
 
@@ -31,12 +31,12 @@ class GraphModel {
         private VX(Map m) {m.each { k,v -> this."$k" = v }}
     }
 
-    @VertexDefinition(global="true")
+    @VertexModel(global="true")
     static enum VXG {
         DOG_CLASS_GLOBAL
     }
 
-    @EdgeDefinition
+    @EdgeModel
     static enum EX {
         BARKS_AT
     }

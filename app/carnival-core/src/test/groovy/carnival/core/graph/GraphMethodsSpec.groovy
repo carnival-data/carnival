@@ -10,7 +10,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 
 import carnival.core.graph.Core
 import carnival.graph.Base
-import carnival.graph.VertexDefinition
+import carnival.graph.VertexModel
 
 
 
@@ -34,7 +34,7 @@ class GmsTestMethods implements GraphMethods {
 public class GraphMethodsSpec extends Specification {
 
 
-    @VertexDefinition
+    @VertexModel
     static enum VX {
         SOME_REAPER_PROCESS_CLASS,
         SOME_REAPER_PROCESS,

@@ -9,9 +9,9 @@ import groovy.transform.CompileStatic
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import carnival.graph.EdgeDefinition
-import carnival.graph.PropertyDefinition
-import carnival.graph.VertexDefinition
+import carnival.graph.EdgeModel
+import carnival.graph.PropertyModel
+import carnival.graph.VertexModel
 
 
 
@@ -32,7 +32,7 @@ class Core {
 	///////////////////////////////////////////////////////////////////////////
 
     /** */
-    @VertexDefinition
+    @VertexModel
     static enum VX {
         APPLICATION (
             vertexProperties:[
@@ -100,7 +100,7 @@ class Core {
 
 
     /** */
-    @EdgeDefinition
+    @EdgeModel
     static enum EX {
     	IS_IDENTIFIED_BY,
         WAS_IDENTIFIED_BY,
@@ -139,7 +139,7 @@ class Core {
 
 
     /** */
-    @PropertyDefinition
+    @PropertyModel
     static enum PX {
         NAME,
         DATE,

@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory
  * and namespace in a Carnival graph. These properties and edges are automatically instantiated
  * in the graph when appropriate.
  * <p>
- * Note: '@EdgeDefinition' and '@PropertyDefinition' do not seem to work here... not sure
+ * Note: '@EdgeModel' and '@PropertyModel' do not seem to work here... not sure
  * why.  Perhaps it is becasue this class is in the same package as the
  * definition classes.  Whatever it is, directly implementing the traits works
  * fine.

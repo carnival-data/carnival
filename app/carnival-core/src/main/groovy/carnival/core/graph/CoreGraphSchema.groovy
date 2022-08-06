@@ -35,17 +35,17 @@ import carnival.graph.VertexBuilder
  *
  */
 @Slf4j
-class CoreGraphSchema implements GraphSchema {
+class DefaultGraphSchema implements GraphSchema {
 
 	///////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTOR
 	///////////////////////////////////////////////////////////////////////////
 
 	/** */
-	public CoreGraphSchema() { }
+	public DefaultGraphSchema() { }
 
 	/** */
-	public CoreGraphSchema(Collection<VertexBuilder> vertexBuilders) {
+	public DefaultGraphSchema(Collection<VertexBuilder> vertexBuilders) {
 		assert vertexBuilders
 		assert vertexBuilders.size() > 0
 		this.vertexBuilders.addAll(vertexBuilders)

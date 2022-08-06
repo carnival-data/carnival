@@ -45,10 +45,10 @@ class CoreGraphTinker extends CoreGraph {
     	def graph = TinkerGraph.open()
 
 		def graphSchema
-        if (args.vertexBuilders) graphSchema = new CoreGraphSchema(args.vertexBuilders)
-        else graphSchema = new CoreGraphSchema()
+        if (args.vertexBuilders) graphSchema = new DefaultGraphSchema(args.vertexBuilders)
+        else graphSchema = new DefaultGraphSchema()
 
-        def graphValidator = new GremlinGraphValidator()
+        def graphValidator = new DefaultGraphValidator()
         def coreGraph = new CoreGraphTinker(graph, graphSchema, graphValidator)
 
     	def g = graph.traversal()

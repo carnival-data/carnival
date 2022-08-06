@@ -54,10 +54,10 @@ class CoreGraphNeo4j extends CoreGraph {
     	def graph = openGremlinGraph()
 
 		def graphSchema
-        if (args.vertexBuilders) graphSchema = new CoreGraphSchema(args.vertexBuilders)
-        else graphSchema = new CoreGraphSchema()
+        if (args.vertexBuilders) graphSchema = new DefaultGraphSchema(args.vertexBuilders)
+        else graphSchema = new DefaultGraphSchema()
 
-        def graphValidator = new GremlinGraphValidator()
+        def graphValidator = new DefaultGraphValidator()
         def coreGraph = new CoreGraphNeo4j(graph, graphSchema, graphValidator)
 
     	def g = graph.traversal()

@@ -119,7 +119,7 @@ abstract class CoreGraph implements GremlinTrait {
 	//Graph graph
 
 	/** */
-	CoreGraphSchema graphSchema
+	DefaultGraphSchema graphSchema
 
 	/** */
 	GraphValidator graphValidator
@@ -131,7 +131,7 @@ abstract class CoreGraph implements GremlinTrait {
 	///////////////////////////////////////////////////////////////////////////
 
 	/** */
-	protected CoreGraph(Graph graph, CoreGraphSchema graphSchema, GraphValidator graphValidator) {
+	protected CoreGraph(Graph graph, DefaultGraphSchema graphSchema, GraphValidator graphValidator) {
 		assert graph
 		assert graphSchema
 		assert graphValidator

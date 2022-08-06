@@ -22,7 +22,7 @@ import carnival.graph.Base
 
 /** */
 @Slf4j
-public class GremlinGraphValidator implements GraphValidator {
+public class DefaultGraphValidator implements GraphValidator {
 
 	///////////////////////////////////////////////////////////////////////////
 	// STATIC METOHDS

@@ -17,10 +17,10 @@ import test.TestModel
 
 
 /**
- * gradle test --tests "carnival.core.graph.GremlinGraphValidatorSpec"
+ * gradle test --tests "carnival.core.graph.DefaultGraphValidatorSpec"
  *
  */
-class GremlinGraphValidatorSpec extends Specification {
+class DefaultGraphValidatorSpec extends Specification {
 
     static enum VX1 implements VertexDefinition {
         GGV_THING,
@@ -96,7 +96,7 @@ class GremlinGraphValidatorSpec extends Specification {
         coreGraph = CoreGraphTinker.create()
         graph = coreGraph.graph
         graphSchema = coreGraph.graphSchema
-        graphValidator = new GremlinGraphValidator()
+        graphValidator = new DefaultGraphValidator()
         g = graph.traversal()
     }
 
@@ -185,7 +185,7 @@ class GremlinGraphValidatorSpec extends Specification {
         graphValidator.checkConstraints(g, graphSchema).size() == 0
 
         when:
-        Core.VX.APPLICATION.instance().withProperty(Core.PX.NAME, 'GremlinGraphValidatorSpecApp').vertex(graph, g)
+        Core.VX.APPLICATION.instance().withProperty(Core.PX.NAME, 'DefaultGraphValidatorSpecApp').vertex(graph, g)
 
         then:
         graphValidator.checkModel(g, graphSchema).size() == 0

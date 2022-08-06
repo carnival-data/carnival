@@ -177,7 +177,14 @@ class PropertyValuesHolder<T> {
         def pvs = allPropertyValues()
         pvs.each { PropertyDefTrait vp, Object val ->
             if (val instanceof org.codehaus.groovy.runtime.GStringImpl) val = val.toString()
-            el.property(vp.label, val) 
+            try {
+                el.property(vp.label, val) 
+            } catch (Exception e) {
+                throw new RuntimeException(
+                    "Could not set property ${vp} with value ${val} of element ${el} with definition " + ElementDef.lookup(el), 
+                    e
+                )
+            }
         }
         el
     }

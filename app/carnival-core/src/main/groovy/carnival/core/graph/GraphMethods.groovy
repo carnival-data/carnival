@@ -47,6 +47,26 @@ trait GraphMethods extends MethodsHolder {
     }
 
 
+    /** */
+    GraphMethodList methods(List<String> names) {
+        assert names != null
+
+        GraphMethodList gml = new GraphMethodList()
+        names.each { name ->
+            def gm = method(name)
+            gml.graphMethods.add(gm)
+        }
+
+        return gml
+    }
+
+
+    /** */
+    GraphMethodList methods(String... names) {
+        methods(names.toList())
+    }
+
+
     ///////////////////////////////////////////////////////////////////////////
     // UTILITY
     ///////////////////////////////////////////////////////////////////////////    

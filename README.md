@@ -32,10 +32,12 @@ Carnival has three principal components: a graph modeling architecture, a cachin
 
 Name | Description
 --- | ---
-carnival-core | Basic carnival framework. Implements the basic carnival framework classes (vines, reapers, reasonsers, etc). Defines the basic carnival graph schema (processes, databases). [Core model](https://github.com/pmbb-ibi/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/Core.groovy)
+carnival-core | Basic Carnival framework. Implements the basic Carnival framework classes (vines, reapers, reasonsers, etc). Defines the basic carnival graph schema (processes, databases). [Core model](https://github.com/pmbb-ibi/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/Core.groovy)
 [carnival-graph](app/carnival-graph/README.md) | Framework for defining carnival graph schemas (vertex and edge definitions). Contains the basic vertex, edge, and property classes.
-[carnival-util](app/carnival-util/README.md) | Standalone package that contains utility and helper classes such as MappedDataTable, FeatureReport and SqlUtils. Primarily used for dealing with relational data.
-[carnival-gradle](app/carnival-gradle/README.md) | Gradle plugin for building a Micronaut app that relies on Carnival.
+[carnival-util](app/carnival-util/README.md) | Standalone package that contains utility and helper classes such as data tables, reports, and SQL utilties, which are primarily used for dealing with relational data.
+[carnival-gradle](app/carnival-gradle/README.md) | Gradle plugin for building Carnival applications and libraries.
+
+
 
 
 ### Extensions

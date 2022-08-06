@@ -9,7 +9,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 
 import carnival.core.util.CoreUtil
 import carnival.graph.Base
-import carnival.graph.VertexDefTrait
+
 
 
 

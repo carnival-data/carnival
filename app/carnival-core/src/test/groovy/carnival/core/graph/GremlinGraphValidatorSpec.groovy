@@ -93,7 +93,7 @@ class DefaultGraphValidatorSpec extends Specification {
     
 
     def setup() { 
-        coreGraph = CoreGraphTinker.create()
+        coreGraph = CarnivalTinker.create()
         graph = coreGraph.graph
         graphSchema = coreGraph.graphSchema
         graphValidator = new DefaultGraphValidator()
@@ -324,7 +324,7 @@ class DefaultGraphValidatorSpec extends Specification {
         Base.EX.IS_INSTANCE_OF.relate(g, id, idClass)
 
         then:
-        CoreGraphUtils.printGraph(g)
+        CarnivalUtils.printGraph(g)
         coreGraph.checkModel().size() == 0
 
         when:

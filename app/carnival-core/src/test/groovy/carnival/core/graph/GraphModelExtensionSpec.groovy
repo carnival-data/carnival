@@ -16,10 +16,10 @@ import carnival.graph.*
 
 
 /**
- * gradle test --tests "carnival.core.graph.CoreGraphGraphModelExtensionSpec"
+ * gradle test --tests "carnival.core.graph.GraphModelExtensionSpec"
  *
  */
-class CoreGraphGraphModelExtensionSpec extends Specification {
+class GraphModelExtensionSpec extends Specification {
 
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS
@@ -43,8 +43,8 @@ class CoreGraphGraphModelExtensionSpec extends Specification {
     }
 
     def setupSpec() {
-        CoreGraphNeo4j.clearGraph()
-        coreGraph = CoreGraphNeo4j.create(vertexBuilders:vertexBuilders)
+        CarnivalNeo4j.clearGraph()
+        coreGraph = CarnivalNeo4j.create(vertexBuilders:vertexBuilders)
     } 
 
 

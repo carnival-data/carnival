@@ -38,7 +38,7 @@ import carnival.graph.VertexBuilder
  *
  */
 @Slf4j
-abstract class CoreGraph implements GremlinTrait {
+abstract class Carnival implements GremlinTrait {
 
 	///////////////////////////////////////////////////////////////////////////
 	// UTILITY
@@ -131,7 +131,7 @@ abstract class CoreGraph implements GremlinTrait {
 	///////////////////////////////////////////////////////////////////////////
 
 	/** */
-	protected CoreGraph(Graph graph, DefaultGraphSchema graphSchema, GraphValidator graphValidator) {
+	protected Carnival(Graph graph, DefaultGraphSchema graphSchema, GraphValidator graphValidator) {
 		assert graph
 		assert graphSchema
 		assert graphValidator
@@ -148,7 +148,7 @@ abstract class CoreGraph implements GremlinTrait {
 
 	/** */
 	public void initializeGremlinGraph(Graph graph, GraphTraversalSource g, String packageName) {
-		log.info "CoreGraph initializeGremlinGraph graph:$graph g:$g packageName:$packageName"
+		log.info "Carnival initializeGremlinGraph graph:$graph g:$g packageName:$packageName"
 
 		initializeDefinedVertices(graph, g, packageName)
 		initializeDefinedEdges(graph, g, packageName)
@@ -157,7 +157,7 @@ abstract class CoreGraph implements GremlinTrait {
 
 	/** */
 	public void initializeGremlinGraph(Graph graph, GraphTraversalSource g) {
-		log.info "CoreGraph initializeGremlinGraph graph:$graph g:$g"
+		log.info "Carnival initializeGremlinGraph graph:$graph g:$g"
 		initializeGremlinGraph(graph, g, 'carnival')
 	}
 	
@@ -195,7 +195,7 @@ abstract class CoreGraph implements GremlinTrait {
 
 	/** */
     public void initializeDefinedVertices(Graph graph, GraphTraversalSource g, String packageName) {
-		log.info "CoreGraph initializeDefinedVertices graph:$graph g:$g packageName:$packageName"
+		log.info "Carnival initializeDefinedVertices graph:$graph g:$g packageName:$packageName"
 		
 		assert graph
 		assert g
@@ -283,7 +283,7 @@ abstract class CoreGraph implements GremlinTrait {
 
     /** */
     public Collection<VertexConstraint> findNewVertexConstraints(String packageName) {
-		log.info "CoreGraph findNewVertexConstraints packageName:$packageName"
+		log.info "Carnival findNewVertexConstraints packageName:$packageName"
 		assert packageName
 
     	Set<Class<VertexDefinition>> vertexDefClasses = findVertexDefClases(packageName)
@@ -383,7 +383,7 @@ abstract class CoreGraph implements GremlinTrait {
 
     /** */
     public Collection<EdgeConstraint> findNewEdgeConstraints(String packageName) {
-		log.info "CoreGraph findNewEdgeConstraints packageName:$packageName"
+		log.info "Carnival findNewEdgeConstraints packageName:$packageName"
 		assert packageName
     	
 		Set<Class<EdgeDefinition>> defClasses = findEdgeDefClases(packageName)

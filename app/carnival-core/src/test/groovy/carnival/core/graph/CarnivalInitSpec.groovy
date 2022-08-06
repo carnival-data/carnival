@@ -13,10 +13,10 @@ import static org.apache.tinkerpop.gremlin.neo4j.process.traversal.LabelP.of
 
 
 /**
- * gradle test --tests "carnival.core.graph.CoreGraphInitSpec"
+ * gradle test --tests "carnival.core.graph.CarnivalInitSpec"
  *
  */
-class CoreGraphInitSpec extends Specification {
+class CarnivalInitSpec extends Specification {
 
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS
@@ -52,7 +52,7 @@ class CoreGraphInitSpec extends Specification {
 
     def "test vertex def trait initizilation"() {
         given:
-        CoreGraphNeo4j.clearGraph()
+        CarnivalNeo4j.clearGraph()
         def classDef = Core.VX.DATA_TRANSFORMATION_PROCESS_CLASS
 
         // we need to set to null because initialization machinery from
@@ -60,7 +60,7 @@ class CoreGraphInitSpec extends Specification {
         classDef.vertex = null
 
         when:
-        def graph = CoreGraphNeo4j.openGremlinGraph()
+        def graph = CarnivalNeo4j.openGremlinGraph()
 
         then:
         graph != null
@@ -68,7 +68,7 @@ class CoreGraphInitSpec extends Specification {
         when:
         def graphSchema = new DefaultGraphSchema()
         def graphValidator = new DefaultGraphValidator()
-        def coreGraph = new CoreGraphNeo4j(graph, graphSchema, graphValidator)
+        def coreGraph = new CarnivalNeo4j(graph, graphSchema, graphValidator)
 
         then:
         classDef.vertex == null

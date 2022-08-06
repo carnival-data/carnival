@@ -117,7 +117,7 @@ class VertexDefinitionSpec extends Specification {
 
     def "instanceOf edge is automatically created"() {
         setup:
-        // these have to be explicitly set as we are not using CoreGraph, just
+        // these have to be explicitly set as we are not using Carnival, just
         // creating a TinkerGraph and testing VertexDefinition in isolation
         if (!VX.A_CLASS.vertex) VX.A_CLASS.vertex = VX.A_CLASS.instance().create(graph)
         if (!VX.B_CLASS.vertex) VX.B_CLASS.vertex = VX.B_CLASS.instance().create(graph)

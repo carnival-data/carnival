@@ -16,7 +16,7 @@ import carnival.graph.*
 
 
 /**
- * gradle test --tests "carnival.core.graph.CoreGraphSpec"
+ * gradle test --tests "carnival.core.graph.CarnivalSpec"
  *
  */
 class LegacyGraphSpec extends Specification {
@@ -47,13 +47,13 @@ class LegacyGraphSpec extends Specification {
     
 
     def setup() {
-        coreGraph = CoreGraphTinker.create(vertexBuilders:vertexBuilders)
+        coreGraph = CarnivalTinker.create(vertexBuilders:vertexBuilders)
         coreGraph.graphValidator = new LegacyValidator()
     }
 
     def setupSpec() {
-        //CoreGraphNeo4j.clearGraph()
-        //coreGraph = CoreGraphNeo4j.create(vertexBuilders:vertexBuilders)
+        //CarnivalNeo4j.clearGraph()
+        //coreGraph = CarnivalNeo4j.create(vertexBuilders:vertexBuilders)
     } 
 
 

@@ -32,15 +32,15 @@ import carnival.core.config.Defaults
 /** */
 @InheritConstructors
 @Slf4j
-class CoreGraphTinker extends CoreGraph {
+class CarnivalTinker extends Carnival {
 
 	///////////////////////////////////////////////////////////////////////////
 	// FACTORY 
 	///////////////////////////////////////////////////////////////////////////
 
     /** */
-    public static CoreGraphTinker create(Map args = [:]) {
-		log.info "CoreGraphTinker create args:$args"
+    public static CarnivalTinker create(Map args = [:]) {
+		log.info "CarnivalTinker create args:$args"
 
     	def graph = TinkerGraph.open()
 
@@ -49,7 +49,7 @@ class CoreGraphTinker extends CoreGraph {
         else graphSchema = new DefaultGraphSchema()
 
         def graphValidator = new DefaultGraphValidator()
-        def coreGraph = new CoreGraphTinker(graph, graphSchema, graphValidator)
+        def coreGraph = new CarnivalTinker(graph, graphSchema, graphValidator)
 
     	def g = graph.traversal()
 

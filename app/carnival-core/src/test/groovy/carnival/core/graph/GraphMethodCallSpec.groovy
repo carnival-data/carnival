@@ -35,7 +35,7 @@ public class GraphMethodCallSpec extends Specification {
     def cleanupSpec() { }
 
     def setup() {
-        coreGraph = CoreGraphTinker.create()
+        coreGraph = CarnivalTinker.create()
         graph = coreGraph.graph
         g = graph.traversal()
     }

@@ -16,10 +16,10 @@ import carnival.graph.*
 
 
 /**
- * gradle test --tests "carnival.core.graph.CoreGraphSpec"
+ * gradle test --tests "carnival.core.graph.CarnivalSpec"
  *
  */
-class CoreGraphSpec extends Specification {
+class CarnivalSpec extends Specification {
 
     ///////////////////////////////////////////////////////////////////////////
     // DEFS
@@ -47,12 +47,12 @@ class CoreGraphSpec extends Specification {
     
 
     def setup() {
-        coreGraph = CoreGraphTinker.create(vertexBuilders:vertexBuilders)
+        coreGraph = CarnivalTinker.create(vertexBuilders:vertexBuilders)
     }
 
     def setupSpec() {
-        //CoreGraphNeo4j.clearGraph()
-        //coreGraph = CoreGraphNeo4j.create(vertexBuilders:vertexBuilders)
+        //CarnivalNeo4j.clearGraph()
+        //coreGraph = CarnivalNeo4j.create(vertexBuilders:vertexBuilders)
     } 
 
 
@@ -73,7 +73,7 @@ class CoreGraphSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     
     /**
-    * This will test graph initizilation once it's been moved to CoreGraph
+    * This will test graph initizilation once it's been moved to Carnival
     */
     def "test graph creation"() {
     	when: 
@@ -81,7 +81,7 @@ class CoreGraphSpec extends Specification {
 
         println "===================="
         println "initial graph"
-        CoreGraphUtils.printGraph(graph.traversal())
+        CarnivalUtils.printGraph(graph.traversal())
         println "===================="
 
     	then:
@@ -96,7 +96,7 @@ class CoreGraphSpec extends Specification {
     	def vs = []
     	//println "graph: $graph"
     	//println "--------"
-    	//CoreGraphUtils.printGraph(g)
+    	//CarnivalUtils.printGraph(g)
 
 
     	//expect:
@@ -310,7 +310,7 @@ class CoreGraphSpec extends Specification {
         Base.EX.IS_INSTANCE_OF.relate(g, id, idClass)
 
         then:
-        CoreGraphUtils.printGraph(g)
+        CarnivalUtils.printGraph(g)
         coreGraph.checkModel().size() == 0
 
         when:

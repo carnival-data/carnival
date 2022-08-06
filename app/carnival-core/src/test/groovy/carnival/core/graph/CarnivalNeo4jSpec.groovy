@@ -23,10 +23,10 @@ import carnival.core.config.Defaults
 
 
 /**
- * gradle test --tests "carnival.core.graph.CoreGraphNeo4jSpec"
+ * gradle test --tests "carnival.core.graph.CarnivalNeo4jSpec"
  *
  */
-class CoreGraphNeo4jSpec extends Specification {
+class CarnivalNeo4jSpec extends Specification {
 
     ///////////////////////////////////////////////////////////////////////////
     // DEFS
@@ -57,8 +57,8 @@ class CoreGraphNeo4jSpec extends Specification {
     }
 
     def setupSpec() {
-        CoreGraphNeo4j.clearGraph()
-        coreGraph = CoreGraphNeo4j.create(vertexBuilders:vertexBuilders)
+        CarnivalNeo4j.clearGraph()
+        coreGraph = CarnivalNeo4j.create(vertexBuilders:vertexBuilders)
     } 
 
 

@@ -17,10 +17,10 @@ import test.coregraphspec.GraphModel
 
 
 /**
- * gradle test --tests "carnival.core.graph.CoreGraphInitializationSpec"
+ * gradle test --tests "carnival.core.graph.CarnivalInitializationSpec"
  *
  */
-class CoreGraphInitializationSpec extends Specification {
+class CarnivalInitializationSpec extends Specification {
 
     ///////////////////////////////////////////////////////////////////////////
     // DEFS
@@ -48,7 +48,7 @@ class CoreGraphInitializationSpec extends Specification {
     
 
     def setup() {
-        coreGraph = CoreGraphTinker.create()
+        coreGraph = CarnivalTinker.create()
         graph = coreGraph.graph
         g = graph.traversal()
     }

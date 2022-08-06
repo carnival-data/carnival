@@ -20,7 +20,7 @@ import static org.apache.tinkerpop.gremlin.neo4j.process.traversal.LabelP.of
 
 
 /** */
-class CoreGraphUtils {
+class CarnivalUtils {
 
 
     ///////////////////////////////////////////////////////////////////////////

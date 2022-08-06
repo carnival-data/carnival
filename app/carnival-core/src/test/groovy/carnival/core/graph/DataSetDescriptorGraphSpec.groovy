@@ -60,8 +60,8 @@ class DataSetDescriptorGraphSpec extends Specification {
     
 
     def setupSpec() {
-        CoreGraphNeo4j.clearGraph()
-        appGraph = CoreGraphNeo4j.create(vertexBuilders:vertexBuilders)
+        CarnivalNeo4j.clearGraph()
+        appGraph = CarnivalNeo4j.create(vertexBuilders:vertexBuilders)
         graph = appGraph.graph
     } 
 

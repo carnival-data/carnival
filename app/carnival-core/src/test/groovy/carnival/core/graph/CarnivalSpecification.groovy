@@ -15,7 +15,7 @@ import static carnival.util.AppUtil.sysPropFalse
 /**
  *
  */
-abstract class CoreGraphSpecification extends Specification {
+abstract class CarnivalSpecification extends Specification {
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -44,8 +44,8 @@ abstract class CoreGraphSpecification extends Specification {
 
         // create the graph
         println "init neo4j graph..."
-        CoreGraphNeo4j.clearGraph()
-        coreGraph = CoreGraphNeo4j.create()
+        CarnivalNeo4j.clearGraph()
+        coreGraph = CarnivalNeo4j.create()
         graph = coreGraph.graph
 
         // validate the base graph

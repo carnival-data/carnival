@@ -34,7 +34,7 @@ import carnival.core.config.Defaults
 /** */
 @InheritConstructors
 @Slf4j
-class CoreGraphNeo4j extends CoreGraph {
+class CarnivalNeo4j extends Carnival {
 
 	///////////////////////////////////////////////////////////////////////////
 	// STATIC
@@ -50,7 +50,7 @@ class CoreGraphNeo4j extends CoreGraph {
 	///////////////////////////////////////////////////////////////////////////
 
     /** */
-    public static CoreGraphNeo4j create(Map args = [:]) {
+    public static CarnivalNeo4j create(Map args = [:]) {
     	def graph = openGremlinGraph()
 
 		def graphSchema
@@ -58,7 +58,7 @@ class CoreGraphNeo4j extends CoreGraph {
         else graphSchema = new DefaultGraphSchema()
 
         def graphValidator = new DefaultGraphValidator()
-        def coreGraph = new CoreGraphNeo4j(graph, graphSchema, graphValidator)
+        def coreGraph = new CarnivalNeo4j(graph, graphSchema, graphValidator)
 
     	def g = graph.traversal()
 
@@ -129,7 +129,7 @@ class CoreGraphNeo4j extends CoreGraph {
 	 *
 	 */
 	public initNeo4j(Graph graph, GraphTraversalSource g) {
-		log.trace "CoreGraphNeo4j initNeo4j"
+		log.trace "CarnivalNeo4j initNeo4j"
 
 		// create uniqueness constraints
 		withTransaction(graph) {

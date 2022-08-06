@@ -38,7 +38,7 @@ public class GraphMethodProcessSpec extends Specification {
     }
 
     def setup() {
-        coreGraph = CoreGraphTinker.create()
+        coreGraph = CarnivalTinker.create()
         graph = coreGraph.graph
         g = graph.traversal()
     }

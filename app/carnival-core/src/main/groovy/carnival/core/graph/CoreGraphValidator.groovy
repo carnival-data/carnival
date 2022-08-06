@@ -18,7 +18,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 
 /** */
 @Slf4j
-public class CoreGraphValidator extends GremlinGraphValidator {
+public class LegacyValidator extends GremlinGraphValidator {
 
 	///////////////////////////////////////////////////////////////////////////
 	// MODEL CHECKING

@@ -57,7 +57,7 @@ class CoreGraphNeo4j extends CoreGraph {
         if (args.vertexBuilders) graphSchema = new CoreGraphSchema(args.vertexBuilders)
         else graphSchema = new CoreGraphSchema()
 
-        def graphValidator = new CoreGraphValidator()
+        def graphValidator = new GremlinGraphValidator()
         def coreGraph = new CoreGraphNeo4j(graph, graphSchema, graphValidator)
 
     	def g = graph.traversal()

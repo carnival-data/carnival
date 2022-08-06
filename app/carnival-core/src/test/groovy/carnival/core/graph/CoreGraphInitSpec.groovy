@@ -67,7 +67,7 @@ class CoreGraphInitSpec extends Specification {
 
         when:
         def graphSchema = new CoreGraphSchema()
-        def graphValidator = new CoreGraphValidator()
+        def graphValidator = new GremlinGraphValidator()
         def coreGraph = new CoreGraphNeo4j(graph, graphSchema, graphValidator)
 
         then:

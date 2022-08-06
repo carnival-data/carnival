@@ -48,7 +48,7 @@ class CoreGraphTinker extends CoreGraph {
         if (args.vertexBuilders) graphSchema = new CoreGraphSchema(args.vertexBuilders)
         else graphSchema = new CoreGraphSchema()
 
-        def graphValidator = new CoreGraphValidator()
+        def graphValidator = new GremlinGraphValidator()
         def coreGraph = new CoreGraphTinker(graph, graphSchema, graphValidator)
 
     	def g = graph.traversal()

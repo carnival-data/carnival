@@ -80,6 +80,91 @@ class PropertyDefTraitSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
+    def "valueOf throws an exception for undefined property"() {
+        when:
+        def v1 = VX.THING_2.instance().create(graph)
+        PX.PROP_B.valueOf(v1)
+
+        then:
+        Exception e = thrown()
+    }
+
+
+    def "valueOf returns null if property not present"() {
+        when:
+        def v1 = VX.THING_2.instance().create(graph)
+
+        then:
+        !PX.PROP_A.of(v1).isPresent()
+        PX.PROP_A.valueOf(v1) == null
+    }
+
+
+    def "valueOf returns property value if present"() {
+        when:
+        def v1 = VX.THING_2.instance().withProperty(PX.PROP_A, 'a').create(graph)
+
+        then:
+        PX.PROP_A.valueOf(v1) == 'a'
+    }
+
+
+    def "set closure result"() {
+        when:
+        def v1 = VX.THING_2.instance().create(graph)
+
+        then:
+        !PX.PROP_A.of(v1).isPresent()
+
+        when:
+        PX.PROP_A.set(v1) {1+1}
+
+        then:
+        PX.PROP_A.of(v1).isPresent()
+        PX.PROP_A.valueOf(v1) == 2
+
+        when:
+        PX.PROP_A.set(v1) { (1==1) }
+
+        then:
+        PX.PROP_A.of(v1).isPresent()
+        PX.PROP_A.valueOf(v1) == true
+
+        when:
+        PX.PROP_A.set(v1) { (1!=1) }
+
+        then:
+        PX.PROP_A.of(v1).isPresent()
+        PX.PROP_A.valueOf(v1) == false
+    }
+
+
+    def "setIf closure result"() {
+        when:
+        def v1 = VX.THING_2.instance().create(graph)
+
+        then:
+        !PX.PROP_A.of(v1).isPresent()
+
+        when:
+        PX.PROP_A.setIf(v1) {
+            null
+        }
+
+        then:
+        !PX.PROP_A.of(v1).isPresent()
+
+        when:
+        PX.PROP_A.setIf(v1) {
+            'a'
+        }
+
+        then:
+        PX.PROP_A.of(v1).isPresent()
+        PX.PROP_A.valueOf(v1) == 'a'
+    }
+
+
     def "set() respects defined properties"() {
         Exception e
 

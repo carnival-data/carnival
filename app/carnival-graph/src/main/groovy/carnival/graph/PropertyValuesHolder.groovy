@@ -16,8 +16,7 @@ import org.apache.tinkerpop.gremlin.structure.Element
 
 
 /** 
- *
- *
+ * Inhertied by builder classes that create elements in the graph that can have properties.
  */
 @Slf4j
 class PropertyValuesHolder<T> {
@@ -40,7 +39,7 @@ class PropertyValuesHolder<T> {
     /** */
     public T withProperty(PropertyDefTrait propDef, Object propValue) {
         assert this.respondsTo("getElementDef")
-        WithPropertyDefsTrait eDef = getElementDef()
+        ElementDefTrait eDef = getElementDef()
 
         if (propertiesMustBeDefined) {
             boolean found = eDef.propertyDefs.find({it.label == propDef.label})
@@ -54,7 +53,25 @@ class PropertyValuesHolder<T> {
 
     /** */
     public T withProperties(Object... args) {
+        if (args.size() == 1) {
+            assert args[0] instanceof Map
+            withProperties(args[0])
+        }
         withProperties(args.toList())
+    }
+
+
+    /** */
+    public T withProperties(Map args) {
+        assert this.respondsTo("getElementDef")
+        ElementDefTrait eDef = getElementDef()
+
+        args.each { k, v ->
+            def propertyDef = eDef.propertyDefs.find { it.name() == k }
+            assert propertyDef : "Could not find property definition for ${k}."
+            withProperty(propertyDef, v)
+        }
+        return this
     }
 
 
@@ -90,6 +107,37 @@ class PropertyValuesHolder<T> {
     }
 
 
+    /** 
+     * Matches a map of data against the properties of this element by name and
+     * assignes the property value on match.
+     *
+     */
+    public T withMatchingProperties(Map args) {
+        assert args != null
+        assert this.respondsTo("getElementDef")
+        ElementDefTrait eDef = getElementDef()
+
+        args.each { k, v ->
+            def propertyDef = eDef.propertyDefs.find { it.name() == k }
+            if (propertyDef) withProperty(propertyDef, v)
+        }
+        return this
+    }
+
+
+    /** 
+     * Matches a map of data against the properties of this element by name and
+     * assignes the property value on match ignoring data records where the
+     * value is null.
+     *
+     */
+    public T withNonNullMatchingProperties(Map args) {
+        assert args != null
+        def nunNullArgs = args.findAll { k, v -> v != null }
+        withMatchingProperties(nunNullArgs)
+    }
+
+
     /** */
     private void holdPropertyPairs(List<List> pairs) {
         Map<PropertyDefTrait,Object> props = new HashMap<PropertyDefTrait,Object>()
@@ -107,7 +155,7 @@ class PropertyValuesHolder<T> {
     /** */
     public Map<PropertyDefTrait,Object> allPropertyValues() {
         assert this.respondsTo("getElementDef")
-        WithPropertyDefsTrait eDef = getElementDef()
+        ElementDefTrait eDef = getElementDef()
 
         def pvs = [:]
         pvs.putAll(propertyValues)
@@ -129,7 +177,14 @@ class PropertyValuesHolder<T> {
         def pvs = allPropertyValues()
         pvs.each { PropertyDefTrait vp, Object val ->
             if (val instanceof org.codehaus.groovy.runtime.GStringImpl) val = val.toString()
-            el.property(vp.label, val) 
+            try {
+                el.property(vp.label, val) 
+            } catch (Exception e) {
+                throw new RuntimeException(
+                    "Could not set property ${vp} with value ${val} of element ${el} with definition " + ElementDef.lookup(el), 
+                    e
+                )
+            }
         }
         el
     }

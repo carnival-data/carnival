@@ -1107,6 +1107,17 @@ class FeatureReport extends MappedDataTable {
     }
 
 
+    /**
+     * Return true iff the subject has already been added to the report.
+     *
+     */
+    public boolean containsSubject(String subjectId) {
+        return this.data.containsKey(
+            toIdValue(subjectId)
+        )
+    }
+
+
     /** 
      * Add a new subject along with some features associated with that subject.
      *
@@ -1121,8 +1132,12 @@ class FeatureReport extends MappedDataTable {
         if (!dataModes.contains(DataMode.ADD_SUBJECT)) throw new IllegalStateException('Data mode ADD_SUBJECT required to call addSubject()')
 
         // add the subject with no data
-        features.put(idFieldName, subjectId)
-        this.dataAdd(features)
+        //features.put(idFieldName, subjectId)
+        Map<String,String> orderedFeatures = new LinkedHashMap<String,String>()
+        orderedFeatures.put(idFieldName, subjectId)
+        features.each { k, v -> orderedFeatures.put(k,v) }
+
+        this.dataAdd(orderedFeatures)
     }
 
 

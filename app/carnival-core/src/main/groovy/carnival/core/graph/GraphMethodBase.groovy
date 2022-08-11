@@ -109,7 +109,7 @@ class GraphMethodBase {
      */
     public Set<GraphMethodProcess> processes(GraphTraversalSource g) {
         assert g != null
-        String argsHash = CoreUtil.standardizedUniquifier(String.valueOf(this.arguments))
+        String argsHash = CoreUtil.argumentsUniquifier(this.arguments)
         Set<Vertex> procVs = g.V()
             .isa(getProcessVertexDef())
             .has(Core.PX.NAME, getName())
@@ -141,7 +141,7 @@ class GraphMethodBase {
         assert startTime != null
         
         // compute a hash to record in the process vertex
-        String argsHash = CoreUtil.standardizedUniquifier(String.valueOf(this.arguments))
+        String argsHash = CoreUtil.argumentsUniquifier(this.arguments)
 
         // grab the defs
         def pcvDef = getProcessClassVertexDef()
@@ -159,14 +159,17 @@ class GraphMethodBase {
         ).create(graph)
         
         // the process vertex is an instance of the process class
-        Core.EX.IS_INSTANCE_OF.instance()
+        Base.EX.IS_INSTANCE_OF.instance()
             .from(procV)
             .to(pcvDef.vertex)
         .create()
         
         // ensure that the process class is a subclass of GRAPH_PROCESS_CLASS
         // it is troubling that this happens every time a graph method is called
-        if (pcvDef != Core.VX.GRAPH_PROCESS) {
+        if (
+            pcvDef.label != Core.VX.GRAPH_PROCESS_CLASS.label ||
+            pcvDef.nameSpace != Core.VX.GRAPH_PROCESS_CLASS.nameSpace
+        ) {
             Base.EX.IS_SUBCLASS_OF.instance()
                 .from(pcvDef.vertex)
                 .to(Core.VX.GRAPH_PROCESS_CLASS.vertex)

@@ -1,0 +1,50 @@
+name: Carnival CI
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  test_runner:
+    name: Unit Tests
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Build testing container
+      run: docker-compose -f ./docker-compose-test.yml build
+    
+    - name: Run tests and publish coverage results
+
+      run: |
+        docker-compose -f docker-compose-test.yml run -e COVERALLS_REPO_TOKEN -w /appsrc/app app gradle test coveralls --console=plain --continue -Dtest.http=false
+      env:
+       COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+
+  build_docs:
+    # Only publish docs on master branch
+    if: github.ref == 'refs/heads/master'
+    name: Publish Docs
+    #needs: [test_runner]
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Build Docker Images
+        run: |
+          docker-compose -f ./docker-compose-doc.yml build
+      - name: Building Docs
+        run: |
+          docker-compose -f ./docker-compose-doc.yml up --abort-on-container-exit --force-recreate
+          rm docs/.gitignore
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: docs
+  
+

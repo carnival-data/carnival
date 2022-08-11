@@ -2,7 +2,7 @@ package carnival.core.cli
 
 
 
-import carnival.util.Defaults
+import carnival.core.config.Defaults
 
 
 

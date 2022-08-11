@@ -51,6 +51,15 @@ public class GraphMethodSpec extends Specification {
         }
     }
 
+    static class TestGraphMethodArguments extends GraphMethod {
+        public void execute(Graph graph, GraphTraversalSource g) {
+            def args = arguments
+            if (args == null) throw new Exception('args are null')
+            assert args instanceof Map
+            assert args.get('a') == 1
+            assert args.get('b') == 2
+        }
+    }
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -82,6 +91,17 @@ public class GraphMethodSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+    void "arguments"() {
+        when:
+        def gm = new TestGraphMethodArguments()
+        gm.arguments(a:1, b:2)
+        def gmc = gm.call(graph, g)
+
+        then:
+        noExceptionThrown()
+    }
+
 
     void "name override"() {
         when:
@@ -122,7 +142,7 @@ public class GraphMethodSpec extends Specification {
         !Core.PX.EXCEPTION_MESSAGE.of(procV).isPresent()
 
         g.V(procV)
-            .out(Core.EX.IS_INSTANCE_OF)
+            .out(Base.EX.IS_INSTANCE_OF)
             .is(VX.SOME_REAPER_PROCESS_CLASS.vertex)
             .tryNext()
         .isPresent()
@@ -155,7 +175,7 @@ public class GraphMethodSpec extends Specification {
         !Core.PX.EXCEPTION_MESSAGE.of(procV).isPresent()
 
         g.V(procV)
-            .out(Core.EX.IS_INSTANCE_OF)
+            .out(Base.EX.IS_INSTANCE_OF)
             .is(Core.VX.GRAPH_PROCESS_CLASS.vertex)
             .tryNext()
         .isPresent()
@@ -184,7 +204,7 @@ public class GraphMethodSpec extends Specification {
         !Core.PX.EXCEPTION_MESSAGE.of(procV).isPresent()
 
         g.V(procV)
-            .out(Core.EX.IS_INSTANCE_OF)
+            .out(Base.EX.IS_INSTANCE_OF)
             .is(VX.SOME_REAPER_PROCESS_CLASS.vertex)
             .tryNext()
         .isPresent()
@@ -219,7 +239,7 @@ public class GraphMethodSpec extends Specification {
         !Core.PX.EXCEPTION_MESSAGE.of(procV).isPresent()
 
         g.V(procV)
-            .out(Core.EX.IS_INSTANCE_OF)
+            .out(Base.EX.IS_INSTANCE_OF)
             .is(Core.VX.GRAPH_PROCESS_CLASS.vertex)
             .tryNext()
         .isPresent()
@@ -300,6 +320,37 @@ public class GraphMethodSpec extends Specification {
         new TestGraphMethod().name('n2').processes(g).size() == 0
         new TestGraphMethod().name('n2').arguments(a:'1').processes(g).size() == 2
     }
+
+
+    void "processes() differentiates on arguments"() {
+        expect:
+        new TestGraphMethod().processes(g).size() == 0
+        new TestGraphMethod().arguments(a:'1').processes(g).size() == 0
+
+        when:
+        new TestGraphMethod().call(graph, g)
+
+        then:
+        new TestGraphMethod().processes(g).size() == 1
+        new TestGraphMethod().arguments(a:'1').processes(g).size() == 0
+
+        when:
+        new TestGraphMethod().arguments(a:'1').call(graph, g)
+
+        then:
+        new TestGraphMethod().processes(g).size() == 1
+        new TestGraphMethod().arguments(a:'1').processes(g).size() == 1
+
+        when:
+        new TestGraphMethod().arguments(a:'1').call(graph, g)
+        new TestGraphMethod().arguments(a:'2').call(graph, g)
+
+        then:
+        new TestGraphMethod().processes(g).size() == 1
+        new TestGraphMethod().arguments(a:'1').processes(g).size() == 2
+        new TestGraphMethod().arguments(a:'2').processes(g).size() == 1
+    }
+
 
 
     void "processes()"() {

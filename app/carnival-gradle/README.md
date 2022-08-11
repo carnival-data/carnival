@@ -23,7 +23,7 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath group:'org.carnival', name:'carnival-gradle', version:'0.2.7'
+        classpath group:'io.github.carnival-data', name:'carnival-gradle', version:'0.2.7'
     }
 }
 apply plugin: 'carnival.application'

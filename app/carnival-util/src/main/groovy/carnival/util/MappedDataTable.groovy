@@ -35,7 +35,7 @@ import org.yaml.snakeyaml.representer.Representer
  *
  */
 @ToString(excludes=['data'], includeNames=true)
-class MappedDataTable extends DataTable implements MappedDataInterface {
+class MappedDataTable extends DataTable {
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -372,6 +372,58 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
 
 
     ///////////////////////////////////////////////////////////////////////////
+    // METHODS - DATA UTILITY
+    ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Convenience method to call trimColumns() and trimRows().
+     *
+     */
+    public void trim() {
+        trimColumns()
+        trimRows()
+    }
+
+
+    /**
+     * Remove columns (fields) that have no data associated with them.
+     *
+     */
+    @WithWriteLock
+    public void trimColumns() {
+        Map<String,Boolean> keysHaveData = new HashMap<String,Boolean>()
+        keySet.each { keysHaveData.put(toFieldName(it), false) }
+        dataIterator().each { rec ->
+            if (!keysHaveData.find({ k, v -> !v})) return
+            rec.each { k, v ->
+                if (v == null) return
+                keysHaveData.put(toFieldName(k), true)
+            }
+        }
+        keysHaveData.each { k, v ->
+            if (v) return
+            keySet.remove(k)
+        }
+    }
+
+
+    /**
+     * Remove rows that have no data associated with them besides the ID value.
+     *
+     */
+    @WithWriteLock
+    public void trimRows() {
+        Set<String> toRemove = new HashSet<String>()
+        this.data.each { k, v ->
+            if (v == null || v.size() <= 1) toRemove << k
+        }
+        toRemove.each { k ->
+            this.data.remove(k)
+        }
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////
     // METHODS - DATA ADD
     ///////////////////////////////////////////////////////////////////////////
 
@@ -387,18 +439,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
     public void dataAdd(java.sql.ResultSet row) {
         def vals = toMap(row)
         this.dataAdd(vals)
-    }
-
-
-    /**
-     * Implementation of MappedDataInterface method.
-     *
-     */
-    public void dataAdd(java.sql.ResultSet row, String idField, String dataFieldPrefix) {
-        assert toFieldName(idField) == this.idFieldName
-
-        def vals = toMap(row)
-        dataAddWithModifications(vals, [dataFieldPrefix:dataFieldPrefix])
     }
 
 
@@ -689,20 +729,6 @@ class MappedDataTable extends DataTable implements MappedDataInterface {
         return destFile
     }
   
-
-
-    /**
-     * Implementation of MappedDataInterface method.
-     * Is expected to be called only be legacy code.
-     *
-     */
-    public void writeToFile(Map args = [:]) {
-        log.warn "MappedDataTable writeToFile ignoring args: $args"
-        log.warn "MappedDataTable writing to ${Defaults.dataCacheDirectory}"
-        writeFiles(Defaults.dataCacheDirectory)
-    }
-
-
 }
 
 

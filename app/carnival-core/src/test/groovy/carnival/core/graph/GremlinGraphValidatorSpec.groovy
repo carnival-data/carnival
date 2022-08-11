@@ -321,7 +321,7 @@ class GremlinGraphValidatorSpec extends Specification {
             Core.PX.HAS_CREATION_FACILITY, false,
             Core.PX.HAS_SCOPE, false
         ).vertex(graph, g)
-        Core.EX.IS_INSTANCE_OF.relate(g, id, idClass)
+        Base.EX.IS_INSTANCE_OF.relate(g, id, idClass)
 
         then:
         CoreGraphUtils.printGraph(g)

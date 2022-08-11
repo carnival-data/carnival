@@ -340,9 +340,13 @@ abstract class DataTable {
      *
      */
     static public File findMetaFile(File dir, String name) {
-        assert name
-        assert dir
-        assert dir.exists()
+        assert name != null
+        assert dir != null
+
+        if (!dir.exists()) {
+            log.warn "dir does not exist: ${dir}"
+            return null
+        }
         assert dir.isDirectory()
 
         def metaFile = metaFile(dir, name)
@@ -362,9 +366,13 @@ abstract class DataTable {
      *
      */
     static public File findDataFile(File dir, String name) {
-        assert name
-        assert dir
-        assert dir.exists()
+        assert name != null
+        assert dir != null
+
+        if (!dir.exists()) {
+            log.warn "dir does not exist: ${dir}"
+            return null
+        }
         assert dir.isDirectory()
 
         def dataFile = dataFile(dir, name)
@@ -862,6 +870,33 @@ abstract class DataTable {
     ///////////////////////////////////////////////////////////////////////////
     // METHODS KEY SET
     ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     *
+     *
+     */
+    public boolean addKey(String k) {
+        this.keySet.add(toFieldName(k))
+    }
+
+
+    /**
+     *
+     *
+     */
+    public boolean removeKey(String k) {
+        this.keySet.remove(toFieldName(k))
+    }
+
+
+    /**
+     *
+     *
+     */
+    public boolean containsKey(String k) {
+        keySetContains(k)
+    }
+
 
     /** 
      * Return true iff the key set of this data table contains the input string

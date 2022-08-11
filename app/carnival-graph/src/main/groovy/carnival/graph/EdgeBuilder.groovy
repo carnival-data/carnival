@@ -15,8 +15,7 @@ import org.apache.tinkerpop.gremlin.structure.Edge
 
 
 /** 
- *
- *
+ * Builder class used when creating edges from an EdgeDefTrait object.
  */
 @Slf4j
 class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
@@ -25,7 +24,9 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Object that owns this builder.
+     * */
     EdgeDefTrait edgeDef
 
     /** */
@@ -51,7 +52,7 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    public WithPropertyDefsTrait getElementDef() { edgeDef }
+    public ElementDefTrait getElementDef() { edgeDef }
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -97,7 +98,12 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
     }
 
 
-    /** */
+    /** 
+     * Create new edge using previously specified 'from' and 'to' Vertex objects.
+     * Usage example, assuming EX.IS_FIRENDS_WITH is an enum decorated with '@EdgeDefinition':
+     * <p>
+     * {@code Edge edge1 = EX.IS_FRIENDS_WITH.instance().from(person1).to(person2).create() }
+     * */
     public Edge create() {
         assert fromVertex
         assert toVertex
@@ -107,7 +113,12 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
     }
 
 
-    /** */
+    /** 
+     * If the edge with the specified 'from', 'to', and properties exists return it, otherwise create it.
+     * Usage example, assuming EX.IS_FIRENDS_WITH is an enum decorated with '@EdgeDefinition':
+     * <p>
+     * {@code Edge edge1 = EX.IS_FRIENDS_WITH.instance().from(person1).to(person2).ensure() }
+     * */
     public Edge ensure(GraphTraversalSource g) {
         assert g
         assert fromVertex

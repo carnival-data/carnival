@@ -21,12 +21,24 @@ import carnival.graph.Base
 
 
 
-/** */
+/** 
+ * Extensions to the Tinkerpop Gremlin graph traversal language that enable the use of 
+ * Carnival objects in anonymous Gremlin treversals.  See TinkerpopTraversalExtension
+ * for descriptions of the step logic.
+ *
+ * @see TinkerpopTraversalExtension
+ *
+ */
 class TinkerpopAnonTraversalExtension {
 
     /** */
     static GraphTraversal out(__ traversal, EdgeDefTrait edef) {
         __.outE(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace).inV()
+    }
+
+    /** */
+    static GraphTraversal both(__ traversal, EdgeDefTrait edef) {
+        __.bothE(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace).otherV()
     }
 
     /** */

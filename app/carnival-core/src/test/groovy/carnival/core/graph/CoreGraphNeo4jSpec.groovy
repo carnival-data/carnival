@@ -12,8 +12,13 @@ import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 import static org.apache.tinkerpop.gremlin.neo4j.process.traversal.LabelP.of
 
+/*import org.neo4j.dbms.api.DatabaseManagementService
+import org.neo4j.dbms.api.DatabaseManagementServiceBuilder
+import org.neo4j.configuration.connectors.BoltConnector
+import org.neo4j.configuration.helpers.SocketAddress*/
+
 import carnival.graph.*
-import carnival.util.Defaults
+import carnival.core.config.Defaults
 
 
 
@@ -71,6 +76,20 @@ class CoreGraphNeo4jSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+    /*def "test expose Bolt port"() {
+        when:
+		// expose Bolt port
+		DatabaseManagementService managementService = new DatabaseManagementServiceBuilder( Defaults.getDataGraphDirectoryPath() )
+        	.setConfig( BoltConnector.enabled, true )
+        	.setConfig( BoltConnector.listen_address, new SocketAddress( "localhost", 7687 ) )
+        .build();
+
+        then:
+        managementService != null
+    }*/
+
+
     
     @IgnoreIf({ !Defaults.getConfigValue('carnival.gremlin.conf.dbms.directories.plugins') })
     def "test apoc"() {

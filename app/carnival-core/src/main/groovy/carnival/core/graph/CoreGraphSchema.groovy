@@ -21,11 +21,11 @@ import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.structure.Edge
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 
-import carnival.util.Defaults
+import carnival.core.config.Defaults
 import carnival.graph.EdgeDefTrait
 import carnival.graph.PropertyDefTrait
 import carnival.graph.VertexDefTrait
-import carnival.graph.ControlledInstance
+import carnival.graph.VertexBuilder
 
 
 
@@ -45,7 +45,7 @@ class CoreGraphSchema implements GraphSchema {
 	public CoreGraphSchema() { }
 
 	/** */
-	public CoreGraphSchema(Collection<ControlledInstance> controlledInstances) {
+	public CoreGraphSchema(Collection<VertexBuilder> controlledInstances) {
 		assert controlledInstances
 		assert controlledInstances.size() > 0
 		this.controlledInstances = controlledInstances
@@ -57,10 +57,10 @@ class CoreGraphSchema implements GraphSchema {
 	///////////////////////////////////////////////////////////////////////////
 
 	/** */
-	private List<ControlledInstance> controlledInstances = new ArrayList<ControlledInstance>()
+	private List<VertexBuilder> controlledInstances = new ArrayList<VertexBuilder>()
 
 	/** */
-	public List<ControlledInstance> getControlledInstances() {
+	public List<VertexBuilder> getVertexBuilders() {
 		return controlledInstances
 	}
 	

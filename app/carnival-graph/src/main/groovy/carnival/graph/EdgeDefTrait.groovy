@@ -17,9 +17,16 @@ import org.apache.tinkerpop.gremlin.structure.Edge
 
 
 
-/** */
+/** 
+ * Defines allowed edges in a graph model, automatically inherited by 
+ * enums with the `@EdgeDefinition` annotation.
+ * 
+ * 
+ * @see carnival.graph.EdgeDefinition
+ * @see carnival.graph.EdgeBuilder
+ */
 @Slf4j
-trait EdgeDefTrait extends WithPropertyDefsTrait {
+trait EdgeDefTrait extends ElementDefTrait {
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -34,9 +41,6 @@ trait EdgeDefTrait extends WithPropertyDefsTrait {
 
     /** additional constraints, just represent as a string for now */
     String constraint
-
-    /** */
-    boolean global = false
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -63,21 +67,6 @@ trait EdgeDefTrait extends WithPropertyDefsTrait {
     }
 
 
-    /** */
-    public boolean isGlobal() {
-        return global
-    }
-
-
-    /** */
-    public String getNameSpace() {
-        //log.debug "\n\ngetNameSpace ${this} ${this.metaClass} ${this.metaClass.theClass} ${this.metaClass.theClass.name} \n\n\n"
-
-        if (this instanceof Enum) return "${this.declaringClass.name}"
-        else return "${this.metaClass.theClass.name}"
-    }
-
-
     ///////////////////////////////////////////////////////////////////////////
     // TYPE CHECKING
     ///////////////////////////////////////////////////////////////////////////
@@ -85,7 +74,7 @@ trait EdgeDefTrait extends WithPropertyDefsTrait {
     /** */
     public boolean isa(Edge e) {
         assert e != null
-        (e.label() == getLabel() && Base.PX.NAME_SPACE.valueOf(e) == getNameSpace())   
+        (e.label() == getLabel() && Base.PX.NAME_SPACE._valueOf(e) == getNameSpace())   
     }
 
     /** */
@@ -159,7 +148,9 @@ trait EdgeDefTrait extends WithPropertyDefsTrait {
 
     /** */
     public EdgeBuilder instance() {
-        return new EdgeBuilder(this)
+        def ci = new EdgeBuilder(this)
+        ci.propertiesMustBeDefined = this.propertiesMustBeDefined
+        return ci
     }
 
 

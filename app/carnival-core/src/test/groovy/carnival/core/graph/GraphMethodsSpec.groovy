@@ -21,6 +21,10 @@ class GmsTestMethods implements GraphMethods {
         public void execute(Graph graph, GraphTraversalSource g) {}
     }
 
+    class AnotherTestGraphMethod extends GraphMethod {
+        public void execute(Graph graph, GraphTraversalSource g) {}
+    }
+
     class TestGraphMethodThrowsException extends GraphMethod {
         public void execute(Graph graph, GraphTraversalSource g) {
             throw new Exception('boom')
@@ -72,6 +76,33 @@ public class GraphMethodsSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
+    void "methods list args"() {
+        when:
+        def gms = new GmsTestMethods()
+        def gmcs = gms
+            .methods('TestGraphMethod', 'AnotherTestGraphMethod')
+            .arguments(a:'1', b:'2')
+        .call(graph, g)
+
+        then:
+        gmcs != null
+        gmcs.size() == 2
+    }
+
+
+    void "methods list no args"() {
+        when:
+        def gms = new GmsTestMethods()
+        def gmcs = gms
+            .methods('TestGraphMethod', 'AnotherTestGraphMethod')
+        .call(graph, g)
+
+        then:
+        gmcs != null
+        gmcs.size() == 2
+    }
+
+
     void "processDefinition() sets process vertex def"() {
         when:
         def gms = new GmsTestMethods()
@@ -95,7 +126,7 @@ public class GraphMethodsSpec extends Specification {
         !Core.PX.EXCEPTION_MESSAGE.of(procV).isPresent()
 
         g.V(procV)
-            .out(Core.EX.IS_INSTANCE_OF)
+            .out(Base.EX.IS_INSTANCE_OF)
             .is(Core.VX.GRAPH_PROCESS_CLASS.vertex)
             .tryNext()
         .isPresent()

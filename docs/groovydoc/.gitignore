@@ -1,0 +1,2 @@
+# This will be populated by running `gradle localPublishGroovydoc`
+!.gitignore

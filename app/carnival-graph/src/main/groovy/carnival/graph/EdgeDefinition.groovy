@@ -10,7 +10,12 @@ import java.lang.reflect.Field
 import org.codehaus.groovy.transform.GroovyASTTransformationClass
 
 
-/** */
+/** 
+ * Used to specify edge definitions in a graph model.
+ * 
+ * @see carnival.graph.EdgeDefTrait
+ * @see carnival.graph.DefinitionTransformation
+ * */
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
 @GroovyASTTransformationClass(["carnival.graph.EdgeDefinitionTransformation"])

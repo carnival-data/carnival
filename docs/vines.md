@@ -15,8 +15,8 @@ Vine methods are functions that return data. In application code, vine method ar
 MappedDataTable vines return data in MappedDataTable objects.
 
 ```groovy
-@Grab(group='org.pmbb', module='carnival-util', version='2.0.1-SNAPSHOT')
-@Grab(group='org.pmbb', module='carnival-core', version='2.0.1-SNAPSHOT')
+@Grab(group='org.pmbb', module='carnival-util', version='2.1.1-SNAPSHOT')
+@Grab(group='org.pmbb', module='carnival-core', version='2.1.1-SNAPSHOT')
 
 import groovy.transform.ToString
 import carnival.util.MappedDataTable
@@ -25,13 +25,16 @@ import carnival.core.vine.MappedDataTableVineMethod
 import carnival.core.vine.CacheMode
 
 class MdtTestVine implements Vine {
-    @ToString(includeNames=true)
-    static class Person { String name }
 
-    class PersonVineMethod extends MappedDataTableVineMethod {
+    class People extends MappedDataTableVineMethod {
         MappedDataTable fetch(Map args) {
-            def mdt = createMappedDataTable('ID')
+            def mdt = createDataTable(idFieldName:'ID')
+            
+            // normally, a data source would be queried here
+            // for this example, we just create a single record
+            // that includes a name taken from the arguments
             mdt.dataAdd(id:'1', name:args.p1)
+            
             mdt
         }
     }
@@ -39,10 +42,11 @@ class MdtTestVine implements Vine {
 
 def vine = new MdtTestVine()
 def methodCall = vine
-    .method('PersonVineMethod')
+    .method('People')
     .args(p1:'alice')
     .mode(CacheMode.IGNORE)
 .call()
+
 def currentDir = new File(System.getProperty("user.dir"))
 methodCall.writeFiles(currentDir)
 println "methodCall.writtenTo: ${methodCall.writtenTo}"
@@ -54,5 +58,9 @@ assert mdt != null
 assert mdt instanceof MappedDataTable
 assert mdt.data.size() == 1
 assert mdt.dataGet('1', 'name') == 'alice'
+
+mdt.dataIterator().each {
+    println "Hi ${it.name}!"
+}
 
 ```

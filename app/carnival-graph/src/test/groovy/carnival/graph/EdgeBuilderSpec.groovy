@@ -20,17 +20,20 @@ import org.apache.tinkerpop.gremlin.structure.Edge
  */
 class EdgeBuilderSpec extends Specification {
 
-    static enum VX implements VertexDefTrait {
+    @VertexDefinition
+    static enum VX {
         EBS_THING_1,
         EBS_THING_2
     }
 
-    static enum PX implements PropertyDefTrait {
+    @PropertyDefinition
+    static enum PX {
         EBS_PROP_A,
         EBS_PROP_B
     }
 
-    static enum EX implements EdgeDefTrait {
+    @EdgeDefinition
+    static enum EX {
         EBS_REL_1(
             domain:[VX.EBS_THING_1],
             range:[VX.EBS_THING_2]
@@ -41,9 +44,6 @@ class EdgeBuilderSpec extends Specification {
                 PX.EBS_PROP_B.defaultValue(1).withConstraints(required:true)
             ],
         )
-
-        EX() {}
-        EX(Map m) {m.each { k,v -> this."$k" = v }}
     }
 
 

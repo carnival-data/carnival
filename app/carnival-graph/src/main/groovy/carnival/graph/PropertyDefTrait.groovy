@@ -16,28 +16,12 @@ import org.apache.tinkerpop.gremlin.structure.Property
 
 
 
-/** */
-@Slf4j
-class PropertyDefTraitHolder implements PropertyDefTrait {
-    PropertyDefTrait source
-
-    public PropertyDefTraitHolder(PropertyDefTrait source) {
-        assert source != null
-        this.source = source
-        this.defaultValue = source.defaultValue
-        this.unique = source.unique
-        this.required = source.required
-        this.index = source.index
-    }
-
-    def methodMissing(String name, def args) {
-        assert this.source != null
-        source.invokeMethod(name, args)
-    }
-}
-
-
-/** */
+/** 
+ * Defines allowed properties in a graph model, automatically inherited by 
+ * enums with the `@PropertyDefinition` annotation.
+ * 
+ * @see carnival.graph.PropertyDefinition
+ */
 @Slf4j
 trait PropertyDefTrait {
 
@@ -46,23 +30,26 @@ trait PropertyDefTrait {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Set by #withDefault()
+    */
     Object defaultValue = null
 
     /**
      * If true, then the values of this property must be unique across all
-     * elements.
+     * elements. Set by #withConstraints()
      */
     Boolean unique = false
 
     /**
-     * If true, then this property must be present in all elements.
+     * If true, then this property must be present in all elements. Set 
+     * by #withConstraints()
      */
     Boolean required = false
 
     /**
      * If true, then this property should be indexed by the underlying database
-     * system.
+     * system. Set by #withConstraints()
      */
     Boolean index = false
 
@@ -71,7 +58,17 @@ trait PropertyDefTrait {
 	// FACTORY METHODS
 	///////////////////////////////////////////////////////////////////////////
 
-	/** */
+	/** 
+     * Used to set constraints for properties when they are added to vertex or edge definitions.
+     * 
+     * @param m 
+     * @param m["unique"] <Boolean>   if true, then the values of this property must be unique across all elements.
+     * @param m["required"] <Boolean> if true, then this property must be present in all elements.
+     * @param m["index"] <Boolean>    if true, then this property should be indexed by the underlying database
+     * system.
+     * 
+     * 
+     * */
 	public PropertyDefTrait withConstraints(Map m) {
         def newObj = new PropertyDefTraitHolder(this)
 
@@ -81,6 +78,12 @@ trait PropertyDefTrait {
 
 		return newObj
 	}
+
+
+	/** */
+	public PropertyDefTrait constraints(Map m) {
+        withConstraints(m)
+    }
 
 
     /** */
@@ -98,6 +101,15 @@ trait PropertyDefTrait {
     /** */
     public Property of(Element el) {
         assert el
+        assertPropertyIsDefined(el)
+
+        _of(el)
+    }
+
+
+    /** */
+    Property _of(Element el) {
+        assert el
         el.property(getLabel())
     }
 
@@ -105,7 +117,16 @@ trait PropertyDefTrait {
     /** */
     public Object valueOf(Element el) {
         assert el
-        el.value(getLabel())
+        assertPropertyIsDefined(el)
+
+        _valueOf(el)
+    }
+
+
+    /** */
+    Object _valueOf(Element el) {
+        assert el
+        el.property(getLabel()).isPresent() ? el.value(getLabel()) : null
     }
 
 
@@ -113,19 +134,49 @@ trait PropertyDefTrait {
     public PropertyDefTrait set(Element el, Object value) {
         assert el
         assert value != null
-
-        VertexDefTrait vdt = VertexDef.lookup(el)
-        if (vdt != null && !(vdt instanceof DynamicVertexDef)) {
-            if (vdt.propertiesMustBeDefined) {
-                boolean found = vdt.propertyDefs.find({it.label == getLabel()})
-                if (!found) {
-                    throw new IllegalArgumentException("${this} is not a property of ${vdt.label}: ${vdt.propertyDefs}")
-                }
-            }
-        }
+        assertPropertyIsDefined(el)
 
         el.property(getLabel(), value)
         this
+    }
+
+
+    /** */
+    void assertPropertyIsDefined(Element el) {
+        boolean isDefined = false
+        
+        ElementDefTrait edt = ElementDef.lookup(el)
+        if (edt != null && !(edt instanceof DynamicVertexDef)) {
+            if (edt.propertiesMustBeDefined) {
+                isDefined = edt.propertyDefs.find({it.label == getLabel()})
+            }
+        }
+        
+        if (!isDefined) {
+            throw new IllegalArgumentException("${this} is not a property of ${edt.label}: ${edt.propertyDefs}")
+
+        }
+    }
+
+
+    /** */
+    boolean propertyIsDefined(Element el) {
+        boolean isDefined = false
+        ElementDefTrait edt = ElementDef.lookup(el)
+        if (edt != null && !(edt instanceof DynamicVertexDef)) {
+            if (edt.propertiesMustBeDefined) {
+                isDefined = edt.propertyDefs.find({it.label == getLabel()})
+            }
+        }
+        isDefined
+    }
+
+
+    /** */
+    public PropertyDefTrait set(Element el, Closure value) {
+        assert el
+        assert value != null
+        set(el, value())
     }
 
 
@@ -135,6 +186,16 @@ trait PropertyDefTrait {
         assert value != null
         assert cl != null
         if (cl(value)) set(el, value)
+        this
+    }
+
+
+    /** */
+    public PropertyDefTrait setIf(Element el, Closure cl) {
+        assert el
+        assert cl != null
+        def val = cl()
+        if (val != null) set(el, val)
         this
     }
 
@@ -162,3 +223,22 @@ trait PropertyDefTrait {
     
 }
 
+/** */
+@Slf4j
+class PropertyDefTraitHolder implements PropertyDefTrait {
+    PropertyDefTrait source
+
+    public PropertyDefTraitHolder(PropertyDefTrait source) {
+        assert source != null
+        this.source = source
+        this.defaultValue = source.defaultValue
+        this.unique = source.unique
+        this.required = source.required
+        this.index = source.index
+    }
+
+    def methodMissing(String name, def args) {
+        assert this.source != null
+        source.invokeMethod(name, args)
+    }
+}

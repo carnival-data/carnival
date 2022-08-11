@@ -5,7 +5,7 @@ package carnival.core.vine
 import groovy.util.logging.Slf4j
 import org.apache.commons.codec.digest.DigestUtils
 
-import carnival.util.Defaults
+import carnival.core.config.Defaults
 import carnival.core.util.CoreUtil
 import carnival.util.GenericDataTable
 import carnival.util.MappedDataTable
@@ -132,9 +132,14 @@ abstract class DataTableVineMethod<T,U extends VineMethodCall> extends VineMetho
     List<File> _writeCacheFile(U methodCall) {
         File cacheDir = _cacheDirectory()
         if (cacheDir == null) {
-            log.warn "cache directory is null. no cache file will be written."
+            log.warn "cache directory is not configured. no cache file will be written."
             return null
         }
+        if (!cacheDir.exists()) {
+            log.warn "cache directory does not exist. no cache files will be written. ${cacheDir}"
+            return null
+        }
+        assert cacheDir.isDirectory()
         
         methodCall.writeFiles(cacheDir)
     }

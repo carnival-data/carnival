@@ -84,6 +84,80 @@ class MappedDataTableSpec extends Specification {
     // CASE SENSITIVITY
     ///////////////////////////////////////////////////////////////////////////
 
+    def "trim columns and rows"() {
+        def mdt
+
+        when:
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
+        mdt.addKey('f1')
+        mdt.addKey('f2')
+        mdt.dataAdd(['id':'id1', 'f1':'v1'])
+        mdt.dataAdd(['id':'id2'])
+        println "mdt.keySet: ${mdt.keySet}"
+
+        then:
+        mdt.containsKey('f1')
+        mdt.containsKey('f2')
+        mdt.dataGet('id1')
+        mdt.dataGet('id2')
+
+        when:
+        mdt.trim()
+        println "mdt.keySet: ${mdt.keySet}"
+
+        then:
+        mdt.containsKey('f1')
+        !mdt.containsKey('f2')
+        mdt.dataGet('id1')
+        !mdt.dataGet('id2')
+    }
+
+
+    def "trim rows"() {
+        def mdt
+
+        when:
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
+        mdt.dataAdd(['id':'id1', 'f1':'v1'])
+        mdt.dataAdd(['id':'id2'])
+        println "mdt.data: ${mdt.data}"
+
+        then:
+        mdt.dataGet('id1')
+        mdt.dataGet('id2')
+
+        when:
+        mdt.trimRows()
+        println "mdt.data: ${mdt.data}"
+
+        then:
+        mdt.dataGet('id1')
+        !mdt.dataGet('id2')
+    }
+
+
+    def "trim columns"() {
+        def mdt
+
+        when:
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
+        mdt.addKey('f1')
+        mdt.addKey('f2')
+        mdt.dataAdd(['id':'id1', 'f1':'v1'])
+        println "mdt.keySet: ${mdt.keySet}"
+
+        then:
+        mdt.containsKey('f1')
+        mdt.containsKey('f2')
+
+        when:
+        mdt.trimColumns()
+        println "mdt.keySet: ${mdt.keySet}"
+
+        then:
+        mdt.containsKey('f1')
+        !mdt.containsKey('f2')
+    }
 
 
     // containsIdentifier
@@ -191,7 +265,7 @@ class MappedDataTableSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
 
 
-    def "dataAdd ResultSet dataFieldPrefix"() {
+    /*def "dataAdd ResultSet dataFieldPrefix"() {
         given:
         def mdt
         def res
@@ -247,7 +321,7 @@ class MappedDataTableSpec extends Specification {
 
         then:
         mdt.data['id2'].size() == 2
-    }
+    }*/
 
 
 
@@ -2012,6 +2086,55 @@ class MappedDataTableSpec extends Specification {
         idKey << ['id', ' id', 'id ', 'ID', 'Id', 'iD']
         idVal << (1..6).collect { "$it" }
     }
+
+
+    def "values are cast as strings"() {
+        def mdt
+        def val
+
+        given:
+        Throwable e
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
+        
+        when:
+        mdt.dataAdd(id:'1', v1:11)
+        val = mdt.dataGet('1', 'v1')
+
+        then:
+        val == '11'
+    }
+
+
+
+
+    def "ids are cast as strings"() {
+        def mdt
+        def val
+
+        given:
+        Throwable e
+        mdt = new MappedDataTable(name:'mdt-test', idFieldName:'id')
+        
+        when:
+        mdt.dataAdd(id:1, v1:'v11')
+        val = mdt.dataGet('1', 'v1')
+
+        then:
+        val == 'v11'
+
+        when:
+        mdt.dataAdd(id:1, v2:'v12')
+
+        then:
+        e = thrown()
+
+        when:
+        mdt.dataAdd(id:'1', v2:'v12')
+
+        then:
+        e = thrown()
+    }
+
 
 
     def "dataAdd Map cannot add same id twice"() {

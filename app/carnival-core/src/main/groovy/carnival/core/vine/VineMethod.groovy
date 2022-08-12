@@ -27,7 +27,7 @@ abstract class VineMethod {
     // STATIC FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    static final String DEFAULT_CACHE_MORE_CONFIG_KEY = 'carnival.cache-mode'
+    static final String DEFAULT_CACHE_MODE_CONFIG_KEY = 'carnival.cache-mode'
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -35,7 +35,7 @@ abstract class VineMethod {
     ///////////////////////////////////////////////////////////////////////////
 
     static public CacheMode defaultCacheMode() {
-        String str = Defaults.getConfigValue(DEFAULT_CACHE_MORE_CONFIG_KEY)
+        String str = Defaults.getConfigValue(DEFAULT_CACHE_MODE_CONFIG_KEY)
         if (str == null) return CacheMode.IGNORE
         CacheMode cm = Enum.valueOf(CacheMode, str)
         if (cm) return cm

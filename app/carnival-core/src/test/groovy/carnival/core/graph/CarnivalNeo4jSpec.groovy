@@ -40,7 +40,7 @@ class CarnivalNeo4jSpec extends Specification {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
     
-    @Shared coreGraph
+    @Shared carnival
     
     @Shared vertexBuilders = [
         Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, "1"),
@@ -53,23 +53,21 @@ class CarnivalNeo4jSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     
 
-    def setup() {
-    }
-
     def setupSpec() {
         CarnivalNeo4j.clearGraph()
-        coreGraph = CarnivalNeo4j.create(vertexBuilders:vertexBuilders)
+        carnival = CarnivalNeo4j.create(vertexBuilders:vertexBuilders)
     } 
 
-
-    def cleanupSpec() {
-        if (coreGraph) coreGraph.graph.close()
-    }
-
+    def setup() { }
 
     def cleanup() {
-        if (coreGraph) coreGraph.graph.tx().rollback()
+        if (carnival) carnival.graph.tx().rollback()
     }
+
+    def cleanupSpec() {
+        if (carnival) carnival.graph.close()
+    }
+
 
 
 
@@ -94,7 +92,7 @@ class CarnivalNeo4jSpec extends Specification {
     @IgnoreIf({ !Defaults.getConfigValue('carnival.gremlin.conf.dbms.directories.plugins') })
     def "test apoc"() {
         when: 
-        def graph = coreGraph.graph
+        def graph = carnival.graph
         def apocVersion
         try {
             apocVersion = graph.cypher('RETURN apoc.version()').toList().first()
@@ -114,7 +112,7 @@ class CarnivalNeo4jSpec extends Specification {
 
     def "test initializeGraph for uniqueness constraint existence"() {
     	when:
-    	def graph = coreGraph.graph
+    	def graph = carnival.graph
     	def constraints = graph.cypher("CALL db.constraints()").toList()
 
     	then:

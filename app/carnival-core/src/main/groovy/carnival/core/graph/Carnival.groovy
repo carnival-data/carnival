@@ -119,7 +119,7 @@ abstract class Carnival implements GremlinTrait {
 	//Graph graph
 
 	/** */
-	DefaultGraphSchema graphSchema
+	GraphSchema graphSchema
 
 	/** */
 	GraphValidator graphValidator
@@ -131,7 +131,7 @@ abstract class Carnival implements GremlinTrait {
 	///////////////////////////////////////////////////////////////////////////
 
 	/** */
-	protected Carnival(Graph graph, DefaultGraphSchema graphSchema, GraphValidator graphValidator) {
+	protected Carnival(Graph graph, GraphSchema graphSchema, GraphValidator graphValidator) {
 		assert graph
 		assert graphSchema
 		assert graphValidator

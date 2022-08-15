@@ -33,7 +33,7 @@ class LegacyGraphSpec extends Specification {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
     
-    @Shared coreGraph
+    @Shared carnival
     
     @Shared vertexBuilders = [
         Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, "1"),
@@ -46,26 +46,18 @@ class LegacyGraphSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     
 
+    def setupSpec() { } 
+
     def setup() {
-        coreGraph = CarnivalTinker.create(vertexBuilders:vertexBuilders)
-        coreGraph.graphValidator = new LegacyValidator()
+        carnival = CarnivalTinker.create(vertexBuilders:vertexBuilders)
+        carnival.graphValidator = new LegacyValidator()
     }
-
-    def setupSpec() {
-        //CarnivalNeo4j.clearGraph()
-        //coreGraph = CarnivalNeo4j.create(vertexBuilders:vertexBuilders)
-    } 
-
-
-    def cleanupSpec() {
-        //if (coreGraph) coreGraph.graph.close()
-    }
-
 
     def cleanup() {
-        //if (coreGraph) coreGraph.graph.tx().rollback()
-        if (coreGraph) coreGraph.close()
+        if (carnival) carnival.close()
     }
+
+    def cleanupSpec() { }
 
 
 
@@ -76,7 +68,7 @@ class LegacyGraphSpec extends Specification {
 
     def "test checkConstraints for identifier uniqueness"() {
         given:
-        def graph = coreGraph.graph
+        def graph = carnival.graph
         def g = graph.traversal()
 
         def idClass1 = graph.addVertex(T.label, 'IdentifierClass', 'name', 'idClass1', 'hasCreationFacility', false, 'hasScope', false)
@@ -121,7 +113,7 @@ class LegacyGraphSpec extends Specification {
 
 
         expect:
-        coreGraph.checkConstraints().size() == 0
+        carnival.checkConstraints().size() == 0
 
         // duplicate id val of the same class
         when:
@@ -129,14 +121,14 @@ class LegacyGraphSpec extends Specification {
         id1Class1Dupe.addEdge('is_instance_of', idClass1)
 
         then:
-        coreGraph.checkConstraints().size() == 1
+        carnival.checkConstraints().size() == 1
 
         // reset
         when:
         id1Class1Dupe.remove()
 
         then:
-        coreGraph.checkConstraints().size() == 0
+        carnival.checkConstraints().size() == 0
 
 
         //duplicate id val of the same class, same scope
@@ -147,14 +139,14 @@ class LegacyGraphSpec extends Specification {
 
 
         then:
-        coreGraph.checkConstraints().size() == 1
+        carnival.checkConstraints().size() == 1
 
         // reset
         when:
         scopedId1Scope1Dupe.remove()
 
         then:
-        coreGraph.checkConstraints().size() == 0
+        carnival.checkConstraints().size() == 0
 
 
         //duplicate id val of the same class, same facility
@@ -164,7 +156,7 @@ class LegacyGraphSpec extends Specification {
         facilityId1Facility1Dupe.addEdge('was_created_by', facility1)
 
         then:
-        coreGraph.checkConstraints().size() == 1
+        carnival.checkConstraints().size() == 1
 
     }
 

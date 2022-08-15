@@ -44,7 +44,7 @@ class DataSetDescriptorGraphSpec extends Specification {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
     
-    @Shared appGraph
+    @Shared carnival
     @Shared graph
     @Shared g
     
@@ -60,22 +60,20 @@ class DataSetDescriptorGraphSpec extends Specification {
     
 
     def setupSpec() {
-        CarnivalNeo4j.clearGraph()
-        appGraph = CarnivalNeo4j.create(vertexBuilders:vertexBuilders)
-        graph = appGraph.graph
     } 
 
     def setup() {
+        carnival = CarnivalTinker.create(vertexBuilders:vertexBuilders)
+        graph = carnival.graph
         g = graph.traversal()
     }
 
     def cleanup() {
         if (g) g.close()
-        if (appGraph) appGraph.graph.tx().rollback()
+        if (graph) graph.close()
     }
 
     def cleanupSpec() {
-        if (appGraph) appGraph.graph.close()
     }
 
 

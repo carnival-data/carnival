@@ -25,7 +25,7 @@ class GraphModelExtensionSpec extends Specification {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
     
-    @Shared coreGraph
+    @Shared carnival
     
     @Shared vertexBuilders = [
         Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, "1"),
@@ -38,24 +38,17 @@ class GraphModelExtensionSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     
 
+    def setupSpec() { } 
+
     def setup() {
-    	
+        carnival = CarnivalTinker.create(vertexBuilders:vertexBuilders)
     }
-
-    def setupSpec() {
-        CarnivalNeo4j.clearGraph()
-        coreGraph = CarnivalNeo4j.create(vertexBuilders:vertexBuilders)
-    } 
-
-
-    def cleanupSpec() {
-        if (coreGraph) coreGraph.graph.close()
-    }
-
 
     def cleanup() {
-        if (coreGraph) coreGraph.graph.tx().rollback()
+        if (carnival) carnival.graph.close()
     }
+
+    def cleanupSpec() { }
 
 
 
@@ -86,7 +79,7 @@ class GraphModelExtensionSpec extends Specification {
         // final check should pass
 
         given:
-        def graph = coreGraph.graph
+        def graph = carnival.graph
         def g = graph.traversal()
 
         def identifierFacility
@@ -95,7 +88,7 @@ class GraphModelExtensionSpec extends Specification {
         def suitcase
 
         expect:
-        coreGraph.checkConstraints().size() == 0
+        carnival.checkConstraints().size() == 0
 
         when:
         identifierFacility = graph.addVertex(T.label, "IdentifierFacility", "name", "f1")
@@ -104,26 +97,26 @@ class GraphModelExtensionSpec extends Specification {
         suitcase = graph.addVertex(T.label, "PortalGun")
 
         then:
-        coreGraph.checkConstraints().size() == 0
+        carnival.checkConstraints().size() == 0
 
         when:
         identifier.addEdge("is_instance_of", identifierClass)
         identifier.addEdge("was_created_by", identifierFacility)
 
         then:
-        coreGraph.checkConstraints().size() == 0
+        carnival.checkConstraints().size() == 0
 
         when:
         suitcase.addEdge("was_created_by", identifierFacility)
 
         then:
-        coreGraph.checkConstraints().size() == 0
+        carnival.checkConstraints().size() == 0
     }
 
 
     def "relationship range extension"() {
         given:
-        def graph = coreGraph.graph
+        def graph = carnival.graph
         def g = graph.traversal()
 
         def identifierFacility
@@ -132,7 +125,7 @@ class GraphModelExtensionSpec extends Specification {
         def suitcase
 
         expect:
-        coreGraph.checkConstraints().size() == 0
+        carnival.checkConstraints().size() == 0
 
         when:
         identifierFacility = graph.addVertex(T.label, "IdentifierFacility", "name", "f1")
@@ -141,20 +134,20 @@ class GraphModelExtensionSpec extends Specification {
         suitcase = graph.addVertex(T.label, "RicksLab")
 
         then:
-        coreGraph.checkConstraints().size() == 0
+        carnival.checkConstraints().size() == 0
 
         when:
         identifier.addEdge("is_instance_of", identifierClass)
         identifier.addEdge("was_created_by", identifierFacility)
 
         then:
-        coreGraph.checkConstraints().size() == 0
+        carnival.checkConstraints().size() == 0
 
         when:
         identifier.addEdge("was_created_by", suitcase)
 
         then:
-        coreGraph.checkConstraints().size() == 0
+        carnival.checkConstraints().size() == 0
     }
     
 }

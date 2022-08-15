@@ -50,19 +50,13 @@ class CarnivalSpec extends Specification {
         coreGraph = CarnivalTinker.create(vertexBuilders:vertexBuilders)
     }
 
-    def setupSpec() {
-        //CarnivalNeo4j.clearGraph()
-        //coreGraph = CarnivalNeo4j.create(vertexBuilders:vertexBuilders)
-    } 
+    def setupSpec() { } 
 
 
-    def cleanupSpec() {
-        //if (coreGraph) coreGraph.graph.close()
-    }
+    def cleanupSpec() { }
 
 
     def cleanup() {
-        //if (coreGraph) coreGraph.graph.tx().rollback()
         if (coreGraph) coreGraph.close()
     }
 

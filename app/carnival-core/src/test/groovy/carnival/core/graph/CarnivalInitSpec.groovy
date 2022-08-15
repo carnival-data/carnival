@@ -9,6 +9,7 @@ import org.apache.tinkerpop.gremlin.structure.T
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 import static org.apache.tinkerpop.gremlin.neo4j.process.traversal.LabelP.of
+import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
 
 
 
@@ -52,32 +53,24 @@ class CarnivalInitSpec extends Specification {
 
     def "test vertex def trait initizilation"() {
         given:
-        CarnivalNeo4j.clearGraph()
         def classDef = Core.VX.DATA_TRANSFORMATION_PROCESS_CLASS
 
         // we need to set to null because initialization machinery from
-        // previous tests may have (did) initi all vertex defs
+        // previous tests may have (did) init all vertex defs
         classDef.vertex = null
 
-        when:
-        def graph = CarnivalNeo4j.openGremlinGraph()
-
-        then:
-        graph != null
-
-        when:
-        def graphSchema = new DefaultGraphSchema()
-        def graphValidator = new DefaultGraphValidator()
-        def coreGraph = new CarnivalNeo4j(graph, graphSchema, graphValidator)
-
-        then:
+        expect:
         classDef.vertex == null
 
         when:
+        def graph = TinkerGraph.open()
+        def graphSchema = new DefaultGraphSchema()
+        def graphValidator = new DefaultGraphValidator()
+        def carnival = new CarnivalTinker(graph, graphSchema, graphValidator)
+
         def g = graph.traversal()
         try {
-            coreGraph.initializeGremlinGraph(graph, g)
-            coreGraph.initNeo4j(graph, g)
+            carnival.initializeGremlinGraph(graph, g)
         } finally {
             if (g) g.close()
         }
@@ -86,7 +79,7 @@ class CarnivalInitSpec extends Specification {
         classDef.vertex != null
 
         cleanup:
-        if (coreGraph) coreGraph.graph.close()
+        if (graph) graph.close()
     }
 
 }

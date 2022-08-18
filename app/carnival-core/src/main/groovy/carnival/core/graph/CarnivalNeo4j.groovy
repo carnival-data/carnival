@@ -161,10 +161,11 @@ class CarnivalNeo4j extends Carnival {
             }
 		}
 
-        if (!Files.exists(graphPath)) {
+        if (!Files.exists(graphPath) && config.gremlin.neo4j.directoryCreateIfNotPresent) {
 			log.trace "Files.createDirectories ${graphPath}"
 			Files.createDirectories(graphPath)
 		}
+		
 		assertDirectoryAttributes(graphPath)
     }
 

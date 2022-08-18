@@ -5,7 +5,6 @@ package carnival.core.vine
 import groovy.util.logging.Slf4j
 import org.apache.commons.codec.digest.DigestUtils
 
-import carnival.core.config.Defaults
 import carnival.core.util.CoreUtil
 import carnival.util.GenericDataTable
 import carnival.util.MappedDataTable
@@ -90,6 +89,8 @@ abstract class DataTableVineMethod<T,U extends VineMethodCall> extends VineMetho
 
 
     U _callCacheModeOptional() {
+        _cacheDirectoryInitialize()
+
         U methodCall
         DataTableFiles cacheFiles = findCacheFiles()
         if (cacheFiles) {
@@ -97,18 +98,19 @@ abstract class DataTableVineMethod<T,U extends VineMethodCall> extends VineMetho
         } else {
             methodCall = _fetchAndCache()
         }
+        
         methodCall
     }
 
 
     U _callCacheModeRequired() {
+        _cacheDirectoryInitialize()
+
         final String EXT = "cache-mode 'required' requires existing cache files."
 
-        File cacheDir = _cacheDirectory()
-        if (cacheDir == null) throw new RuntimeException("cache directory is null. ${EXT}")
-        if (!cacheDir.exists()) throw new RuntimeException("cache directory does not exist. ${EXT}")
-        if (!cacheDir.isDirectory()) throw new RuntimeException("cache directory is not a directory. ${EXT}")
-        if (!cacheDir.canRead()) throw new RuntimeException("cache directory is not readable. ${EXT}")
+        File cacheDir = _cacheDirectoryValidated()
+        if (cacheDir == null) throw new RuntimeException("cache directory invalid. ${cacheDir} ${EXT}")
+        if (!cacheDir.canRead()) throw new RuntimeException("cache directory is not readable. ${cacheDir} ${EXT}")
 
         DataTableFiles cacheFiles = DataTableVineMethodCall.findFiles(cacheDir, this.class, this.arguments)
         if (cacheFiles == null || cacheFiles.areNull()) throw new RuntimeException("cache files are null. ${EXT}")        
@@ -130,17 +132,11 @@ abstract class DataTableVineMethod<T,U extends VineMethodCall> extends VineMetho
 
 
     List<File> _writeCacheFile(U methodCall) {
-        File cacheDir = _cacheDirectory()
+        File cacheDir = _cacheDirectoryValidated()
         if (cacheDir == null) {
-            log.warn "cache directory is not configured. no cache file will be written."
+            log.warn "cache directory is invalid. no cache file will be written."
             return null
         }
-        if (!cacheDir.exists()) {
-            log.warn "cache directory does not exist. no cache files will be written. ${cacheDir}"
-            return null
-        }
-        assert cacheDir.isDirectory()
-        
         methodCall.writeFiles(cacheDir)
     }
 
@@ -148,11 +144,6 @@ abstract class DataTableVineMethod<T,U extends VineMethodCall> extends VineMetho
     ///////////////////////////////////////////////////////////////////////////
     // CACHING
     ///////////////////////////////////////////////////////////////////////////
-
-    File _cacheDirectory() {
-        Defaults.getDataCacheDirectory()
-    }
-
 
     DataTableFiles findCacheFiles() {
         File cacheDir = _cacheDirectory()

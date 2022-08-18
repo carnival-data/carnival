@@ -36,6 +36,9 @@ trait Vine extends MethodsHolder {
     /** */
     Map<String,Object> _dynamicVineMethodResources = new HashMap<String,Object>()
 
+    /** */
+    VineConfiguration vineConfiguration = VineConfiguration.defaultConfiguration()
+
 
     ///////////////////////////////////////////////////////////////////////////
     // CLIENT INTERFACE
@@ -74,6 +77,7 @@ trait Vine extends MethodsHolder {
 
         // create a vine method instance
         def vm = vmc.newInstance(this)
+        vm.vineConfiguration = this.vineConfiguration
 
         // should probably get rid of this
         _dynamicVineMethodResources.each { String name, Object value ->

@@ -79,6 +79,17 @@ class JvsTestVineWithResource extends JvsTestVine {
 
 
 
+class JvsTestVineDefault implements Vine { 
+    @ToString(includeNames=true)
+    static class Person { String name }
+
+    class PersonVineMethod extends JsonVineMethod<Person> { 
+        Person fetch(Map args) { new Person(name:args.p1) }
+    }
+}
+
+
+
 class JsonVineSpec extends Specification {
 
     ///////////////////////////////////////////////////////////////////////////
@@ -176,6 +187,25 @@ class JsonVineSpec extends Specification {
     def "cache file can be deleted"() {
         when:
         def vine = new JvsTestVine()
+        def vm = vine.method('PersonVineMethod').args(p1:'alice')
+        def cf = vm.cacheFile()
+
+        then:
+        cf != null
+        cf instanceof File
+
+        when:
+        if (cf.exists()) cf.delete()
+        vm.call(CacheMode.OPTIONAL)
+
+        then:
+        cf.exists()
+    }
+
+    
+    def "default cache directory"() {
+        when:
+        def vine = new JvsTestVineDefault()
         def vm = vine.method('PersonVineMethod').args(p1:'alice')
         def cf = vm.cacheFile()
 

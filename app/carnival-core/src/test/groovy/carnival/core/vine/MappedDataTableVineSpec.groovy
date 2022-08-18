@@ -73,6 +73,20 @@ class MdtTestVineWithResource extends MdtTestVine {
 
 
 
+class MdtTestVineDefault implements Vine { 
+    @ToString(includeNames=true)
+    static class Person { String name }
+
+    class PersonVineMethod extends MappedDataTableVineMethod { 
+        MappedDataTable fetch(Map args) {
+            def mdt = createDataTable(idFieldName:'ID')
+            mdt.dataAdd(id:'1', name:args.p1)
+            mdt
+        }
+    }
+}
+
+
 
 class MappedDataTableVineSpec extends Specification {
 
@@ -131,6 +145,25 @@ class MappedDataTableVineSpec extends Specification {
     def "cache files can be deleted"() {
         when:
         def vine = new MdtTestVine()
+        def vm = vine.method('PersonVineMethod').args(p1:'alice')
+        def cfs = vm.cacheFiles()
+
+        then:
+        cfs != null
+        cfs instanceof DataTableFiles
+
+        when:
+        if (cfs.exist()) cfs.toMap().values().each { it.delete() }
+        vm.call(CacheMode.OPTIONAL)
+
+        then:
+        cfs.exist()
+    }
+
+
+    def "default cache directory"() {
+        when:
+        def vine = new MdtTestVineDefault()
         def vm = vine.method('PersonVineMethod').args(p1:'alice')
         def cfs = vm.cacheFiles()
 

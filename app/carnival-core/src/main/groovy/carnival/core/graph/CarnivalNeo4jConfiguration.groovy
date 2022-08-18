@@ -45,6 +45,7 @@ class CarnivalNeo4jConfiguration {
         @ToString(includeNames=true)
         static class Neo4j {
             String directory
+            Boolean directoryCreateIfNotPresent = true
 
             @ToString(includeNames=true)
             static class Conf {

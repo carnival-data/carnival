@@ -2,10 +2,12 @@ package carnival.core.vine
 
 
 
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.nio.file.Files
 import groovy.util.logging.Slf4j
 import org.apache.commons.codec.digest.DigestUtils
 
-import carnival.core.config.Defaults
 import carnival.core.util.CoreUtil
 
 
@@ -23,25 +25,6 @@ import carnival.core.util.CoreUtil
 @Slf4j
 abstract class VineMethod {
 
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC FIELDS
-    ///////////////////////////////////////////////////////////////////////////
-
-    static final String DEFAULT_CACHE_MODE_CONFIG_KEY = 'carnival.cache-mode'
-
-
-    ///////////////////////////////////////////////////////////////////////////
-    // STATIC METHODS
-    ///////////////////////////////////////////////////////////////////////////
-
-    static public CacheMode defaultCacheMode() {
-        String str = Defaults.getConfigValue(DEFAULT_CACHE_MODE_CONFIG_KEY)
-        if (str == null) return CacheMode.IGNORE
-        CacheMode cm = Enum.valueOf(CacheMode, str)
-        if (cm) return cm
-        CacheMode.IGNORE
-    }
-
 
     ///////////////////////////////////////////////////////////////////////////
     // ABSTRACT INTERFACE
@@ -55,24 +38,94 @@ abstract class VineMethod {
     ///////////////////////////////////////////////////////////////////////////
 
     /** */
-    CacheMode cacheMode = defaultCacheMode()
+    VineConfiguration vineConfiguration = VineConfiguration.defaultConfiguration()
 
     /** */
     Map arguments = [:]
 
 
     ///////////////////////////////////////////////////////////////////////////
-    // METHODS CACHE MODE
+    // CACHE MODE
     ///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    CacheMode cacheMode
+
+    /** */
+    public CacheMode getCacheMode() {
+        if (cacheMode != null) return cacheMode
+        assert vineConfiguration != null
+        vineConfiguration.getCacheMode()
+    }
+
+    /** */
+    public void setCacheMode(CacheMode cacheMode) {
+        this.cacheMode = cacheMode
+    }
 
     VineMethod cacheMode(CacheMode cm) {
         assert cm != null
-        this.cacheMode = cm
+        setCacheMode(cm)
         this
     }
 
     VineMethod mode(CacheMode cm) {
         cacheMode(cm)
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // CACHE DIRECTORY
+    ///////////////////////////////////////////////////////////////////////////
+
+    File _cacheDirectory() {
+        assert vineConfiguration != null
+        vineConfiguration.getCacheDirectory()
+    }
+
+    File _cacheDirectoryValidated() {
+        File cacheDir = _cacheDirectory()
+        if (cacheDir == null) {
+            log.warn "cache directory is not configured."
+            return null
+        }
+        if (!cacheDir.exists()) {
+            log.warn "cache directory does not exist. ${cacheDir}"
+            return null
+        }
+        if (!cacheDir.isDirectory()) {
+            log.warn "cache directory is not a directory. ${cacheDir}"
+            return null
+        }
+        return cacheDir
+    }
+
+    void _cacheDirectoryInitialize() {
+        Path cachePath = Paths.get(vineConfiguration.cache.directory)
+		if (cachePath == null) throw new RuntimeException("cachePath is null")
+        
+		def assertDirectoryAttributes = { Path dirPath ->
+			String dirPathString = dirPath.toAbsolutePath().toString()
+			if (!Files.exists(dirPath)) {
+                throw new RuntimeException("${dirPathString} does not exist")
+			}
+            if (!Files.isDirectory(dirPath)) {
+                throw new RuntimeException("${dirPathString} is not a directory")
+            }
+            if (!Files.isWritable(dirPath)) {
+                throw new RuntimeException("${dirPathString} is not writable")
+            }
+            if (!Files.isReadable(dirPath)) {
+                throw new RuntimeException("${dirPathString} is not readable")
+            }
+		}
+
+        if (!Files.exists(cachePath) && vineConfiguration.cache.directoryCreateIfNotPresent) {
+			log.trace "Files.createDirectories ${cachePath}"
+			Files.createDirectories(cachePath)
+		}
+		
+		assertDirectoryAttributes(cachePath)        
     }
 
 

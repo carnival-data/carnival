@@ -5,7 +5,6 @@ package carnival.core.vine
 import groovy.util.logging.Slf4j
 import org.apache.commons.codec.digest.DigestUtils
 
-import carnival.core.config.Defaults
 import carnival.core.util.CoreUtil
 
 
@@ -81,6 +80,7 @@ abstract class JsonVineMethod<T> extends VineMethod {
 
 
     JsonVineMethodCall<T> _callCacheModeOptional() {
+        _cacheDirectoryInitialize()
         JsonVineMethodCall<T> methodCall
         File cacheFile = findCacheFile()
         if (cacheFile) {
@@ -93,13 +93,13 @@ abstract class JsonVineMethod<T> extends VineMethod {
 
 
     JsonVineMethodCall<T> _callCacheModeRequired() {
+        _cacheDirectoryInitialize()
+
         final String EXT = "cache-mode 'required' requires an existing cache file."
 
-        File cacheDir = _cacheDirectory()
-        if (cacheDir == null) throw new RuntimeException("cache directory is null. ${EXT}")
-        if (!cacheDir.exists()) throw new RuntimeException("cache directory does not exist. ${EXT}")
-        if (!cacheDir.isDirectory()) throw new RuntimeException("cache directory is not a directory. ${EXT}")
-        if (!cacheDir.canRead()) throw new RuntimeException("cache directory is not readable. ${EXT}")
+        File cacheDir = _cacheDirectoryValidated()
+        if (cacheDir == null) throw new RuntimeException("cache directory is invalid. ${cacheDir} ${EXT}")
+        if (!cacheDir.canRead()) throw new RuntimeException("cache directory is not readable. ${cacheDir} ${EXT}")
 
         File cacheFile = JsonVineMethodCall.findFile(cacheDir, this.class, this.arguments)
         if (cacheFile == null) throw new RuntimeException("cache file does not exist. ${EXT}")        
@@ -127,9 +127,9 @@ abstract class JsonVineMethod<T> extends VineMethod {
 
 
     List<File> _writeCacheFile(JsonVineMethodCall<T> methodCall) {
-        File cacheDir = _cacheDirectory()
+        File cacheDir = _cacheDirectoryValidated()
         if (cacheDir == null) {
-            log.warn "cache directory is null. no cache file will be written."
+            log.warn "cache directory is invalid. no cache file will be written."
             return null
         }
         
@@ -153,11 +153,6 @@ abstract class JsonVineMethod<T> extends VineMethod {
     ///////////////////////////////////////////////////////////////////////////
     // CACHING
     ///////////////////////////////////////////////////////////////////////////
-
-    File _cacheDirectory() {
-        Defaults.getDataCacheDirectory()
-    }
-
 
     File findCacheFile() {
         File cacheDir = _cacheDirectory()

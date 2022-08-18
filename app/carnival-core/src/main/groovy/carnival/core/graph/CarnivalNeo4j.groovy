@@ -28,8 +28,6 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 
 import org.apache.tinkerpop.gremlin.neo4j.structure.Neo4jGraph
 
-import carnival.core.config.Defaults
-
 
 
 
@@ -165,7 +163,7 @@ class CarnivalNeo4j extends Carnival {
 			log.trace "Files.createDirectories ${graphPath}"
 			Files.createDirectories(graphPath)
 		}
-		
+
 		assertDirectoryAttributes(graphPath)
     }
 

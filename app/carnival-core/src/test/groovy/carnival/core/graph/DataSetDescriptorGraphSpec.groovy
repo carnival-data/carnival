@@ -48,11 +48,6 @@ class DataSetDescriptorGraphSpec extends Specification {
     @Shared graph
     @Shared g
     
-    @Shared vertexBuilders = [
-        Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, "1"),
-        Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, "2"),
-    ]
-
 
     ///////////////////////////////////////////////////////////////////////////
     // SET UP
@@ -63,7 +58,7 @@ class DataSetDescriptorGraphSpec extends Specification {
     } 
 
     def setup() {
-        carnival = CarnivalTinker.create(vertexBuilders:vertexBuilders)
+        carnival = CarnivalTinker.create()
         graph = carnival.graph
         g = graph.traversal()
     }

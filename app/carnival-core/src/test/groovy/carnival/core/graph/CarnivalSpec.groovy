@@ -33,7 +33,7 @@ class CarnivalSpec extends Specification {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
     
-    @Shared coreGraph
+    @Shared carnival
     
     @Shared vertexBuilders = [
         Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, "1"),
@@ -47,7 +47,12 @@ class CarnivalSpec extends Specification {
     
 
     def setup() {
-        coreGraph = CarnivalTinker.create(vertexBuilders:vertexBuilders)
+        carnival = CarnivalTinker.create(vertexBuilders:vertexBuilders)
+        /*carnival.withTraversal { graph, g ->
+            ["1", "2"].each {
+                Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, it).create(graph)
+            }
+        }*/
     }
 
     def setupSpec() { } 
@@ -57,7 +62,7 @@ class CarnivalSpec extends Specification {
 
 
     def cleanup() {
-        if (coreGraph) coreGraph.close()
+        if (carnival) carnival.close()
     }
 
 
@@ -71,7 +76,7 @@ class CarnivalSpec extends Specification {
     */
     def "test graph creation"() {
     	when: 
-    	def graph = coreGraph.graph
+    	def graph = carnival.graph
 
         println "===================="
         println "initial graph"
@@ -85,7 +90,7 @@ class CarnivalSpec extends Specification {
 
     def "test initializeGraph for VertexBuilder creation"() {
     	given:
-    	def graph = coreGraph.graph
+    	def graph = carnival.graph
     	def g = graph.traversal()
     	def vs = []
     	//println "graph: $graph"
@@ -94,7 +99,7 @@ class CarnivalSpec extends Specification {
 
 
     	//expect:
-    	//coreGraph.graphSchema.vertexBuilders?.size() == vertexBuilders?.size()
+    	//carnival.graphSchema.vertexBuilders?.size() == vertexBuilders?.size()
 
     	when:
     	vs = g.V().hasLabel('Identifier').toList()
@@ -127,12 +132,12 @@ class CarnivalSpec extends Specification {
 
     def "test checkConstraints for exactly one singleton vertex"() {
 		given:
-    	def graph = coreGraph.graph
+    	def graph = carnival.graph
     	def g = graph.traversal()
     	def vs
 
     	expect:
-    	coreGraph.checkConstraints().size() == 0
+    	carnival.checkConstraints().size() == 0
 
     	when:
     	g.V().hasLabel('Identifier').has("value", "1").next().remove()
@@ -140,8 +145,8 @@ class CarnivalSpec extends Specification {
 
     	then:
     	vs.size() == 0
-    	coreGraph.checkConstraints().size() == 1
-    	//println coreGraph.checkConstraints()
+    	carnival.checkConstraints().size() == 1
+    	//println carnival.checkConstraints()
 
     	when:
         Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, "1").vertex(graph, g)
@@ -150,7 +155,7 @@ class CarnivalSpec extends Specification {
 
     	then:
     	vs.size() == 1
-    	coreGraph.checkConstraints().size() == 0
+    	carnival.checkConstraints().size() == 0
 
     	when:
     	graph.addVertex(
@@ -162,18 +167,18 @@ class CarnivalSpec extends Specification {
 
     	then:
     	vs.size() == 2
-    	coreGraph.checkConstraints().size() == 1
+    	carnival.checkConstraints().size() == 1
 
     }
 
     def "test checkConstraints for property existence constraints"() {
     	given:
-    	def graph = coreGraph.graph
+    	def graph = carnival.graph
     	def g = graph.traversal()
     	def vert
 
     	expect:
-    	coreGraph.checkConstraints().size() == 0
+    	carnival.checkConstraints().size() == 0
 
     	when:
     	vert = graph.addVertex(
@@ -182,13 +187,13 @@ class CarnivalSpec extends Specification {
         )
 
     	then:
-    	coreGraph.checkConstraints().size() == 3
+    	carnival.checkConstraints().size() == 3
     }
 
 
     def "test checkConstraints for relationship domain constraints"() {
         given:
-        def graph = coreGraph.graph
+        def graph = carnival.graph
         def g = graph.traversal()
 
         def identifierFacility
@@ -197,7 +202,7 @@ class CarnivalSpec extends Specification {
         def suitcase
 
         expect:
-        coreGraph.checkConstraints().size() == 0
+        carnival.checkConstraints().size() == 0
 
         when:
         identifierFacility = Core.VX.IDENTIFIER_FACILITY.instance().withProperty(Core.PX.NAME, "f1").vertex(graph, g)
@@ -219,7 +224,7 @@ class CarnivalSpec extends Specification {
         suitcase = VX.CGS_SUITCASE.instance().vertex(graph, g)
 
         then:
-        coreGraph.checkConstraints().size() == 0
+        carnival.checkConstraints().size() == 0
 
         when:
         Base.EX.IS_INSTANCE_OF.relate(g, identifier, identifierClass)
@@ -228,7 +233,7 @@ class CarnivalSpec extends Specification {
         //identifier.addEdge("was_created_by", identifierFacility)
 
         then:
-        coreGraph.checkConstraints().size() == 0
+        carnival.checkConstraints().size() == 0
 
         when:
         suitcase.addEdge(Core.EX.WAS_CREATED_BY.label, identifierFacility, Base.PX.NAME_SPACE.label, Core.EX.WAS_CREATED_BY.nameSpace)
@@ -236,13 +241,13 @@ class CarnivalSpec extends Specification {
         //suitcase.addEdge("was_created_by", identifierFacility)
 
         then:
-        coreGraph.checkConstraints().size() == 1
+        carnival.checkConstraints().size() == 1
     }
 
 
     def "test checkConstraints for relationship range constraints"() {
         given:
-        def graph = coreGraph.graph
+        def graph = carnival.graph
         def g = graph.traversal()
 
         def identifierFacility
@@ -251,7 +256,7 @@ class CarnivalSpec extends Specification {
         def suitcase
 
         expect:
-        coreGraph.checkConstraints().size() == 0
+        carnival.checkConstraints().size() == 0
 
         when:
         identifierFacility = Core.VX.IDENTIFIER_FACILITY.instance().withProperty(Core.PX.NAME, "f1").vertex(graph, g)
@@ -264,7 +269,7 @@ class CarnivalSpec extends Specification {
         suitcase = VX.CGS_SUITCASE.instance().vertex(graph, g)
 
         then:
-        coreGraph.checkConstraints().size() == 0
+        carnival.checkConstraints().size() == 0
 
         when:
         Base.EX.IS_INSTANCE_OF.relate(g, identifier, identifierClass)
@@ -273,7 +278,7 @@ class CarnivalSpec extends Specification {
         //identifier.addEdge("was_created_by", identifierFacility)
 
         then:
-        coreGraph.checkConstraints().size() == 0
+        carnival.checkConstraints().size() == 0
 
         when:
         //Core.EX.WAS_CREATED_BY.relate(g, identifier, suitcase)
@@ -281,18 +286,18 @@ class CarnivalSpec extends Specification {
         //identifier.addEdge("was_created_by", suitcase)
 
         then:
-        coreGraph.checkConstraints().size() == 1
+        carnival.checkConstraints().size() == 1
     }
 
 
     def "test checkModel for unmodeled vertex and edge labels"() {
         given:
-        def graph = coreGraph.graph
+        def graph = carnival.graph
         def suitcase, salesman, id, idClass
         def g = graph.traversal()
 
         expect:
-        !coreGraph.checkModel()
+        !carnival.checkModel()
 
         when:
         id = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, '123').vertex(graph, g)
@@ -305,22 +310,22 @@ class CarnivalSpec extends Specification {
 
         then:
         CarnivalUtils.printGraph(g)
-        coreGraph.checkModel().size() == 0
+        carnival.checkModel().size() == 0
 
         when:
         suitcase = graph.addVertex(T.label, "Suitcase")
         salesman = graph.addVertex(T.label, "Salesman")
 
         then:
-        coreGraph.checkModel().size() == 1
-        println coreGraph.checkModel()
+        carnival.checkModel().size() == 1
+        println carnival.checkModel()
 
         when:
         suitcase.addEdge("belongs_to", salesman)
 
         then:
-        coreGraph.checkModel().size() == 2
-        println coreGraph.checkModel()
+        carnival.checkModel().size() == 2
+        println carnival.checkModel()
     }
 
     /*
@@ -331,25 +336,25 @@ class CarnivalSpec extends Specification {
     /*
     def "test checkModel for unmodeled vertex properties"() {
         given:
-        def graph = coreGraph.graph
+        def graph = carnival.graph
         def patient
 
         expect:
-        !coreGraph.checkModel()
+        !carnival.checkModel()
 
         when:
         patient = graph.addVertex(T.label, "Patient", "customProp", "abc123")
 
         then:
-        coreGraph.checkModel().size() == 1
-        println coreGraph.checkModel()
+        carnival.checkModel().size() == 1
+        println carnival.checkModel()
     }*/
 
 
 
     def "test Identifier vertex class"() {
         given:
-        def graph = coreGraph.graph
+        def graph = carnival.graph
         def g = graph.traversal()
         Exception t
 
@@ -414,8 +419,8 @@ class CarnivalSpec extends Specification {
         def idNode
 
         expect:
-        coreGraph.checkModel().size() == 0
-        coreGraph.checkConstraints().size() == 0
+        carnival.checkModel().size() == 0
+        carnival.checkConstraints().size() == 0
 
         /*
         where:

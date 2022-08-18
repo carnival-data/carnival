@@ -2,6 +2,9 @@ package carnival.core.graph
 
 
 
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.nio.file.Files
 import groovy.util.logging.Slf4j
 import groovy.transform.ToString
 
@@ -15,13 +18,27 @@ import carnival.graph.VertexBuilder
 @ToString(includeNames=true)
 class CarnivalNeo4jConfiguration {
 
-    Graph graph
-    GraphSchema graphSchema
-    GraphValidator graphValidator    
+    ///////////////////////////////////////////////////////////////////////////
+    // STATIC
+    ///////////////////////////////////////////////////////////////////////////
 
-    Set<VertexBuilder> vertexBuilders
+    final static String GRAPH_PATH_DEFAULT = "carnival-home/neo4j/graph"
+
+    static public CarnivalNeo4jConfiguration defaultConfiguration() {
+        Path currentRelativePath = Paths.get("");
+        Path carnivalHomePath = currentRelativePath.resolve(GRAPH_PATH_DEFAULT)
+        String carnivalHomePathString = carnivalHomePath.toAbsolutePath().toString()
+
+        CarnivalNeo4jConfiguration config = new CarnivalNeo4jConfiguration()
+        config.gremlin.neo4j.directory = carnivalHomePathString
+
+        return config
+    }
 
 
+    ///////////////////////////////////////////////////////////////////////////
+    // CONFIG FIELDS
+    ///////////////////////////////////////////////////////////////////////////
     @ToString(includeNames=true)
     static class Gremlin {
 
@@ -67,6 +84,9 @@ class CarnivalNeo4jConfiguration {
 
     }
     Gremlin gremlin = new Gremlin()
+
+
+
 
 
 

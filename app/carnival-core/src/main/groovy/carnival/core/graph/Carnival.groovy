@@ -34,7 +34,12 @@ import carnival.graph.VertexBuilder
 
 
 /**
- * The core graph.  See the documentation for model details.
+ * The Carnival object.
+ *
+ * A Carnival is comprosed of three main components:
+ *    - a Gremlin graph
+ *    - a graph schema
+ *    - a graph validator
  *
  */
 @Slf4j
@@ -226,7 +231,11 @@ abstract class Carnival implements GremlinTrait {
 	}
 
 
-	/** */
+	/** 
+	 * Create the singleton vertex for a vertex constraint for a vertex definition if
+	 * it represents a class and has no required properties.
+	 *
+	 */
 	public void createClassVertex(Graph graph, GraphTraversalSource g, VertexConstraint vld) {
 		log.trace "createClassVertex vld: ${vld.label} $vld"
 

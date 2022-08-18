@@ -35,11 +35,6 @@ class LegacyGraphSpec extends Specification {
     
     @Shared carnival
     
-    @Shared vertexBuilders = [
-        Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, "1"),
-        Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, "2"),
-    ]
-
 
     ///////////////////////////////////////////////////////////////////////////
     // SET UP
@@ -49,7 +44,7 @@ class LegacyGraphSpec extends Specification {
     def setupSpec() { } 
 
     def setup() {
-        carnival = CarnivalTinker.create(vertexBuilders:vertexBuilders)
+        carnival = CarnivalTinker.create()
         carnival.graphValidator = new LegacyValidator()
     }
 

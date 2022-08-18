@@ -129,6 +129,9 @@ docs/node_modules
 # might be created by tests that write files
 app/carnival-core/data
 
+# created by CarnivalNeo4jSpec
+app/carnival-core/carnival-home
+
 # scratch code
 *.groovy_
 

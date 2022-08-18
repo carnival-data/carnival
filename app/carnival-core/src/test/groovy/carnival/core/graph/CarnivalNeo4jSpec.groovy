@@ -18,7 +18,6 @@ import org.neo4j.configuration.connectors.BoltConnector
 import org.neo4j.configuration.helpers.SocketAddress*/
 
 import carnival.graph.*
-import carnival.core.config.Defaults
 
 
 
@@ -54,8 +53,9 @@ class CarnivalNeo4jSpec extends Specification {
     
 
     def setupSpec() {
-        CarnivalNeo4j.clearGraph()
-        carnival = CarnivalNeo4j.create(vertexBuilders:vertexBuilders)
+        CarnivalNeo4jConfiguration cnConf = CarnivalNeo4jConfiguration.defaultConfiguration()
+        CarnivalNeo4j.clearGraph(cnConf)
+        carnival = CarnivalNeo4j.create(cnConf, [vertexBuilders:vertexBuilders])
     } 
 
     def setup() { }
@@ -78,7 +78,7 @@ class CarnivalNeo4jSpec extends Specification {
     /*def "test expose Bolt port"() {
         when:
 		// expose Bolt port
-		DatabaseManagementService managementService = new DatabaseManagementServiceBuilder( Defaults.getDataGraphDirectoryPath() )
+		DatabaseManagementService managementService = new DatabaseManagementServiceBuilder( carnival.graphPath() )
         	.setConfig( BoltConnector.enabled, true )
         	.setConfig( BoltConnector.listen_address, new SocketAddress( "localhost", 7687 ) )
         .build();
@@ -89,7 +89,7 @@ class CarnivalNeo4jSpec extends Specification {
 
 
     
-    @IgnoreIf({ !Defaults.getConfigValue('carnival.gremlin.conf.dbms.directories.plugins') })
+    @IgnoreIf({ !CarnivalNeo4jConfiguration.defaultConfiguration().gremlin.neo4j.conf.dbms.directories.plugins })
     def "test apoc"() {
         when: 
         def graph = carnival.graph
@@ -99,7 +99,7 @@ class CarnivalNeo4jSpec extends Specification {
             println "apocVersion: $apocVersion"
         } catch (org.neo4j.graphdb.QueryExecutionException e) {
             e.printStackTrace()
-            def pluginDir = Defaults.getConfigValue('carnival.gremlin.conf.dbms.directories.plugins')
+            def pluginDir = CarnivalNeo4jConfiguration.defaultConfiguration().gremlin.neo4j.conf.dbms.directories.plugins
             println "in order to run APOC, the APOC library must be present on the file system and configured in the application configuration."
             println "has carnival.home been set?  or a configuration otherwise provided?"
             println "is the following plugin directory valid? ${pluginDir}"

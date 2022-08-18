@@ -56,18 +56,18 @@ trait VertexDefinition extends ElementDefinition {
     
     /** 
      * optional, defines what the superclass of this class is.
-     * */
+     */
     VertexDefinition superClass
 
     /** 
      * optional, defines what class these verticies are instances of.
-     * */
+     */
     VertexDefinition instanceOf
 
     /** 
      * Explicitly designate this definition as a class. A singleton vertex will
      * automatically be created in the graph.
-     *  */
+     */
     Boolean isClass = null
 
 

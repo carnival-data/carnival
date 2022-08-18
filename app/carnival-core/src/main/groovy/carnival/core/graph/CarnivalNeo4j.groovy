@@ -2,6 +2,9 @@ package carnival.core.graph
 
 
 
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.nio.file.Files
 import groovy.util.AntBuilder
 import groovy.transform.ToString
 import groovy.transform.InheritConstructors
@@ -40,84 +43,90 @@ class CarnivalNeo4j extends Carnival {
 	// STATIC
 	///////////////////////////////////////////////////////////////////////////
 
-	/** File path to the graph directory */
-	static String GRAPH_PATH = "${Defaults.dataGraphDirectory}"
-
-
-
-	///////////////////////////////////////////////////////////////////////////
-	// FACTORY 
-	///////////////////////////////////////////////////////////////////////////
-
     /** */
     public static CarnivalNeo4j create(Map args = [:]) {
-    	def graph = openGremlinGraph()
+		CarnivalNeo4jConfiguration defaultConfig = CarnivalNeo4jConfiguration.defaultConfiguration()
+		create(defaultConfig, args)
+	}
 
+
+    /** */
+    public static CarnivalNeo4j create(CarnivalNeo4jConfiguration config, Map args = [:]) {
+		// initialize the directory structure
+		initializeFiles(config)
+
+		// open the neo4j gremlin graph
+    	def graph = openGremlinGraph(config)
+
+		// create a graph schema object
 		def graphSchema
         if (args.vertexBuilders) graphSchema = new DefaultGraphSchema(args.vertexBuilders)
         else graphSchema = new DefaultGraphSchema()
 
+		// create a graph validator object
         def graphValidator = new DefaultGraphValidator()
-        def coreGraph = new CarnivalNeo4j(graph, graphSchema, graphValidator)
+        
+		// create the carnival object
+		def carnival = new CarnivalNeo4j(graph, graphSchema, graphValidator)
+		carnival.config = config
 
+		// initialize the graph
     	def g = graph.traversal()
-
     	try {
-	    	coreGraph.initializeGremlinGraph(graph, g)
-			coreGraph.initNeo4j(graph, g)
+	    	carnival.initializeGremlinGraph(graph, g)
+			carnival.neo4jConstraints(graph, g)
     	} finally {
     		if (g) g.close()
     	}
 
-    	assert coreGraph
-		return coreGraph
+    	assert carnival
+		return carnival
     }
 
 
-
-
-
-	///////////////////////////////////////////////////////////////////////////
-	// INITIALIZATION 
-	///////////////////////////////////////////////////////////////////////////
-
 	/** */
-	public static PropertiesConfiguration neo4jConfig() {
-   		def config = new PropertiesConfiguration()
-   		config.setProperty('gremlin.neo4j.directory', Defaults.dataGraphDirectoryPath)
+	public static PropertiesConfiguration neo4jConfig(CarnivalNeo4jConfiguration config) {
+   		def nconf = new PropertiesConfiguration()
+   		nconf.setProperty('gremlin.neo4j.directory', config.gremlin.neo4j.directory)
+		
+		nconf.setProperty(
+			'gremlin.neo4j.conf.dbms.security.auth_enabled', 
+			config.gremlin.neo4j.conf.dbms.security.auth_enabled
+		)
+		nconf.setProperty(
+			'gremlin.neo4j.conf.dbms.directories.plugins',
+			config.gremlin.neo4j.conf.dbms.directories.plugins
+		)
+		nconf.setProperty(
+			'gremlin.neo4j.conf.dbms.security.procedures.unrestricted',
+			config.gremlin.neo4j.conf.dbms.security.procedures.unrestricted
+		)
+		nconf.setProperty(
+			'gremlin.neo4j.conf.dbms.security.procedures.whitelist',
+			config.gremlin.neo4j.conf.dbms.security.procedures.whitelist
+		)
+		nconf.setProperty(
+			'gremlin.neo4j.conf.dbms.unmanaged_extension_classes',
+			config.gremlin.neo4j.conf.dbms.unmanaged_extension_classes
+		)
 
-   		[
-   			"carnival.gremlin.neo4j.conf.dbms.security.auth_enabled",
-   			"carnival.gremlin.neo4j.conf.dbms.directories.plugins",
-   			"carnival.gremlin.neo4j.conf.dbms.security.procedures.unrestricted",
-   			"carnival.gremlin.neo4j.conf.dbms.security.procedures.whitelist",
-   			"carnival.gremlin.neo4j.conf.dbms.unmanaged_extension_classes"
-   		].each { p ->
-		    def k = p.split('\\.').drop(1).join('.')
-		    def v = Defaults.getConfigValue(p)
-	   		config.setProperty(k, v)
-   		}
-   		
-   		return config
+   		return nconf
 	}
 
 
 	/** */
-	public static Graph openGremlinGraph(Map args = [:]) {
-		log.trace "openGremlinGraph() creating or loading graph in ${GRAPH_PATH}"
+	public static Graph openGremlinGraph(CarnivalNeo4jConfiguration config) {
+		log.trace "openGremlinGraph() creating or loading graph in ${config}"
 
 		// configure log4j
    		System.setProperty('log4j.configuration', 'log4j.properties')
 
    		// get the neo4j config
-   		def config = neo4jConfig()
-
-   		// adjust neo4j config per params
-   		if (args.graphDirectory) config.setProperty('gremlin.neo4j.directory', args.graphDirectory)
+   		def nconf = neo4jConfig(config)
 
 		// create gremlin Neo4jGraph
-		log.info "opening Neo4j graph config:${config} ..."
-		Graph graph = Neo4jGraph.open(config)
+		log.info "opening Neo4j graph nconf:${nconf} ..."
+		Graph graph = Neo4jGraph.open(nconf)
 		assert graph
 
 		return graph
@@ -125,11 +134,66 @@ class CarnivalNeo4j extends Carnival {
 
 
 	/**
+	 * Initialize directory structure.
+	 *
+	 */
+	public static void initializeFiles(CarnivalNeo4jConfiguration config) {
+        Path graphPath = Paths.get(config.gremlin.neo4j.directory)
+		if (graphPath == null) throw new RuntimeException("graphPath is null")
+        
+		//String currentRelativePathString = currentRelativePath.toAbsolutePath().toString()
+        //Path graphPath = currentRelativePath.resolve(CARNIVAL_HOME_NAME)
+        //String graphPathString = graphPath.toAbsolutePath().toString()
+
+		def assertDirectoryAttributes = { Path dirPath ->
+			String dirPathString = dirPath.toAbsolutePath().toString()
+			if (!Files.exists(dirPath)) {
+                throw new RuntimeException("${dirPathString} does not exist")
+			}
+            if (!Files.isDirectory(dirPath)) {
+                throw new RuntimeException("${dirPathString} is not a directory")
+            }
+            if (!Files.isWritable(dirPath)) {
+                throw new RuntimeException("${dirPathString} is not writable")
+            }
+            if (!Files.isReadable(dirPath)) {
+                throw new RuntimeException("${dirPathString} is not readable")
+            }
+		}
+
+        if (!Files.exists(graphPath)) {
+			log.trace "Files.createDirectories ${graphPath}"
+			Files.createDirectories(graphPath)
+		}
+		assertDirectoryAttributes(graphPath)
+    }
+
+
+
+	///////////////////////////////////////////////////////////////////////////
+	// FIELDS
+	///////////////////////////////////////////////////////////////////////////
+
+	CarnivalNeo4jConfiguration config
+
+
+
+	///////////////////////////////////////////////////////////////////////////
+	// NEO4J
+	///////////////////////////////////////////////////////////////////////////
+
+	/** */
+	public void initializeFiles() {
+		assert this.config
+		initializeFiles(this.config)
+	}
+
+	/**
 	 * Set property uniqueness constraints.
 	 *
 	 */
-	public initNeo4j(Graph graph, GraphTraversalSource g) {
-		log.trace "CarnivalNeo4j initNeo4j"
+	public void neo4jConstraints(Graph graph, GraphTraversalSource g) {
+		log.trace "CarnivalNeo4j neo4jConstraints"
 
 		// create uniqueness constraints
 		withTransaction(graph) {
@@ -141,6 +205,16 @@ class CarnivalNeo4j extends Carnival {
 	    		}
 	    	}
 		}
+	}
+
+
+
+	/**
+	 * Set indexes.
+	 *
+	 */
+	public void createIndexes(Graph graph, GraphTraversalSource g) {
+		log.trace "CarnivalNeo4j createIndexes"
 
         // create indexes
         withTransaction(graph) {
@@ -152,6 +226,22 @@ class CarnivalNeo4j extends Carnival {
 	    	}
         }
 	}
+
+
+	/** */
+	public String graphPath() {
+		assert this.config
+		Paths.get(config.gremlin.neo4j.directory)
+	}
+
+
+	/** */
+	public String graphPathString() {
+		Path dirPath = graphPath()
+		String dirPathString = dirPath.toAbsolutePath().toString()
+		return dirPathString
+	}
+
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -169,18 +259,19 @@ class CarnivalNeo4j extends Carnival {
 	///////////////////////////////////////////////////////////////////////////
 
 	/** */
-	public static File graphDir() {
-		File graphDir = new File(GRAPH_PATH)
-		assert graphDir.exists()
-		assert graphDir.isDirectory()
+	public static File graphDir(CarnivalNeo4jConfiguration config) {
+		def graphPath = Paths.get(config.gremlin.neo4j.directory)
+		File graphDir = graphPath.toFile()
 		graphDir
 	}
 
 
 	/** */
-	public static File sisterDir(String dirName) {
+	public static File sisterDir(CarnivalNeo4jConfiguration config, String dirName) {
 		assert dirName
-		File graphDir = graphDir()
+		File graphDir = graphDir(config)
+		assert graphDir.exists()
+		assert graphDir.isDirectory()
 		File parentDir = graphDir.getParentFile()
 		assert parentDir.exists()
 		assert parentDir.isDirectory()
@@ -190,43 +281,44 @@ class CarnivalNeo4j extends Carnival {
 
 
 	/** */
- 	public static clearGraph() {
+ 	public static clearGraph(CarnivalNeo4jConfiguration config) {
 		log.info "clearGraph"
         def ant = new AntBuilder()
-        def graphDir = graphDir()
+        def graphDir = graphDir(config)
         if (graphDir.exists()) ant.delete(dir:graphDir)
     }
 
 
 	/** */
-	public static resetGraphFrom(String sourceDirName) {
+	public static resetGraphFrom(CarnivalNeo4jConfiguration config, String sourceDirName) {
 		log.info "resetGraphFrom sourceDirName:${sourceDirName}"
 
-		File sourceDir = sisterDir(sourceDirName)
+		File sourceDir = sisterDir(config, sourceDirName)
 		assert sourceDir.exists()
 
-		resetGraphFrom(sourceDir)
+		resetGraphFrom(config, sourceDir)
 	}
 
 
 	/** */
-	public static resetGraphFromIfExists(String sourceDirName) {
+	public resetGraphFromIfExists(CarnivalNeo4jConfiguration config, String sourceDirName) {
 		log.info "resetGraphFromIfExists sourceDirName:${sourceDirName}"
 
-		File sourceDir = sisterDir(sourceDirName)
-		if (sourceDir.exists()) resetGraphFrom(sourceDir)
+		File sourceDir = sisterDir(config, sourceDirName)
+		if (sourceDir.exists()) resetGraphFrom(config, sourceDir)
 	}
 
 
 	/** */
-	public static resetGraphFrom(File sourceDir) {
+	public resetGraphFrom(CarnivalNeo4jConfiguration config, File sourceDir) {
 		log.info "resetGraphFrom sourceDir:${sourceDir}"
 
 		assert sourceDir
 		assert sourceDir.exists()
+		assert sourceDir.isDirectory()
 
         def ant = new AntBuilder()
-		File graphDir = graphDir()
+		File graphDir = graphDir(config)
         if (graphDir.exists()) ant.delete(dir:graphDir)
         ant.mkdir(dir:graphDir)
         ant.sequential {
@@ -240,21 +332,23 @@ class CarnivalNeo4j extends Carnival {
 
 
 	/** */
-	public copyGraph(String dirName) {
+	public copyGraph(CarnivalNeo4jConfiguration config, String dirName) {
 		log.info "copyGraph dirName: $dirName"
 		assert dirName
 
-		File publishDir = sisterDir(dirName)
-		copyGraph(publishDir)
+		File publishDir = sisterDir(config, dirName)
+		copyGraph(config, publishDir)
 	}
 
 
 	/** */
-	public copyGraph(File publishDir) {
+	public copyGraph(CarnivalNeo4jConfiguration config, File publishDir) {
 		log.info "copyGraph $publishDir"
 		assert publishDir
 
-		File graphDir = graphDir()
+		File graphDir = graphDir(config)
+		assert graphDir.exists()
+		assert graphDir.isDirectory()
 
 		// set up publish directory
         def ant = new AntBuilder()

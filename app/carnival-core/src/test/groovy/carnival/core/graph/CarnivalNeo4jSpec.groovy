@@ -2,6 +2,10 @@ package carnival.core.graph
 
 
 
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.nio.file.Files
+
 import spock.lang.Specification
 import spock.lang.Unroll
 import spock.lang.Shared
@@ -18,6 +22,7 @@ import org.neo4j.configuration.connectors.BoltConnector
 import org.neo4j.configuration.helpers.SocketAddress*/
 
 import carnival.graph.*
+import carnival.core.util.FilesUtil
 
 
 
@@ -86,6 +91,28 @@ class CarnivalNeo4jSpec extends Specification {
         then:
         managementService != null
     }*/
+
+
+    def "test configuration graph directory"() {
+        when:
+        CarnivalNeo4jConfiguration conf2 = CarnivalNeo4jConfiguration.defaultConfiguration()
+        conf2.gremlin.neo4j.directory += "2"
+        assert conf2.gremlin.neo4j.directory.endsWith("2")
+        Path graphDir = Paths.get(conf2.gremlin.neo4j.directory)
+
+        then:
+        !Files.exists(graphDir)
+
+        when:
+        def carnival2 = CarnivalNeo4j.create(conf2)
+
+        then:
+        Files.exists(graphDir)
+
+        cleanup:
+        carnival2.graph.close()
+        FilesUtil.delete(graphDir)
+    }
 
 
     

@@ -356,7 +356,7 @@ class MappedDataTable extends DataTable {
      *
      * @param idVal The record identifier.
      * @param fieldName The name of the field for which to get the value.
-     * @param args.verbose Defaults to [verbose:false].
+     * @param args.verbose Verbose logging; default is [verbose:false].
      * @return The value of field fieldName for the record identified by idVal
      * as a String if it exists, otherwise null.
      * 

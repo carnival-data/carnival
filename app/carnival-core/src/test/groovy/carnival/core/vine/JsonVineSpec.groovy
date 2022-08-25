@@ -1,9 +1,14 @@
 package carnival.core.vine
 
 
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.nio.file.Files
 import groovy.transform.ToString
 import spock.lang.Specification
 import spock.lang.Shared
+
+import carnival.core.util.FilesUtil
 
 
 /**
@@ -200,6 +205,29 @@ class JsonVineSpec extends Specification {
 
         then:
         cf.exists()
+    }
+
+
+    def "custom cache directory"() {
+        when:
+        def vine = new JvsTestVineDefault()
+        vine.vineConfiguration.cache.directory += "2"
+        Path cacheDirPath = Paths.get(vine.vineConfiguration.cache.directory)
+
+        then:
+        vine.vineConfiguration.cache.directory.endsWith("2")
+        !Files.exists(cacheDirPath)
+
+        when:
+        def vm = vine.method('PersonVineMethod')
+            .args(p1:'alice')
+        .call(CacheMode.OPTIONAL)
+
+        then:
+        Files.exists(cacheDirPath)
+
+        cleanup:
+        FilesUtil.delete(cacheDirPath)
     }
 
     

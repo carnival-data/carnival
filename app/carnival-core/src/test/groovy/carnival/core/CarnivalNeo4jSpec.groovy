@@ -1,4 +1,4 @@
-package carnival.core.graph
+package carnival.core
 
 
 
@@ -23,11 +23,12 @@ import org.neo4j.configuration.helpers.SocketAddress*/
 
 import carnival.graph.*
 import carnival.core.util.FilesUtil
+import carnival.core.graph.*
 
 
 
 /**
- * gradle test --tests "carnival.core.graph.CarnivalNeo4jSpec"
+ * gradle test --tests "carnival.core.CarnivalNeo4jSpec"
  *
  */
 class CarnivalNeo4jSpec extends Specification {

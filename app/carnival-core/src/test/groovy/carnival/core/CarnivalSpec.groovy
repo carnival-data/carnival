@@ -1,4 +1,4 @@
-package carnival.core.graph
+package carnival.core
 
 
 
@@ -12,11 +12,12 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 import static org.apache.tinkerpop.gremlin.neo4j.process.traversal.LabelP.of
 
 import carnival.graph.*
+import carnival.core.graph.*
 
 
 
 /**
- * gradle test --tests "carnival.core.graph.CarnivalSpec"
+ * gradle test --tests "carnival.core.CarnivalSpec"
  *
  */
 class CarnivalSpec extends Specification {

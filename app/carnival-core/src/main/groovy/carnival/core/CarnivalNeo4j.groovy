@@ -1,4 +1,4 @@
-package carnival.core.graph
+package carnival.core
 
 
 
@@ -10,10 +10,6 @@ import groovy.transform.ToString
 import groovy.transform.InheritConstructors
 import groovy.util.logging.Slf4j
 
-import org.reflections.Reflections
-
-import org.apache.commons.configuration.Configuration
-import org.apache.commons.configuration.BaseConfiguration
 import org.apache.commons.configuration.PropertiesConfiguration
 
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
@@ -25,8 +21,10 @@ import org.apache.tinkerpop.gremlin.structure.Transaction
 import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.structure.Edge
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
-
 import org.apache.tinkerpop.gremlin.neo4j.structure.Neo4jGraph
+
+import carnival.core.graph.DefaultGraphSchema
+import carnival.core.graph.DefaultGraphValidator
 
 
 

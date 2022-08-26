@@ -12,6 +12,7 @@ import carnival.core.graph.Core
 import carnival.graph.Base
 import carnival.graph.VertexModel
 import carnival.graph.VertexDefinition
+import carnival.core.CarnivalTinker
 
 
 

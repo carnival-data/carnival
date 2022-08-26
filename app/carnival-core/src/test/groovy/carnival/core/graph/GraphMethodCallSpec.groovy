@@ -8,6 +8,7 @@ import spock.lang.Shared
 
 import carnival.core.graph.Core
 import carnival.graph.VertexModel
+import carnival.core.CarnivalTinker
 
 
 

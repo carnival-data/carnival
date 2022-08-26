@@ -13,6 +13,7 @@ import static org.apache.tinkerpop.gremlin.neo4j.process.traversal.LabelP.of
 
 import carnival.graph.*
 import test.TestModel
+import carnival.core.CarnivalTinker
 
 
 

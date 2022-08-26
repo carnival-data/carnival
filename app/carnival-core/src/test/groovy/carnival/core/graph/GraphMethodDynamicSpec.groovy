@@ -13,6 +13,7 @@ import carnival.graph.Base
 import carnival.graph.VertexModel
 import carnival.graph.VertexDefinition
 import static carnival.core.graph.GraphMethodDynamic.GM
+import carnival.core.CarnivalTinker
 
 
 

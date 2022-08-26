@@ -1,4 +1,4 @@
-package carnival.core.graph
+package carnival.core
 
 
 
@@ -7,11 +7,12 @@ import spock.lang.Unroll
 import spock.lang.Shared
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
 import carnival.graph.VertexBuilder
+import carnival.core.graph.*
 
 
 
 /**
- * gradle test --tests "carnival.core.graph.CarnivalInitializationSpec"
+ * gradle test --tests "carnival.core.CarnivalInitializationSpec"
  *
  */
 class CarnivalNeo4jConfigurationSpec extends Specification {

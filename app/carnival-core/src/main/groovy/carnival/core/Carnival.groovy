@@ -1,4 +1,4 @@
-package carnival.core.graph
+package carnival.core
 
 
 
@@ -27,6 +27,14 @@ import carnival.graph.PropertyDefinition
 import carnival.graph.VertexDefinition
 import carnival.graph.DynamicVertexDef
 import carnival.graph.VertexBuilder
+import carnival.core.graph.GremlinTrait
+import carnival.core.graph.GraphSchema
+import carnival.core.graph.DefaultGraphSchema
+import carnival.core.graph.GraphValidator
+import carnival.core.graph.GraphValidationError
+import carnival.core.graph.DefaultGraphValidator
+import carnival.core.graph.EdgeConstraint
+import carnival.core.graph.VertexConstraint
 
 
 

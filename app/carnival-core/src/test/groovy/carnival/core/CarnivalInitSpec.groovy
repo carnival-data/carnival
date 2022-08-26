@@ -1,4 +1,4 @@
-package carnival.core.graph
+package carnival.core
 
 
 import spock.lang.Specification
@@ -11,10 +11,14 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 import static org.apache.tinkerpop.gremlin.neo4j.process.traversal.LabelP.of
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
 
+import carnival.core.graph.DefaultGraphSchema
+import carnival.core.graph.DefaultGraphValidator
+import carnival.core.graph.*
+
 
 
 /**
- * gradle test --tests "carnival.core.graph.CarnivalInitSpec"
+ * gradle test --tests "carnival.core.CarnivalInitSpec"
  *
  */
 class CarnivalInitSpec extends Specification {

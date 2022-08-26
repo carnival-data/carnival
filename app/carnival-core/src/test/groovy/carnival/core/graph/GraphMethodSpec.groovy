@@ -8,11 +8,12 @@ import spock.lang.Shared
 import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 
-import carnival.core.graph.Core
+import carnival.core.Core
 import carnival.graph.Base
 import carnival.graph.VertexModel
 import carnival.graph.VertexDefinition
 import carnival.core.CarnivalTinker
+import carnival.core.Core
 
 
 

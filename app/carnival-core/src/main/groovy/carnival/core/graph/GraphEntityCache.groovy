@@ -21,7 +21,7 @@ import carnival.graph.VertexDefinition
 import carnival.graph.PropertyDefinition
 import carnival.graph.PropertyDefinition
 import carnival.graph.EdgeDefinition
-import carnival.core.graph.Core
+import carnival.core.Core
 import carnival.core.Carnival
 
 

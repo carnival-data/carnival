@@ -5,7 +5,7 @@ package test.coregraphspec
 import carnival.graph.VertexDefinition
 import carnival.graph.PropertyDefinition
 import carnival.graph.EdgeDefinition
-import carnival.core.graph.Core
+import carnival.core.Core
 import carnival.graph.VertexModel
 import carnival.graph.EdgeModel
 

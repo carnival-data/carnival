@@ -1,4 +1,4 @@
-package carnival.core.graph
+package carnival.core
 
 
 
@@ -15,7 +15,10 @@ import carnival.graph.VertexModel
 
 
 
-/** */
+/** 
+ * The Core graph model.
+ *
+ */
 class Core {
 
 	///////////////////////////////////////////////////////////////////////////

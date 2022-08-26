@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory
 import carnival.graph.EdgeDefinition
 import carnival.graph.PropertyDefinition
 import carnival.graph.VertexDefinition
-import carnival.core.graph.Core
+import carnival.core.Core
 
 
 /** */

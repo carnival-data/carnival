@@ -6,7 +6,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import spock.lang.Shared
 
-import carnival.core.graph.Core
+import carnival.core.Core
 import carnival.graph.VertexModel
 import carnival.core.CarnivalTinker
 

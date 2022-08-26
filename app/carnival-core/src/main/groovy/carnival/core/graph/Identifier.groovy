@@ -24,6 +24,7 @@ import org.apache.tinkerpop.gremlin.structure.Edge
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 
 import carnival.graph.Base
+import carnival.core.Core
 
 
 

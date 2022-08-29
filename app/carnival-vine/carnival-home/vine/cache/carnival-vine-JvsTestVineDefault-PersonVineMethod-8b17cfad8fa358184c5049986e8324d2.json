@@ -1,0 +1,11 @@
+{
+  "thisClass" : "carnival.vine.JsonVineMethodCall",
+  "vineMethodClass" : "carnival.vine.JvsTestVineDefault$PersonVineMethod",
+  "resultClass" : "carnival.vine.JvsTestVineDefault$Person",
+  "arguments" : {
+    "p1" : "alice"
+  },
+  "result" : [ "carnival.vine.JvsTestVineDefault$Person", {
+    "name" : "alice"
+  } ]
+}

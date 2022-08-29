@@ -1,0 +1,13 @@
+{
+  "thisClass" : "carnival.vine.JsonVineMethodListCall",
+  "vineMethodClass" : "carnival.vine.JsonVineMethodListCallSpec$PersonsVineMethod",
+  "resultClass" : "java.util.ArrayList",
+  "arguments" : { },
+  "resultHolder" : [ "carnival.vine.JsonVineMethodListCall$ListHolder", {
+    "value" : [ [ "carnival.vine.JsonVineMethodListCallSpec$Person", {
+      "name" : "alice"
+    } ], [ "carnival.vine.JsonVineMethodListCallSpec$Person", {
+      "name" : "bob"
+    } ] ]
+  } ]
+}

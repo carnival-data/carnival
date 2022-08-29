@@ -1,0 +1,13 @@
+{
+  "thisClass" : "carnival.vine.JsonVineMethodCall",
+  "vineMethodClass" : "carnival.vine.JsonVineMethodCallSpec$PersonsHolderVineMethod",
+  "resultClass" : "carnival.vine.JsonVineMethodCallSpec$PersonsHolder",
+  "arguments" : { },
+  "result" : [ "carnival.vine.JsonVineMethodCallSpec$PersonsHolder", {
+    "persons" : [ {
+      "name" : "alice"
+    }, {
+      "name" : "bob"
+    } ]
+  } ]
+}

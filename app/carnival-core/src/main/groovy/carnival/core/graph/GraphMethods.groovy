@@ -5,7 +5,7 @@ package carnival.core.graph
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import carnival.core.util.MethodsHolder
+import carnival.util.MethodsHolder
 
 
 

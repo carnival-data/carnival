@@ -22,7 +22,7 @@ import org.neo4j.configuration.connectors.BoltConnector
 import org.neo4j.configuration.helpers.SocketAddress*/
 
 import carnival.graph.*
-import carnival.core.util.FilesUtil
+import carnival.util.FilesUtil
 import carnival.core.graph.*
 
 

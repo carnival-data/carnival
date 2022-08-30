@@ -131,6 +131,7 @@ app/carnival-core/data
 
 # created by CarnivalNeo4jSpec
 app/carnival-core/carnival-home
+app/carnival-vine/carnival-home
 
 # scratch code
 *.groovy_

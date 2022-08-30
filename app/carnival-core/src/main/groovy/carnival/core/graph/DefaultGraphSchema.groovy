@@ -5,8 +5,6 @@ package carnival.core.graph
 import groovy.transform.ToString
 import groovy.util.logging.Slf4j
 
-import org.reflections.Reflections
-
 import org.apache.commons.configuration.Configuration
 import org.apache.commons.configuration.BaseConfiguration
 import org.apache.commons.configuration.PropertiesConfiguration

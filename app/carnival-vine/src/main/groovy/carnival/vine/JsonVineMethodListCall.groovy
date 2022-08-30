@@ -17,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.fasterxml.jackson.annotation.JsonIgnore
-import org.apache.commons.codec.digest.DigestUtils
 
 import carnival.util.StringUtils
 

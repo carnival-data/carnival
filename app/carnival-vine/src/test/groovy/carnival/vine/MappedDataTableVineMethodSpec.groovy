@@ -7,7 +7,7 @@ import spock.lang.Specification
 import spock.lang.Shared
 import carnival.util.MappedDataTable
 import carnival.util.DataTableFiles
-import org.yaml.snakeyaml.composer.ComposerException
+import org.yaml.snakeyaml.scanner.ScannerException
 
 
 
@@ -167,7 +167,7 @@ class MappedDataTableVineMethodSpec extends Specification {
         then:
         Exception e = thrown()
         //e.printStackTrace()
-        e instanceof ComposerException
+        e instanceof ScannerException
     }
 
 

@@ -3,7 +3,6 @@ package carnival.vine
 
 
 import groovy.util.logging.Slf4j
-import org.apache.commons.codec.digest.DigestUtils
 
 import carnival.util.GenericDataTable
 import carnival.util.MappedDataTable

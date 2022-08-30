@@ -7,8 +7,6 @@ import groovy.transform.ToString
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import org.reflections.Reflections
-
 import org.apache.commons.configuration.Configuration
 import org.apache.commons.configuration.BaseConfiguration
 import org.apache.commons.configuration.PropertiesConfiguration

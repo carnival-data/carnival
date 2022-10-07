@@ -1,5 +1,5 @@
 ---
-title: 'Carnival: JVM Property graph data unification'
+title: 'Carnival: JVM Property graph data unification framework'
 tags:
 - Groovy
 - Tinkerpop

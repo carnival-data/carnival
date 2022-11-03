@@ -8,14 +8,14 @@ services:
     working_dir: /appsrc/app
     command: >
       gradle publishAllPublicationsToCentralRepository
-      -Psigning.secretKeyRingFile=/appsrc/signing_private.gpg
+      -Psigning.secretKeyRingFile=/appsrc/keys/${SIGNING_PRIVATE_FILE}
       -Psigning.password=${SIGNING_PRIVATE_KEY_PASSWORD}
       -Psigning.keyId=${SIGNING_KEY_ID}
       -Pcentral.user=${CENTRAL_USER}
       -Pcentral.password=${CENTRAL_PASSWORD}
-      --no-daemon
+      --no-daemon --console=plain
     tty: true
     stdin_open: true
     volumes:
       - ./:/appsrc
-      - ${SIGNING_PRIVATE_KEY}:/appsrc/signing_private.gpg
+      - ${SIGNING_PRIVATE_DIR}:/appsrc/keys

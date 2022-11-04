@@ -3,20 +3,22 @@
 ## Publishing to Maven
 
 * Maven Repository Manager: https://s01.oss.sonatype.org/#welcome
-* Carnival-Core @ Maven:Maven: https://search.maven.org/artifact/io.github.carnival-data/carnival-core
+* Carnival-Core @ Maven: https://search.maven.org/artifact/io.github.carnival-data/carnival-core
+* Maven JIRA: https://issues.sonatype.org/secure/Dashboard.jspa
+* Maven publishing documentation: https://central.sonatype.org/publish/publish-maven/
 
 ### Configuration
 Copy `.env-template` to `.env` and update the file with your maven central credentials and private key information. The signing file should be .gpg format, and SIGNING_KEY_ID is usually the last 8 digits of the fingerprint. More detail about the signing plugin available [here](https://docs.gradle.org/7.4.1/userguide/signing_plugin.html#sec:signatory_credentials).
 
 
 ### Publish to Snapshot Repository
-When the carnivalVersion specified in `app\gradle.properties` ends with "-SNAPSHOT", the package will be published to the snapshot repository. Previous releases with the same version can be overwritten.
+When the carnivalVersion specified in `app\gradle.properties` ends with "-SNAPSHOT", the package will be published to the [snapshot repository](https://central.sonatype.org/publish/publish-maven/#performing-a-snapshot-deployment). Previous releases with the same version can be overwritten.
 ```
 docker-compose -f docker-compose-publish-maven.yml up
 ```
 
 ### Publish Release Versions
-If the version number does not end with "-SNAPSHOT", the package will be published to the staging repository and must be manually approved.
+If the version number does not end with "-SNAPSHOT", the package will be published to the staging repository and must be manually approved. Published releases must have unique version numbers. **Note that once approved and released to the Central repository, an artifiact [cannot be changed or removed](https://central.sonatype.org/faq/can-i-change-a-component/)!**
 
 1. Run the following to publish to the staging repository:
 ```
@@ -30,6 +32,8 @@ docker-compose -f docker-compose-publish-maven.yml up
 1. Review the repository files. If it looks correct, click "close" to close the staging repository and start the validation process.
 
 1. If the validation is successfull, click "Release" to publish the release.
+
+More detail can be found in the [Maven release instructions](https://central.sonatype.org/publish/release/).
 
 
 ### Publishing Production Builds to Github (Deprecated)
@@ -45,3 +49,6 @@ Once authorization has been set up, the procedure to publish production builds i
 -   Go back to the master branch, and `app/build.gradle` increment the version number and add the `-SNAPSHOT` suffix (i.e. `0.2.9-SNAPSHOT`)
 
 For further details, see Configuring Gradle for use with GitHub Packages.
+
+## Related Issues
+* https://github.com/carnival-data/carnival/issues/67

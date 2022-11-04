@@ -3,7 +3,7 @@
 ## Publishing to Maven
 
 * Maven Repository Manager: https://s01.oss.sonatype.org/#welcome
-* Maven: https://search.maven.org/artifact/io.github.carnival-data/carnival-core
+* Carnival-Core @ Maven:Maven: https://search.maven.org/artifact/io.github.carnival-data/carnival-core
 
 ### Configuration
 Copy `.env-template` to `.env` and update the file with your maven central credentials and private key information. The signing file should be .gpg format, and SIGNING_KEY_ID is usually the last 8 digits of the fingerprint. More detail about the signing plugin available [here](https://docs.gradle.org/7.4.1/userguide/signing_plugin.html#sec:signatory_credentials).

@@ -84,7 +84,36 @@ class MdtTestVineDefault implements Vine {
             mdt
         }
     }
+
 }
+
+
+class MdtTestVineBadConfig implements Vine { 
+    @ToString(includeNames=true)
+    static class Person { String name }
+
+    static VineConfiguration EXAMPLE_CONFIG = new VineConfiguration(
+        cache: new VineConfiguration.Cache(
+            mode: CacheMode.REQUIRED.name(),
+            directory: null,
+            directoryCreateIfNotPresent: false
+        )
+    )
+
+    public MdtTestVineBadConfig() {
+        this.vineConfiguration = EXAMPLE_CONFIG
+    }
+
+    class PersonVineMethodBadConfig extends MappedDataTableVineMethod { 
+        MappedDataTable fetch(Map args) {
+            def mdt = createDataTable(idFieldName:'ID')
+            mdt.dataAdd(id:'1', name:args.p1)
+            mdt
+        }
+    }
+
+}
+
 
 
 
@@ -93,6 +122,22 @@ class MappedDataTableVineSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // tests
     ///////////////////////////////////////////////////////////////////////////
+
+
+    def "bad cache path"() {
+        when:
+        def vine = new MdtTestVineBadConfig()
+        def res = vine
+            .method('PersonVineMethodBadConfig')
+            .args(p1:'alice')
+            .call()
+        .getResult()
+
+        then:
+        Exception e = thrown()
+    }
+
+
 
     def "shared resource"() {
         when:

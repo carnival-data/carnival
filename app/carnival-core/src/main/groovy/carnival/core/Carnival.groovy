@@ -127,7 +127,7 @@ abstract class Carnival implements GremlinTrait {
 	// INSTANCE
 	///////////////////////////////////////////////////////////////////////////
 
-	/** Graph object is added by GremlinTrait. */
+	/** A gremlin Graph object is added by GremlinTrait. */
 	//Graph graph
 
 	/** */

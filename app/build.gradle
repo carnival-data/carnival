@@ -36,15 +36,10 @@ plugins {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// Java
+// debug printing
 ///////////////////////////////////////////////////////////////////////////////
-task printJavaVersion {
-    doLast {
-        println "[Carnival] Java version: ${JavaVersion.current()}"
-    }
-}
-clean.dependsOn('printJavaVersion')
-compileGroovy.dependsOn('printJavaVersion')
+clean.dependsOn('printVersions')
+compileGroovy.dependsOn('printVersions')
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -55,8 +50,17 @@ compileGroovy.dependsOn('printJavaVersion')
 allprojects {
     group = carnivalGroup
     version = carnivalVersion   // see https://semver.org/
+    ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
     sourceCompatibility = JavaVersion.toVersion("${javaVersion}")
     targetCompatibility = JavaVersion.toVersion("${javaVersion}")
+
+    task printVersions {
+        doLast {
+            println "[Carnival] Java version: ${JavaVersion.current()}"
+            println "[Carnival] Carnival version: ${version}"
+            println "[Carnival] Is release version: ${isReleaseVersion}"
+        }
+    }
 
     repositories {
         mavenCentral()
@@ -143,6 +147,7 @@ subprojects {
 subprojects {
     apply plugin: "maven-publish"
     apply plugin: "signing"
+    publishToMavenLocal.dependsOn 'printVersions'
     publishing {
         repositories {
             maven {
@@ -166,6 +171,7 @@ subprojects {
         }
     }
 }
+
 
 
 ///////////////////////////////////////////////////////////////////////////////

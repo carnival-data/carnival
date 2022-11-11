@@ -100,6 +100,7 @@ class CarnivalApplicationPlugin implements Plugin<Project> {
             implementation("io.github.carnival-data:carnival-util:${carnivalVersion}")
             implementation("io.github.carnival-data:carnival-graph:${carnivalVersion}")
             implementation("io.github.carnival-data:carnival-core:${carnivalVersion}")
+            implementation("io.github.carnival-data:carnival-vine:${carnivalVersion}")
         }
     }
 }

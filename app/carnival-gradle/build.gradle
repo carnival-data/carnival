@@ -76,7 +76,7 @@ publishing {
 
 signing {
     required { 
-        (!version.endsWith("SNAPSHOT")) && 
+        isReleaseVersion && 
         gradle.taskGraph.hasTask("publish") &&
         !gradle.taskGraph.hasTask("publishToMavenLocal")
     }

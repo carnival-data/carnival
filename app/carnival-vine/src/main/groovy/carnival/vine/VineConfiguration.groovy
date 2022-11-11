@@ -38,7 +38,7 @@ class VineConfiguration {
 
     @ToString(includeNames=true)
     static class Cache {
-        String mode = CacheMode.IGNORE.name()
+        CacheMode mode = CacheMode.IGNORE
         String directory
         Boolean directoryCreateIfNotPresent = true
     }

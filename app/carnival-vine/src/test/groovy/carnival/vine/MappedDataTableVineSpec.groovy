@@ -94,7 +94,7 @@ class MdtTestVineBadConfig implements Vine {
 
     static VineConfiguration EXAMPLE_CONFIG = new VineConfiguration(
         cache: new VineConfiguration.Cache(
-            mode: CacheMode.REQUIRED.name(),
+            mode: CacheMode.REQUIRED,
             directory: null,
             directoryCreateIfNotPresent: false
         )

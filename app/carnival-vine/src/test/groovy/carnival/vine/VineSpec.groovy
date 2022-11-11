@@ -14,7 +14,7 @@ class VsVineWithConfig implements Vine {
 
     static VineConfiguration EXAMPLE_CONFIG = new VineConfiguration(
         cache: new VineConfiguration.Cache(
-            mode: CacheMode.REQUIRED.name(),
+            mode: CacheMode.REQUIRED,
             directory: '/path/to/directory',
             directoryCreateIfNotPresent: false
         )
@@ -44,7 +44,7 @@ class VineSpec extends Specification {
 
         then:
         vine.vineConfiguration == VsVineWithConfig.EXAMPLE_CONFIG
-        vine.vineConfiguration.cache.mode == CacheMode.REQUIRED.name()
+        vine.vineConfiguration.cache.mode == CacheMode.REQUIRED
         vine.vineConfiguration.cache.directory == '/path/to/directory'
         vine.vineConfiguration.cache.directoryCreateIfNotPresent == false
     }

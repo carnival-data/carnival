@@ -23,10 +23,9 @@ class VineConfiguration {
     static public VineConfiguration defaultConfiguration() {
         Path currentRelativePath = Paths.get("");
         Path cachePath = currentRelativePath.resolve(CACHE_PATH_DEFAULT)
-        String cachePathString = cachePath.toAbsolutePath().toString()
 
         VineConfiguration config = new VineConfiguration()
-        config.cache.directory = cachePathString
+        config.cache.directory = cachePath
 
         return config
     }
@@ -39,7 +38,7 @@ class VineConfiguration {
     @ToString(includeNames=true)
     static class Cache {
         CacheMode mode = CacheMode.IGNORE
-        String directory
+        Path directory
         Boolean directoryCreateIfNotPresent = true
     }
     Cache cache = new Cache()
@@ -67,9 +66,7 @@ class VineConfiguration {
      *
      */
     public File getCacheDirectory() {
-        String dirPathString = cache.directory
-        assert dirPathString != null
-        Path relativePath = Paths.get(dirPathString.trim())
-        return relativePath.toFile()
+        assert cache.directory != null
+        return cache.directory.toFile()
     }
 }

@@ -15,12 +15,14 @@ class VsVineWithConfig implements Vine {
     static VineConfiguration EXAMPLE_CONFIG = new VineConfiguration(
         cache: new VineConfiguration.Cache(
             mode: CacheMode.REQUIRED,
-            directory: '/path/to/directory',
+            directory: Paths.get('/path/to/directory'),
             directoryCreateIfNotPresent: false
         )
     )
 
-    VineConfiguration vineConfiguration = EXAMPLE_CONFIG
+    public VsVineWithConfig() {
+        this.vineConfiguration = EXAMPLE_CONFIG
+    }
 
     @ToString(includeNames=true)
     static class Person { String name }
@@ -45,7 +47,7 @@ class VineSpec extends Specification {
         then:
         vine.vineConfiguration == VsVineWithConfig.EXAMPLE_CONFIG
         vine.vineConfiguration.cache.mode == CacheMode.REQUIRED
-        vine.vineConfiguration.cache.directory == '/path/to/directory'
+        vine.vineConfiguration.cache.directory == Paths.get('/path/to/directory')
         vine.vineConfiguration.cache.directoryCreateIfNotPresent == false
     }
 

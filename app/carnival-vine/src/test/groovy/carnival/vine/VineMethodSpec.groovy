@@ -14,7 +14,7 @@ class SomeVineMethod extends VineMethod {
     static VineConfiguration EXAMPLE_CONFIG = new VineConfiguration(
         cache: new VineConfiguration.Cache(
             mode: CacheMode.REQUIRED,
-            directory: '/path/to/directory',
+            directory: Paths.get('/path/to/directory'),
             directoryCreateIfNotPresent: false
         )
     )
@@ -44,7 +44,7 @@ class VineMethodSpec extends Specification {
         then:
         vm.vineConfiguration == SomeVineMethod.EXAMPLE_CONFIG
         vm.vineConfiguration.cache.mode == CacheMode.REQUIRED
-        vm.vineConfiguration.cache.directory == '/path/to/directory'
+        vm.vineConfiguration.cache.directory == Paths.get('/path/to/directory')
         vm.vineConfiguration.cache.directoryCreateIfNotPresent == false
     }
 

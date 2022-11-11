@@ -98,7 +98,7 @@ abstract class VineMethod {
     }
 
     void _cacheDirectoryInitialize() {
-        Path cachePath = Paths.get(vineConfiguration.cache.directory)
+        Path cachePath = vineConfiguration.cache.directory
 		if (cachePath == null) throw new RuntimeException("cachePath is null")
         
 		def assertDirectoryAttributes = { Path dirPath ->

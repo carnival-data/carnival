@@ -211,11 +211,11 @@ class JsonVineSpec extends Specification {
     def "custom cache directory"() {
         when:
         def vine = new JvsTestVineDefault()
-        vine.vineConfiguration.cache.directory += "2"
-        Path cacheDirPath = Paths.get(vine.vineConfiguration.cache.directory)
+        vine.vineConfiguration.cache.directory = Paths.get(vine.vineConfiguration.cache.directory.toString() + "2")
+        Path cacheDirPath = vine.vineConfiguration.cache.directory
 
         then:
-        vine.vineConfiguration.cache.directory.endsWith("2")
+        vine.vineConfiguration.cache.directory.toString().endsWith("2")
         !Files.exists(cacheDirPath)
 
         when:

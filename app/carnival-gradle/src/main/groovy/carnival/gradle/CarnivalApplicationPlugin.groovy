@@ -1,12 +1,17 @@
 package carnival.gradle
 
 
-
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 
-
+/**
+ * A Gradle plugin that was intended to make it easier to create applications
+ * that rely on Carnival.  It is no longer used.
+ *
+ * @Deprecated
+ *
+ */
 class CarnivalApplicationPlugin implements Plugin<Project> {
 
     void apply(Project project) {

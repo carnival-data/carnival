@@ -1,8 +1,17 @@
 /**
  * carnival-gradle
  *
- */
+*/
 
+
+///////////////////////////////////////////////////////////////////////////////
+// plugins needed to publish to the Gradle plugin repository
+///////////////////////////////////////////////////////////////////////////////
+
+plugins {
+    id 'java-gradle-plugin'                           
+    id 'com.gradle.plugin-publish' version '1.1.0'   
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // properties file
@@ -75,17 +84,35 @@ publishing {
 }
 
 signing {
-    required { 
+    /*required { 
         isReleaseVersion && 
         gradle.taskGraph.hasTask("publish") &&
         !gradle.taskGraph.hasTask("publishToMavenLocal")
-    }
-
+    }*/
     sign publishing.publications.mavenGroovy
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
+// Gradle publishing
+///////////////////////////////////////////////////////////////////////////////
 
+pluginBundle {
+    website = 'https://carnival-data.github.io/carnival/' 
+    vcsUrl = 'https://github.com/carnival-data/carnival/' 
+    tags = ['carnival', 'graph', 'data']     
+}
+
+gradlePlugin {
+    plugins { 
+        greetingsPlugin { 
+            id = 'io.github.carnival-data.carnival' 
+            displayName = 'Carnival' 
+            description = 'The Carnival plugin adds the necessary dependencies for an application that relies on Carnival' 
+            implementationClass = 'carnival.gradle.CarnivalLibraryPlugin'
+        }
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // dependencies

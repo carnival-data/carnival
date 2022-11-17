@@ -152,7 +152,7 @@ class MyDomain {
      * and LAST.
      * 
      */ 
-    @VertexDefinition
+    @VertexModel
     static enum VX {
         PERSON,
 
@@ -170,7 +170,7 @@ class MyDomain {
      * have domain and range restrictions.
      * 
      */ 
-    @EdgeDefinition
+    @EdgeModel
     static enum EX {
         IS_NAMED(
             domain:[VX.PERSON],
@@ -183,7 +183,7 @@ class MyDomain {
      * The following enum defines allowed properties.
      * 
      */ 
-    @PropertyDefinition
+    @PropertyModel
     static enum PX {
         FIRST,
         LAST,

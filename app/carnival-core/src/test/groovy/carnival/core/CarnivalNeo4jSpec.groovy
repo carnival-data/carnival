@@ -129,7 +129,7 @@ class CarnivalNeo4jSpec extends Specification {
             e.printStackTrace()
             def pluginDir = CarnivalNeo4jConfiguration.defaultConfiguration().gremlin.neo4j.conf.dbms.directories.plugins
             println "in order to run APOC, the APOC library must be present on the file system and configured in the application configuration."
-            println "has carnival.home been set?  or a configuration otherwise provided?"
+            println "has a configuration been provided?"
             println "is the following plugin directory valid? ${pluginDir}"
         }
 

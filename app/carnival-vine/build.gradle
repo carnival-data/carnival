@@ -84,12 +84,6 @@ publishing {
 }
 
 signing {
-    required { 
-        isReleaseVersion && 
-        gradle.taskGraph.hasTask("publish") &&
-        !gradle.taskGraph.hasTask("publishToMavenLocal")
-    }
-
     sign publishing.publications.mavenGroovy
 }
 

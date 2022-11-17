@@ -148,6 +148,7 @@ subprojects {
     apply plugin: "maven-publish"
     apply plugin: "signing"
     publishToMavenLocal.dependsOn 'printVersions'
+    tasks.withType(Sign) { onlyIf { isReleaseVersion } }
     publishing {
         repositories {
             maven {

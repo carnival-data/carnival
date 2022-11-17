@@ -11,17 +11,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // maven publishing
 ///////////////////////////////////////////////////////////////////////////////
-task sourcesJar(type: Jar) {
-    from sourceSets.main.allJava
-    from sourceSets.main.allGroovy
-    classifier = 'sources'
-}
-
-task javadocJar(type: Jar) {
-    from javadoc
-    from groovydoc
-    classifier = 'javadoc'
-}
 
 publishing {
     publications {

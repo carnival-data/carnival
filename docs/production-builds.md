@@ -2,10 +2,10 @@
 
 ## Publishing to Maven Local
 
-Carnival artifacts can be published to your local Maven repository usually found on your file system in the directory `~/.m2` via the following command. 
+Carnival artifacts can be published to your local Maven repository usually found on your local file system in the directory ~/.m2 via the following command. 
 
 ```Shell
-./gradlew :carnival-gradle:publishToMavenLocal 
+./gradlew publishToMavenLocal 
 ```
 
 ## Publishing to Maven
@@ -13,8 +13,11 @@ Carnival artifacts can be published to your local Maven repository usually found
 Carnival artifacts are published to [Maven](https://search.maven.org/search?q=io.github.carnival-data) via the [Nexus Repository Manager](https://s01.oss.sonatype.org).
 
 ### Configuration
-Copy `.env-template` to `.env` and update the file with your maven central credentials and private key information. The signing file should be **.gpg** (not **.asc**) format.  `SIGNING_KEY_ID` is usually the last 8 digits of the fingerprint. More detail about the signing plugin available [here](https://docs.gradle.org/7.4.1/userguide/signing_plugin.html#sec:signatory_credentials).
+Production builds will be signed with the [Gradle Signing Plugin](https://docs.gradle.org/current/userguide/signing_plugin.html).
 
+Copy `.env-template` to `.env` and update the file with your Maven Central credentials and private key information. The signing file should be **.gpg** (not **.asc**) format.  `SIGNING_KEY_ID` is usually the last 8 digits of the fingerprint.
+
+Note that the [Gradle Signing Plugin](https://docs.gradle.org/current/userguide/signing_plugin.html) will look in the Gradle properties file (~/.gradle/gradle.properties) for signing credentials.  If they are present, they may be referenced by Gradle during the build process and cause a failure of the credentials are invalid. 
 
 ### Publish to Snapshot Repository
 When the carnivalVersion specified in `app/gradle.properties` ends with "-SNAPSHOT", the package will be published to the snapshot repository. Previous releases with the same version can be overwritten.
@@ -31,35 +34,32 @@ From the `app/` directory:
 
 ```Shell
 source ../.env
-./gradlew :carnival-gradle:publishAllPublicationsToCentralRepository 
+./gradlew publishAllPublicationsToCentralRepository 
 ```
 
 ### Publish Release Versions
-If the version number does not end with "-SNAPSHOT", the package will be published to the staging repository and must be manually approved.
+If the version number does not end with "-SNAPSHOT", the package will be published to the staging repository.  Packages in the staging repository must be manually approved to be released.
 
 #### Docker
 
-Run the following to publish to the staging repository:
+Run the following to publish to the staging repository using Docker:
 ```
 docker-compose -f docker-compose-publish-maven.yml up
 ```
 
 #### Gradle
 
-From the `app/` directory:
+Packages can be published using Gradle from the `app/` directory via the following commands:
 
 
 ```Shell
 source ../.env
-```
-
-```Shell
 ./gradlew publishAllPublicationsToCentralRepository -Psigning.secretKeyRingFile=${SIGNING_PRIVATE_DIR}/${SIGNING_PRIVATE_FILE} -Psigning.password=${SIGNING_PRIVATE_KEY_PASSWORD} -Psigning.keyId=${SIGNING_KEY_ID} -Pcentral.user=${CENTRAL_USER} -Pcentral.password=${CENTRAL_PASSWORD} --no-daemon --console=plain
 ```
 
 #### Publish The Release
 
-1. Log into the [Maven Nexus Repository Manager](https://s01.oss.sonatype.org/#welcome)
+1. Log into the [Nexus Repository Manager](https://s01.oss.sonatype.org/)
 
 1. Click "Staging Repositories" on the left. The repository that was just published should be visible.
 

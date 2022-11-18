@@ -12,7 +12,9 @@
 - Applications
   - [Using the Carnival Library](#using-carnival)
   - [Groovy Scripts](#script-development)
-  - [Micronaut Applications](#app-development)
+  - [Groovy Applications](#app-development)
+  - [Micronaut Applications](#micronaut-app-development)
+- Documentation
   - [Reference Documentation](#reference-docs)
   - [Application Programmer Interface (API)](#api)
 
@@ -274,11 +276,43 @@ The following links contain instructions on how to code and publish the Carnival
 ## <a name="using-carnival"></a>Using Carnival
 Carnival is a library that can be used directly in scripts or included in a JVM application.  Carnival has been developed using [Groovy](https://groovy-lang.org) scripts and the [Micronaut](https://micronaut.io) framework as test application environments.
 
+The only requirement to use Carnival in a JVM application is to include the required Carnival dependencies.  There is a [Carnival Gradle Plugin](https://plugins.gradle.org/plugin/io.github.carnival-data.carnival) that will add the dependencies.
+
+```Gradle
+plugins {
+    id "io.github.carnival-data.carnival" version "3.0.0"
+}
+```
+
+Alternatively, the dependencies can be added as follows:
+
+```Gradle
+dependencies {
+    // Groovy
+    implementation "org.codehaus.groovy:groovy-all:3.0.9"
+
+    // Tinkerpop
+    implementation "org.apache.tinkerpop:gremlin-core:3.4.10"
+    implementation "org.apache.tinkerpop:gremlin-groovy:3.4.10"
+    implementation "org.apache.tinkerpop:tinkergraph-gremlin:3.4.10"
+
+    // Neo4J
+    implementation "org.apache.tinkerpop:neo4j-gremlin:3.4.10"
+    implementation "org.neo4j:neo4j-tinkerpop-api-impl:0.9-3.4.0"
+    implementation "org.neo4j.driver:neo4j-java-driver:4.1.1"
+
+    // Carnival
+    implementation "io.github.carnival-data:carnival-util:3.0.0"
+    implementation "io.github.carnival-data:carnival-graph:3.0.0"
+    implementation "io.github.carnival-data:carnival-core:3.0.0"
+    implementation "io.github.carnival-data:carnival-vine:3.0.0"
+}  
+```
+
 
 ## <a name="script-development"></a>Groovy Scripts
 The Carnival library can be included in Groovy scripts.  Example scripts can be found in [docs/groovy](groovy).  
 
-### Command Line
 To run these scripts on the command line, first install [Groovy](https://groovy-lang.org)  version 3.0.9.  [SDKMAN Software Development Kit Manager](https://sdkman.io) is a useful tool to install Groovy and other JVM tools.
  
 These scripts can be run on the command line via the following command:
@@ -294,12 +328,24 @@ groovy -Dgroovy.grape.report.downloads=true graph-model-1.groovy
 ```
 
 
-## <a name="app-development"></a>Micronaut Applications
+## <a name="app-development"></a>Groovy Applications
+The Carnival library can be included in generic Groovy applications.  
+
+To create a Groovy application using Gradle as the build tool, the only requirement should be the inclusion of the Carnival Gradle plugin to add the Carnival dependencies.  
+
+
+Follow these [step-by-step instructions](app-dev-application.md) to create a Groovy app that uses Carnival.
+
+## <a name="micronaut-app-development"></a>Micronaut Applications
 The Carnival library can be included in Micronaut applications.  [carnival-demo-biomedical](https://github.com/carnival-data/carnival-demo-biomedical) provides an example of a working Micronaut application that uses Carnival.
 
-- [Getting Started](app-dev-getting-started.md)
-    - [Create a library](app-dev-library.md)
-    - [Create an application](app-dev-application.md)
+To create a new Micronaut application that uses Carnival:
+
+1. Follow the instructions at [CREATING YOUR FIRST MICRONAUT APPLICATION](https://guides.micronaut.io/latest/creating-your-first-micronaut-app-gradle-groovy.html) to create the skeleton application.
+2. Add the Carnival Gradle Plugin to include the Carnival dependencies.
+
+The application is now ready to use the Carnival library.  See [carnival-demo-biomedical](https://github.com/carnival-data/carnival-demo-biomedical) for examples on how common Carnival functionality can fit into a Micronaut application.
+
 
     
 ## <a name="reference-docs"></a>Reference Documentation
@@ -313,6 +359,7 @@ The Carnival library can be included in Micronaut applications.  [carnival-demo-
 - [Graph Methods](graph-method.md)
 
 ## Graph Database Engines
+- [TinkerGraph](https://tinkerpop.apache.org/docs/current/reference/#tinkergraph-gremlin)
 - [Neo4j](neo4j.md)
 
 ## <a name="api"></a> Application Programmer Interface (API)

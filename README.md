@@ -29,20 +29,11 @@ Carnival has three principal components: a graph modeling architecture, a cachin
 
 Name | Description
 --- | ---
-carnival-core | Basic Carnival framework. Implements the basic Carnival framework classes (vines, reapers, reasonsers, etc). Defines the basic carnival graph schema (processes, databases). [Core model](https://github.com/pmbb-ibi/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/Core.groovy)
-carnival-vine | Mechanisms to faciliate the aggregation of data with data caching.  
+[carnival-core](app/carnival-core/README.md) | Basic Carnival framework. Implements the basic Carnival framework classes (vines, reapers, reasonsers, etc). Defines the basic carnival graph schema (processes, databases). [Core model](https://github.com/pmbb-ibi/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/Core.groovy)
+[carnival-vine](app/carnival-vine/README.md) | Mechanisms to faciliate the aggregation of data with data caching.  
 [carnival-graph](app/carnival-graph/README.md) | Framework for defining carnival graph schemas (vertex and edge definitions). Contains the basic vertex, edge, and property classes.
 [carnival-util](app/carnival-util/README.md) | Standalone package that contains utility and helper classes such as data tables, reports, and SQL utilties, which are primarily used for dealing with relational data.
 [carnival-gradle](app/carnival-gradle/README.md) | Gradle plugin for building Carnival applications and libraries.
-
-
-
-
-### Extensions
-
-Name | Description
---- | ---
-[carnival-openspecimen](https://github.com/carnival-data/carnival-openspecimen) | Extension of carnival-core that implements vines for interfacing with [OpenSpecimen](https://www.openspecimen.org/) inventory management system.
 
 ## <a name="contribution-guide"></a> Contribution Guide
 Carnival is an open source project and welcomes contributions! Here are some ways to help:

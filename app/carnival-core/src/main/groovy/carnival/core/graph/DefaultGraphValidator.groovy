@@ -247,7 +247,7 @@ public class DefaultGraphValidator implements GraphValidator {
 	Set<String> unmodeledElements(Traversal traversal, Collection<ElementConstraint> allModels) {
 
 		def modelsByLabel = modelsByLabel(allModels)
-		log.debug "modelsByLabel: $modelsByLabel"
+		log.trace "modelsByLabel: $modelsByLabel"
 
 		Set<DefaultElementConstraint> dbElementConstraints = new HashSet<DefaultElementConstraint>()
 		traversal.each { e ->

@@ -2,7 +2,7 @@
 // DEPENDENCIES
 ///////////////////////////////////////////////////////////////////////////////
 
-@Grab('org.carnival:carnival-core:2.1.1-SNAPSHOT')
+@Grab('io.github.carnival-data:carnival-core:3.0.0-SNAPSHOT')
 @Grab('org.apache.tinkerpop:gremlin-core:3.4.10')
 
 
@@ -17,10 +17,10 @@ import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.structure.Edge
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 
-import carnival.core.graph.CoreGraphTinker
-import carnival.graph.VertexDefinition
-import carnival.graph.PropertyDefinition
-import carnival.graph.EdgeDefinition
+import carnival.core.CarnivalTinker
+import carnival.graph.VertexModel
+import carnival.graph.PropertyModel
+import carnival.graph.EdgeModel
 import carnival.graph.Base
 import carnival.core.graph.GraphMethods
 import carnival.core.graph.GraphMethod
@@ -30,12 +30,12 @@ import carnival.core.graph.GraphMethod
 // SCRIPT
 ///////////////////////////////////////////////////////////////////////////////
 
-def cg = CoreGraphTinker.create()
+def cg = CarnivalTinker.create()
 Graph graph = cg.graph
 GraphTraversalSource g = graph.traversal()
 
 
-@VertexDefinition
+@VertexModel
 enum VX {
     
     // isClass tells Carnival CLASS_OF_DOGS is a class
@@ -54,15 +54,15 @@ enum VX {
     ),
 
     SHIBA_INU (
-        instanceOf:VX. SHIBA_INU_CLASS
+        instanceOf: VX.SHIBA_INU_CLASS
     ),
 
     COLLIE (
-        instanceOf:VX. COLLIE_CLASS
+        instanceOf: VX.COLLIE_CLASS
     )
 
 }
-cg.addDefinitions(VX)
+cg.addModel(VX)
 
 
 Vertex spotV = VX.COLLIE.instance().create(graph)

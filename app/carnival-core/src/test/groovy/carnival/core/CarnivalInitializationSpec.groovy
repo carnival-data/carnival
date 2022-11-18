@@ -73,14 +73,59 @@ class CarnivalInitializationSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
 
 
-    def "add edge definitions convenience method"() {
+    def "add vertex model convenience method"() {
         def modelErrs 
 
         expect:
         coreGraph.checkModel().size() == 0
 
         when:
-        coreGraph.addConstraints(GraphModel.VX)
+        GraphModel.VX.DOG.instance().create(graph)
+        modelErrs = coreGraph.checkModel()
+
+        then:
+        modelErrs.size() == 1
+
+        when:
+        coreGraph.addModel(GraphModel.VX)
+        modelErrs = coreGraph.checkModel()
+
+        then:
+        modelErrs.size() == 0
+    }
+
+
+    def "add vertex model"() {
+        def modelErrs 
+
+        expect:
+        coreGraph.checkModel().size() == 0
+
+        when:
+        GraphModel.VX.DOG.instance().create(graph)
+        modelErrs = coreGraph.checkModel()
+
+        then:
+        modelErrs.size() == 1
+
+        when:
+        coreGraph.addVertexModel(graph, g, GraphModel.VX)
+
+        modelErrs = coreGraph.checkModel()
+
+        then:
+        modelErrs.size() == 0
+    }
+
+
+    def "add edge model convenience method"() {
+        def modelErrs 
+
+        expect:
+        coreGraph.checkModel().size() == 0
+
+        when:
+        coreGraph.addModel(GraphModel.VX)
         def d1 = GraphModel.VX.DOG.instance().create(graph)
         def d2 = GraphModel.VX.DOG.instance().create(graph)
         modelErrs = coreGraph.checkModel()
@@ -96,7 +141,7 @@ class CarnivalInitializationSpec extends Specification {
         modelErrs.size() == 1
 
         when:
-        coreGraph.addConstraints(GraphModel.EX)
+        coreGraph.addModel(GraphModel.EX)
         modelErrs = coreGraph.checkModel()
 
         then:
@@ -104,14 +149,14 @@ class CarnivalInitializationSpec extends Specification {
     }
 
 
-    def "add edge definitions"() {
+    def "add vertex and edge models"() {
         def modelErrs 
 
         expect:
         coreGraph.checkModel().size() == 0
 
         when:
-        coreGraph.addConstraints(graph, g, GraphModel.VX)
+        coreGraph.addModel(graph, g, GraphModel.VX)
         def d1 = GraphModel.VX.DOG.instance().create(graph)
         def d2 = GraphModel.VX.DOG.instance().create(graph)
         modelErrs = coreGraph.checkModel()
@@ -127,7 +172,7 @@ class CarnivalInitializationSpec extends Specification {
         modelErrs.size() == 1
 
         when:
-        coreGraph.addConstraints(graph, g, GraphModel.EX)
+        coreGraph.addModel(graph, g, GraphModel.EX)
         modelErrs = coreGraph.checkModel()
 
         then:
@@ -137,7 +182,7 @@ class CarnivalInitializationSpec extends Specification {
 
 
 
-    def "add vertex definitions convenience method"() {
+    def "add vertex model convenience method"() {
         def modelErrs 
 
         expect:
@@ -151,7 +196,7 @@ class CarnivalInitializationSpec extends Specification {
         modelErrs.size() == 1
 
         when:
-        coreGraph.addConstraints(GraphModel.VX)
+        coreGraph.addModel(GraphModel.VX)
         modelErrs = coreGraph.checkModel()
 
         then:
@@ -159,7 +204,7 @@ class CarnivalInitializationSpec extends Specification {
     }
 
 
-    def "add vertex definitions"() {
+    def "add vertex model"() {
         def modelErrs 
 
         expect:
@@ -173,7 +218,7 @@ class CarnivalInitializationSpec extends Specification {
         modelErrs.size() == 1
 
         when:
-        coreGraph.addConstraints(graph, g, GraphModel.VX)
+        coreGraph.addModel(graph, g, GraphModel.VX)
         modelErrs = coreGraph.checkModel()
 
         then:

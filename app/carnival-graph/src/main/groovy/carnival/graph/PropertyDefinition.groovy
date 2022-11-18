@@ -143,6 +143,11 @@ trait PropertyDefinition {
 
     /** */
     void assertPropertyIsDefined(Element el) {
+        assert el
+
+        EnumSet allBaseDefs = EnumSet.allOf(Base.PX)
+        if (allBaseDefs.contains(this)) return
+
         boolean isDefined = false
         
         ElementDefinition edt = Definition.lookup(el)

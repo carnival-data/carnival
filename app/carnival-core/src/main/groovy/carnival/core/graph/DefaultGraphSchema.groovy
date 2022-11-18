@@ -74,6 +74,13 @@ class DefaultGraphSchema implements GraphSchema {
 		return vertexConstraints
 	}
 
+	/** */
+	boolean containsConstraint(VertexDefinition vDef) {
+		vertexConstraints.find {
+			it.label == vDef.label && it.nameSpace == vDef.nameSpace
+		}
+	}
+
 
 	///////////////////////////////////////////////////////////////////////////
 	// EDGE CONSTRAINTS

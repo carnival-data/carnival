@@ -80,6 +80,19 @@ class PropertyDefinitionSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
+    def "base properties are defined"() {
+        when:
+        def v1 = VX.THING_2.instance().create(graph)
+        pm.valueOf(v1)
+
+        then:
+        noExceptionThrown()
+
+        where:
+        pm << EnumSet.allOf(Base.PX)
+    }
+    
+
     def "valueOf throws an exception for undefined property"() {
         when:
         def v1 = VX.THING_2.instance().create(graph)

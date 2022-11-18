@@ -46,10 +46,11 @@ interface GraphSchema {
 	 */
 	Collection<VertexBuilder> getVertexBuilders()
 
-
 	/** */
 	Collection<VertexConstraint> getVertexConstraints()
 
+	/** */
+	boolean containsConstraint(VertexDefinition vDef)
 
 	/** */
 	Collection<EdgeConstraint> getEdgeConstraints()

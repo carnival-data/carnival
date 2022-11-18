@@ -24,6 +24,7 @@ import org.apache.tinkerpop.gremlin.structure.Graph.Features.GraphFeatures
 
 import carnival.graph.EdgeDefinition
 import carnival.graph.PropertyDefinition
+import carnival.graph.ElementDefinition
 import carnival.graph.VertexDefinition
 import carnival.graph.DynamicVertexDef
 import carnival.graph.VertexBuilder
@@ -155,55 +156,28 @@ abstract class Carnival implements GremlinTrait {
 
 
 	///////////////////////////////////////////////////////////////////////////
-	// INITIALIZATION 
+	// INITIALIZATION
+	//
+	// Initialize the graph from models defined in code.  Operates at the Java
+	// package level. 
 	///////////////////////////////////////////////////////////////////////////
-
-	/** */
-	public void initializeGremlinGraph(Graph graph, GraphTraversalSource g, String packageName) {
-		log.info "Carnival initializeGremlinGraph graph:$graph g:$g packageName:$packageName"
-
-		initializeDefinedVertices(graph, g, packageName)
-		initializeDefinedEdges(graph, g, packageName)
-		createVertexBuilders(graph, g)
-	}
 
 	/** */
 	public void initializeGremlinGraph(Graph graph, GraphTraversalSource g) {
 		log.info "Carnival initializeGremlinGraph graph:$graph g:$g"
 		initializeGremlinGraph(graph, g, 'carnival')
 	}
+
 	
-
-	///////////////////////////////////////////////////////////////////////////
-	// GRAPH MODEL - GENERIC METHODS
-	///////////////////////////////////////////////////////////////////////////
-
 	/** */
-	public void addConstraints(Graph graph, GraphTraversalSource g, Class defClass) {
-		assert graph
-		assert g
-		assert defClass
+	public void initializeGremlinGraph(Graph graph, GraphTraversalSource g, String packageName) {
+		log.info "Carnival initializeGremlinGraph graph:$graph g:$g packageName:$packageName"
 
-		def defInterfaces = defClass.getInterfaces()
-		if (defInterfaces.contains(VertexDefinition)) addVertexConstraints(graph, g, defClass)
-		else if (defInterfaces.contains(EdgeDefinition)) addEdgeConstraints(graph, g, defClass)
-		else throw new RuntimeException("unrecognized definition class: $defClass")
+		initializeDefinedVertices(graph, g, packageName)
+		initializeDefinedEdges(graph, g, packageName)
+		initializeGraphSchemaVertices(graph, g)
 	}
 
-
-	/** */
-	public void addConstraints(Class defClass) {
-		assert defClass
-		withGremlin { graph, g ->
-			addConstraints(graph, g, defClass)
-		}
-	}
-
-
-
-	///////////////////////////////////////////////////////////////////////////
-	// GRAPH MODEL - VERTICES
-	///////////////////////////////////////////////////////////////////////////
 
 	/** */
     public void initializeDefinedVertices(Graph graph, GraphTraversalSource g, String packageName) {
@@ -213,88 +187,15 @@ abstract class Carnival implements GremlinTrait {
 		assert g
 		assert packageName
 
-		Set<VertexConstraint> newDefinitions = findNewVertexConstraints(packageName)
+		Set<VertexConstraint> vertexConstraints = findNewVertexConstraints(packageName)
+		vertexConstraints.each { vc ->
+			addConstraint(vc)
+		}
 
 		withTransactionIfSupported(graph) {
-	        newDefinitions.each { vld ->
-				addConstraint(graph, g, vld)
-	        }
-	        newDefinitions.each { vld ->
-				createClassVertex(graph, g, vld)
-			}
-	        newDefinitions.each { vld ->
-				connectClassVertices(graph, g, vld)
-			}
+			initializeClassVertices(graph, g, vertexConstraints)
 		}
     }
-
-
-	/** */
-	public void addConstraint(Graph graph, GraphTraversalSource g, VertexConstraint vld) {
-		log.trace "addConstraint vld: ${vld.label} $vld"
-
-		log.trace "adding vertex definition to graph schema ${vld.label} ${vld}"
-		graphSchema.vertexConstraints << vld
-	}
-
-
-	/** 
-	 * Create the singleton vertex for a vertex constraint for a vertex definition if
-	 * it represents a class and has no required properties.
-	 *
-	 */
-	public void createClassVertex(Graph graph, GraphTraversalSource g, VertexConstraint vld) {
-		log.trace "createClassVertex vld: ${vld.label} $vld"
-
-		// create class singleton vertex, which can only be done if there
-		// are no required properties
-		def vdef = vld.vertexDef
-		if (vdef.isClass() && vdef.requiredProperties.size() == 0) {
-			def ci = graphSchema.vertexBuilders.find {
-				it instanceof VertexDefinition && it.vertexDef == vdef
-			}
-
-			if (!ci) {
-				ci = vdef.instance()
-				log.trace "created controlled instance ${ci.vertexDef.label} ${ci}"
-				graphSchema.vertexBuilders << ci
-			}
-			
-			vdef.vertex = ci.vertex(graph, g)
-			log.trace "created controlled instance vertex ${vdef.label} ${vdef.nameSpace} ${vdef.vertex}"
-		}
-	}
-
-
-	/** */
-	public void connectClassVertices(Graph graph, GraphTraversalSource g, VertexConstraint vld) {
-		def vdef = vld.vertexDef
-
-		if (vdef.superClass) {
-			log.trace "set superclass to ${vdef.superClass}"
-			assert vdef.isClass()
-			assert vdef.superClass.isClass()
-			assert vdef.vertex
-			assert vdef.superClass.vertex
-			vdef.setSubclassOf(g, vdef.superClass)
-		}
-	}
-
-
-
-	/** */
-	public void addVertexConstraints(Graph graph, GraphTraversalSource g, Class<VertexDefinition> vdc) {
-		Set<VertexConstraint> existingDefinitions = graphSchema.getVertexConstraints()
-		vdc.values().each { VertexDefinition vdef ->
-			def found = existingDefinitions.find {
-				it.label == vdef.label && it.nameSpace == vdef.nameSpace
-			}
-			if (!found) {
-				def vld = VertexConstraint.create(vdef)
-				addConstraint(graph, g, vld)
-			}
-		}
-	}
 
 
     /** */
@@ -307,35 +208,6 @@ abstract class Carnival implements GremlinTrait {
 
 		findNewVertexConstraints(vertexDefClasses)
 	}
-
-
-    /** */
-    public Collection<VertexConstraint> findNewVertexConstraints(Set<Class<VertexDefinition>> vertexDefClasses) {
-		assert vertexDefClasses
-    	
-		Set<VertexConstraint> existingDefinitions = graphSchema.getVertexConstraints()
-		Set<VertexConstraint> newDefinitions = new HashSet<VertexConstraint>()
-
-        vertexDefClasses.each { Class vdc ->
-        	log.trace "findNewVertexConstraints vdc: $vdc"
-
-            vdc.values().each { VertexDefinition vdef ->
-            	log.trace "findNewVertexConstraints vdef: $vdef"
-
-            	// check if already defined
-            	def found = existingDefinitions.find {
-            		it.label == vdef.label && it.nameSpace == vdef.nameSpace
-            	}
-            	if (!found) {
-					def vld = VertexConstraint.create(vdef)
-					log.trace "found new vertex definition ${vld.label} ${vld}"
-	            	newDefinitions.add(vld)
-            	}
-            }
-        }
-
-        return newDefinitions
-    }
 
 
     /** */
@@ -353,46 +225,15 @@ abstract class Carnival implements GremlinTrait {
     }
 
 
-
-	///////////////////////////////////////////////////////////////////////////
-	// GRAPH MODEL - EDGES
-	///////////////////////////////////////////////////////////////////////////
-
-	public void addConstraint(Graph graph, GraphTraversalSource g, EdgeConstraint relDef) {
-		log.trace "addConstraint relDef: ${relDef.label} $relDef"
-
-		log.trace "adding edge definition to graph schema ${relDef.label} ${relDef}"
-		graphSchema.edgeConstraints.add(relDef)
-	}
-
-
-	/** */
-	public void addEdgeConstraints(Graph graph, GraphTraversalSource g, Class<EdgeDefinition> edc) {
-		Set<EdgeConstraint> existingDefinitions = graphSchema.getEdgeConstraints()
-		edc.values().each { EdgeDefinition edef ->
-			def found = existingDefinitions.find {
-				it.label == edef.label && it.nameSpace == edef.nameSpace
-			}
-			if (!found) {
-				def relDef = EdgeConstraint.create(edef)
-				addConstraint(graph, g, relDef)
-			}
-		}
-	}
-
-
 	/** */
     public void initializeDefinedEdges(Graph graph, GraphTraversalSource g, String packageName) {
 		assert graph
 		assert g
 		assert packageName
 
-		Set<EdgeConstraint> newDefinitions = findNewEdgeConstraints(packageName)
-
-		withTransactionIfSupported(graph) {
-	        newDefinitions.each { eld ->
-				addConstraint(graph, g, eld)
-	        }
+		Set<EdgeConstraint> edgeConstraints = findNewEdgeConstraints(packageName)
+		edgeConstraints.each { ec ->
+			addConstraint(ec)
 		}
     }	
 
@@ -406,6 +247,217 @@ abstract class Carnival implements GremlinTrait {
 		if (!defClasses) return new HashSet<EdgeConstraint>()
 		
 		findNewEdgeConstraints(defClasses)
+	}
+
+
+	/** */
+    public Set<Class<EdgeDefinition>> findEdgeDefClases(String packageName) {
+    	// find all vertex defs
+    	Reflections reflections = new Reflections(packageName)
+    	Set<Class<EdgeDefinition>> classes = reflections.getSubTypesOf(EdgeDefinition.class)
+    	log.trace "findEdgeDefClases classes: $classes"
+
+    	// remove genralized classes
+    	classes.remove(carnival.graph.DynamicVertexDef)
+    	log.trace "findEdgeDefClases classes: $classes"
+
+    	return classes
+    }
+
+
+
+	///////////////////////////////////////////////////////////////////////////
+	// GRAPH CONSTRAINTS - GENERIC
+	///////////////////////////////////////////////////////////////////////////
+
+	public void addModel(Class<ElementDefinition> defClass) {
+		assert defClass
+		withGremlin { graph, g ->
+			addModel(graph, g, defClass)
+		}
+	}
+
+	/**
+	 * Add a model.
+	 *
+	 */
+	public void addModel(Graph graph, GraphTraversalSource g, Class<ElementDefinition> defClass) {
+		assert graph
+		assert g
+		assert defClass
+
+		def defInterfaces = defClass.getInterfaces()
+		if (defInterfaces.contains(VertexDefinition)) addVertexModel(graph, g, defClass)
+		else if (defInterfaces.contains(EdgeDefinition)) addEdgeModel(graph, g, defClass)
+		else throw new RuntimeException("unrecognized definition class: $defClass")
+
+	}
+
+
+	public void addVertexModel(Graph graph, GraphTraversalSource g, Class<VertexDefinition> defClass) {
+		assert graph
+		assert g
+		assert defClass
+
+		Set<VertexConstraint> vertexConstraints = findNewVertexConstraints(defClass)
+		vertexConstraints.each { vc ->
+			addConstraint(vc)
+		}
+		withTransactionIfSupported(graph) {
+			initializeClassVertices(graph, g, vertexConstraints)
+		}
+	}
+
+
+	public void addEdgeModel(Graph graph, GraphTraversalSource g, Class<EdgeDefinition> defClass) {
+		assert graph
+		assert g
+		assert defClass
+
+		Set<EdgeConstraint> edgeConstraints = findNewEdgeConstraints(defClass)
+		edgeConstraints.each { ec ->
+			addConstraint(ec)
+		}
+	}
+
+	/*public void addConstraints(Graph graph, GraphTraversalSource g, Class defClass) {
+		assert graph
+		assert g
+		assert defClass
+
+		def defInterfaces = defClass.getInterfaces()
+		if (defInterfaces.contains(VertexDefinition)) addVertexConstraints(graph, g, defClass)
+		else if (defInterfaces.contains(EdgeDefinition)) addEdgeConstraints(graph, g, defClass)
+		else throw new RuntimeException("unrecognized definition class: $defClass")
+	}
+
+	public void addConstraints(Class defClass) {
+		assert defClass
+		withGremlin { graph, g ->
+			addConstraints(graph, g, defClass)
+		}
+	}
+
+	public void addVertexConstraints(Graph graph, GraphTraversalSource g, Class<VertexDefinition> vdc) {
+		Set<VertexConstraint> existingDefinitions = graphSchema.getVertexConstraints()
+		vdc.values().each { VertexDefinition vdef ->
+			def found = existingDefinitions.find {
+				it.label == vdef.label && it.nameSpace == vdef.nameSpace
+			}
+			if (!found) {
+				def vld = VertexConstraint.create(vdef)
+				addConstraint(graph, g, vld)
+			}
+		}
+	}
+
+	public void addEdgeConstraints(Class<EdgeDefinition> edc) {
+		Set<EdgeConstraint> existingDefinitions = graphSchema.getEdgeConstraints()
+		edc.values().each { EdgeDefinition edef ->
+			def found = existingDefinitions.find {
+				it.label == edef.label && it.nameSpace == edef.nameSpace
+			}
+			if (!found) {
+				def edgeConst = EdgeConstraint.create(edef)
+				addConstraint(edgeConst)
+			}
+		}
+	}
+
+	public void addVertexModel(Graph graph, GraphTraversalSource g, Class modelClass) {
+		assert graph
+		assert g
+		assert defClass
+
+		Set<VertexConstraint> newConstraints = findNewVertexConstraints(modelClass)
+	}
+
+	public void addVertexModel(Class modelClass) {
+	}*/
+
+
+
+	///////////////////////////////////////////////////////////////////////////
+	// GRAPH CONSTRAINTS - VERTEX
+	///////////////////////////////////////////////////////////////////////////
+
+	/** */
+	public void addConstraint(VertexConstraint vertexConstraint) {
+		log.trace "addConstraint vertexConstraint: ${vertexConstraint.label} $vertexConstraint"
+		graphSchema.vertexConstraints << vertexConstraint
+	}
+
+
+    /** */
+    public Collection<VertexConstraint> findNewVertexConstraints(Set<Class<VertexDefinition>> vertexDefClasses) {
+		Set<VertexConstraint> allNewConstraints = new HashSet<VertexConstraint>()
+		vertexDefClasses.each { vdc ->
+			Set<VertexConstraint> newConstraints = findNewVertexConstraints(vdc)
+			allNewConstraints.addAll(newConstraints)
+		}
+		allNewConstraints
+	}
+
+
+    /** */
+    public Collection<VertexConstraint> findNewVertexConstraints(Class<VertexDefinition> vertexDefClass) {
+		assert vertexDefClass
+    	
+		Set<VertexConstraint> existingConstraints = graphSchema.getVertexConstraints()
+		Set<VertexConstraint> newConstraints = new HashSet<VertexConstraint>()
+
+		toVertexConstraints(vertexDefClass).each { vc ->
+			log.trace "findNewVertexConstraints vc: $vc"
+			def exists = existsInGraphSchema(vc)
+			if (!exists) newConstraints.add(vc)
+		}
+
+        return newConstraints
+    }
+
+
+	/** */
+	boolean existsInGraphSchema(VertexConstraint vc) {
+		graphSchema.vertexConstraints.find {
+			it.label == vc.label && it.nameSpace == vc.nameSpace
+		}
+	}
+
+
+    /** */
+    public Collection<VertexConstraint> toVertexConstraints(Class<VertexDefinition> vertexDefClass) {
+		assert vertexDefClass
+
+		Set<VertexConstraint> constraints = new HashSet<VertexConstraint>()
+		vertexDefClass.values().each { VertexDefinition vdef ->
+			log.trace "toVertexConstraints vdef: $vdef"
+
+			def vld = VertexConstraint.create(vdef)
+			constraints.add(vld)
+		}
+
+		return constraints
+	}
+
+
+
+	///////////////////////////////////////////////////////////////////////////
+	// GRAPH CONSTRAINTS - EDGES
+	///////////////////////////////////////////////////////////////////////////
+
+	public void addConstraint(EdgeConstraint edgeConst) {
+		log.trace "addConstraint edgeConst: ${edgeConst.label} $edgeConst"
+
+		log.trace "adding edge definition to graph schema ${edgeConst.label} ${edgeConst}"
+		graphSchema.edgeConstraints.add(edgeConst)
+	}
+
+
+	public Collection<EdgeConstraint> findNewEdgeConstraints(Class<EdgeDefinition> edgeDefClass) {
+		assert edgeDefClass
+		Set<Class<EdgeDefinition>> edcs = new HashSet<Class<EdgeDefinition>>()
+		edcs.add(edgeDefClass)
+		findNewEdgeConstraints(edcs)
 	}
 
 
@@ -438,29 +490,21 @@ abstract class Carnival implements GremlinTrait {
     }
 
     
-    /** */
-    public Set<Class<EdgeDefinition>> findEdgeDefClases(String packageName) {
-    	// find all vertex defs
-    	Reflections reflections = new Reflections(packageName)
-    	Set<Class<EdgeDefinition>> classes = reflections.getSubTypesOf(EdgeDefinition.class)
-    	log.trace "findEdgeDefClases classes: $classes"
-
-    	// remove genralized classes
-    	classes.remove(carnival.graph.DynamicVertexDef)
-    	log.trace "findEdgeDefClases classes: $classes"
-
-    	return classes
-    }
+    
 
 
 
 	///////////////////////////////////////////////////////////////////////////
-	// CONTROLLED INSTANCES
+	// VERTEX INSTANCES
 	///////////////////////////////////////////////////////////////////////////
 
-	/** */
-	public List<Vertex> createVertexBuilders(Graph graph, GraphTraversalSource g) {
-		log.trace "createVertexBuilders vertexBuilders:${graphSchema.vertexBuilders}"
+	/** 
+	 * If the graph schema contains vertex builders that should be used to
+	 * create initial vertices in a graph, create the vertices from them.
+	 *
+	 */
+	public List<Vertex> initializeGraphSchemaVertices(Graph graph, GraphTraversalSource g) {
+		log.trace "initializeGraphSchemaVertices vertexBuilders:${graphSchema.vertexBuilders}"
 
 		List<Vertex> verts = new ArrayList<Vertex>()
 		
@@ -475,6 +519,61 @@ abstract class Carnival implements GremlinTrait {
 		return verts
 	}
 
+
+	/** */
+	public void initializeClassVertices(Graph graph, GraphTraversalSource g, Set<VertexConstraint> vcs) {
+		withTransactionIfSupported(graph) {
+	        vcs.each { vc ->
+				createClassVertex(graph, g, vc)
+			}
+	        vcs.each { vc ->
+				connectClassVertices(graph, g, vc)
+			}
+		}
+	}
+
+
+	/** 
+	 * Create the singleton vertex for a vertex constraint for a vertex definition if
+	 * it represents a class and has no required properties.
+	 *
+	 */
+	public void createClassVertex(Graph graph, GraphTraversalSource g, VertexConstraint vertexConstraint) {
+		log.trace "createClassVertex vertexConstraint: ${vertexConstraint.label} $vertexConstraint"
+
+		// create class singleton vertex, which can only be done if there
+		// are no required properties
+		def vdef = vertexConstraint.vertexDef
+		if (vdef.isClass() && vdef.requiredProperties.size() == 0) {
+			def ci = graphSchema.vertexBuilders.find {
+				it instanceof VertexDefinition && it.vertexDef == vdef
+			}
+
+			if (!ci) {
+				ci = vdef.instance()
+				log.trace "created controlled instance ${ci.vertexDef.label} ${ci}"
+				graphSchema.vertexBuilders << ci
+			}
+			
+			vdef.vertex = ci.vertex(graph, g)
+			log.trace "created controlled instance vertex ${vdef.label} ${vdef.nameSpace} ${vdef.vertex}"
+		}
+	}
+
+
+	/** */
+	public void connectClassVertices(Graph graph, GraphTraversalSource g, VertexConstraint vertexConstraint) {
+		def vdef = vertexConstraint.vertexDef
+
+		if (vdef.superClass) {
+			log.trace "set superclass to ${vdef.superClass}"
+			assert vdef.isClass()
+			assert vdef.superClass.isClass()
+			assert vdef.vertex
+			assert vdef.superClass.vertex
+			vdef.setSubclassOf(g, vdef.superClass)
+		}
+	}
 
 
 	///////////////////////////////////////////////////////////////////////////

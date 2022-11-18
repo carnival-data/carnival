@@ -2,7 +2,7 @@
 // DEPENDENCIES
 ///////////////////////////////////////////////////////////////////////////////
 
-@Grab('io.github.carnival-data:carnival-core:2.1.1-SNAPSHOT')
+@Grab('io.github.carnival-data:carnival-core:3.0.0-SNAPSHOT')
 @Grab('org.apache.tinkerpop:gremlin-core:3.4.10')
 
 
@@ -17,10 +17,10 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.structure.Edge
 
-import carnival.core.graph.CoreGraphTinker
-import carnival.graph.VertexDefinition
-import carnival.graph.EdgeDefinition
-import carnival.graph.PropertyDefinition
+import carnival.core.CarnivalTinker
+import carnival.graph.VertexModel
+import carnival.graph.EdgeModel
+import carnival.graph.PropertyModel
 import carnival.core.graph.GraphMethods
 import carnival.core.graph.GraphMethod
 
@@ -30,7 +30,7 @@ import carnival.core.graph.GraphMethod
 // CREATE A CARNIVAL
 ///////////////////////////////////////////////////////////////////////////////
 
-def cg = CoreGraphTinker.create()
+def cg = CarnivalTinker.create()
 def graph = cg.graph
 
 
@@ -39,7 +39,7 @@ def graph = cg.graph
 // DEFINE A GRAPH MODEL
 ///////////////////////////////////////////////////////////////////////////////
 
-@VertexDefinition
+@VertexModel
 enum VX {
     RECORD (
         propertyDefs:[
@@ -54,14 +54,14 @@ enum VX {
     ),
 }
 
-@PropertyDefinition
+@PropertyModel
 enum PX {
     NAME,
     FIRST,
     LAST
 }
 
-@EdgeDefinition
+@EdgeModel
 enum EX {
     IS_DERIVED_FROM
 }

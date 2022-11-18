@@ -7,10 +7,10 @@
   - [Statement of Need](#statement-need)
   - [Overview](#summary)
   - [Features](#features)
-- Development
-  - [Carnival Library Development](#core-development)
+- Carnival Library
+  - [Carnival API Development](#core-development)
 - Applications
-  - [Using the Carnival Library](#using-carnival)
+  - [Using the Carnival API](#using-carnival)
   - [Groovy Scripts](#script-development)
   - [Groovy Applications](#app-development)
   - [Micronaut Applications](#micronaut-app-development)
@@ -276,7 +276,9 @@ The following links contain instructions on how to code and publish the Carnival
 ## <a name="using-carnival"></a>Using Carnival
 Carnival is a library that can be used directly in scripts or included in a JVM application.  Carnival has been developed using [Groovy](https://groovy-lang.org) scripts and the [Micronaut](https://micronaut.io) framework as test application environments.
 
-The only requirement to use Carnival in a JVM application is to include the required Carnival dependencies.  There is a [Carnival Gradle Plugin](https://plugins.gradle.org/plugin/io.github.carnival-data.carnival) that will add the dependencies.
+The only requirement to use Carnival in a JVM application is to include the required Carnival dependencies.  There is a [Carnival Gradle Plugin](https://plugins.gradle.org/plugin/io.github.carnival-data.carnival) that will add the dependencies.  See the [Github repository](https://github.com/carnival-data/carnival/tree/master/app/carnival-gradle) and the file [CarnivalLibraryPlugin.groovy](https://github.com/carnival-data/carnival/blob/master/app/carnival-gradle/src/main/groovy/carnival/gradle/CarnivalLibraryPlugin.groovy) for more information about the plugin.
+
+Plugin usage:
 
 ```Gradle
 plugins {
@@ -284,7 +286,7 @@ plugins {
 }
 ```
 
-Alternatively, the dependencies can be added as follows:
+Without using the plugin, the dependencies can be added as follows:
 
 ```Gradle
 dependencies {

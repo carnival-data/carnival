@@ -70,15 +70,11 @@ class Core {
             ]
         ),
 
-        DATA_TRANSFORMATION_PROCESS_CLASS,
+        DATA_TRANSFORMATION_PROCESS_CLASS(
+            superClass: VX.PROCESS_CLASS            
+        ),
 
         VALIDATION_FAILURE,
-
-        IDENTIFIER (
-            vertexProperties:[
-                PX.VALUE.withConstraints(required:true, index:true)
-            ]
-        ),
 
         IDENTIFIER_CLASS (
             vertexProperties:[
@@ -87,13 +83,16 @@ class Core {
                 PX.HAS_CREATION_FACILITY.defaultValue(false).withConstraints(required:true, index:true)
             ]
         ),
-
+        IDENTIFIER (
+            vertexProperties:[
+                PX.VALUE.withConstraints(required:true, index:true)
+            ]
+        ),
         IDENTIFIER_FACILITY (
             vertexProperties:[
                 PX.NAME.withConstraints(required:true, unique:true)
             ]
         ),
-
         IDENTIFIER_SCOPE (
             vertexProperties:[
                 PX.NAME.withConstraints(required:true, unique:true)

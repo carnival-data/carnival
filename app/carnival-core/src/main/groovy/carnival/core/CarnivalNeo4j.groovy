@@ -69,7 +69,7 @@ class CarnivalNeo4j extends Carnival {
 		// initialize the graph
     	def g = graph.traversal()
     	try {
-	    	carnival.initializeGremlinGraph(graph, g)
+	    	carnival.initialize(graph, g)
 			carnival.neo4jConstraints(graph, g)
     	} finally {
     		if (g) g.close()

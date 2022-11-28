@@ -49,6 +49,12 @@ class CarnivalSpec extends Specification {
 
     def setup() {
         carnival = CarnivalTinker.create(vertexBuilders:vertexBuilders)
+        carnival.addModel(VX)
+        carnival.withTraversal { graph, g ->
+            carnival.withTransactionIfSupported(graph) {
+                carnival.addGraphSchemaVertices(graph, g)
+            }
+        }
         /*carnival.withTraversal { graph, g ->
             ["1", "2"].each {
                 Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, it).create(graph)

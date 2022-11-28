@@ -228,7 +228,7 @@ class CarnivalInitializationSpec extends Specification {
 
     def "set superclass"() {
         when:
-        coreGraph.initializeGremlinGraph(graph, g, 'test.coregraphspec')
+        coreGraph.addModelsFromPackage(graph, g, 'test.coregraphspec')
 
         then:
         g.V(GraphModel.VX.COLLIE_CLASS.vertex)

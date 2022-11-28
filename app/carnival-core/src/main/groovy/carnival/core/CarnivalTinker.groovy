@@ -44,18 +44,18 @@ class CarnivalTinker extends Carnival {
         else graphSchema = new DefaultGraphSchema()
 
         def graphValidator = new DefaultGraphValidator()
-        def coreGraph = new CarnivalTinker(graph, graphSchema, graphValidator)
+        def carnival = new CarnivalTinker(graph, graphSchema, graphValidator)
 
     	def g = graph.traversal()
 
     	try {
-	    	coreGraph.initializeGremlinGraph(graph, g)
+	    	carnival.initialize(graph, g)
     	} finally {
     		if (g) g.close()
     	}
 
-    	assert coreGraph
-		return coreGraph
+    	assert carnival
+		return carnival
     }
 
 

@@ -25,7 +25,7 @@ class CarnivalNeo4jConfiguration {
     final static String GRAPH_PATH_DEFAULT = "carnival-home/neo4j/graph"
 
     static public CarnivalNeo4jConfiguration defaultConfiguration() {
-        Path currentRelativePath = Paths.get("");
+        Path currentRelativePath = Paths.get("")
         Path carnivalHomePath = currentRelativePath.resolve(GRAPH_PATH_DEFAULT)
         String carnivalHomePathString = carnivalHomePath.toAbsolutePath().toString()
 

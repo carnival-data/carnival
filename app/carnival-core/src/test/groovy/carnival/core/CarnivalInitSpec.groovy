@@ -74,7 +74,7 @@ class CarnivalInitSpec extends Specification {
 
         def g = graph.traversal()
         try {
-            carnival.initializeGremlinGraph(graph, g)
+            carnival.initialize(graph, g)
         } finally {
             if (g) g.close()
         }

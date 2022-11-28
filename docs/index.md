@@ -365,4 +365,4 @@ The application is now ready to use the Carnival library.  See [carnival-demo-bi
 - [Neo4j](neo4j.md)
 
 ## <a name="api"></a> Application Programmer Interface (API)
-- [Groovy API documentation](groovydoc/index.html)
+- [GroovyDoc API documentation](https://carnival-data.github.io/carnival/groovydoc/index.html)

@@ -96,6 +96,7 @@ class DefaultGraphValidatorSpec extends Specification {
 
     def setup() { 
         coreGraph = CarnivalTinker.create()
+        [VX1, VX2, VX3, EX1, EX2, EX3, EX4].each { coreGraph.addModel(it) }
         graph = coreGraph.graph
         graphSchema = coreGraph.graphSchema
         graphValidator = new DefaultGraphValidator()
@@ -121,7 +122,7 @@ class DefaultGraphValidatorSpec extends Specification {
         graphValidator.checkConstraints(g, graphSchema).size() == 0
 
         when:
-        coreGraph.initializeGremlinGraph(graph, g, 'test')
+        coreGraph.addModelsFromPackage(graph, g, 'test')
         TestModel.VX.APPLICATION.instance().withProperty(Core.PX.NAME, 'TestApp').vertex(graph, g)
 
         then:
@@ -154,7 +155,7 @@ class DefaultGraphValidatorSpec extends Specification {
         graphValidator.checkConstraints(g, graphSchema).size() == 0
 
         when:
-        coreGraph.initializeGremlinGraph(graph, g, 'test')
+        coreGraph.addModelsFromPackage(graph, g, 'test')
         TestModel.VX.TEST_THING.instance().withProperty(Core.PX.NAME, 'TestThingName').vertex(graph, g)
 
         then:

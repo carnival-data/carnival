@@ -68,7 +68,7 @@ public class GraphMethodSpec extends Specification {
     // SET UP
     ///////////////////////////////////////////////////////////////////////////
 
-    @Shared coreGraph
+    @Shared carnival
     @Shared graph
     @Shared g
 
@@ -78,13 +78,14 @@ public class GraphMethodSpec extends Specification {
     def cleanupSpec() { }
 
     def setup() {
-        coreGraph = CarnivalTinker.create()
-        graph = coreGraph.graph
+        carnival = CarnivalTinker.create()
+        carnival.addModel(VX)
+        graph = carnival.graph
         g = graph.traversal()
     }
 
     def cleanup() {
-        if (coreGraph) coreGraph.close()
+        if (carnival) carnival.close()
         if (g) g.close()
     }
 

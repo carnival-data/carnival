@@ -22,6 +22,7 @@ import org.apache.tinkerpop.gremlin.structure.Edge
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 import org.apache.tinkerpop.gremlin.structure.Graph.Features.GraphFeatures
 
+import carnival.graph.Base
 import carnival.graph.EdgeDefinition
 import carnival.graph.PropertyDefinition
 import carnival.graph.ElementDefinition
@@ -157,31 +158,33 @@ abstract class Carnival implements GremlinTrait {
 
 	///////////////////////////////////////////////////////////////////////////
 	// INITIALIZATION
-	//
-	// Initialize the graph from models defined in code.  Operates at the Java
-	// package level. 
 	///////////////////////////////////////////////////////////////////////////
 
 	/** */
-	public void initializeGremlinGraph(Graph graph, GraphTraversalSource g) {
-		log.info "Carnival initializeGremlinGraph graph:$graph g:$g"
-		initializeGremlinGraph(graph, g, 'carnival')
-	}
+	public void initialize(Graph graph, GraphTraversalSource g) {
+		log.info "Carnival initialize graph:$graph g:$g"
+		[Base.EX, Core.EX, Core.VX].each {
+			addModel(graph, g, it)
+		}
+	} 
 
-	
-	/** */
-	public void initializeGremlinGraph(Graph graph, GraphTraversalSource g, String packageName) {
-		log.info "Carnival initializeGremlinGraph graph:$graph g:$g packageName:$packageName"
 
-		initializeDefinedVertices(graph, g, packageName)
-		initializeDefinedEdges(graph, g, packageName)
-		initializeGraphSchemaVertices(graph, g)
-	}
 
+	///////////////////////////////////////////////////////////////////////////
+	// GRAPH MODEL - PACKAGES
+	///////////////////////////////////////////////////////////////////////////
 
 	/** */
-    public void initializeDefinedVertices(Graph graph, GraphTraversalSource g, String packageName) {
-		log.info "Carnival initializeDefinedVertices graph:$graph g:$g packageName:$packageName"
+	public void addModelsFromPackage(Graph graph, GraphTraversalSource g, String packageName) {
+		log.info "Carnival addModelsFromPackage graph:$graph g:$g packageName:$packageName"
+		addVertexModelsFromPackage(graph, g, packageName)
+		addEdgeModelsFromPackage(graph, g, packageName)
+	}
+
+
+	/** */
+    public void addVertexModelsFromPackage(Graph graph, GraphTraversalSource g, String packageName) {
+		log.info "Carnival addVertexModelsFromPackage graph:$graph g:$g packageName:$packageName"
 		
 		assert graph
 		assert g
@@ -193,7 +196,7 @@ abstract class Carnival implements GremlinTrait {
 		}
 
 		withTransactionIfSupported(graph) {
-			initializeClassVertices(graph, g, vertexConstraints)
+			addClassVertices(graph, g, vertexConstraints)
 		}
     }
 
@@ -226,7 +229,7 @@ abstract class Carnival implements GremlinTrait {
 
 
 	/** */
-    public void initializeDefinedEdges(Graph graph, GraphTraversalSource g, String packageName) {
+    public void addEdgeModelsFromPackage(Graph graph, GraphTraversalSource g, String packageName) {
 		assert graph
 		assert g
 		assert packageName
@@ -265,11 +268,11 @@ abstract class Carnival implements GremlinTrait {
     }
 
 
-
 	///////////////////////////////////////////////////////////////////////////
-	// GRAPH CONSTRAINTS - GENERIC
+	// GRAPH MODEL - CLASSES
 	///////////////////////////////////////////////////////////////////////////
 
+	/** */
 	public void addModel(Class<ElementDefinition> defClass) {
 		assert defClass
 		withGremlin { graph, g ->
@@ -304,7 +307,7 @@ abstract class Carnival implements GremlinTrait {
 			addConstraint(vc)
 		}
 		withTransactionIfSupported(graph) {
-			initializeClassVertices(graph, g, vertexConstraints)
+			addClassVertices(graph, g, vertexConstraints)
 		}
 	}
 
@@ -498,13 +501,17 @@ abstract class Carnival implements GremlinTrait {
 	// VERTEX INSTANCES
 	///////////////////////////////////////////////////////////////////////////
 
+	public List<Vertex> addGraphSchemaVertices() {
+		
+	}
+
 	/** 
 	 * If the graph schema contains vertex builders that should be used to
 	 * create initial vertices in a graph, create the vertices from them.
 	 *
 	 */
-	public List<Vertex> initializeGraphSchemaVertices(Graph graph, GraphTraversalSource g) {
-		log.trace "initializeGraphSchemaVertices vertexBuilders:${graphSchema.vertexBuilders}"
+	public List<Vertex> addGraphSchemaVertices(Graph graph, GraphTraversalSource g) {
+		log.trace "addGraphSchemaVertices vertexBuilders:${graphSchema.vertexBuilders}"
 
 		List<Vertex> verts = new ArrayList<Vertex>()
 		
@@ -521,7 +528,7 @@ abstract class Carnival implements GremlinTrait {
 
 
 	/** */
-	public void initializeClassVertices(Graph graph, GraphTraversalSource g, Set<VertexConstraint> vcs) {
+	public void addClassVertices(Graph graph, GraphTraversalSource g, Set<VertexConstraint> vcs) {
 		withTransactionIfSupported(graph) {
 	        vcs.each { vc ->
 				createClassVertex(graph, g, vc)

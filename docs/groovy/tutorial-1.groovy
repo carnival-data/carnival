@@ -5,7 +5,7 @@
 @Grab('io.github.carnival-data:carnival-core:3.0.0-SNAPSHOT')
 @Grab('io.github.carnival-data:carnival-vine:3.0.0-SNAPSHOT')
 @Grab('org.apache.tinkerpop:gremlin-core:3.4.10')
-@Grab(group='com.fasterxml.jackson.core', module='jackson-databind', version='2.14.1')
+@Grab('com.fasterxml.jackson.core:jackson-databind:2.14.1')
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -108,9 +108,6 @@ class OpenLibraryVine implements Vine {
     HttpClient client
 
     public OpenLibraryVine() {
-        // modify the default configuration to set the cache mode
-        this.vineConfiguration.cache.mode = CacheMode.OPTIONAL
-        
         // create an HttpClient
         this.client = HttpClient.newBuilder()
             .version(Version.HTTP_2)
@@ -131,13 +128,12 @@ class OpenLibraryVine implements Vine {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString())
             String json = response.body() 
-            println(json)
 
             ObjectMapper objectMapper = new ObjectMapper()
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) 
             
             AuthorSearchResult authorSearchResult = objectMapper.readValue(json, AuthorSearchResult.class);
-            println "authorSearchResult: ${authorSearchResult}"
+            println "AuthorSearch.fetch authorSearchResult: ${authorSearchResult}"
             authorSearchResult
         }
     }
@@ -154,13 +150,12 @@ class OpenLibraryVine implements Vine {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString())
             String json = response.body() 
-            println(json)
 
             ObjectMapper objectMapper = new ObjectMapper()
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) 
             
             AuthorWorkResult authorWorksResult = objectMapper.readValue(json, AuthorWorkResult.class);
-            println "authorWorksResult: ${authorWorksResult}"
+            println "AuthorWorks.fetch authorWorksResult: ${authorWorksResult}"
             authorWorksResult
         }
     }
@@ -169,6 +164,9 @@ class OpenLibraryVine implements Vine {
 
 // create an OpenLibrary vine
 OpenLibraryVine vine = new OpenLibraryVine()
+
+// modify the default configuration to set the cache mode
+vine.vineConfiguration.cache.mode = CacheMode.OPTIONAL
 
 // search for authors matching j k rowling
 AuthorSearchResult asr = vine
@@ -195,12 +193,12 @@ println "awr: ${awr}"
 
 // filter the works for only those with subject_people
 List<Work> worksWithPeople = awr.entries.findAll({it.subject_people})
-worksWithPeople.each { work ->
+/*worksWithPeople.each { work ->
     println "\n${work.title}"
     work.subject_people.each { sp ->
         println "- ${sp}"
     }
-}
+}*/
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -255,29 +253,39 @@ void printGraph(GraphTraversalSource g) {
 // CREATE A CARNIVAL
 ///////////////////////////////////////////////////////////////////////////////
 
-Carnival carnival = CarnivalTinker.create()
+// Use TinkerGraph 
+//Carnival carnival = CarnivalTinker.create()
 
-/*
+// Use Neo4j
+// choose a custom directory for the neo4j graph
 Path currentRelativePath = Paths.get("")
 Path neo4jGraphDir = currentRelativePath.resolve('carnival-home/neo4j-dir-custom')
 String neo4jGraphDirString = neo4jGraphDir.toAbsolutePath().toString()
-
 CarnivalNeo4jConfiguration carnivalNeo4jConf = CarnivalNeo4jConfiguration.defaultConfiguration()
 carnivalNeo4jConf.gremlin.neo4j.directory = neo4jGraphDirString
-
-CarnivalNeo4j.clearGraph(carnivalNeo4jConf)
+// Clear the neo4j graph directory
+//CarnivalNeo4j.clearGraph(carnivalNeo4jConf)
 Carnival carnival = CarnivalNeo4j.create(carnivalNeo4jConf)
-*/
 
 
+///////////////////////////////////////////////////////////////////////////////
+// ADD THE MODELS
+///////////////////////////////////////////////////////////////////////////////
 
-class Loaders implements GraphMethods {
+carnival.addModel(VX)
+carnival.addModel(EX)
+
+
+///////////////////////////////////////////////////////////////////////////////
+// DEFINE GRAPH METHODS
+///////////////////////////////////////////////////////////////////////////////
+
+class OpenLibraryMethods implements GraphMethods {
     
     class LoadBooks extends GraphMethod {
-
         void execute(Graph graph, GraphTraversalSource g) {
             assert args.works
-            println "Loaders.LoadBooks.execute args.works:${args.works}"
+            println "OpenLibraryMethods.LoadBooks.execute args.works:${args.works}"
             args.works.each { work ->
                 Vertex bookV = VX.BOOK.instance().withProperties(
                     PX.TITLE, work.title
@@ -290,52 +298,64 @@ class Loaders implements GraphMethods {
                 }
             }
         }
+    }
 
+    class CreatCoappearances extends GraphMethod {
+        void execute(Graph graph, GraphTraversalSource g) {
+            g.V()
+                .isa(VX.PERSON).as('p1')
+                .out(EX.APPEARS_IN)
+                .isa(VX.BOOK).as('b')
+                .in(EX.APPEARS_IN)
+                .isa(VX.PERSON).as('p2')
+                .select('b', 'p1', 'p2')
+            .each { m ->
+                if (m.p1 == m.p2) return
+
+                Vertex caV = g.V()
+                    .isa(VX.COAPPEARANCE).as('ca')
+                    .in(EX.PARTICIPATES_IN)
+                    .is(m.p1)
+                    .select('ca')
+                    .in(EX.PARTICIPATES_IN)
+                    .is(m.p2)
+                    .select('ca')
+                .tryNext().orElseGet {
+                    def newCaV = VX.COAPPEARANCE.instance().create(graph)
+                    EX.PARTICIPATES_IN.instance().from(m.p1).to(newCaV).create()
+                    EX.PARTICIPATES_IN.instance().from(m.p2).to(newCaV).create()
+                    newCaV
+                }
+                
+                EX.OCCURS_IN.instance().from(caV).to(m.b).ensure(g)
+            }
+        }
     }
 
 }
-Loaders loaders = new Loaders()
+
+
+///////////////////////////////////////////////////////////////////////////////
+// DATA BUILD
+///////////////////////////////////////////////////////////////////////////////
+
+OpenLibraryMethods openLib = new OpenLibraryMethods()
 
 carnival.withGremlin { graph, g ->
-    loaders
+    openLib
         .method('LoadBooks')
         .arguments(works:worksWithPeople)
     .ensure(graph, g)
+
+    openLib.method('CreatCoappearances').ensure(graph, g)
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+// QUERIES
+///////////////////////////////////////////////////////////////////////////////
+
 carnival.withGremlin { graph, g ->
-    g.V()
-        .isa(VX.PERSON).as('p1')
-        .out(EX.APPEARS_IN)
-        .isa(VX.BOOK).as('b')
-        .in(EX.APPEARS_IN)
-        .isa(VX.PERSON).as('p2')
-        .select('b', 'p1', 'p2')
-    .each { m ->
-        if (m.p1 == m.p2) return
-
-        Vertex caV = g.V()
-            .isa(VX.COAPPEARANCE).as('ca')
-            .in(EX.PARTICIPATES_IN)
-            .is(m.p1)
-            .select('ca')
-            .in(EX.PARTICIPATES_IN)
-            .is(m.p2)
-            .select('ca')
-        .tryNext().orElseGet {
-            def newCaV = VX.COAPPEARANCE.instance().create(graph)
-            EX.PARTICIPATES_IN.instance().from(m.p1).to(newCaV).create()
-            EX.PARTICIPATES_IN.instance().from(m.p2).to(newCaV).create()
-            newCaV
-        }
-        
-        EX.OCCURS_IN.instance().from(caV).to(m.b).ensure(g)
-    }
-
-    /*g.V().isa(VX.COAPPEARANCE).each { caV ->
-        println "caV persons: " + g.V(caV).in(EX.PARTICIPATES_IN).isa(VX.PERSON).properties(PX.NAME).value().toList()
-        println "caV books: " + g.V(caV).out(EX.OCCURS_IN).isa(VX.BOOK).properties(PX.TITLE).value().toList()
-    }*/
 
     def cas1 = g.V()
         .isa(VX.COAPPEARANCE)
@@ -353,13 +373,13 @@ carnival.withGremlin { graph, g ->
     })
     .reverse()
     
-    println "people who appeared in the most books together"
+    println "\npeople who appeared in the most books together\n"
     cas1.take(15).each { rec ->
         println "" + rec.personVs.collect({PX.NAME.valueOf(it)}).join(', ')
-        rec.bookVs.each { bookV -> println "" + PX.TITLE.valueOf(bookV) }
+        rec.bookVs.each { bookV -> println "  - " + PX.TITLE.valueOf(bookV) }
     }
 
-    println "people who appeared in only one book"
+    println "\npeople who appeared in only one book\n"
     g.V().isa(VX.PERSON).toList()
     .collect({ pV ->
         def bookVs = g.V(pV).out(EX.APPEARS_IN).isa(VX.BOOK).toList()
@@ -376,8 +396,5 @@ carnival.withGremlin { graph, g ->
     })
 }
 
-carnival.withGremlin { graph, g ->
-    //printGraph(g)
-}
-
+// close the Carnival graph
 carnival.close()

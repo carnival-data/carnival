@@ -51,8 +51,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 
 ///////////////////////////////////////////////////////////////////////////////
 // In this example, the works of the author J.K. Rowling are loaded from a 
-// public API, the characters in the books are expanded into subject vertices,
-// and some sample queries are provided.
+// public API, the books and the characters in the books are expanded into 
+// vertices, and some sample queries are provided.
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -102,17 +102,26 @@ class AuthorWorkResult {
 }
 
 
-/** declare a Carnival Vine for the OpenLibrary API endpoint */
+/** Declare a Carnival Vine for the OpenLibrary API endpoint */
 class OpenLibraryVine implements Vine { 
 
+    /** to be used to communicate with the OpenLibrary API */
     HttpClient client
 
+    /** Jackson object mapper for JSON de-serialization */
+    ObjectMapper objectMapper
+
+    /** constructor */
     public OpenLibraryVine() {
-        // create an HttpClient
+        // create the HttpClient
         this.client = HttpClient.newBuilder()
             .version(Version.HTTP_2)
             .followRedirects(Redirect.NORMAL)
         .build();
+
+        // create the object mapper
+        objectMapper = new ObjectMapper()
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) 
     }
 
     /** JSON Vine method to search for an author */
@@ -125,13 +134,8 @@ class OpenLibraryVine implements Vine {
                 .uri(new URI(uri))    
                 .GET()
             .build();
-
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString())
             String json = response.body() 
-
-            ObjectMapper objectMapper = new ObjectMapper()
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) 
-            
             AuthorSearchResult authorSearchResult = objectMapper.readValue(json, AuthorSearchResult.class);
             println "AuthorSearch.fetch authorSearchResult: ${authorSearchResult}"
             authorSearchResult
@@ -147,13 +151,8 @@ class OpenLibraryVine implements Vine {
                 .uri(new URI(uri))    
                 .GET()
             .build();
-
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString())
             String json = response.body() 
-
-            ObjectMapper objectMapper = new ObjectMapper()
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) 
-            
             AuthorWorkResult authorWorksResult = objectMapper.readValue(json, AuthorWorkResult.class);
             println "AuthorWorks.fetch authorWorksResult: ${authorWorksResult}"
             authorWorksResult
@@ -193,12 +192,12 @@ println "awr: ${awr}"
 
 // filter the works for only those with subject_people
 List<Work> worksWithPeople = awr.entries.findAll({it.subject_people})
-/*worksWithPeople.each { work ->
+worksWithPeople.each { work ->
     println "\n${work.title}"
     work.subject_people.each { sp ->
         println "- ${sp}"
     }
-}*/
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -240,6 +239,7 @@ enum EX {
 // UTILITY
 ///////////////////////////////////////////////////////////////////////////////
 
+/** Utility method to print the graph elements to the console */
 void printGraph(GraphTraversalSource g) {
     def vs = g.V().valueMap(true)
     vs.each { v -> println "$v" }
@@ -280,8 +280,17 @@ carnival.addModel(EX)
 // DEFINE GRAPH METHODS
 ///////////////////////////////////////////////////////////////////////////////
 
+/** 
+ * OpenLibraryMethods contains graph methods to operate over the data loaded
+ * from the OpenLibrary API.
+ *
+ */
 class OpenLibraryMethods implements GraphMethods {
     
+    /**
+     * Load the books and subject_people data into the graph.
+     *
+     */
     class LoadBooks extends GraphMethod {
         void execute(Graph graph, GraphTraversalSource g) {
             assert args.works
@@ -300,6 +309,11 @@ class OpenLibraryMethods implements GraphMethods {
         }
     }
 
+    /**
+     * Traverse the graph, create COAPPEARANCE vertices for pairs of characters 
+     * who appear in a book together.
+     *
+     */
     class CreatCoappearances extends GraphMethod {
         void execute(Graph graph, GraphTraversalSource g) {
             g.V()
@@ -339,8 +353,10 @@ class OpenLibraryMethods implements GraphMethods {
 // DATA BUILD
 ///////////////////////////////////////////////////////////////////////////////
 
+// create an OpenLibraryMethods object
 OpenLibraryMethods openLib = new OpenLibraryMethods()
 
+// call the relevant graph methods to build the graph
 carnival.withGremlin { graph, g ->
     openLib
         .method('LoadBooks')
@@ -353,10 +369,16 @@ carnival.withGremlin { graph, g ->
 
 ///////////////////////////////////////////////////////////////////////////////
 // QUERIES
+//
+// These sample queries use Tinkerpop Gremlin traversals, Groovy data
+// manipulation methods, and Carnival.  The discrepancies of the OpenLibrary
+// data are not addressed.
 ///////////////////////////////////////////////////////////////////////////////
 
 carnival.withGremlin { graph, g ->
 
+    // query the coappearances to  find the people who appeared in the most
+    // books together.
     def cas1 = g.V()
         .isa(VX.COAPPEARANCE)
         .toList()
@@ -379,6 +401,7 @@ carnival.withGremlin { graph, g ->
         rec.bookVs.each { bookV -> println "  - " + PX.TITLE.valueOf(bookV) }
     }
 
+    // query the graph to find the people who appeared in only one book
     println "\npeople who appeared in only one book\n"
     g.V().isa(VX.PERSON).toList()
     .collect({ pV ->

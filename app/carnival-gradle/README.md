@@ -1,6 +1,6 @@
 # Carnival Gradle Plugin
 
-The Carnival Gradle Plugin facilitates the inclusion of Carnival in an application built by Gradle by adding a consistent set of dependencies.
+The [Carnival Gradle Plugin](https://plugins.gradle.org/plugin/io.github.carnival-data.carnival) facilitates the inclusion of Carnival in an application built by Gradle by adding a consistent set of dependencies.
 
 The plugin can be built from source and deployed to your local maven repository by:
 

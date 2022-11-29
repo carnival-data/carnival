@@ -167,7 +167,7 @@ OpenLibraryVine vine = new OpenLibraryVine()
 // modify the default configuration to set the cache mode
 vine.vineConfiguration.cache.mode = CacheMode.OPTIONAL
 
-// search for authors matching j k rowling
+// search for an author
 AuthorSearchResult asr = vine
     .method('AuthorSearch')
     .arguments(query:'j k rowling')
@@ -179,6 +179,7 @@ println "asr: ${asr}"
 Document topAuthorDoc = asr.docs
     .findAll({it.work_count > 0})
     .sort({ a, b -> a.work_count <=> b.work_count })
+    .reverse()
 .first()
 println "topAuthorDoc: ${topAuthorDoc}"
 
@@ -197,40 +198,6 @@ worksWithPeople.each { work ->
     work.subject_people.each { sp ->
         println "- ${sp}"
     }
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-// DEFINE A GRAPH MODEL
-///////////////////////////////////////////////////////////////////////////////
-
-@VertexModel
-enum VX {
-    BOOK (
-        propertyDefs:[
-            PX.TITLE
-        ]
-    ),
-    PERSON (
-        propertyDefs:[
-            PX.NAME
-        ]
-    ),
-    COAPPEARANCE
-}
-
-@PropertyModel
-enum PX {
-    TITLE,
-    NAME
-}
-
-@EdgeModel
-enum EX {
-    IS_DERIVED_FROM,
-    APPEARS_IN,
-    PARTICIPATES_IN,
-    OCCURS_IN
 }
 
 
@@ -266,6 +233,40 @@ carnivalNeo4jConf.gremlin.neo4j.directory = neo4jGraphDirString
 // Clear the neo4j graph directory
 //CarnivalNeo4j.clearGraph(carnivalNeo4jConf)
 Carnival carnival = CarnivalNeo4j.create(carnivalNeo4jConf)
+
+
+///////////////////////////////////////////////////////////////////////////////
+// DEFINE A GRAPH MODEL
+///////////////////////////////////////////////////////////////////////////////
+
+@VertexModel
+enum VX {
+    BOOK (
+        propertyDefs:[
+            PX.TITLE
+        ]
+    ),
+    PERSON (
+        propertyDefs:[
+            PX.NAME
+        ]
+    ),
+    COAPPEARANCE
+}
+
+@PropertyModel
+enum PX {
+    TITLE,
+    NAME
+}
+
+@EdgeModel
+enum EX {
+    IS_DERIVED_FROM,
+    APPEARS_IN,
+    PARTICIPATES_IN,
+    OCCURS_IN
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -44,6 +44,7 @@ docs/groovydoc/**
 
 # add github workflows
 !.github/workflows/github-pages.yml
+!.github/workflows/draft-pdf.yml
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar

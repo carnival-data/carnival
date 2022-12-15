@@ -170,7 +170,7 @@ vine.vineConfiguration.cache.mode = CacheMode.OPTIONAL
 // search for an author
 AuthorSearchResult asr = vine
     .method('AuthorSearch')
-    .arguments(query:'j k rowling')
+    .arguments(query:'tolkien')
     .call()
 .result
 println "asr: ${asr}"
@@ -192,9 +192,14 @@ AuthorWorkResult awr = vine
 println "awr: ${awr}"
 
 // filter the works for only those with subject_people
+println "\nworks:"
+awr.entries.sort({ a, b -> a.title <=> b.title }).each { work ->
+    println "${work.title}"
+}
 List<Work> worksWithPeople = awr.entries.findAll({it.subject_people})
+println "\nworks with people:"
 worksWithPeople.each { work ->
-    println "\n${work.title}"
+    println "${work.title}"
     work.subject_people.each { sp ->
         println "- ${sp}"
     }
@@ -221,7 +226,7 @@ void printGraph(GraphTraversalSource g) {
 ///////////////////////////////////////////////////////////////////////////////
 
 // Use TinkerGraph 
-//Carnival carnival = CarnivalTinker.create()
+Carnival carnival = CarnivalTinker.create()
 
 // Use Neo4j
 // choose a custom directory for the neo4j graph
@@ -232,7 +237,7 @@ CarnivalNeo4jConfiguration carnivalNeo4jConf = CarnivalNeo4jConfiguration.defaul
 carnivalNeo4jConf.gremlin.neo4j.directory = neo4jGraphDirString
 // Clear the neo4j graph directory
 //CarnivalNeo4j.clearGraph(carnivalNeo4jConf)
-Carnival carnival = CarnivalNeo4j.create(carnivalNeo4jConf)
+//Carnival carnival = CarnivalNeo4j.create(carnivalNeo4jConf)
 
 
 ///////////////////////////////////////////////////////////////////////////////

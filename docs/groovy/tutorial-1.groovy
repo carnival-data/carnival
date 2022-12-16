@@ -2,6 +2,7 @@
 // DEPENDENCIES
 ///////////////////////////////////////////////////////////////////////////////
 
+@GrabResolver(name='io.github.carnival-data', root='https://s01.oss.sonatype.org/content/repositories/snapshots/')
 @Grab('io.github.carnival-data:carnival-core:3.0.0-SNAPSHOT')
 @Grab('io.github.carnival-data:carnival-vine:3.0.0-SNAPSHOT')
 @Grab('org.apache.tinkerpop:gremlin-core:3.4.10')
@@ -50,7 +51,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// In this example, the works of the author J.K. Rowling are loaded from a 
+// In this example, the works of the author Stephenie Meyer are loaded from a 
 // public API, the books and the characters in the books are expanded into 
 // vertices, and some sample queries are provided.
 ///////////////////////////////////////////////////////////////////////////////
@@ -170,7 +171,7 @@ vine.vineConfiguration.cache.mode = CacheMode.OPTIONAL
 // search for an author
 AuthorSearchResult asr = vine
     .method('AuthorSearch')
-    .arguments(query:'tolkien')
+    .arguments(query:'stephenie meyer')
     .call()
 .result
 println "asr: ${asr}"

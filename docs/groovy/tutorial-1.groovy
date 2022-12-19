@@ -223,20 +223,29 @@ void printGraph(GraphTraversalSource g) {
 
 ///////////////////////////////////////////////////////////////////////////////
 // CREATE A CARNIVAL
+//
+// This example demonstrated the use of TinkerGrapha and Neo4j carnivals.  Only
+// one carnival need be creted.
 ///////////////////////////////////////////////////////////////////////////////
 
-// Use TinkerGraph 
+// Using TinkerGraph 
+
+// create the carnival
 Carnival carnival = CarnivalTinker.create()
 
-// Use Neo4j
+// Using Neo4j
+
 // choose a custom directory for the neo4j graph
 Path currentRelativePath = Paths.get("")
 Path neo4jGraphDir = currentRelativePath.resolve('carnival-home/neo4j-dir-custom')
 String neo4jGraphDirString = neo4jGraphDir.toAbsolutePath().toString()
 CarnivalNeo4jConfiguration carnivalNeo4jConf = CarnivalNeo4jConfiguration.defaultConfiguration()
 carnivalNeo4jConf.gremlin.neo4j.directory = neo4jGraphDirString
-// Clear the neo4j graph directory
+
+// optionally delete an existing neo4j graph directory
 //CarnivalNeo4j.clearGraph(carnivalNeo4jConf)
+
+// create the carnival
 //Carnival carnival = CarnivalNeo4j.create(carnivalNeo4jConf)
 
 

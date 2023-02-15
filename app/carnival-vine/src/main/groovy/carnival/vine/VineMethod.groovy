@@ -27,6 +27,11 @@ abstract class VineMethod {
     // ABSTRACT INTERFACE
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Perform the fine method logic and return a result.
+     * @param args A map of arguments
+     * @return The result of the fetch.
+     */
     abstract Object fetch(Map args)
 
 
@@ -34,10 +39,10 @@ abstract class VineMethod {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** The configuration that the vine method will use */
     VineConfiguration vineConfiguration = VineConfiguration.defaultConfiguration()
 
-    /** */
+    /** The arguments that will be passed to the call() methods */
     Map arguments = [:]
 
 
@@ -45,27 +50,42 @@ abstract class VineMethod {
     // CACHE MODE
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** The cache mode that will be used when this vine method is called. */
     CacheMode cacheMode
 
-    /** */
+    /**
+     * Returns the cache more of this vine method.
+     * @return The CacheMode object.
+     */
     public CacheMode getCacheMode() {
         if (cacheMode != null) return cacheMode
         assert vineConfiguration != null
         vineConfiguration.getCacheMode()
     }
 
-    /** */
+    /** 
+     * Set the cache mode of this vine method.
+     * @param cacheMode The CacheMode object to use.
+     */
     public void setCacheMode(CacheMode cacheMode) {
         this.cacheMode = cacheMode
     }
 
+    /**
+     * Set the cache mode and return this vine method for method chaining.
+     * @param cm The CacheMode object.
+     * @return This vine method object.
+     */
     VineMethod cacheMode(CacheMode cm) {
         assert cm != null
         setCacheMode(cm)
         this
     }
 
+    /**
+     * Synonym for cacheMode().
+     * @see #cacheMode(CacheMode)
+     */
     VineMethod mode(CacheMode cm) {
         cacheMode(cm)
     }
@@ -75,11 +95,21 @@ abstract class VineMethod {
     // CACHE DIRECTORY
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Return the cache directory of this vine method as a file.
+     * @return The File object
+     */
     File _cacheDirectory() {
         assert vineConfiguration != null
         vineConfiguration.getCacheDirectory()
     }
 
+
+    /**
+     * Return the cache directory of this vine method if it is valid, otherwise
+     * return null.
+     * @return The File object or null
+     */
     File _cacheDirectoryValidated() {
         File cacheDir = _cacheDirectory()
         if (cacheDir == null) {
@@ -97,6 +127,10 @@ abstract class VineMethod {
         return cacheDir
     }
 
+
+    /**
+     * Initialize the cache directory.
+     */
     void _cacheDirectoryInitialize() {
         Path cachePath = vineConfiguration.cache.directory
 		if (cachePath == null) throw new RuntimeException("cachePath is null")
@@ -130,11 +164,20 @@ abstract class VineMethod {
     // METHODS ARGUMENTS
     ///////////////////////////////////////////////////////////////////////////
 
+    /** 
+     * Set the arguments to be used when the vine method is called 
+     * @param args The map of arguments.
+     * @return This VineMethod
+     */
     VineMethod arguments(Map args) {
         this.arguments = args
         this
     }
 
+    /** 
+     * Synonym for arguments().
+     * @see #arguments(Map) 
+     */
     VineMethod args(Map args) {
         arguments(args)
     }
@@ -144,9 +187,32 @@ abstract class VineMethod {
     // METHODS CALL
     ///////////////////////////////////////////////////////////////////////////
 
+    /** 
+     * Call the vine method logic without modification 
+     * @return A VineMethodCall object
+     */ 
     abstract VineMethodCall call()
+
+    /**
+     * Call the vine method logic using the provided arguments.
+     * @param Map of arguments
+     * @return A VineMethodCall object
+     */
     abstract VineMethodCall call(Map args)
+
+    /**
+     * Call the vine method logic using the provided cache mode.
+     * @param cacheMode The cache mode to use.
+     * @return A VineMethodCall object
+     */
     abstract VineMethodCall call(CacheMode cacheMode)
+
+    /**
+     * Call the vine method logic using the provided cache mode and arguments.
+     * @param Map of arguments
+     * @param cacheMode The cache mode to use.
+     * @return A VineMethodCall object
+     */
     abstract VineMethodCall call(CacheMode cacheMode, Map args)
 
 }

@@ -13,6 +13,9 @@ import carnival.util.DataTable
 
 
 
+/**
+ * A vine method call for a GenericDataTableVineMethod.
+ */
 @Slf4j
 class GenericDataTableVineMethodCall extends DataTableVineMethodCall<GenericDataTable> {
 
@@ -20,7 +23,11 @@ class GenericDataTableVineMethodCall extends DataTableVineMethodCall<GenericData
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Create a vine method call object using the provided cache files.
+     * @param cacheFiles The cache files.
+     * @return A vine method call object.
+     */
     static public GenericDataTableVineMethodCall createFromFiles(DataTableFiles cacheFiles) {
         GenericDataTable gdt = GenericDataTable.createFromFiles(cacheFiles)
         GenericDataTableVineMethodCall methodCall = new GenericDataTableVineMethodCall()
@@ -43,10 +50,19 @@ class GenericDataTableVineMethodCall extends DataTableVineMethodCall<GenericData
     // METHODS - RESULT
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Return the data table result of this vine method call.
+     * @return A data table.
+     */
     public GenericDataTable getResult() {
         return this.result
     }
 
+
+    /**
+     * Set the data table result of this vine method call.
+     * @param result The data table result.
+     */
     public void setResult(GenericDataTable result) {
         this.result = result
     }

@@ -27,7 +27,11 @@ abstract class GenericDataTableVineMethod extends DataTableVineMethod<GenericDat
     // METHODS CALL
     ///////////////////////////////////////////////////////////////////////////
 
-
+    /**
+     * Return a vine method call object using the provided cache files.
+     * @param cacheFiles The cache files.
+     * @return A vine method call object.
+     */
     GenericDataTableVineMethodCall _readFromCache(DataTableFiles cacheFiles) {
         assert cacheFiles != null
         assert cacheFiles.exist()
@@ -36,6 +40,12 @@ abstract class GenericDataTableVineMethod extends DataTableVineMethod<GenericDat
     }
 
 
+    /**
+     * Create a vine method call object using the provided arguments and data
+     * table result.
+     * @param arguments Map of arguments.
+     * @result Data table result.
+     */
     GenericDataTableVineMethodCall _createCallObject(Map arguments, GenericDataTable result) {
         assert arguments != null
         assert result != null
@@ -48,6 +58,11 @@ abstract class GenericDataTableVineMethod extends DataTableVineMethod<GenericDat
     }
 
 
+    /**
+     * Create an empty data table suitable as a result for this vine method.
+     * @param args Optional map of arguments.
+     * @return An empty data table object.
+     */
     GenericDataTable createDataTable(Map args = [:]) {
         String name = DataTableVineMethodCall.computedName(this.class, this.arguments)
         new GenericDataTable(

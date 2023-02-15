@@ -31,12 +31,10 @@ class JsonVineMethodCall<T> implements VineMethodCall<T> {
     // CLASSES
     ///////////////////////////////////////////////////////////////////////////
 
-    /* Not used. 
-    static class Files {
-        File data
-        File meta
-    }*/
-
+    /**
+     * Encompasses the meta or descriptor data for a vine method call.
+     *
+     */
     @JsonPropertyOrder(["thisClass", "vineMethodClass", "resultClass", "arguments"])
     static class Meta {
         Class thisClass
@@ -46,6 +44,11 @@ class JsonVineMethodCall<T> implements VineMethodCall<T> {
         @JsonTypeInfo(use=Id.CLASS, include=As.WRAPPER_ARRAY)
         Map arguments
 
+        /**
+         * Create a Meta object from a JSON string.
+         * @param json The JSON text in string form.
+         * @return The Meta object.
+         */
         static public Meta createFromJson(String json) {
             ObjectMapper mapper = new ObjectMapper();
             Meta mcm = mapper.readValue(json, Meta);
@@ -53,10 +56,19 @@ class JsonVineMethodCall<T> implements VineMethodCall<T> {
         }
     }
 
+    /**
+     * Encompasses the result of a vine method call.
+     *
+     */
     static class Result {
         @JsonTypeInfo(use=Id.CLASS, include=As.WRAPPER_ARRAY)
         Object value
 
+        /**
+         * Create a result object from a JSON string.
+         * @param json The JSON text in string form.
+         * @return The result object
+         */
         static public Result createFromJson(String json) {
             ObjectMapper mapper = new ObjectMapper();
             Result out = mapper.readValue(json, Result);
@@ -69,7 +81,12 @@ class JsonVineMethodCall<T> implements VineMethodCall<T> {
     // STATIC METHODS 
     ///////////////////////////////////////////////////////////////////////////
 
-
+    /**
+     * Create a JsonVineMethodCall object from a JSON string.
+     * @param json The JSON string.
+     * @return The JsonVineMethodCall object.
+     *
+     */
     static public <E extends JsonVineMethodCall> E createFromJson(String json) {
         ObjectMapper mapper = new ObjectMapper();
 
@@ -96,22 +113,11 @@ class JsonVineMethodCall<T> implements VineMethodCall<T> {
     }
 
 
-    /*static public <E extends JsonVineMethodCall> E createFromJson(String metaJson, resultJson) {
-        JsonVineMethodCall mc = new JsonVineMethodCall()
-
-        Meta meta = Meta.createFromJson(metaJson)
-        mc.thisClass = meta.thisClass
-        mc.vineMethodClass = meta.vineMethodClass
-        mc.arguments = meta.arguments
-        mc.resultClass = meta.resultClass
-
-        Result resultWrapper = Result.createFromJson(resultJson)
-        mc.result = resultWrapper.value
-
-        mc
-    }*/
-
-
+    /**
+     * Create a JsonVineMethodCall from a file.
+     * @param file The file object to use as a source.
+     * @return The JsonVineMethodCall object.
+     */
     static public <E> JsonVineMethodCall<E> createFromFile(File file) { 
         assert file != null
         assert file.exists()
@@ -129,6 +135,14 @@ class JsonVineMethodCall<T> implements VineMethodCall<T> {
         return mc
     }
 
+
+    /**
+     * Return the computed name for a vine method class and arguments combo.
+     * @param vineMethodClass The vine method class
+     * @param arguments The arguments supplied to the call
+     * @return The computed name as a string
+     *
+     */
     static String computedName(Class vineMethodClass, Map arguments) {
         String name = CoreUtil.standardizedFileName(vineMethodClass)
 
@@ -142,12 +156,30 @@ class JsonVineMethodCall<T> implements VineMethodCall<T> {
         return name
     }
 
+
+    /**
+     * Find the file in a directory for the given vine method class and args
+     * returning null if not found.
+     * @param dir The directory in which to look.
+     * @param vineMethodClass The vine method class.
+     * @param args Map of arguments for the call.
+     * @return The file object if it exists, otherwise null.
+     */
     static public File findFile(File dir, Class vineMethodClass, Map args) { 
         File file = file(dir, vineMethodClass, args)
         if (file.exists() && file.isFile()) return file
         else return null
     }
 
+
+    /**
+     * Find the file in a directory for the given vine method class and args
+     * returning the file object whether or not the file exists.
+     * @param dir The directory in which to look
+     * @param vineMethodClass The vine method class
+     * @param args Map of arguments for the call
+     * @return The file object
+     */
     static public File file(File dir, Class vineMethodClass, Map args) { 
         String fileName = computedName(vineMethodClass, args)
         new File(dir, fileName)
@@ -159,7 +191,10 @@ class JsonVineMethodCall<T> implements VineMethodCall<T> {
     // STATIC FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
+    /** The default file extension separator to use in file names */
     static final String FILE_EXTENSION_SEPARATOR = '.'
+
+    /** The default file extension to use for JSON file names */
     static final String FILE_EXTENSION_JSON = 'json'
 
 
@@ -189,10 +224,18 @@ class JsonVineMethodCall<T> implements VineMethodCall<T> {
     // METHODS - RESULT
     ///////////////////////////////////////////////////////////////////////////
 
+    /** 
+     * Return the result of this vine method call 
+     * @return The reuslt object
+     */
     public T getResult() {
         return this.result
     }
 
+    /**
+     * Set the result of the vine method call
+     * @param result The result object
+     */
     public void setResult(T result) {
         this.result = result
         this.resultClass = result.class
@@ -203,6 +246,10 @@ class JsonVineMethodCall<T> implements VineMethodCall<T> {
     // METHODS - COMPUTED PROPERTIES
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Return the computed name of this JSON vine method call
+     * @return The computed name as a string
+     */
     public String computedName() {
         computedName(this.vineMethodClass, this.arguments)
     }
@@ -212,29 +259,10 @@ class JsonVineMethodCall<T> implements VineMethodCall<T> {
     // METHODS - JSON SERIALIZATION
     ///////////////////////////////////////////////////////////////////////////
 
-    /*public String metaJson() { 
-        ObjectMapper mapper = new ObjectMapper()
-        ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter()
-        Meta meta = new Meta(
-            thisClass: this.thisClass,
-            vineMethodClass: this.vineMethodClass,
-            arguments: this.arguments,
-            resultClass: this.resultClass
-        )
-        String out = writer.writeValueAsString(meta)
-        out
-    }*/
-
-
-    /*public String resultJson() { 
-        ObjectMapper mapper = new ObjectMapper()
-        ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter()
-        Result resultWrapper = new Result(value: this.result)
-        String out = writer.writeValueAsString(resultWrapper)
-        out
-    }*/
-
-
+    /**
+     * Return this object as a JSON string.
+     * @return This object as as JSON string
+     */
     public String toJson() { 
         ObjectMapper mapper = new ObjectMapper()
         ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter()
@@ -247,6 +275,11 @@ class JsonVineMethodCall<T> implements VineMethodCall<T> {
     // METHODS - FILES
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Write this object as one or more files in the given directory.
+     * @param dir The directory in which to write the files.
+     * @return The list of files written
+     */
     public List<File> writeFiles(File dir) { 
         assert dir != null
         assert dir.exists()
@@ -265,14 +298,5 @@ class JsonVineMethodCall<T> implements VineMethodCall<T> {
 
         [destFile]
     }
-
-
-    /*
-    public Files writeFiles(File dir) { }
-    public File writeMetaFile(File dir) { }
-    public File writeDataFile(File dir) { }
-    public File findMetaFile(File dir) { }
-    public File findDataFile(File dir) { }
-    */
 
 }

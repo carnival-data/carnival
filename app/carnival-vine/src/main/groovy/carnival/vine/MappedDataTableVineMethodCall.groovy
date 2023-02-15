@@ -15,7 +15,9 @@ import carnival.util.DataTable
 
 
 
-
+/**
+ * A vine method call for a MappedDataTableVineMethod.
+ */
 @Slf4j
 class MappedDataTableVineMethodCall extends DataTableVineMethodCall<MappedDataTable> {
 
@@ -23,7 +25,11 @@ class MappedDataTableVineMethodCall extends DataTableVineMethodCall<MappedDataTa
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Create a vine method call object from the provided cache files.
+     * @param cacheFiles The cache files.
+     * @return A vine method call object.
+     */
     static public MappedDataTableVineMethodCall createFromFiles(DataTableFiles cacheFiles) {
         MappedDataTable mdt = MappedDataTable.createFromFiles(cacheFiles)
         MappedDataTableVineMethodCall methodCall = new MappedDataTableVineMethodCall()
@@ -46,10 +52,18 @@ class MappedDataTableVineMethodCall extends DataTableVineMethodCall<MappedDataTa
     // METHODS - RESULT
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Get the data table result of this vine method call.
+     * @return A data table object.
+     */
     public MappedDataTable getResult() {
         return this.result
     }
 
+    /**
+     * Set the data table result of this vine method call.
+     * @param result The data table result.
+     */
     public void setResult(MappedDataTable result) {
         this.result = result
     }

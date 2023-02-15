@@ -61,10 +61,18 @@ class JsonVineMethodListCall<T> extends JsonVineMethodCall<T> {
     // METHODS - RESULT
     ///////////////////////////////////////////////////////////////////////////
 
+    /** 
+     * Return the result of the call.
+     * @return The result of the call
+     */
     public T getResult() {
         return this.resultHolder.value
     }
 
+    /**
+     * Set the result of the call.
+     * @param result The result of the call
+     */
     public void setResult(T result) {
         this.result = result
         this.resultHolder = new ListHolder(value:result)

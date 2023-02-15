@@ -24,6 +24,11 @@ abstract class JsonVineMethod<T> extends VineMethod {
     // ABSTRACT INTERFACE
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * The vine method logic.
+     * @param args Arguments provided to the method logic.
+     * @return A typed object representing the result.
+     */
     abstract T fetch(Map args)
 
 
@@ -32,6 +37,12 @@ abstract class JsonVineMethod<T> extends VineMethod {
     // METHODS CALL
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Set the arguments then call the vine method logic.
+     * @see call()
+     * @param args Map of arguments
+     * @return A vine method call object
+     */
     JsonVineMethodCall<T> call(Map args) {
         assert args != null
         this.arguments = args
@@ -39,6 +50,12 @@ abstract class JsonVineMethod<T> extends VineMethod {
     }
 
 
+    /**
+     * Set the cache mode then call the vine method logic.
+     * @see call()
+     * @param cacheMode The CacheMode to use
+     * @return A vine method call object
+     */
     JsonVineMethodCall<T> call(CacheMode cacheMode) {
         assert cacheMode != null
         this.cacheMode = cacheMode
@@ -46,6 +63,13 @@ abstract class JsonVineMethod<T> extends VineMethod {
     }
 
 
+    /**
+     * Set the cache mode and arguments then call the vine method logic.
+     * @see call()
+     * @param cacheMode The CacheMode to use
+     * @param args Map of arguments
+     * @return A vine method call object
+     */
     JsonVineMethodCall<T> call(CacheMode cacheMode, Map args) {
         assert cacheMode != null
         assert args != null
@@ -54,6 +78,11 @@ abstract class JsonVineMethod<T> extends VineMethod {
         call()
     }
 
+
+    /**
+     * Call the vine method logic respecting the cache mode.
+     * @return A vine method call object.
+     */
     JsonVineMethodCall<T> call() {
         assert this.cacheMode != null
         assert this.arguments != null
@@ -72,11 +101,21 @@ abstract class JsonVineMethod<T> extends VineMethod {
     }
 
 
+    /**
+     * Call _fetchAndCache() and return the result.
+     * @see _fetchAndCache()
+     * @return A vine method call object.
+     */
     JsonVineMethodCall<T> _callCacheModeIgnore() {
         _fetchAndCache()
     }
 
 
+    /**
+     * Look for a cache file; if present, return a result from it; if not call
+     * _fetchAndCache() and return the result.
+     * @return A vine method call object.
+     */
     JsonVineMethodCall<T> _callCacheModeOptional() {
         _cacheDirectoryInitialize()
         JsonVineMethodCall<T> methodCall
@@ -90,6 +129,10 @@ abstract class JsonVineMethod<T> extends VineMethod {
     }
 
 
+    /**
+     * Assert that a cache file exists, then return a result from it.
+     * @return A vine method call.
+     */
     JsonVineMethodCall<T> _callCacheModeRequired() {
         _cacheDirectoryInitialize()
 
@@ -109,6 +152,10 @@ abstract class JsonVineMethod<T> extends VineMethod {
     }
 
 
+    /**
+     * Execute the vine method logic, cache the result, and return the result.
+     * @return A vine method call object.
+     */
     JsonVineMethodCall<T> _fetchAndCache() {
         T fetchResult = fetch(this.arguments)
         JsonVineMethodCall<T> methodCall = _createCallObject(this.arguments, fetchResult)
@@ -117,6 +164,12 @@ abstract class JsonVineMethod<T> extends VineMethod {
     }
 
 
+    /**
+     * Return a result from the provided cache file.
+     * @see JsonVineMethodCall#createFromFile(java.io.File)
+     * @param cacheFile The cache file.
+     * @return A vine method call objet.
+     */
     JsonVineMethodCall<T> _readFromCache(File cacheFile) {
         assert cacheFile.exists()
         assert cacheFile.canRead()
@@ -124,6 +177,11 @@ abstract class JsonVineMethod<T> extends VineMethod {
     }
 
 
+    /**
+     * Write the cache file for the provided vine method call object.
+     * @param methodCall The vine method call object.
+     * @return The list of files written.
+     */
     List<File> _writeCacheFile(JsonVineMethodCall<T> methodCall) {
         File cacheDir = _cacheDirectoryValidated()
         if (cacheDir == null) {
@@ -135,6 +193,13 @@ abstract class JsonVineMethod<T> extends VineMethod {
     }
 
 
+    /**
+     * Create a vine method call object given the provided map of arguments
+     * and result.
+     * @param arguments Map of arguments.
+     * @param result A result object.
+     * @return A vine method call object.
+     */
     JsonVineMethodCall<T> _createCallObject(Map arguments, T result) {
         assert result != null
         JsonVineMethodCall<T> mc 
@@ -152,6 +217,10 @@ abstract class JsonVineMethod<T> extends VineMethod {
     // CACHING
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Find the cache file inside the cache directory of this vine method
+     * @return If the file exists, returns the file, otherwise null.
+     */
     File findCacheFile() {
         File cacheDir = _cacheDirectory()
         if (cacheDir == null) {
@@ -161,7 +230,10 @@ abstract class JsonVineMethod<T> extends VineMethod {
         JsonVineMethodCall.findFile(cacheDir, this.class, this.arguments)
     }
 
-
+    /**
+     * Return the cache file associated with the vine method
+     * @return The cache file
+     */
     File cacheFile() {
         File cacheDir = _cacheDirectory()
         if (cacheDir == null) {

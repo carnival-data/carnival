@@ -15,7 +15,7 @@ import carnival.util.DataTable
 
 
 /**
- *
+ * A vine method that returns a MappedDataTable as a result.
  *
  */
 @Slf4j
@@ -26,7 +26,11 @@ abstract class MappedDataTableVineMethod extends DataTableVineMethod<MappedDataT
     // METHODS CALL
     ///////////////////////////////////////////////////////////////////////////
 
-
+    /** 
+     * Create a vine method call using the provided cache files.
+     * @param cacheFiles The cache files.
+     * @return A vine method call object.
+     */
     MappedDataTableVineMethodCall _readFromCache(DataTableFiles cacheFiles) {
         assert cacheFiles != null
         assert cacheFiles.exist()
@@ -35,6 +39,13 @@ abstract class MappedDataTableVineMethod extends DataTableVineMethod<MappedDataT
     }
 
 
+    /**
+     * Create a vine method call object using the provided arguments and
+     * result.
+     * @param arguments Map of arguments.
+     * @param result A data table result.
+     * @return A vine method call object.
+     */
     MappedDataTableVineMethodCall _createCallObject(Map arguments, MappedDataTable result) {
         assert arguments != null
         assert result != null
@@ -47,6 +58,11 @@ abstract class MappedDataTableVineMethod extends DataTableVineMethod<MappedDataT
     }
 
 
+    /**
+     * Create an empty data suitable for a result for this vine method.
+     * @param args Map of args.
+     * @return A data table object.
+     */
     MappedDataTable createDataTable(Map args) {
         assert args != null
         assert args.idFieldName

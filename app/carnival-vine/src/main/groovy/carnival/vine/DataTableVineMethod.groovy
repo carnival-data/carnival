@@ -26,12 +26,36 @@ abstract class DataTableVineMethod<T,U extends VineMethodCall> extends VineMetho
     // ABSTRACT INTERFACE
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Executes the logic of this vine method.
+     * @param Arguments for the vine method logic.
+     * @return A DataTable object containing the results of the vime method
+     *         logic.
+     */
     abstract DataTable fetch(Map args)
 
+    /**
+     * Read the vine method result from the cache files.
+     * @param cacheFiles The cache files.
+     * @return The result data table.
+     */
     abstract U _readFromCache(DataTableFiles cacheFiles)
 
+    /**
+     * Create the vine method call object representing a call to this vine
+     * method.
+     * @param arguments The map of argument used during the call.
+     * @param result The result object of the call.
+     * @return The vine method call object.
+     */
     abstract U _createCallObject(Map arguments, T result) 
 
+    /**
+     * Create an empty data table for this vine methods if it were called using
+     * the provided arguments.
+     * @param args The map of arguments.
+     * @return An empty data table.
+     */
     abstract T createDataTable(Map args) 
 
 
@@ -39,6 +63,12 @@ abstract class DataTableVineMethod<T,U extends VineMethodCall> extends VineMetho
     // METHODS CALL
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Set the arguments to the provided ones and call the vine method.
+     * @see #call()
+     * @param args Map of arguments.
+     * @return A vine method call object.
+     */
     U call(Map args) {
         assert args != null
         this.arguments = args
@@ -46,6 +76,12 @@ abstract class DataTableVineMethod<T,U extends VineMethodCall> extends VineMetho
     }
 
 
+    /**
+     * Set the cache mode to the provided one and call the vine method.
+     * @see #call()
+     * @param cacheMode The cache mode to use.
+     * @return A vine method call object.
+     */
     U call(CacheMode cacheMode) {
         assert cacheMode != null
         this.cacheMode = cacheMode
@@ -53,6 +89,13 @@ abstract class DataTableVineMethod<T,U extends VineMethodCall> extends VineMetho
     }
 
 
+    /**
+     * Set the cache mode and arguments and call the vine method.
+     * @see #call()
+     * @param cacheMode The cache mode to use.
+     * @param args Map of arguments.
+     * @return A vine method call object.
+     */
     U call(CacheMode cacheMode, Map args) {
         assert cacheMode != null
         assert args != null
@@ -62,6 +105,11 @@ abstract class DataTableVineMethod<T,U extends VineMethodCall> extends VineMetho
     }
 
 
+    /**
+     * Call the vine method returning a vine method call object.  This method
+     * respects the cache mode.
+     * @return A vine method call object.
+     */
     U call() {
         assert this.cacheMode != null
         assert this.arguments != null
@@ -80,12 +128,21 @@ abstract class DataTableVineMethod<T,U extends VineMethodCall> extends VineMetho
     }
 
 
-
+    /**
+     * Call the _fetchAndCache() and return the vine method call object.
+     * @see #_fetchAndCache()
+     * @return A vine method call object
+     */
     U _callCacheModeIgnore() {
         _fetchAndCache()
     }
 
 
+    /**
+     * Check for a cached result; return if present; if not present, call
+     * _fetchAndCache() and return the resulting vine method call object.
+     * @see #_fetchAndCache()
+     */
     U _callCacheModeOptional() {
         _cacheDirectoryInitialize()
 
@@ -101,6 +158,10 @@ abstract class DataTableVineMethod<T,U extends VineMethodCall> extends VineMetho
     }
 
 
+    /**
+     * Verify that a cached result exists and return it.
+     * @return A vine method call object created from a cached result.
+     */
     U _callCacheModeRequired() {
         _cacheDirectoryInitialize()
 
@@ -120,7 +181,12 @@ abstract class DataTableVineMethod<T,U extends VineMethodCall> extends VineMetho
     }
 
 
-
+    /**
+     * Call fetch(), write the result to the cache, and return a vine method
+     * call object.
+     * @see #fetch(Map)
+     * @return A vine method call object
+     */
     U _fetchAndCache() {
         T fetchResult = fetch(this.arguments)
         U methodCall = _createCallObject(this.arguments, fetchResult)
@@ -129,6 +195,14 @@ abstract class DataTableVineMethod<T,U extends VineMethodCall> extends VineMetho
     }
 
 
+    /**
+     * Write the cache files to the cache directory for the provided method
+     * call object.
+     * @see DataTableVineMethodCall#writeFiles(java.io.File)
+     * @param methodCall The method call object that will be written to the
+     *                   cache directory.
+     * @return The written cache files.
+     */
     List<File> _writeCacheFile(U methodCall) {
         File cacheDir = _cacheDirectoryValidated()
         if (cacheDir == null) {
@@ -143,6 +217,12 @@ abstract class DataTableVineMethod<T,U extends VineMethodCall> extends VineMetho
     // CACHING
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Convenience method to call DataTableVineMethodCall.findFiles for this
+     * vine method.
+     * @see DataTableVineMethodCall#findFiles(java.io.File, Class, Map)
+     * @return A DataTableFiles object.
+     */
     DataTableFiles findCacheFiles() {
         File cacheDir = _cacheDirectory()
         if (cacheDir == null) {
@@ -153,6 +233,11 @@ abstract class DataTableVineMethod<T,U extends VineMethodCall> extends VineMetho
     }
     
 
+    /**
+     * Convenience method to call DataTableFiles.create for this vine method.
+     * @see carnival.util.DataTableFiles#create(java.io.File, String)
+     * @return A DataTableFiles object.
+     */
     DataTableFiles cacheFiles() {
         File cacheDir = _cacheDirectory()
         if (cacheDir == null) {

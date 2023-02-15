@@ -25,7 +25,7 @@ trait Vine extends MethodsHolder {
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** The log object to use. */
     static Logger log = LoggerFactory.getLogger(this.class)
 
 
@@ -33,10 +33,15 @@ trait Vine extends MethodsHolder {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Key value pairs of dynamic resources that will be provided to vine 
+     * methods.
+     */
     Map<String,Object> _dynamicVineMethodResources = new HashMap<String,Object>()
 
-    /** */
+    /** 
+     * The VineConfiguration object that will be used to configure vine methods.  
+     */
     VineConfiguration vineConfiguration = VineConfiguration.defaultConfiguration()
 
 
@@ -44,7 +49,12 @@ trait Vine extends MethodsHolder {
     // CLIENT INTERFACE
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Look up a vine method with the given name and return it.
+     * @param Name The name of the vine method to call.
+     * @return Return the VineMethod object with the given name.
+     *
+     */
     VineMethod method(String name) {
         assert name != null
         assert name.trim().length() > 0
@@ -56,17 +66,30 @@ trait Vine extends MethodsHolder {
     // UTILITY
     ///////////////////////////////////////////////////////////////////////////    
 
-    /** */
+    /** 
+     * Return the set of all vine method objects contained in this vine.
+     * @return The set of all vine method objects contained in this vine.
+     *
+     */
     public Set<Class> allVineMethodClasses() {
         allMethodClasses(VineMethod)
     }
 
-    /** */
+    /** 
+     * Find a vine method class by name.
+     * @param name The name of the vine mthod.
+     * @return The class of the vine method with the given name.
+     */
     public Class findVineMethodClass(String name) {
         findMethodClass(VineMethod, name)
     }
 
-    /** */
+    /** 
+     * Create a VineMethod object for the vine with the given name.
+     * @param methodName The name of the vine method.
+     * @return The VineMethod object.
+     *
+     */
     public VineMethod createVineMethodInstance(String methodName) {
         log.trace "Vine.createVineMethodInstance methodName:${methodName}"
 
@@ -88,13 +111,22 @@ trait Vine extends MethodsHolder {
     }
 
 
-    /** */
+    /** 
+     * Set a key value resource of the vine mathod. 
+     * @param vm The VineMethod object
+     * @param name The name of the resource
+     * @param value The value of the resource
+     */
     void setResource(VineMethod vm, String name, Object value) {
         vm.metaClass."${name}" = value
     }
 
 
-    /** */
+    /** 
+     * Set a vine method resource.
+     * @param name The name of the resource
+     * @value The value of the resource
+     */
     void vineMethodResource(String name, Object value) {
         _dynamicVineMethodResources.put(name, value)
     }
@@ -105,7 +137,16 @@ trait Vine extends MethodsHolder {
     // CONVENIENCE
     ///////////////////////////////////////////////////////////////////////////    
 
-    /** */
+    /** 
+     * methodMissing() is a Groovy language feature that catches unknown method
+     * calls. <a href="https://groovy-lang.org/metaprogramming.html">Groovy metaprogramming</a>
+     * Carnival uses methodMissing() to support calling vine methods with
+     * convenience methods.  Ex. myVineObject.myFunMethod(a:1) would call the 
+     * vine method named "MyFunMethod" with an argument named "a" with value 1.
+     * @param name The name of the missing method.
+     * @param args The provided arguments.
+     *
+     */
     def methodMissing(String name, def args) {
         log.trace "Vine invoke method via methodMissing name:$name args:${args?.class?.name}"
 

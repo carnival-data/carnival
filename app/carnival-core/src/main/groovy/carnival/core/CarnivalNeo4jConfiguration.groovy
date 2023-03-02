@@ -14,6 +14,9 @@ import carnival.graph.VertexBuilder
 
 
 
+/**
+ * A configuration object for a CarnivalNeo4j.
+ */
 @Slf4j
 @ToString(includeNames=true)
 class CarnivalNeo4jConfiguration {
@@ -22,8 +25,13 @@ class CarnivalNeo4jConfiguration {
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
 
+    /** The default relative file path for the neo4j graph */
     final static String GRAPH_PATH_DEFAULT = "carnival-home/neo4j/graph"
 
+    /** 
+     * Returns a default configuration object.
+     * @return A default CarnivalNeo4j configuration.
+     */
     static public CarnivalNeo4jConfiguration defaultConfiguration() {
         Path currentRelativePath = Paths.get("")
         Path carnivalHomePath = currentRelativePath.resolve(GRAPH_PATH_DEFAULT)
@@ -39,12 +47,25 @@ class CarnivalNeo4jConfiguration {
     ///////////////////////////////////////////////////////////////////////////
     // CONFIG FIELDS
     ///////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * A data holder for CarnivalNeo4j configuration elements.  See the Neo4j
+     * documentation for a description of each configuration element.
+     */
     @ToString(includeNames=true)
     static class Gremlin {
 
         @ToString(includeNames=true)
         static class Neo4j {
+
+            /** The directory Neo4j will use for the database files */
             String directory
+
+            /** 
+             * If true, an empty database directory will be created if it does
+             * not already exist; Neo4j requires that the directy be present
+             * when the database starts up. 
+             */
             Boolean directoryCreateIfNotPresent = true
 
             @ToString(includeNames=true)
@@ -85,10 +106,6 @@ class CarnivalNeo4jConfiguration {
 
     }
     Gremlin gremlin = new Gremlin()
-
-
-
-
 
 
 }

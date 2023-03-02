@@ -76,7 +76,11 @@ class GenericDataTable extends DataTable {
 
 
     /**
-     * 
+     * Create a gemeric data table that contains the results of a cypher query.
+     * @param args.graph A Neo4j gremlin graph
+     * @param args.cypherMatch The match component of the cypher query
+     * @param args.cypherReturn The return component of the cypher query
+     * @return A populated generic data table 
      *
      */
     static public GenericDataTable createFromCypher(Map args) {

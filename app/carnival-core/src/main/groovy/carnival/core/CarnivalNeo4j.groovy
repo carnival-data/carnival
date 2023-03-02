@@ -10,6 +10,9 @@ import groovy.transform.ToString
 import groovy.transform.InheritConstructors
 import groovy.util.logging.Slf4j
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import org.apache.commons.configuration.PropertiesConfiguration
 
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
@@ -30,7 +33,9 @@ import carnival.core.graph.DefaultGraphValidator
 
 
 
-/** */
+/** 
+ * A Carnival implementation with an underlying Neo4j graph.
+ */
 @InheritConstructors
 @Slf4j
 class CarnivalNeo4j extends Carnival {
@@ -39,7 +44,13 @@ class CarnivalNeo4j extends Carnival {
 	// STATIC
 	///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** A log used to log Cypher statements */
+    static Logger sqllog = LoggerFactory.getLogger('sql')
+
+
+    /** 
+	 * Create a CarnivalNeo4j object.
+	 */
     public static CarnivalNeo4j create(Map args = [:]) {
 		CarnivalNeo4jConfiguration defaultConfig = CarnivalNeo4jConfiguration.defaultConfiguration()
 		create(defaultConfig, args)
@@ -361,5 +372,27 @@ class CarnivalNeo4j extends Carnival {
 		    echo("done")
 		}
 	}
+
+	///////////////////////////////////////////////////////////////////////////
+	// CYPHER
+	///////////////////////////////////////////////////////////////////////////
+
+    /** */
+    public Object cypher(String q) {
+        sqllog.info("CarnivalNeo4j.cypher:\n$q")
+        assert graph
+        return graph.cypher(q)
+    }
+
+
+    /** */
+    public Object cypher(String q, Map args) {
+        sqllog.info("CarnivalNeo4j.cypher:\n$q\n$args")
+        assert graph
+        return graph.cypher(q, args)
+    }
+
+
+
 	
 }

@@ -24,7 +24,9 @@ import carnival.core.graph.DefaultGraphValidator
 
 
 
-/** */
+/** 
+ * A Carnival with an underlying Tinkergraph implementation.
+ */
 @InheritConstructors
 @Slf4j
 class CarnivalTinker extends Carnival {
@@ -33,7 +35,10 @@ class CarnivalTinker extends Carnival {
 	// FACTORY 
 	///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Create a ready-to-use CarnivalTinker object.
+     * @return A CarnivalTinker object.
+     */
     public static CarnivalTinker create(Map args = [:]) {
 		log.info "CarnivalTinker create args:$args"
 
@@ -65,7 +70,9 @@ class CarnivalTinker extends Carnival {
     // LIFE-CYCLE
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Close this Carnival.
+     */
     public void close() {
         graph.close()
     }

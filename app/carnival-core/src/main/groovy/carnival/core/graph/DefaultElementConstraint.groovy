@@ -8,7 +8,11 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 
-/** */
+/** 
+ * A default implementation of ElementConstraint, which is used by the 
+ * default graph validator.
+ * @see ElementConstraint
+ */
 @ToString
 @EqualsAndHashCode(allProperties=true)
 class DefaultElementConstraint implements ElementConstraint {

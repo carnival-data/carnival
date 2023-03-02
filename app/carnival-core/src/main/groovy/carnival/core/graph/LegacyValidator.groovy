@@ -18,7 +18,10 @@ import carnival.core.Core
 
 
 
-/** */
+/** 
+ * An implementation of a graph validator.
+ * @deprecated Replaced by {@link DefaultGraphValidator}
+ */
 @Slf4j
 public class LegacyValidator extends DefaultGraphValidator {
 
@@ -31,6 +34,9 @@ public class LegacyValidator extends DefaultGraphValidator {
 	 * Check relationship constraints
 	 * Check that singleton vertices exist only once
 	 * Check that the combinaiton of identifier.value/identifierClass/IdentifierScope is unique
+	 * @param g A graph traversal source
+	 * @param graphSchema THe graph schema to use
+	 * @return A list of graph validation errors.
 	 */
 	public List<GraphValidationError> checkConstraints(GraphTraversalSource g, GraphSchema graphSchema) {
 		log.trace "checkConstraints()"

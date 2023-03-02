@@ -27,8 +27,10 @@ import carnival.core.Core
 
 
 /** 
- * A domain class to represent Identifier objects in the graph.
- *
+ * A domain class to represent Identifier objects in the graph.  This class is
+ * deprecated.  It is recommended that identifier classes be modeled using as
+ * needed using standard Carnival graph models.
+ * @deprecated
  */
 @ToString
 class Identifier {

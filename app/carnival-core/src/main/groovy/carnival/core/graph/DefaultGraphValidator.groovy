@@ -20,7 +20,10 @@ import carnival.graph.Base
 
 
 
-/** */
+/** 
+ * A default implementation of GraphValidator that uses gremlin traversals to
+ * perform the graph validation steps.
+ */
 @Slf4j
 public class DefaultGraphValidator implements GraphValidator {
 
@@ -28,7 +31,13 @@ public class DefaultGraphValidator implements GraphValidator {
 	// STATIC METOHDS
 	///////////////////////////////////////////////////////////////////////////
 
-	/** */
+	/** 
+	 * Return true if the proided strings represent the same value; null values
+	 * are considered equal.
+	 * @param a The first string to compare
+	 * @param b The second string to compare
+	 * @return True if the strings represent the same value
+	 */
 	static boolean sameAs(String a, String b) {
 		if (a == null && b == null) return true
 		if (a == null || b == null) return false
@@ -41,10 +50,11 @@ public class DefaultGraphValidator implements GraphValidator {
 	///////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Check property existence constraints
-	 * Check relationship constraints
-	 * Check that singleton vertices exist only once
-	 * Check that the combinaiton of identifier.value/identifierClass/IdentifierScope is unique
+	 * Check: property existence constraints, relationship constraints, that 
+	 * singleton vertices exist only once.
+	 * @param graphSchema The graph schema 
+	 * @param g A graph traversal source to use
+	 * @return A list of graph validation errors.
 	 */
 	public List<GraphValidationError> checkConstraints(GraphTraversalSource g, GraphSchema graphSchema) {
 		log.trace "checkConstraints()"
@@ -149,7 +159,11 @@ public class DefaultGraphValidator implements GraphValidator {
 
 
 	/**
-	 * Check to see if there are any vertex or edge labels that are not defined in the model
+	 * Check to see if there are any vertex or edge labels that are not defined 
+	 * in the model.
+	 * @param graphSchema A graph schema
+	 * @param g A graph traversal source to use
+	 * @return A collection of strings describing model errors.
 	 *
 	 */
 	public Collection<String> checkModel(GraphTraversalSource g, GraphSchema graphSchema) {
@@ -160,9 +174,6 @@ public class DefaultGraphValidator implements GraphValidator {
 
 		def warnings = []
 
-		// global defs are consistent
-		assertGlobalDefsAreUnique(g, graphSchema)
-
 		// vertices, edges, and properties
 		warnings.addAll(checkModelVertices(g, graphSchema))
 		warnings.addAll(checkModelEdges(g, graphSchema))
@@ -170,12 +181,6 @@ public class DefaultGraphValidator implements GraphValidator {
 
 		log.trace "checkModel() total warnings: ${warnings.size()}"
 		return warnings
-	}
-
-
-	/** */
-	public void assertGlobalDefsAreUnique(GraphTraversalSource g, GraphSchema graphSchema) {
-		// each global def for a given label should be unique!!!
 	}
 
 
@@ -249,15 +254,12 @@ public class DefaultGraphValidator implements GraphValidator {
 		def modelsByLabel = modelsByLabel(allModels)
 		log.trace "modelsByLabel: $modelsByLabel"
 
-		Set<DefaultElementConstraint> dbElementConstraints = new HashSet<DefaultElementConstraint>()
+		Set<ElementConstraint> dbElementConstraints = new HashSet<ElementConstraint>()
 		traversal.each { e ->
 			def lbl = e.label()
 			def ns = e.property(Base.PX.NAME_SPACE.label).orElse(Base.GLOBAL_NAME_SPACE)
 			dbElementConstraints << new DefaultElementConstraint(label:lbl, nameSpace:ns)
 		}
-
-		//Set<DefaultElementConstraint> dbElementConstraints = new HashSet<DefaultElementConstraint>()
-		//dbElementConstraints.addAll(dbElementConstraintMap.values())
 		log.trace "dbElementConstraints: ${dbElementConstraints?.size()} ${dbElementConstraints?.take(100)}"
 
 		Set<String> unmodeledElements = new HashSet<String>()

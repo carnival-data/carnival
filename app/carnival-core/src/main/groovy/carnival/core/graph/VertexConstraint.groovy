@@ -42,6 +42,12 @@ class VertexConstraint implements ElementConstraint {
 	///////////////////////////////////////////////////////////////////////////
 	// STATIC
 	///////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Create a vertex constraint from a vertex definition
+	 * @param vdef The Vertex definition
+	 * @return A vertex constraint
+	 */
 	static public VertexConstraint create(VertexDefinition vdef) {
 		def propDefs = []
 		vdef.vertexProperties.each { PropertyDefinition pdef ->
@@ -67,27 +73,42 @@ class VertexConstraint implements ElementConstraint {
 	///////////////////////////////////////////////////////////////////////////
 	// FIELDS
 	///////////////////////////////////////////////////////////////////////////
+
+	/** The vertex label to which this constraint applies */
 	String label
+
+	/** The namespace to which this constraint applies */
 	String nameSpace
+
+	/**
+	 * The vertex definition specifying the parameters of the constraint.
+	 */
 	VertexDefinition vertexDef
+
+	/** List of allowed vertex properties */
 	List<VertexPropertyConstraint> properties
 
 
 	///////////////////////////////////////////////////////////////////////////
 	// METHODS
 	///////////////////////////////////////////////////////////////////////////
+
+	/** Returns true if this constraint should be applied globally */
 	boolean isGlobal() { 
 		nameSpace == null || vertexDef == null || vertexDef.isGlobal()
 	}
 
+	/** The list of properties that must have unique values */
 	List<String> getUniquePropertyKeys() {
 		return properties.findAll({it.unique})*.name
 	}
 
+	/** The list of properties that are required by this constraint */
 	List<String> getRequiredPropertyKeys() {
 		return properties.findAll({it.required})*.name
 	}
 
+	/** The list of properties that should be indexed by the graph database */
 	List<String> getIndexedPropertyKeys() {
 		return properties.findAll({it.index})*.name
 	}

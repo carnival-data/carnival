@@ -43,7 +43,8 @@ import carnival.core.Core
 
 
 /**
- *
+ * A persistence of a data set descriptor in a property graph.  This is
+ * experimental code and subject to rapid change. 
  *
  */
 class DataSetDescriptorGraph implements GremlinTrait {
@@ -466,6 +467,4 @@ class FeatureSetRecipeStepGraphTraversal implements DescribedEntity {
     FeatureSetRecipeIngredient hasOutput
 
 }
-
-
 

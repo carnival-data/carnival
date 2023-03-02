@@ -40,6 +40,12 @@ class EdgeConstraint implements ElementConstraint {
 	///////////////////////////////////////////////////////////////////////////
 	// STATIC
 	///////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Create an edge constraint from an edge definition.
+	 * @param edgeDef The edge definition
+	 * @return The edge constraint
+	 */
 	static public EdgeConstraint create(EdgeDefinition edgeDef) {
 		assert edgeDef
 		EdgeConstraint rd = new EdgeConstraint(
@@ -56,16 +62,28 @@ class EdgeConstraint implements ElementConstraint {
 	///////////////////////////////////////////////////////////////////////////
 	// FIELDS
 	///////////////////////////////////////////////////////////////////////////
+
+	/** The edge labels to which this constraint applies */
 	String label
+
+	/** The name space to which this constraint applies */
 	String nameSpace
+
+	/** The edge definition that defines the constraint parameters */ 
 	EdgeDefinition edgeDef
-	List<String> domainLabels // null indicates any allowed
-	List<String> rangeLabels // null indicates any allowed
+
+	/** The allowable in-vertex labels; null indicates any allowed */
+	List<String> domainLabels
+
+	/** The allowable out-vertex labels; null indicates any allowed */
+	List<String> rangeLabels
 
 
 	///////////////////////////////////////////////////////////////////////////
 	// METHODS
 	///////////////////////////////////////////////////////////////////////////
+
+	/** Returns true if this edge constraint should be applied globally */
 	boolean isGlobal() { 
 		nameSpace == null || edgeDef == null || edgeDef.isGlobal()
 	}

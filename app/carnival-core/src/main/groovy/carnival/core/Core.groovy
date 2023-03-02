@@ -34,7 +34,7 @@ class Core {
 	// in this file.
 	///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** Core vertex model. */
     @VertexModel
     static enum VX {
         APPLICATION (
@@ -101,7 +101,7 @@ class Core {
     }
 
 
-    /** */
+    /** Core edge model */
     @EdgeModel
     static enum EX {
     	IS_IDENTIFIED_BY,
@@ -140,7 +140,7 @@ class Core {
     }
 
 
-    /** */
+    /** Core property model */
     @PropertyModel
     static enum PX {
         NAME,

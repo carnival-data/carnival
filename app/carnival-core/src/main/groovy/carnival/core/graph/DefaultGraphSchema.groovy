@@ -38,10 +38,15 @@ class DefaultGraphSchema implements GraphSchema {
 	// CONSTRUCTOR
 	///////////////////////////////////////////////////////////////////////////
 
-	/** */
+	/** No argument constructor */
 	public DefaultGraphSchema() { }
 
-	/** */
+	/** 
+	 * Construct a DefaultGraphSchema with an initial list of vertex builders.
+	 * @param vertexBuilders A collection of vertex builders to include in the
+	 * graph schema.
+	 * @return A DefaultGraphSchema.
+	 */
 	public DefaultGraphSchema(Collection<VertexBuilder> vertexBuilders) {
 		assert vertexBuilders
 		assert vertexBuilders.size() > 0
@@ -53,10 +58,16 @@ class DefaultGraphSchema implements GraphSchema {
 	// SINGLETON VERTEX BUILDERS
 	///////////////////////////////////////////////////////////////////////////
 
-	/** */
+	/** 
+	 * A set of vertex builders expected to be used to create vertices in newly
+	 * created graphs.
+	 */
 	private Set<VertexBuilder> vertexBuilders = new HashSet<VertexBuilder>()
 
-	/** */
+	/**
+     * Getter for the set of vertex builders.
+	 * @return The set of graph builders.
+	 */
 	public Set<VertexBuilder> getVertexBuilders() {
 		return vertexBuilders
 	}
@@ -69,12 +80,17 @@ class DefaultGraphSchema implements GraphSchema {
 	/** vertex constraints */
 	private Set<VertexConstraint> vertexConstraints = new HashSet<VertexConstraint>()
 
-	/* get vertex constraints */
+	/** get the vertex constraints */
 	public Set<VertexConstraint> getVertexConstraints() {
 		return vertexConstraints
 	}
 
-	/** */
+	/** 
+	 * Returns true if the schema contains a vertex constraint based on the 
+	 * provided vertex definition.
+	 * @param vDef The vertex definition
+	 * @return True if the vertex constraint is found, false otherwise
+	 */
 	boolean containsConstraint(VertexDefinition vDef) {
 		vertexConstraints.find {
 			it.label == vDef.label && it.nameSpace == vDef.nameSpace

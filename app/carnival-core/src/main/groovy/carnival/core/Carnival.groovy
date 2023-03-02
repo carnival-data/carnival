@@ -37,6 +37,7 @@ import carnival.core.graph.GraphValidationError
 import carnival.core.graph.DefaultGraphValidator
 import carnival.core.graph.EdgeConstraint
 import carnival.core.graph.VertexConstraint
+import carnival.core.util.DuplicateModelException
 
 
 
@@ -45,10 +46,8 @@ import carnival.core.graph.VertexConstraint
 /**
  * The Carnival object.
  *
- * A Carnival is comprosed of three main components:
- *    - a Gremlin graph
- *    - a graph schema
- *    - a graph validator
+ * A Carnival is comprosed of three main components: a Gremlin graph, a graph 
+ * schema, and a graph validator.
  *
  */
 @Slf4j
@@ -58,7 +57,23 @@ abstract class Carnival implements GremlinTrait {
 	// UTILITY
 	///////////////////////////////////////////////////////////////////////////
 
-	/** */
+	/** 
+	 * Utility method to run a closure in the context of a fresh transaction
+	 * that will be comitted and closed upon successful termination of the
+	 * closure. 
+	 * If there is a prior open transaction, it will be closed, but not 
+	 * committed.
+	 * If the closure accepts no arguments, it will be called without 
+	 * arguments.
+	 * If the closure accepts one argument, it will be called with the 
+	 * transaction object as the argument.
+	 * If the closure accepts any other number of arguments, a runtime
+	 * exception will be thrown.
+	 * Note that if the gremlin graph does not support transactions, then an
+	 * error will be thrown.
+	 * @param graph The gremlin graph.
+	 * @param cl The closure to execute.
+	 */
 	static public void withTransaction(Graph graph, Closure cl) {
 		def tx = graph.tx()
 		if (tx.isOpen()) tx.close()
@@ -71,6 +86,8 @@ abstract class Carnival implements GremlinTrait {
 				cl()
 			} else if (maxClosureParams == 1) {
 				cl(tx)
+			} else {
+				throw new RuntimeException("withTransaction closure must accept zero or one arguments")
 			}
 		} finally {
 			tx.commit()
@@ -79,7 +96,23 @@ abstract class Carnival implements GremlinTrait {
 	}
 
 
-	/** */
+	/** 
+	 * Utility method to run a closure in the context of a fresh transaction
+	 * that will be comitted and closed upon successful termination of the
+	 * closure IF the gremlin graph supports transactions. 
+	 * If the gremlin graph supports transactions and there is a prior open
+	 * transaction, it will be closed, but not committed.
+	 * If the gremlin graph does not support transactions, then the closure 
+	 * will be called with no parameters.
+	 * If the gremlin graph supports transactions and the closure accepts no 
+	 * arguments, it will be called without arguments.
+	 * If the gremlin graph supports transactions and the closure accepts one 
+	 * argument, it will be called with the transaction object as the argument.
+	 * If the closure accepts any other number of arguments, a runtime
+	 * exception will be thrown.
+	 * @param graph The gremlin graph.
+	 * @param cl The closure to execute.
+	 */	
 	static public void withTransactionIfSupported(Graph graph, Closure cl) {
 		def transactionsAreSupported = graph.features().graph().supportsTransactions()
 		log.trace "transactionsAreSupported:${transactionsAreSupported}"
@@ -99,27 +132,14 @@ abstract class Carnival implements GremlinTrait {
 			} else if (maxClosureParams == 1) {
 				if (transactionsAreSupported) cl(tx)
 				else cl()
+			} else {
+				throw new RuntimeException("withTransactionIfSupported closure must accept zero or one arguments")
 			}
 		} finally {
 			if (transactionsAreSupported) {
 				tx.commit()
 				tx.close()
 			}
-		}
-	}
-
-
-	/** */
-	static protected void combine(EdgeConstraint relDef, EdgeDefinition edgeDef) {
-		assert relDef
-		assert edgeDef
-
-		edgeDef.domainLabels.each { dl ->
-			if (!relDef.domainLabels.contains(dl)) relDef.domainLabels << dl
-		}
-
-		edgeDef.rangeLabels.each { rl ->
-			if (!relDef.rangeLabels.contains(rl)) relDef.rangeLabels << rl
 		}
 	}
 
@@ -132,11 +152,17 @@ abstract class Carnival implements GremlinTrait {
 	/** A gremlin Graph object is added by GremlinTrait. */
 	//Graph graph
 
-	/** */
+	/** The graph schema of this Carnival */
 	GraphSchema graphSchema
 
-	/** */
+	/** The graph validator of this Carnival */
 	GraphValidator graphValidator
+
+	/** 
+	 * If true, if duplicate models are added, ignore the duplicates.  If
+	 * false, if duplicate models are added, throw an exception
+	 */
+	boolean ignoreDuplicateModels = false
 
 
 
@@ -144,7 +170,13 @@ abstract class Carnival implements GremlinTrait {
 	// CONSTRUCTOR
 	///////////////////////////////////////////////////////////////////////////
 
-	/** */
+	/** 
+	 * Create a Carnival from a gremlin graph, a graph schema, and a graph 
+	 * validator.
+	 * @param graph A gremlin graph.
+	 * @param graphSchema A graph schema
+	 * @param graphValidator A graph validator
+	 */
 	protected Carnival(Graph graph, GraphSchema graphSchema, GraphValidator graphValidator) {
 		assert graph
 		assert graphSchema
@@ -160,7 +192,11 @@ abstract class Carnival implements GremlinTrait {
 	// INITIALIZATION
 	///////////////////////////////////////////////////////////////////////////
 
-	/** */
+	/** 
+	 * Initialize a gremlin graph with the core Carnival graph model.
+	 * @param graph The gremlin graph to initialize
+	 * @param g A graph traversal source to use during initialization.
+	 */
 	public void initialize(Graph graph, GraphTraversalSource g) {
 		log.info "Carnival initialize graph:$graph g:$g"
 		[Base.EX, Core.EX, Core.VX].each {
@@ -174,7 +210,13 @@ abstract class Carnival implements GremlinTrait {
 	// GRAPH MODEL - PACKAGES
 	///////////////////////////////////////////////////////////////////////////
 
-	/** */
+	/** 
+	 * Add graph models from a package of the given name via package 
+	 * introspection.
+	 * @param graph The gremlin graph to add models.
+	 * @param g A graph traversal source to use.
+	 * @packageName The name of the package in which to search for models.
+	 */
 	public void addModelsFromPackage(Graph graph, GraphTraversalSource g, String packageName) {
 		log.info "Carnival addModelsFromPackage graph:$graph g:$g packageName:$packageName"
 		addVertexModelsFromPackage(graph, g, packageName)
@@ -182,7 +224,12 @@ abstract class Carnival implements GremlinTrait {
 	}
 
 
-	/** */
+	/** 
+	 * Add vertex models from a package of the given name.
+	 * @param graph The gremlin graph to add models.
+	 * @param g A graph traversal source to use.
+	 * @packageName The name of the package in which to search for models.
+	 */
     public void addVertexModelsFromPackage(Graph graph, GraphTraversalSource g, String packageName) {
 		log.info "Carnival addVertexModelsFromPackage graph:$graph g:$g packageName:$packageName"
 		
@@ -201,7 +248,12 @@ abstract class Carnival implements GremlinTrait {
     }
 
 
-    /** */
+    /** 
+	 * Find vertex constraints in the package with the given name that are not
+	 * already part of the graph schema.
+	 * @param packageName The name of the package to search.
+	 * @return A collection of zero or more vertex constraints.
+	 */
     public Collection<VertexConstraint> findNewVertexConstraints(String packageName) {
 		log.info "Carnival findNewVertexConstraints packageName:$packageName"
 		assert packageName
@@ -213,7 +265,11 @@ abstract class Carnival implements GremlinTrait {
 	}
 
 
-    /** */
+    /** 
+	 * Find all vertex definition classes in the package with the given name.
+	 * @param packageName The name of the package to search.
+	 * @return A set of vertex definition classes.
+	 */
     public Set<Class<VertexDefinition>> findVertexDefClases(String packageName) {
     	// find all vertex defs
     	Reflections reflections = new Reflections(packageName)
@@ -228,7 +284,13 @@ abstract class Carnival implements GremlinTrait {
     }
 
 
-	/** */
+	/** 
+	 * Add edge models to the provided gremlin graph from the package named per
+	 * the provided name.
+	 * @param graph A gremlin graph.
+	 * @param g A graph traversal source to use.
+	 * @param packageName The name of the package in which to search.
+	 */
     public void addEdgeModelsFromPackage(Graph graph, GraphTraversalSource g, String packageName) {
 		assert graph
 		assert g
@@ -241,7 +303,12 @@ abstract class Carnival implements GremlinTrait {
     }	
 
 
-    /** */
+    /** 
+	 * Find edge constraints in the package named per the provided name that do
+	 * not already exist in the graph schema.
+	 * @param packageName The name of the package in which to search.
+	 * @return A collection of edge constraints.
+	 */
     public Collection<EdgeConstraint> findNewEdgeConstraints(String packageName) {
 		log.info "Carnival findNewEdgeConstraints packageName:$packageName"
 		assert packageName
@@ -253,7 +320,11 @@ abstract class Carnival implements GremlinTrait {
 	}
 
 
-	/** */
+	/** 
+	 * Find edge definition classes in the package named per the provided name.
+	 * @param packageName The name of the package in which to search.
+	 * @return A set of edge definition classes.
+	 */
     public Set<Class<EdgeDefinition>> findEdgeDefClases(String packageName) {
     	// find all vertex defs
     	Reflections reflections = new Reflections(packageName)
@@ -272,7 +343,10 @@ abstract class Carnival implements GremlinTrait {
 	// GRAPH MODEL - CLASSES
 	///////////////////////////////////////////////////////////////////////////
 
-	/** */
+	/** 
+	 * Add the model defined in the given class to this Carnival.
+	 * @param defClass The element definition class.
+	 */
 	public void addModel(Class<ElementDefinition> defClass) {
 		assert defClass
 		withGremlin { graph, g ->
@@ -281,8 +355,13 @@ abstract class Carnival implements GremlinTrait {
 	}
 
 	/**
-	 * Add a model.
-	 *
+	 * Add a model defined in the given class to this Carnival using the
+	 * provided graph and graph traversal source.  This is an internal method;
+	 * it is expected that client code will use addModel(Class) to add models.
+	 * @see addModel(Class<ElementDefinition>)
+	 * @param graph A gremlin graph.
+	 * @param g A grpah traversal source to use.
+	 * @param defClass The element definition class.
 	 */
 	public void addModel(Graph graph, GraphTraversalSource g, Class<ElementDefinition> defClass) {
 		assert graph
@@ -297,6 +376,16 @@ abstract class Carnival implements GremlinTrait {
 	}
 
 
+	/**
+	 * Add a vertex model defined in the given vertex definition class to this
+	 * Carnival using the provided graph and graph traversal source.  This is
+	 * an internal method; it is expected that client code will use
+	 * addModel(Class) to add models.
+	 * @see addModel(Class<ElementDefinition>)
+	 * @param defClass The vertex definition class.
+	 * @param graph A gremlin graph.
+	 * @param g A graph traversal source to use.
+	 */
 	public void addVertexModel(Graph graph, GraphTraversalSource g, Class<VertexDefinition> defClass) {
 		assert graph
 		assert g
@@ -312,6 +401,14 @@ abstract class Carnival implements GremlinTrait {
 	}
 
 
+	/**
+	 * Add the edge models in the provided edge definition class to this
+	 * Carnival using the provided graph and graph traversal source. This is an
+	 * internal method and not expected to be called by client code.
+	 * @param graph A gremlin graph.
+	 * @param g A graph traversal source.
+	 * @param defClass An edge definition class.
+	 */
 	public void addEdgeModel(Graph graph, GraphTraversalSource g, Class<EdgeDefinition> defClass) {
 		assert graph
 		assert g
@@ -323,75 +420,27 @@ abstract class Carnival implements GremlinTrait {
 		}
 	}
 
-	/*public void addConstraints(Graph graph, GraphTraversalSource g, Class defClass) {
-		assert graph
-		assert g
-		assert defClass
-
-		def defInterfaces = defClass.getInterfaces()
-		if (defInterfaces.contains(VertexDefinition)) addVertexConstraints(graph, g, defClass)
-		else if (defInterfaces.contains(EdgeDefinition)) addEdgeConstraints(graph, g, defClass)
-		else throw new RuntimeException("unrecognized definition class: $defClass")
-	}
-
-	public void addConstraints(Class defClass) {
-		assert defClass
-		withGremlin { graph, g ->
-			addConstraints(graph, g, defClass)
-		}
-	}
-
-	public void addVertexConstraints(Graph graph, GraphTraversalSource g, Class<VertexDefinition> vdc) {
-		Set<VertexConstraint> existingDefinitions = graphSchema.getVertexConstraints()
-		vdc.values().each { VertexDefinition vdef ->
-			def found = existingDefinitions.find {
-				it.label == vdef.label && it.nameSpace == vdef.nameSpace
-			}
-			if (!found) {
-				def vld = VertexConstraint.create(vdef)
-				addConstraint(graph, g, vld)
-			}
-		}
-	}
-
-	public void addEdgeConstraints(Class<EdgeDefinition> edc) {
-		Set<EdgeConstraint> existingDefinitions = graphSchema.getEdgeConstraints()
-		edc.values().each { EdgeDefinition edef ->
-			def found = existingDefinitions.find {
-				it.label == edef.label && it.nameSpace == edef.nameSpace
-			}
-			if (!found) {
-				def edgeConst = EdgeConstraint.create(edef)
-				addConstraint(edgeConst)
-			}
-		}
-	}
-
-	public void addVertexModel(Graph graph, GraphTraversalSource g, Class modelClass) {
-		assert graph
-		assert g
-		assert defClass
-
-		Set<VertexConstraint> newConstraints = findNewVertexConstraints(modelClass)
-	}
-
-	public void addVertexModel(Class modelClass) {
-	}*/
-
-
 
 	///////////////////////////////////////////////////////////////////////////
 	// GRAPH CONSTRAINTS - VERTEX
 	///////////////////////////////////////////////////////////////////////////
 
-	/** */
+	/** 
+	 * Add the provided vertex constraint to this Carnival.
+	 * @param vertexConstraint The Vertex constraint to add.
+	 */
 	public void addConstraint(VertexConstraint vertexConstraint) {
 		log.trace "addConstraint vertexConstraint: ${vertexConstraint.label} $vertexConstraint"
 		graphSchema.vertexConstraints << vertexConstraint
 	}
 
 
-    /** */
+    /** 
+	 * Find vertex constraints in the given set of vertex definition classes
+	 * that do not already exist in this Carnival.
+	 * @param vertexDefClasses A set of vertex definition classes.
+	 * @return A set of vertex constraints.
+	 */
     public Collection<VertexConstraint> findNewVertexConstraints(Set<Class<VertexDefinition>> vertexDefClasses) {
 		Set<VertexConstraint> allNewConstraints = new HashSet<VertexConstraint>()
 		vertexDefClasses.each { vdc ->
@@ -402,7 +451,12 @@ abstract class Carnival implements GremlinTrait {
 	}
 
 
-    /** */
+    /** 
+	 * Find vertex constraints in the provided vertex definition class that do
+	 * not already exist in this Carnival.
+	 * @param vertexDefClass The vertex definition class.
+	 * @return A collection of vertex constraints.
+	 */
     public Collection<VertexConstraint> findNewVertexConstraints(Class<VertexDefinition> vertexDefClass) {
 		assert vertexDefClass
     	
@@ -412,14 +466,25 @@ abstract class Carnival implements GremlinTrait {
 		toVertexConstraints(vertexDefClass).each { vc ->
 			log.trace "findNewVertexConstraints vc: $vc"
 			def exists = existsInGraphSchema(vc)
-			if (!exists) newConstraints.add(vc)
+			if (!exists) {
+				log.trace "new vertex constraint: ${vc}"
+				newConstraints.add(vc)
+			}
+			if (exists && !ignoreDuplicateModels) throw new DuplicateModelException(
+				"vertex constraint already exists: ${vc}"
+			)
 		}
 
         return newConstraints
     }
 
 
-	/** */
+	/** 
+	 * Return true if the provided vertex constraint exists in the graph 
+	 * schema.
+	 * @param vc The vertex constraint
+	 * @return True if the vertex constraint exists
+	 */
 	boolean existsInGraphSchema(VertexConstraint vc) {
 		graphSchema.vertexConstraints.find {
 			it.label == vc.label && it.nameSpace == vc.nameSpace
@@ -427,7 +492,12 @@ abstract class Carnival implements GremlinTrait {
 	}
 
 
-    /** */
+    /** 
+	 * Scan the vertex definition class for vertex constraint definitions, 
+	 * return them in a collection.
+	 * @param vertexDefClass The vertex definition class to scan.
+	 * @return A collection of vertex constraints.
+	 */
     public Collection<VertexConstraint> toVertexConstraints(Class<VertexDefinition> vertexDefClass) {
 		assert vertexDefClass
 
@@ -448,6 +518,10 @@ abstract class Carnival implements GremlinTrait {
 	// GRAPH CONSTRAINTS - EDGES
 	///////////////////////////////////////////////////////////////////////////
 
+	/**
+	 * Add the provided edge constraint to this carnival.
+	 * @param edgeConst The edge constraint to add.
+	 */
 	public void addConstraint(EdgeConstraint edgeConst) {
 		log.trace "addConstraint edgeConst: ${edgeConst.label} $edgeConst"
 
@@ -456,6 +530,12 @@ abstract class Carnival implements GremlinTrait {
 	}
 
 
+	/**
+	 * Find edge constraints in an edge definition class that are not already
+	 * present in this Carnival.
+	 * @param edgeDefClass The edge definition class.
+	 * @return A collection of edge constraints.
+	 */
 	public Collection<EdgeConstraint> findNewEdgeConstraints(Class<EdgeDefinition> edgeDefClass) {
 		assert edgeDefClass
 		Set<Class<EdgeDefinition>> edcs = new HashSet<Class<EdgeDefinition>>()
@@ -464,12 +544,16 @@ abstract class Carnival implements GremlinTrait {
 	}
 
 
-	/** */
+	/** 
+	 * Find edge constraints in a provided set of edge definition classes that
+	 * are not already present in this Carnival.
+	 * @param edgeDefClasses A set of edge definition classes.
+	 * @return A collection of edge constraints.
+	 */
     public Collection<EdgeConstraint> findNewEdgeConstraints(Set<Class<EdgeDefinition>> edgeDefClasses) {
 		assert edgeDefClasses
     	
-		Set<EdgeConstraint> existingDefinitions = graphSchema.getEdgeConstraints()
-		Set<EdgeConstraint> newDefinitions = new HashSet<EdgeConstraint>()
+		Set<EdgeConstraint> newConstraints = new HashSet<EdgeConstraint>()
 
         edgeDefClasses.each { Class edc ->
         	log.trace "findNewEdgeConstraints edc: $edc"
@@ -477,22 +561,33 @@ abstract class Carnival implements GremlinTrait {
             edc.values().each { EdgeDefinition edef ->
             	log.trace "findNewEdgeConstraints edef: $edef"
 
-            	// check if already defined
-            	def found = existingDefinitions.find {
-            		it.label == edef.label && it.nameSpace == edef.nameSpace
-            	}
-            	if (!found) {
-					def relDef = EdgeConstraint.create(edef)
-					log.trace "found new relationship definition ${relDef.label} ${relDef}"
-	            	newDefinitions.add(relDef)
-            	}
+				EdgeConstraint ec = EdgeConstraint.create(edef)
+				def exists = existsInGraphSchema(ec)
+				if (!exists) {
+					log.trace "new edge constraint ${ec.label} ${ec}"
+					newConstraints.add(ec)
+				}
+				if (exists && !ignoreDuplicateModels) throw new DuplicateModelException(
+					"edge constraint already exists: ${ec}"
+				)
             }
         }
 
-        return newDefinitions
+        return newConstraints
     }
 
     
+	/** 
+	 * Return true if the provided edge constraint exists in the graph 
+	 * schema.
+	 * @param vc The edge constraint
+	 * @return True if the edge constraint exists
+	 */
+	boolean existsInGraphSchema(EdgeConstraint ec) {
+		graphSchema.edgeConstraints.find {
+			it.label == ec.label && it.nameSpace == ec.nameSpace
+		}
+	}
     
 
 
@@ -501,14 +596,12 @@ abstract class Carnival implements GremlinTrait {
 	// VERTEX INSTANCES
 	///////////////////////////////////////////////////////////////////////////
 
-	public List<Vertex> addGraphSchemaVertices() {
-		
-	}
-
 	/** 
 	 * If the graph schema contains vertex builders that should be used to
 	 * create initial vertices in a graph, create the vertices from them.
-	 *
+	 * @param graph The graph to add vertices to.
+	 * @param g A graph traversal to use.
+	 * @return A list of added vertices.
 	 */
 	public List<Vertex> addGraphSchemaVertices(Graph graph, GraphTraversalSource g) {
 		log.trace "addGraphSchemaVertices vertexBuilders:${graphSchema.vertexBuilders}"
@@ -527,7 +620,13 @@ abstract class Carnival implements GremlinTrait {
 	}
 
 
-	/** */
+	/** 
+	 * Look in the set of vertex constraints for those that define classes;
+	 * add a verte in the graph to represent each of them.
+	 * @param vcs A set of vertex constraints.
+	 * @param graph A gremlin graph to which to add vertices.
+	 * @param g A graph traversal to use.
+	 */
 	public void addClassVertices(Graph graph, GraphTraversalSource g, Set<VertexConstraint> vcs) {
 		withTransactionIfSupported(graph) {
 	        vcs.each { vc ->
@@ -543,7 +642,9 @@ abstract class Carnival implements GremlinTrait {
 	/** 
 	 * Create the singleton vertex for a vertex constraint for a vertex definition if
 	 * it represents a class and has no required properties.
-	 *
+	 * @param vertexConstraint The vertex constraint representint a class.
+	 * @param graph The gremlin graph to use.
+	 * @param g The graph traversal to use.
 	 */
 	public void createClassVertex(Graph graph, GraphTraversalSource g, VertexConstraint vertexConstraint) {
 		log.trace "createClassVertex vertexConstraint: ${vertexConstraint.label} $vertexConstraint"
@@ -568,7 +669,13 @@ abstract class Carnival implements GremlinTrait {
 	}
 
 
-	/** */
+	/** 
+	 * Connect the class vertex which represents the provided vertex constraint
+	 * to a superclass vertex if it exists.
+	 * @param vertexConstraint The vertex constraint.
+	 * @param graph A gremlin graph to use.
+	 * @param g A graph traversal source to use.
+	 */
 	public void connectClassVertices(Graph graph, GraphTraversalSource g, VertexConstraint vertexConstraint) {
 		def vdef = vertexConstraint.vertexDef
 
@@ -587,7 +694,11 @@ abstract class Carnival implements GremlinTrait {
 	// GRAPH VALIDATION
 	///////////////////////////////////////////////////////////////////////////
 
-	/** */
+	/** 
+	 * Check that the gremlin graph of this carnival obeys all graph
+	 * graph constraints.
+	 * @return A list of graph validation errors.
+	 */
 	public List<GraphValidationError> checkConstraints() {
 		def g = graph.traversal()
 		def res
@@ -600,7 +711,11 @@ abstract class Carnival implements GremlinTrait {
 	}
 
 
-	/** */
+	/** 
+	 * Check that the vertices and edges in the gremlin graph obey all
+	 * specified models.
+	 * @return A collection of model violation descriptions.
+	 */
 	public Collection<String> checkModel() {
 		def g = graph.traversal()
 		def res
@@ -613,13 +728,29 @@ abstract class Carnival implements GremlinTrait {
 	}
 
 
-	/** */
+	/** 
+	 * Return a graph traversal source that can be used with this carnival.
+	 * @return A grpah traversal souece.
+	 */
 	public GraphTraversalSource traversal() {
 		return graph.traversal()
 	}
 
 
-	/** */
+	/** 
+	 * Run the provided closure in the context of a transaction of this
+	 * carnival.
+	 * If the closure accepts no arguments, it will be called with none.
+	 * If the closure accepts one argument, it will be called with the
+	 * transaction as the only parameter.
+	 * If the closure accepts two arguments, it will be called with the
+	 * transaction as the first parameter and a graph traversal source as the
+	 * second.
+	 * If the closure accepts more than two arguments, it will be called with
+	 * the transaction as the first parameter, the graph traversal source as
+	 * as the second, and the gremlin graph as the third.
+	 * @param The closure to execute.
+	 */
 	public void withTransaction(Closure cl) {
 		def tx = graph.tx()
 		if (tx.isOpen()) tx.close()

@@ -18,62 +18,71 @@ import carnival.core.Core
 
 
 
+class DefaultGraphValidatorSpecModels {
+
+    @VertexModel
+    static enum VX4 {
+        GGV_WTF(global:true)
+    }
+
+}
+
+
 /**
  * gradle test --tests "carnival.core.graph.DefaultGraphValidatorSpec"
  *
  */
 class DefaultGraphValidatorSpec extends Specification {
 
-    static enum VX1 implements VertexDefinition {
+    @VertexModel
+    static enum VX1 {
         GGV_THING,
         GGV_ANOTHER_THING,
         GGV_SUITCASE,
         GGV_SALESMAN
     }
 
-    static enum VX2 implements VertexDefinition {
-        GGV_THING(vertexProperties:[Core.PX.NAME.withConstraints(required:true, unique:true)])
-
-        private VX2() {}
-        private VX2(Map m) {m.each { k,v -> this."$k" = v } }
+    @VertexModel
+    static enum VX2 {
+        GGV_THING(
+            vertexProperties:[
+                Core.PX.NAME.withConstraints(required:true, unique:true)
+            ]
+        )
     }
 
-    static enum VX3 implements VertexDefinition {
+    @VertexModel
+    static enum VX3 {
         GGV_ANOTHER_THING(
             global:true,
             vertexProperties:[Core.PX.NAME.withConstraints(required:true, unique:true)]
         )
-
-        private VX3() {}
-        private VX3(Map m) {m.each { k,v -> this."$k" = v } }
     }
 
-    static enum EX1 implements EdgeDefinition {
+    @EdgeModel
+    static enum EX1 {
         GGV_RELATION
     }
 
-    static enum EX2 implements EdgeDefinition {
+    @EdgeModel
+    static enum EX2 {
         GGV_RELATION(
             domain: [VX1.GGV_THING], 
             range: [VX1.GGV_ANOTHER_THING]
         )
-
-        private EX2() {}
-        private EX2(Map m) {m.each { k,v -> this."$k" = v } }
     }
 
-    static enum EX3 implements EdgeDefinition {
+    @EdgeModel
+    static enum EX3 {
         GGV_GLOBAL_RELATION(
             global:true,
             domain: [VX1.GGV_THING], 
             range: [VX3.GGV_ANOTHER_THING]
         )
-
-        private EX3() {}
-        private EX3(Map m) {m.each { k,v -> this."$k" = v } }
     }
 
-    static enum EX4 implements EdgeDefinition {
+    @EdgeModel
+    static enum EX4 {
         GGV_GLOBAL_RELATION
     }
 
@@ -82,7 +91,7 @@ class DefaultGraphValidatorSpec extends Specification {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
     
-    @Shared coreGraph
+    @Shared carnival
     @Shared graph
     @Shared graphValidator
     @Shared g
@@ -95,17 +104,17 @@ class DefaultGraphValidatorSpec extends Specification {
     
 
     def setup() { 
-        coreGraph = CarnivalTinker.create()
-        [VX1, VX2, VX3, EX1, EX2, EX3, EX4].each { coreGraph.addModel(it) }
-        graph = coreGraph.graph
-        graphSchema = coreGraph.graphSchema
+        carnival = CarnivalTinker.create()
+        [VX1, VX2, VX3, EX1, EX2, EX3, EX4].each { carnival.addModel(it) }
+        graph = carnival.graph
+        graphSchema = carnival.graphSchema
         graphValidator = new DefaultGraphValidator()
         g = graph.traversal()
     }
 
     def cleanup() {
         if (g) g.close()
-        if (coreGraph) coreGraph.close()
+        if (carnival) carnival.close()
     }
 
 
@@ -114,6 +123,7 @@ class DefaultGraphValidatorSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
+    
     def "test package is modelled on demand overload"() {
         def thing, anotherThing, suitcase
 
@@ -122,7 +132,7 @@ class DefaultGraphValidatorSpec extends Specification {
         graphValidator.checkConstraints(g, graphSchema).size() == 0
 
         when:
-        coreGraph.addModelsFromPackage(graph, g, 'test')
+        carnival.addModelsFromPackage(graph, g, 'test')
         TestModel.VX.APPLICATION.instance().withProperty(Core.PX.NAME, 'TestApp').vertex(graph, g)
 
         then:
@@ -155,7 +165,7 @@ class DefaultGraphValidatorSpec extends Specification {
         graphValidator.checkConstraints(g, graphSchema).size() == 0
 
         when:
-        coreGraph.addModelsFromPackage(graph, g, 'test')
+        carnival.addModelsFromPackage(graph, g, 'test')
         TestModel.VX.TEST_THING.instance().withProperty(Core.PX.NAME, 'TestThingName').vertex(graph, g)
 
         then:
@@ -315,7 +325,7 @@ class DefaultGraphValidatorSpec extends Specification {
         def suitcase, salesman, id, idClass
 
         expect:
-        coreGraph.checkModel().size() == 0
+        carnival.checkModel().size() == 0
 
         when:
         id = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, '123').vertex(graph, g)
@@ -328,22 +338,22 @@ class DefaultGraphValidatorSpec extends Specification {
 
         then:
         CarnivalUtils.printGraph(g)
-        coreGraph.checkModel().size() == 0
+        carnival.checkModel().size() == 0
 
         when:
         suitcase = graph.addVertex(T.label, "Suitcase")
         salesman = graph.addVertex(T.label, "Salesman")
 
         then:
-        coreGraph.checkModel().size() == 1
-        println coreGraph.checkModel()
+        carnival.checkModel().size() == 1
+        println carnival.checkModel()
 
         when:
         suitcase.addEdge("belongs_to", salesman)
 
         then:
-        coreGraph.checkModel().size() == 2
-        println coreGraph.checkModel()
+        carnival.checkModel().size() == 2
+        println carnival.checkModel()
     }
 
 

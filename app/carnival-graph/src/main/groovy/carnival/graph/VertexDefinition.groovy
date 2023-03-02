@@ -36,10 +36,10 @@ trait VertexDefinition extends ElementDefinition {
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** The default suffix for vertex labels representing classes */
     public static final String CLASS_SUFFIX = '_class'
 
-    /** */
+    /** The default separator for components of a name */
     public static final String NAME_SEPARATOR = '_'
 
 

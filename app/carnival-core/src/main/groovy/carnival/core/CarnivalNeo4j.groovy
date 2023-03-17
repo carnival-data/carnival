@@ -14,6 +14,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import org.apache.commons.configuration.PropertiesConfiguration
+import org.apache.commons.io.FileUtils
 
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
@@ -49,7 +50,12 @@ class CarnivalNeo4j extends Carnival {
 
 
     /** 
-	 * Create a CarnivalNeo4j object.
+	 * Create a CarnivalNeo4j object using the default configuration modified
+	 * by any provided arguments.
+	 * @param args A map of arguments
+	 * @param args.vertexBuilders A collection of vertex builders that will be
+	 * used to create the initial set of vertices in the graph.
+	 * @return A started CarnivalNeo4j object
 	 */
     public static CarnivalNeo4j create(Map args = [:]) {
 		CarnivalNeo4jConfiguration defaultConfig = CarnivalNeo4jConfiguration.defaultConfiguration()
@@ -57,7 +63,13 @@ class CarnivalNeo4j extends Carnival {
 	}
 
 
-    /** */
+    /** 
+	 * Create a CarnivalNeo4j object using the provided configuration and arguments.
+	 * @param args A map of arguments
+	 * @param args.vertexBuilders A collection of vertex builders that will be
+	 * @param config A configuration object
+	 * @return A started CarnivalNeo4j object
+	 */
     public static CarnivalNeo4j create(CarnivalNeo4jConfiguration config, Map args = [:]) {
 		// initialize the directory structure
 		initializeFiles(config)
@@ -91,7 +103,13 @@ class CarnivalNeo4j extends Carnival {
     }
 
 
-	/** */
+	/** 
+	 * Convert a CarnivalNeo4jConfiguration to a PropertiesConfiguration 
+	 * object.
+	 * @param config The source CarnivalNeo4jConfiguration
+	 * @return A PropertiesConfiguration object with values based on the 
+	 * provided CarnivalNeo4jConfiguration
+	 */
 	public static PropertiesConfiguration neo4jConfig(CarnivalNeo4jConfiguration config) {
    		def nconf = new PropertiesConfiguration()
    		nconf.setProperty('gremlin.neo4j.directory', config.gremlin.neo4j.directory)
@@ -121,7 +139,11 @@ class CarnivalNeo4j extends Carnival {
 	}
 
 
-	/** */
+	/** 
+	 * Open a Neo4jGraph using the provided configuration.
+	 * @param config A configuration object
+	 * @return An opened Neo4jGraph
+	 */
 	public static Graph openGremlinGraph(CarnivalNeo4jConfiguration config) {
 		log.trace "openGremlinGraph() creating or loading graph in ${config}"
 
@@ -141,8 +163,11 @@ class CarnivalNeo4j extends Carnival {
 
 
 	/**
-	 * Initialize directory structure.
-	 *
+	 * Initialize directory structure required to open a Neo4jgraph using the
+	 * provided configuration.  The graph path is verified.  If the config
+	 * directoryCreateIfNotPresent is set to true, the graph path will be
+	 * created if not already present.
+	 * @param config The configuration to use
 	 */
 	public static void initializeFiles(CarnivalNeo4jConfiguration config) {
         Path graphPath = Paths.get(config.gremlin.neo4j.directory)
@@ -182,6 +207,7 @@ class CarnivalNeo4j extends Carnival {
 	// FIELDS
 	///////////////////////////////////////////////////////////////////////////
 
+	/** The configuration of this object */
 	CarnivalNeo4jConfiguration config
 
 
@@ -190,15 +216,22 @@ class CarnivalNeo4j extends Carnival {
 	// NEO4J
 	///////////////////////////////////////////////////////////////////////////
 
-	/** */
+	/** 
+	 * Initialise the directory structure of this Neo4j Carnival using the
+	 * the configuration of this object.
+	 * @see #initializeFiles(CarnivalNeo4jConfiguration)
+	 */
 	public void initializeFiles() {
 		assert this.config
 		initializeFiles(this.config)
 	}
 
+
 	/**
-	 * Set property uniqueness constraints.
-	 *
+	 * Apply the property uniqueness constraints contained in the graph schema 
+	 * using the provided graph and graph traversal source.
+	 * @param graph The target gremlin graph
+	 * @param g The graph traversal source to use
 	 */
 	public void neo4jConstraints(Graph graph, GraphTraversalSource g) {
 		log.trace "CarnivalNeo4j neo4jConstraints"
@@ -216,10 +249,11 @@ class CarnivalNeo4j extends Carnival {
 	}
 
 
-
 	/**
-	 * Set indexes.
-	 *
+	 * Create the graph indexes specified in the graph schema using the
+	 * provided graph and graph traversal source.
+	 * @param graph The target gremlin graph
+	 * @param g The graph traversal source to use
 	 */
 	public void createIndexes(Graph graph, GraphTraversalSource g) {
 		log.trace "CarnivalNeo4j createIndexes"
@@ -236,27 +270,23 @@ class CarnivalNeo4j extends Carnival {
 	}
 
 
-	/** */
-	public String graphPath() {
+	/** 
+	 * Return the configured graph path as a Path using Paths.get.
+	 * @return A Path representation of the configured graph path.
+	 */
+	public Path graphPath() {
 		assert this.config
 		Paths.get(config.gremlin.neo4j.directory)
 	}
-
-
-	/** */
-	public String graphPathString() {
-		Path dirPath = graphPath()
-		String dirPathString = dirPath.toAbsolutePath().toString()
-		return dirPathString
-	}
-
 
 
     ///////////////////////////////////////////////////////////////////////////
     // LIFE-CYCLE
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+	 * Convenience method to close the underlying Neo4j graph.
+	 */
     public void close() {
         graph.close()
     }
@@ -266,7 +296,12 @@ class CarnivalNeo4j extends Carnival {
 	// GRAPH DIRECTORY OPERATIONS
 	///////////////////////////////////////////////////////////////////////////
 
-	/** */
+	/** 
+	 * Return the graph directory from the provided configuration object as a 
+	 * File object using Paths.get.
+	 * @param @config The source configuration
+	 * @return The graph directory as a File object
+	 */
 	public static File graphDir(CarnivalNeo4jConfiguration config) {
 		def graphPath = Paths.get(config.gremlin.neo4j.directory)
 		File graphDir = graphPath.toFile()
@@ -274,7 +309,15 @@ class CarnivalNeo4j extends Carnival {
 	}
 
 
-	/** */
+	/** 
+	 * Search for a directory named as the provided dirName that resides in the
+	 * same parent directory as the graph directory as per the provided
+	 * configuration.  The sister directory is asserted to exist and be a 
+	 * directory.
+	 * @param dirName The name of the directory to find
+	 * @param config. The Carnival configuration
+	 * @return The sister directory as a File object
+	 */
 	public static File sisterDir(CarnivalNeo4jConfiguration config, String dirName) {
 		assert dirName
 		File graphDir = graphDir(config)
@@ -288,16 +331,29 @@ class CarnivalNeo4j extends Carnival {
 	}
 
 
-	/** */
+	/** 
+	 * Clear the graph directory of the provided configuration.
+	 * @param config The configuration from which to get the graph directory
+	 */
  	public static clearGraph(CarnivalNeo4jConfiguration config) {
 		log.info "clearGraph"
-        def ant = new AntBuilder()
-        def graphDir = graphDir(config)
-        if (graphDir.exists()) ant.delete(dir:graphDir)
+        File graphDir = graphDir(config)
+		if (graphDir.exists()) {
+			FileUtils.deleteDirectory(graphDir)
+			graphDir.delete()
+		}
     }
 
 
-	/** */
+	/** 
+	 * Resets this Carnival object to use a Neo4j graph found in a sister
+	 * directory of the configured graph directory that is named per the
+	 * provided directory name.
+	 * @param config The configuration with the default graph directory
+	 * @param sourceDirName The name of the sister directory to use
+	 * @see #sisterDir(CarnivalNeo4jConfiguration, String)
+	 * @see #resetGraphFrom(CarnivalNeo4jConfiguration, File)
+	 */
 	public static resetGraphFrom(CarnivalNeo4jConfiguration config, String sourceDirName) {
 		log.info "resetGraphFrom sourceDirName:${sourceDirName}"
 
@@ -308,7 +364,12 @@ class CarnivalNeo4j extends Carnival {
 	}
 
 
-	/** */
+	/** 
+	 * Reset this Carnival to the new graph directory only if it exists.
+	 * @param config The configuration with the default graph directory
+	 * @param sourceDirName The name of the sister directory to use
+	 * @see #resetGraphFrom(CarnivalNeo4jConfiguration, String)
+	 */
 	public resetGraphFromIfExists(CarnivalNeo4jConfiguration config, String sourceDirName) {
 		log.info "resetGraphFromIfExists sourceDirName:${sourceDirName}"
 
@@ -317,7 +378,12 @@ class CarnivalNeo4j extends Carnival {
 	}
 
 
-	/** */
+	/** 
+	 * Copy the Neo4j graph from the specified source directory to the graph
+	 * directory of the provided configuration.
+	 * @param sourceDir The source Neo4j graph directory
+	 * @param config The configuration containing the target graph path.
+	 */
 	public resetGraphFrom(CarnivalNeo4jConfiguration config, File sourceDir) {
 		log.info "resetGraphFrom sourceDir:${sourceDir}"
 
@@ -339,7 +405,12 @@ class CarnivalNeo4j extends Carnival {
 	}
 
 
-	/** */
+	/** 
+	 * Copy the graph directory of the provided configuration to the provided
+	 * target directory.
+	 * @param dirName The String path to the target directory 
+	 * @param config The configuration
+	 */
 	public copyGraph(CarnivalNeo4jConfiguration config, String dirName) {
 		log.info "copyGraph dirName: $dirName"
 		assert dirName
@@ -349,7 +420,12 @@ class CarnivalNeo4j extends Carnival {
 	}
 
 
-	/** */
+	/** 
+	 * Copy the graph directory of the provided configuration to the provided
+	 * target directory.
+	 * @param publishDir The target directory
+	 * @param config The configuration
+	 */
 	public copyGraph(CarnivalNeo4jConfiguration config, File publishDir) {
 		log.info "copyGraph $publishDir"
 		assert publishDir
@@ -377,7 +453,11 @@ class CarnivalNeo4j extends Carnival {
 	// CYPHER
 	///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+	 * Run the Cypher query specified by the provided String.
+	 * @param q The Cypher query
+	 * @return The result of running the Cypher query
+	 */
     public Object cypher(String q) {
         sqllog.info("CarnivalNeo4j.cypher:\n$q")
         assert graph
@@ -385,7 +465,12 @@ class CarnivalNeo4j extends Carnival {
     }
 
 
-    /** */
+    /** 
+	 * Run the Cypher query specified by the provided String using the
+	 * provided arguments.
+	 * @param q The Cypher query
+	 * @param args The map of arguments passed to graph.cypher()
+	 */
     public Object cypher(String q, Map args) {
         sqllog.info("CarnivalNeo4j.cypher:\n$q\n$args")
         assert graph

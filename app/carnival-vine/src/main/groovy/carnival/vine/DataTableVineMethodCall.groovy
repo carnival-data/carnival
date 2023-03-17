@@ -25,7 +25,7 @@ abstract class DataTableVineMethodCall<T> implements VineMethodCall<T> {
 
     /**
      * Return the computed name for the provided vine method.
-     * @see computedName(Class, Map)
+     * @see #computedName(Class, Map)
      * @param vineMethod The vine method.
      * @return The computed name as a string.
      */
@@ -57,7 +57,7 @@ abstract class DataTableVineMethodCall<T> implements VineMethodCall<T> {
      * Find the files for the given vine method class and arguments in the
      * provided directory.
      * @see carnival.util.DataTable#findDataTableFiles(java.io.File, String)
-     * @see computedName(Class, Map)
+     * @see #computedName(Class, Map)
      * @param dir The directory in which to look.
      * @param vineMethodClass The vine method class.
      * @param args A map of arguments.
@@ -95,7 +95,7 @@ abstract class DataTableVineMethodCall<T> implements VineMethodCall<T> {
 
     /**
      * Return the computed name of this vine method call object.
-     * @see computedName(Class, Map)
+     * @see #computedName(Class, Map)
      * @return The computed name as a string.
      */
     public String computedName() {

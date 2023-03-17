@@ -692,7 +692,7 @@ class MappedDataTable extends DataTable {
      * Write the meta-data file for this MappedDataTable in the given
      * directory.
      *
-     * @see fileName(String, String, Map)
+     * @see #fileName(String, String, Map)
      * @param destDir The directory in which to write the file.
      * @param args Optional args passed to fileName().
      * @return The meta-data file. 

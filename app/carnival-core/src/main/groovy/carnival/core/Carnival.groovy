@@ -358,7 +358,7 @@ abstract class Carnival implements GremlinTrait {
 	 * Add a model defined in the given class to this Carnival using the
 	 * provided graph and graph traversal source.  This is an internal method;
 	 * it is expected that client code will use addModel(Class) to add models.
-	 * @see addModel(Class<ElementDefinition>)
+	 * @see #addModel(Class<ElementDefinition>)
 	 * @param graph A gremlin graph.
 	 * @param g A grpah traversal source to use.
 	 * @param defClass The element definition class.
@@ -381,7 +381,7 @@ abstract class Carnival implements GremlinTrait {
 	 * Carnival using the provided graph and graph traversal source.  This is
 	 * an internal method; it is expected that client code will use
 	 * addModel(Class) to add models.
-	 * @see addModel(Class<ElementDefinition>)
+	 * @see #addModel(Class<ElementDefinition>)
 	 * @param defClass The vertex definition class.
 	 * @param graph A gremlin graph.
 	 * @param g A graph traversal source to use.

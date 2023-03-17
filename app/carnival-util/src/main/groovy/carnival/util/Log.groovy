@@ -45,7 +45,7 @@ class Log {
      * Convenience method to call the more general progress(...) using the log
      * method 'info'.
      *
-     * @see progress(Logger log, String logMethod, String msg, Integer total, Integer current)
+     * @see #progress(Logger log, String logMethod, String msg, Integer total, Integer current)
      *
      */
     static void progress(Logger log, String msg, Integer total, Integer current) {

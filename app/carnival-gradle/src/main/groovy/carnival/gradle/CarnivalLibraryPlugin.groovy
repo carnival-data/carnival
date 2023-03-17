@@ -6,8 +6,8 @@ import org.gradle.api.Project
 
 
 /**
- * A simple Gradle plugin to add a consistent set of dependencies to an 
- * application that relies on Carnival.
+ * A simple Gradle plugin to add a consistent set of dependencies to code 
+ * that relies on Carnival.
  *
  */
 class CarnivalLibraryPlugin implements Plugin<Project> {

@@ -39,7 +39,7 @@ abstract class JsonVineMethod<T> extends VineMethod {
 
     /**
      * Set the arguments then call the vine method logic.
-     * @see call()
+     * @see #call()
      * @param args Map of arguments
      * @return A vine method call object
      */
@@ -52,7 +52,7 @@ abstract class JsonVineMethod<T> extends VineMethod {
 
     /**
      * Set the cache mode then call the vine method logic.
-     * @see call()
+     * @see #call()
      * @param cacheMode The CacheMode to use
      * @return A vine method call object
      */
@@ -65,7 +65,7 @@ abstract class JsonVineMethod<T> extends VineMethod {
 
     /**
      * Set the cache mode and arguments then call the vine method logic.
-     * @see call()
+     * @see #call()
      * @param cacheMode The CacheMode to use
      * @param args Map of arguments
      * @return A vine method call object
@@ -103,7 +103,7 @@ abstract class JsonVineMethod<T> extends VineMethod {
 
     /**
      * Call _fetchAndCache() and return the result.
-     * @see _fetchAndCache()
+     * @see #_fetchAndCache()
      * @return A vine method call object.
      */
     JsonVineMethodCall<T> _callCacheModeIgnore() {

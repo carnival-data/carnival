@@ -395,7 +395,7 @@ class FeatureReport extends MappedDataTable {
     /** 
      * Convenience method to create the data dictionary and write it to file.
      *
-     * @see dataDictionary()
+     * @see #dataDictionary()
      * @param destDir The directory in which to write the file.
      * @param args The args to be passed to writeDataFile of the created data
      * dictionary.

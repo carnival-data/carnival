@@ -39,7 +39,11 @@ abstract class ModelTransformation extends AbstractASTTransformation {
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Adds the provided trait class to the provided class node.
+     * @param traitClass The trait class
+     * @param classNode The target class node
+     */
     static void addTrait(ClassNode classNode, Class traitClass) {
         ClassNode[] interfaces = classNode.getInterfaces()
         ClassNode traitClassNode = new ClassNode(traitClass)
@@ -54,8 +58,14 @@ abstract class ModelTransformation extends AbstractASTTransformation {
     }
 
 
-    /** */
+    /** 
+     * Adds a no argument constructor containing the optionally provided
+     * statement to the provided class node.
+     * @param stmt Optionally provided statement to include in the constructor
+     * @param classNode The target class node
+     */
     static addNoArgConstructor(ClassNode classNode, Statement stmt = new EmptyStatement()) {
+        assert classNode != null
         ConstructorNode noArgConstructor = 
             new ConstructorNode(
                 ClassNode.ACC_PRIVATE, 
@@ -67,8 +77,16 @@ abstract class ModelTransformation extends AbstractASTTransformation {
     }
 
     
-    /** */
+    /** 
+     * Adds a constructor that accepts a single map argument and contains the
+     * provided statment to the provided class node.
+     * @param stmt The statement to include in the constructor
+     * @param classNode The target class node.
+     */
     static addMapConstructor(ClassNode classNode, BlockStatement stmt) {
+        assert classNode != null
+        assert stmt != null
+
         Parameter mapParam = new Parameter(
             new ClassNode(Map), 
             "m", 
@@ -88,7 +106,7 @@ abstract class ModelTransformation extends AbstractASTTransformation {
     // INTERFACE
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** The defintion trait class of this model */
     abstract Class getDefTraitClass()
 
 
@@ -96,6 +114,11 @@ abstract class ModelTransformation extends AbstractASTTransformation {
     // TRANSFORM IMPLEMENTATION
     ///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Override of the visit method of ASTTransformation that applies the 
+     * abstract syntax tree transformations.
+     * @see org.codehaus.groovy.transform.ASTTransformation#visit(ASTNode[], SourceUnit)
+     */
     @Override
     void visit(ASTNode[] nodes, SourceUnit source) {
         // get the relevant nodes
@@ -136,13 +159,22 @@ abstract class ModelTransformation extends AbstractASTTransformation {
 
 
 
-/** */
+/** 
+ * VertexModelTransformation contains a visit() method that applies the syntax
+ * tree transformations necessary for vertex models.
+ */
 @GroovyASTTransformation(phase = CompilePhase.SEMANTIC_ANALYSIS)
 class VertexModelTransformation extends ModelTransformation {
 
+    /** The trait that will be applied to the target class */
     Class getDefTraitClass() { return carnival.graph.VertexDefinition }
 
 
+    /**
+     * Applies the changes to the syntax tree for vertex models including the
+     * addition of constructors, application of traits, and the changes from
+     * the parent class ModelTransformation.
+     */
     @Override
     void visit(ASTNode[] nodes, SourceUnit source) {
         // do the superclass stuff
@@ -190,7 +222,10 @@ class VertexModelTransformation extends ModelTransformation {
 }
 
 
-/** */
+/** 
+ * EdgeModelTransformation is an empty concretization of ModelTransformation;
+ * it does not add any transformation logic.
+ */
 @GroovyASTTransformation(phase = CompilePhase.SEMANTIC_ANALYSIS)
 class EdgeModelTransformation extends ModelTransformation {
 
@@ -199,7 +234,10 @@ class EdgeModelTransformation extends ModelTransformation {
 }
 
 
-/** */
+/** 
+ * PropertyModelTransformation is an empty concretization of ModelTransformation;
+ * it does not add any transformation logic.
+ */
 @GroovyASTTransformation(phase = CompilePhase.SEMANTIC_ANALYSIS)
 class PropertyModelTransformation extends ModelTransformation {
 
@@ -207,6 +245,11 @@ class PropertyModelTransformation extends ModelTransformation {
 
 }
 
+
+
+///////////////////////////////////////////////////////////////////////////////
+// COMMENT CODE USEFUL FOR DEBUGGING
+///////////////////////////////////////////////////////////////////////////////
 
 /** 
 @GroovyASTTransformation(phase = CompilePhase.CANONICALIZATION)

@@ -33,24 +33,31 @@ trait ElementDefinition extends WithPropertyDefsTrait {
     ///////////////////////////////////////////////////////////////////////////
 
     /** 
-     * if true, the `Base.PX.NAME_SPACE` property for verticies in the graph
-     * will use a global namespace value instead of one generated from 
-     * the package name.
+     * If true, the `Base.PX.NAME_SPACE` property for verticies in the graph
+     * will use a global namespace value instead of one generated from the 
+     * package name.
      */
     boolean global = false
 
-    /** */
+    /** 
+     * Getter for the global property.
+     * @return The global property
+     */
     boolean getGlobal() { this.global }
 
-    /** */
+    /** 
+     * Setter for the global property.
+     * @param val The value to set the global property
+     */
     void setGlobal(boolean val) {
         this.global = val
     }
 
-    /** */
-    public boolean isGlobal() {
-        return global
-    }
+    /** 
+     * Synomym for getGlobal()
+     * @see #getGlobal()
+     */
+    public boolean isGlobal() { this.getGlobal() }
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -58,9 +65,9 @@ trait ElementDefinition extends WithPropertyDefsTrait {
     ///////////////////////////////////////////////////////////////////////////
 
     /** 
-     * if false, verticies created by this definition can contain properties
+     * If false, verticies created by this definition can contain properties
      * that were not defined by this VertexDefinition.
-     * */
+     */
     Boolean propertiesMustBeDefined = true
 
 
@@ -68,7 +75,10 @@ trait ElementDefinition extends WithPropertyDefsTrait {
     // NAME SPACE
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Return the name space of this element definition.
+     * @return The name space of this element definition as a string
+     */
     public String getNameSpace() {
         if (this.global) return Base.GLOBAL_NAME_SPACE
         return getElementDefinitionClass()
@@ -79,7 +89,11 @@ trait ElementDefinition extends WithPropertyDefsTrait {
     // ELEMENT DEFINITION
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Return a string representation of the element definition class of this 
+     * element definition.
+     * @return The string value of the element definition class
+     */
     public String getElementDefinitionClass() {
         if (this instanceof Enum) return "${this.declaringClass.name}"
         return "${this.metaClass.theClass.name}"

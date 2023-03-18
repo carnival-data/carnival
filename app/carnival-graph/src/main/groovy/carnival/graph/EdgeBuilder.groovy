@@ -25,14 +25,14 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
     ///////////////////////////////////////////////////////////////////////////
 
     /** 
-     * Object that owns this builder.
-     * */
+     * The edge definition that will be used to create edges.
+     */
     EdgeDefinition edgeDef
 
-    /** */
+    /** The from or out vertex for created edges */
     Vertex fromVertex
 
-    /** */
+    /** The to or in vertex for created edges */
     Vertex toVertex
 
 
@@ -40,7 +40,10 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
     // CONSTRUCTOR
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Constructor that takes the edge definition as an argument.
+     * @param edgeDef The edge definition this builder will use.
+     */
     public EdgeBuilder(EdgeDefinition edgeDef) {
         assert edgeDef
         this.edgeDef = edgeDef
@@ -51,7 +54,10 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
     // GETTERS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Return the element element definition of this builder.
+     * @return The ElementDefinition
+     */
     public ElementDefinition getElementDef() { edgeDef }
 
 
@@ -59,14 +65,20 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
     // UTILITY METHODS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Convenience string representation of this object.
+     * @return A string representation of this object
+     */
     public String toString() {
         def str = "${edgeDef}"
         if (propertyValues.size() > 0) str += " ${propertyValues}"
         return str
     }
 
-    /** */
+    /** 
+     * Assert that the properties required by the edge definition have been
+     * set.
+     */
     void assertRequiredProperties() {
         edgeDef.requiredProperties.each { requiredPropDef ->
             boolean found = allPropertyValues().find { k, v ->
@@ -81,7 +93,11 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
     // BUILDER METHODS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Sets the from vertex for created edges.
+     * @param v The from vertex
+     * @return This object
+     */
     public EdgeBuilder from(Vertex v) {
         assert v != null
         edgeDef.assertDomain(v)
@@ -90,7 +106,11 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
     }
 
 
-    /** */
+    /** 
+     * Sets the to vertex for created edges.
+     * @param v The to vertex
+     * @return This object
+     */
     public EdgeBuilder to(Vertex v) {
         edgeDef.assertRange(v)
         toVertex = v

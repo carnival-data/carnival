@@ -66,7 +66,7 @@ trait PropertyDefinition {
      * @param m["required"] <Boolean> if true, then this property must be present in all elements.
      * @param m["index"] <Boolean>    if true, then this property should be indexed by the underlying database
      * system.
-     * 
+     * @return This object
      * 
      * */
 	public PropertyDefinition withConstraints(Map m) {
@@ -80,13 +80,20 @@ trait PropertyDefinition {
 	}
 
 
-	/** */
+	/** 
+     * Synonym of withConstraints().
+     * @see #withConstraints(Map)
+     */
 	public PropertyDefinition constraints(Map m) {
         withConstraints(m)
     }
 
 
-    /** */
+    /** 
+     * Set the default value for this property.
+     * @param o The default value to use
+     * @return This object
+     */
     public PropertyDefinition defaultValue(Object o) {
         def newObj = new PropertyDefinitionHolder(this)
         newObj.defaultValue = o
@@ -98,7 +105,12 @@ trait PropertyDefinition {
 	// PROPERTY METHODS
 	///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Assert that the property is defined in the element and then return the 
+     * property of the provided element.
+     * @param el The source element
+     * @return The property object
+     */
     public Property of(Element el) {
         assert el
         assertPropertyIsDefined(el)
@@ -107,14 +119,23 @@ trait PropertyDefinition {
     }
 
 
-    /** */
+    /** 
+     * Return property of the provided element.
+     * @param el The source element
+     * @return The property object
+     */
     Property _of(Element el) {
         assert el
         el.property(getLabel())
     }
 
 
-    /** */
+    /** 
+     * Assert the property is defined and return the property value of the 
+     * source element.
+     * @param el The source element
+     * @return The value of the property.
+     */
     public Object valueOf(Element el) {
         assert el
         assertPropertyIsDefined(el)
@@ -123,14 +144,24 @@ trait PropertyDefinition {
     }
 
 
-    /** */
+    /** 
+     * Return the property value of the source element.
+     * @param el The source element
+     * @return The value of the property.
+     */
     Object _valueOf(Element el) {
         assert el
         el.property(getLabel()).isPresent() ? el.value(getLabel()) : null
     }
 
 
-    /** */
+    /** 
+     * Set the property value of the provided element to the provided value.
+     * Asserts that the property is defined.
+     * @param value The property value
+     * @param el The target element
+     * @return This object
+     */
     public PropertyDefinition set(Element el, Object value) {
         assert el
         assert value != null
@@ -141,7 +172,10 @@ trait PropertyDefinition {
     }
 
 
-    /** */
+    /** 
+     * Assert that the property is defined in the target element.
+     * @param el The target element
+     */
     void assertPropertyIsDefined(Element el) {
         assert el
 
@@ -164,7 +198,11 @@ trait PropertyDefinition {
     }
 
 
-    /** */
+    /** 
+     * Returns true if the property is defined in the provided target element.
+     * @param el The target element
+     * @return True if the property is defined
+     */
     boolean propertyIsDefined(Element el) {
         boolean isDefined = false
         ElementDefinition edt = Definition.lookup(el)
@@ -177,7 +215,13 @@ trait PropertyDefinition {
     }
 
 
-    /** */
+    /** 
+     * Set the property of the target element to the result of running the
+     * provided closure.
+     * @param value The value closure
+     * @param el The target element
+     * @return This object
+     */
     public PropertyDefinition set(Element el, Closure value) {
         assert el
         assert value != null
@@ -185,7 +229,16 @@ trait PropertyDefinition {
     }
 
 
-    /** */
+    /** 
+     * Set the property of the provided target element to the value if the
+     * provided closure returns true when passed the value as the only
+     * argument.
+     * @param cl A closure whose result will be evaluated as a boolean
+     * @param value The value to pass to the closure and set to the property
+     * value
+     * @param el The target element
+     * @return This object
+     */
     public PropertyDefinition setIf(Element el, Object value, Closure cl) {
         assert el
         assert value != null
@@ -195,7 +248,13 @@ trait PropertyDefinition {
     }
 
 
-    /** */
+    /** 
+     * Run the provided closure; if the result is not null, set the property
+     * of the target element to it.
+     * @param cl The closure to run
+     * @param el The target element
+     * @return This object
+     */
     public PropertyDefinition setIf(Element el, Closure cl) {
         assert el
         assert cl != null
@@ -205,7 +264,10 @@ trait PropertyDefinition {
     }
 
 
-	/** */
+	/** 
+     * Returns the property label to use for this property definition.
+     * @return The property label as a string
+     */
     public String getLabel() {
         def chunks = name().split('_')
         if (chunks.size() == 1) return chunks[0].toLowerCase()
@@ -216,7 +278,10 @@ trait PropertyDefinition {
     }
 
 
-    /** */
+    /** 
+     * Returns a string representation of this object
+     * @return A string
+     */
     public String toString() {
         def str = "${name()} ${label}"
         if (unique) str += " unique:${unique}"
@@ -228,7 +293,10 @@ trait PropertyDefinition {
     
 }
 
-/** */
+/** 
+ * PropertyDefinitionHolder extends PropertyDefinition to add a methodMissing()
+ * passes unkonwn method calls to the wrapped property.
+ */
 @Slf4j
 class PropertyDefinitionHolder implements PropertyDefinition {
     PropertyDefinition source

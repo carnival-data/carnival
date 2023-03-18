@@ -33,10 +33,10 @@ trait EdgeDefinition extends ElementDefinition {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** The set of permitted vertex definitions for from vertices */
     List<VertexDefinition> domain = new ArrayList<VertexDefinition>()
 
-    /** */
+    /** The set of permitted vertex definitions for to vertices */
     List<VertexDefinition> range = new ArrayList<VertexDefinition>()
 
 
@@ -44,10 +44,10 @@ trait EdgeDefinition extends ElementDefinition {
     // GETTERS / SETTERS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** Setter wrapper for propertyDefs */
+    /** Getter wrapper for propertyDefs */
     List<PropertyDefinition> getEdgeProperties() { propertyDefs }
     
-    /** Getter wrapper for propertyDefs */
+    /** Setter wrapper for propertyDefs */
     void setEdgeProperties(ArrayList<PropertyDefinition> propertyDefs) {
         assert propertyDefs != null
         propertyDefs = propertyDefs
@@ -58,7 +58,10 @@ trait EdgeDefinition extends ElementDefinition {
     // METHODS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Return the label to use for instantiated edges.
+     * @return The label as a string
+     */
     public String getLabel() {
         name().toLowerCase()
     }
@@ -68,13 +71,20 @@ trait EdgeDefinition extends ElementDefinition {
     // TYPE CHECKING
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Returns true if this definition applies to the provided edge.
+     * @param e The edge object to test
+     */
     public boolean isa(Edge e) {
         assert e != null
         (e.label() == getLabel() && Base.PX.NAME_SPACE._valueOf(e) == getNameSpace())   
     }
 
-    /** */
+    /** 
+     * Implementation of isa(Vertex) that will always return false since this
+     * object defines edges, not vertices.
+     * @param v The vertex to test
+     */
     public boolean isa(Vertex v) {
         assert v != null
         return false
@@ -85,21 +95,31 @@ trait EdgeDefinition extends ElementDefinition {
     // DOMAIN / RANGE
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Return the list of labels of the domain vertex definitions.
+     * @return The list of labels as a String
+     */
     public List<String> getDomainLabels() {
         if (domain == null) return null
         else return domain*.label
     }
 
 
-    /** */
+    /** 
+     * Return the list of labels of the range vertex definitions.
+     * @return The list of labels as a String
+     */
     public List<String> getRangeLabels() {
         if (range == null) return null
         else return range*.label
     }
 
 
-    /** */
+    /** 
+     * Assert that the provided vertex definition is included in the set of 
+     * permissible domain vertex definitions of this edge definition.
+     * @param fromDef The vertex definition to test
+     */
     public void assertDomain(VertexDefinition fromDef) {
         assert fromDef != null
         if (this.domain.size() > 0) {
@@ -111,7 +131,11 @@ trait EdgeDefinition extends ElementDefinition {
     }
 
 
-    /** */
+    /** 
+     * Assert that the definition of the provided vertex is included in the 
+     * domain of this edge definition.
+     * @param from The vertex to test
+     */
     public void assertDomain(Vertex from) {
         assert from != null
         def fromDef = Definition.lookup(from)
@@ -119,7 +143,11 @@ trait EdgeDefinition extends ElementDefinition {
     }
 
 
-    /** */
+    /** 
+     * Assert that the provided vertex definition is included in the range of
+     * this edge definition.
+     * @param toDef The vertex definition to test
+     */
     public void assertRange(VertexDefinition toDef) {
         assert toDef != null
         if (this.range.size() > 0) {
@@ -131,7 +159,11 @@ trait EdgeDefinition extends ElementDefinition {
     }
 
 
-    /** */
+    /** 
+     * Assert that the definition that applies to the provided vertex is
+     * included in the range of this edge definition.
+     * @param to The vertex to test
+     */
     public void assertRange(Vertex to) {
         assert to != null
         def toDef = Definition.lookup(to)
@@ -143,7 +175,11 @@ trait EdgeDefinition extends ElementDefinition {
     // Builders
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Return an edge builder that can be used to instantiate an edge using
+     * this edge definition.
+     * @return An edge builder
+     */
     public EdgeBuilder instance() {
         def ci = new EdgeBuilder(this)
         ci.propertiesMustBeDefined = this.propertiesMustBeDefined
@@ -155,13 +191,26 @@ trait EdgeDefinition extends ElementDefinition {
     // VertexDef -> VertexDef
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Synonym for setRelationship().
+     * @see #setRelationship(GraphTraversalSource, VertexDefinition, VertexDefinition)
+     */
     public Edge relate(GraphTraversalSource g, VertexDefinition from, VertexDefinition to) {
         setRelationship(g, from, to)
     }
 
 
-    /** */
+    /** 
+     * Create an edge based on this edge definition between the singleton
+     * vertices of the provided from and to vertex definitions if the edge is
+     * not already present. The from and to vertex definitions must have 
+     * singleton vertices defined, which is the case for all vertices that
+     * represent classes of things.
+     * @param g A graph traversal source to use
+     * @param from The from vertex definition
+     * @param to The to vertex definition
+     * @return The new or existing edge
+     */
     public Edge setRelationship(GraphTraversalSource g, VertexDefinition from, VertexDefinition to) {
         assert g != null
         assert from != null
@@ -169,6 +218,8 @@ trait EdgeDefinition extends ElementDefinition {
 
         assertDomain(from)
         assertRange(to)
+        assert from.vertex
+        assert to.vertex
 
         def lbl = getLabel()
         def ns = getNameSpace()
@@ -190,13 +241,23 @@ trait EdgeDefinition extends ElementDefinition {
     // Vertex -> VertexDef
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Synonym for setRelationship().
+     * @see #setRelationship(GraphTraversalSource, Vertex, VertexDefinition)
+     */
     public Edge relate(GraphTraversalSource g, Vertex from, VertexDefinition to) {
         setRelationship(g, from, to)
     }
 
 
-    /** */
+    /** 
+     * Create an edge between the provided from vertex and the singleton vertex
+     * of the provided to vertex definition if the edge is not already created.
+     * @param g A graph traversal source to use
+     * @param from The from vertex
+     * @param to The to vertex definition that must have a singleton vertex
+     * @return The new or existing edge
+     */
     public Edge setRelationship(GraphTraversalSource g, Vertex from, VertexDefinition to) {
         assert g != null
         assert from != null
@@ -204,6 +265,7 @@ trait EdgeDefinition extends ElementDefinition {
 
         assertDomain(from)
         assertRange(to)
+        assert to.vertex
 
         def lbl = getLabel()
         def ns = getNameSpace()
@@ -225,13 +287,23 @@ trait EdgeDefinition extends ElementDefinition {
     // Vertex -> Vertex
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Synonym for setRelationship().
+     * @see #setRelationship(GraphTraversalSource, Vertex, Vertex)
+     * @return The new or existing edge
+     */
     public Edge relate(GraphTraversalSource g, Vertex from, Vertex to) {
         setRelationship(g, from, to)
     }
 
 
-    /** */
+    /** 
+     * Create an edge between the from and to vertices if the edge is not
+     * already present.
+     * @param to The to vertex
+     * @param from The from vertex
+     * @return The new or existing edge
+     */
     public Edge setRelationship(GraphTraversalSource g, Vertex from, Vertex to) {
         assert g != null
         assert from != null
@@ -256,10 +328,17 @@ trait EdgeDefinition extends ElementDefinition {
     }
 
 
-    /** */
+    /** 
+     * Add an edge between the from and to vertices.
+     * @param from The from vertex
+     * @param to The to vertex
+     */
     public Edge addEdge(Vertex from, Vertex to) {
         assert from != null
         assert to != null
+
+        assertDomain(from)
+        assertRange(to)
 
         def lbl = getLabel()
         def ns = getNameSpace()
@@ -268,6 +347,5 @@ trait EdgeDefinition extends ElementDefinition {
             Base.PX.NAME_SPACE.label, ns
         )
     }
-
 
 }

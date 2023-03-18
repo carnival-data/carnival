@@ -17,11 +17,19 @@ import carnival.util.StringUtils
 import carnival.graph.Base
 
 
-
+/**
+ * A collection of static methods relevent to element definitions.
+ */
 @Slf4j
 class Definition {
 
-    /** */
+    /** 
+     * Look up the element definition of the provided element.  If the element
+     * is a vertex, a VertexDefinition will be returned; if the element is an
+     * edge, and EdgeDefinition will be returned.
+     * @param v The source element
+     * @return The ElementDefinition that applies to the element.
+     */
     static public ElementDefinition lookupElementDefinition(Element v) {
         assert v != null
         assert (v instanceof Edge || v instanceof Vertex)
@@ -61,14 +69,24 @@ class Definition {
     }
 
     
-    /** */
+    /** 
+     * Look up the vertex definition of the provided vertex.
+     * @param v The source vertex
+     * @return The VertexDefinition that applies to the vertex
+     * @see #lookupElementDefinition(Element)
+     */
     static public VertexDefinition lookup(Vertex v) {
         assert v != null
         lookupElementDefinition(v)
     }    
 
 
-    /** */
+    /** 
+     * Look up the edge definition of the provided edge.
+     * @param v The source edge
+     * @return The EdgeDefinition that applies to the edge
+     * @see #lookupElementDefinition(Element)
+     */
     static public EdgeDefinition lookup(Edge e) {
         assert e != null
         lookupElementDefinition(e)

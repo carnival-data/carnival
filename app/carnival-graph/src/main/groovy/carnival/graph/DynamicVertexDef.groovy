@@ -19,50 +19,42 @@ import carnival.util.StringUtils
 
 
 
-/** */
+/** 
+ * DynamicVertexDef is a VertexDefinition that is created in code outside the
+ * normal model definition construction of enumerated classes tagged with 
+ * @VertexModel.
+ */
 @ToString
 @EqualsAndHashCode(allProperties=true)
 class DynamicVertexDef implements VertexDefinition {
 
-    /** 
-     * @param name The name of the vertex def formatted as per Java enum convention, eg. SOME_NAME
-     *
-     */
-    static public DynamicVertexDef singletonFromScreamingSnakeCase(Graph graph, GraphTraversalSource g, String name) {
-        def dvf = new DynamicVertexDef(name)
-        if (dvf.isClass()) dvf.vertex = dvf.instance().vertex(graph, g)
-        return dvf
-    }
-
-    /** 
-     * @param name The name of the vertex def formatted in camel case, eg. SomeName
-     *
-     */
-    static public DynamicVertexDef singletonFromCamelCase(Graph graph, GraphTraversalSource g, String name) {
-        singletonFromScreamingSnakeCase(
-            graph, 
-            g, 
-            StringUtils.toScreamingSnakeCase(name)
-        )
-    }
-
-    /** */
+    /** The name of the vertex definition */
     String name
 
-    /** */
+    /** Override the namespace calculated from the classpath */
     String nameSpaceOverride
 
-    /** */
+    /** 
+     * Private constructor.
+     * @param name The name of the vertex definition.
+     */
     private DynamicVertexDef(String name) {
         this.name = name
     }
 
-    /** */
+    /** 
+     * Returns the name of the vertex definition.
+     * @return The name of this vertex definition
+     */
     public String name() {
         return this.name
     }
 
-    /** */
+    /** 
+     * Returns the namespace of this vertex definition, which will be
+     * calculated from the class if not overridden.
+     * @return The name space of this vertex definition
+     */
     @Override
     public String getNameSpace() {
         if (this.nameSpaceOverride != null) return this.nameSpaceOverride
@@ -76,7 +68,11 @@ class DynamicVertexDef implements VertexDefinition {
         return "${this.metaClass.theClass.name}"
     }
 
-    /** */
+    /** 
+     * Set the name space of this definition to the provided value, which will
+     * be used in getNameSpace() rather than the calculated value.
+     * @param ns The namespace to use for this definition
+     */
     public void setNameSpace(String ns) {
         this.nameSpaceOverride = ns
     }

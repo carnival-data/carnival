@@ -59,6 +59,7 @@ class TinkerpopTraversalExtension {
             )
         .in(Base.EX.IS_INSTANCE_OF)
     }
+    
 
     /** 
      * Filters elements to include only  instances of the given

@@ -16,7 +16,11 @@ import carnival.graph.VertexModel
 
 
 /** 
- * The Core graph model.
+ * The Core graph model.  The intention is for this model to be linked to
+ * published ontologies such that there is congruency between the terms and
+ * relations of this model and those of the published ontologies.  Future 
+ * versions of Carnival will explicitly include this linkage.  The current
+ * model is minimally documented in anticipation of this enhancement.
  *
  */
 class Core {

@@ -12,6 +12,9 @@ import org.gradle.api.Project
  */
 class CarnivalLibraryPlugin implements Plugin<Project> {
 
+    /**
+     * Apply a consistent set of Carnival dependencies to the Gradle project.
+     */
     void apply(Project project) {
         // dependency versions
         Locale locale = new Locale("en", "US");

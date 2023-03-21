@@ -28,8 +28,8 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
     ///////////////////////////////////////////////////////////////////////////
 
     /** 
-     * Object that owns this builder.
-     * */
+     * The source vertex definition of this builder.
+     */
     VertexDefinition vertexDef
 
 
@@ -37,7 +37,10 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
     // CONSTRUCTOR
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Constructor
+     * @param The source vertex definition of this builder.
+     */
     public VertexBuilder(VertexDefinition vertexDef) {
         assert vertexDef
         this.vertexDef = vertexDef
@@ -48,7 +51,9 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
     // GETTERS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Return the source vertex definition as an element definition.
+     */
     public ElementDefinition getElementDef() { vertexDef }
 
 
@@ -104,7 +109,13 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
     }
 
 
-    /** */
+    /** 
+     * Returns a graph traversal that starts with vertices that match this
+     * vertex builder.
+     * @param graph The property graph
+     * @param g A graph traversal source to use
+     * @return A graph traversal
+     */
     public Traversal traversal(Graph graph, GraphTraversalSource g) {
         assert graph
         assert g
@@ -174,7 +185,10 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
     }
 
 
-    /** */
+    /** 
+     * Assert that all the properties required by the source vertex definition
+     * have been set in this builder.
+     */
     void assertRequiredProperties() {
         vertexDef.requiredProperties.each { requiredPropDef ->
             boolean found = allPropertyValues().find { k, v ->

@@ -75,18 +75,30 @@ trait VertexDefinition extends ElementDefinition {
     // GETTERS / SETTERS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** Setter wrapper for propertyDefs */
+    /** 
+     * Getter wrapper for propertyDefs 
+     * @return A set of property definitions
+     */
     Set<PropertyDefinition> getVertexProperties() { this.propertyDefs }
     
-    /** Getter wrapper for propertyDefs */
+    /** 
+     * Setter wrapper for propertyDefs 
+     * @param A set of proeprty definitions
+     */
     void setVertexProperties(Set<PropertyDefinition> propertyDefs) {
         this.propertyDefs = propertyDefs
     }
 
-    /** */
+    /** 
+     * Get the superclass vertex definition of this vertex definition.
+     * @return The superclass vertex definition
+     */
     VertexDefinition getSuperClass() { this.superClass }
 
-    /** */
+    /** 
+     * Set the superclass vertex definition of this vertex definition.
+     * @param vDef The superclass vertex definition
+     */
     void setSuperClass(VertexDefinition vDef) {
         assert vDef != null
         if (!isClass()) throw new RuntimeException("cannot set superClass when isClass() is false")
@@ -94,10 +106,17 @@ trait VertexDefinition extends ElementDefinition {
         this.superClass = vDef
     }
 
-    /** */
+    /** 
+     * Return the vertex definition of which this definition is an instance.
+     * @return The instanceOf vertex definition
+     */
     VertexDefinition getInstanceOf() { this.instanceOf }
 
-    /** */
+    /** 
+     * Set the vertex definition of which this definition is an instance; 
+     * applies only to vertex definitions that do not define classes.
+     * @param vDef The instanceOf vertex definition
+     */
     void setInstanceOf(VertexDefinition vDef) {
         assert vDef != null
         if (isClass()) throw new RuntimeException("cannot set instanceOf when isClass() is true")
@@ -111,7 +130,10 @@ trait VertexDefinition extends ElementDefinition {
     // PROPERTY METHODS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Return the string label to use for instantiated vertices.
+     * @return The string label
+     */
     public String getLabel() {
         def n = name()
         def chunks = n.split(NAME_SEPARATOR)
@@ -121,27 +143,42 @@ trait VertexDefinition extends ElementDefinition {
     }
 
 
-    /** */
+    /** 
+     * Return true if the provided vertex has the label of this vertex 
+     * definition.
+     * @param v The vertex to test
+     */
     public boolean hasLabel(Vertex v) {
         assert v != null
         return v.label() == getLabel()
     }
 
 
-    /** */
+    /** 
+     * Synonym for isClass()
+     * @see #isClass()
+     */
     boolean getIsClass() {
         isClass()        
     }
 
 
-    /** */
+    /** 
+     * Return true if this definition defines a class vertex.
+     * @return A boolean value
+     */
     public boolean isClass() {
         if (this.isClass != null) return this.isClass
         name().toLowerCase().endsWith(CLASS_SUFFIX)
     }
 
 
-    /** */
+    /** 
+     * Return all the vertex properties of the provided vertex that are
+     * defined in this vertex definition.
+     * @param v The source vertex
+     * @return A set of vertex properties
+     */
     public Set<VertexProperty> definedPropertiesOf(Vertex v) {
         Set<VertexProperty> vProps = new HashSet<VertexProperty>()
         propertyDefs.each { pDef ->
@@ -159,7 +196,10 @@ trait VertexDefinition extends ElementDefinition {
     // SINGLETON VERTEX METHODS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Create a vertex builder using this vertex definition as a source.
+     * @return A vertex builder
+     */
     public VertexBuilder instance() {
         def vb = new VertexBuilder(this)
         vb.propertiesMustBeDefined = this.propertiesMustBeDefined
@@ -167,7 +207,12 @@ trait VertexDefinition extends ElementDefinition {
     }
 
 
-    /** */
+    /** 
+     * Create a vertex using this vertex definition with no properties set in
+     * the provided property graph.
+     * @param graph The target property graph
+     * @return The created vertex
+     */
     public Vertex createVertex(Graph graph) {
         assert graph
         if (isClass()) throw new RuntimeException("cannot create instance vertex of class ${this}")
@@ -191,13 +236,23 @@ trait VertexDefinition extends ElementDefinition {
     // TYPE CHECKING
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Always returns false since edges cannot be defined by vertex 
+     * definitions.
+     * @param e The edge to test
+     * @return false
+     */
     public boolean isa(Edge e) {
         assert e != null
         return false
     }
 
-    /** */
+    /** 
+     * Return true if the provided vertex matches this vertex definition; this
+     * method does not take properties into account.
+     * @param v The vertex to test
+     * @return True if the provided vertex matches this vertex definition
+     */
     public boolean isa(Vertex v) {
         assert v != null
         (v.label() == getLabel() && Base.PX.NAME_SPACE._valueOf(v) == getNameSpace())
@@ -208,7 +263,12 @@ trait VertexDefinition extends ElementDefinition {
     // KNOWLEDGE GRAPH METHODS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Create the class level vertices in the provided graph using the provided
+     * graph traversal source.
+     * @param graph The target property graph
+     * @param g The graph traversal source to use
+     */
     public void applyTo(Graph graph, GraphTraversalSource g) {
         if (this.isClass() && this.requiredProperties.size() == 0) {
             this.vertex = this.instance().ensure(graph, g)
@@ -225,8 +285,10 @@ trait VertexDefinition extends ElementDefinition {
 
 
     /** 
-     *
-     *
+     * Sets that this definition is a subclass of the provided superclass 
+     * definition using the provided graph traversal source.
+     * @param g The graph graversal source to use
+     * @param superClassDef The superclass definition
      */
     public void setSubclassOf(GraphTraversalSource g, VertexDefinition superClassDef) {
         assert g
@@ -243,8 +305,10 @@ trait VertexDefinition extends ElementDefinition {
 
 
     /** 
-     *
-     *
+     * Sets that this definition is a superclass of the provided subclass
+     * definition using the provided graph traversal source.
+     * @param g The graph traversal source to use
+     * @param subclassV The subclass vertex.
      */
     public void setSuperclassOf(GraphTraversalSource g, Vertex subclassV) {
         assert g
@@ -260,8 +324,12 @@ trait VertexDefinition extends ElementDefinition {
 
 
     /** 
-     *
-     *
+     * If not already present, create an edge based on the provided edge
+     * definition between the singleton vertex of this vertex definition and
+     * the singleton vertex of the provided target class definition.
+     * @param g The graph traversal source to use
+     * @param rel The edge definition
+     * @param targetClassDef The target class definition
      */
     public void setRelationship(GraphTraversalSource g, EdgeDefinition rel, VertexDefinition targetClassDef) {
         //log.debug "setRelationship rel:$rel"
@@ -284,8 +352,8 @@ trait VertexDefinition extends ElementDefinition {
     ///////////////////////////////////////////////////////////////////////////
 
     /**
-     *
-     *
+     * Return a string representation of this object.
+     * @return A string
      */
     public String toString() {
         def str = "${name()} ${nameSpace}"

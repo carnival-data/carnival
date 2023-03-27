@@ -12,7 +12,11 @@ import carnival.util.StringUtils
 class CoreUtil {
 
 
-    /** */
+    /** 
+     * Return a unique fingerprint computed from the provided map of args.
+     * @param args Map of arguments
+     * @return A unique fingerprint as a string
+     */
     static public String argumentsUniquifier(Map args) {
         assert args != null
 
@@ -21,14 +25,24 @@ class CoreUtil {
     }
 
 
-    /** */
+    /** 
+     * Return a string representation of the provided object tagged with the
+     * type of the object; Null provided objects are accepted.
+     * @param v The source object
+     * @return The string representation
+     */
     static String nullSafeTypedString(Object v) {
         if (v == null) return String.valueOf(v)
         else return typedString(v)
     }
 
 
-    /** */
+    /** 
+     * Return a string representation of the provided object tagged with the
+     * type of the object.
+     * @param v The source object
+     * @return The string representation
+     */
     static String typedString(Object v) {
         assert v != null
 
@@ -45,7 +59,11 @@ class CoreUtil {
     }
 
 
-    /** */
+    /** 
+     * Return a string representation of the provided object map.
+     * @param v The source map
+     * @return The string representation
+     */
     static String typedStringMap(Map map) {
         assert map != null
 
@@ -62,7 +80,11 @@ class CoreUtil {
     }
 
 
-    /** */
+    /** 
+     * Return a string representation of the provided object list.
+     * @param v The source list
+     * @return The string representation
+     */
     static String typedStringList(List list) {
         assert list != null
 
@@ -78,7 +100,11 @@ class CoreUtil {
     }
 
 
-    /** */
+    /**
+     * The type tag for the provided object.
+     * @param v The source object
+     * @param The type tag as a string 
+     */
     static String typeTag(Object v) {
         assert v != null
 
@@ -95,7 +121,11 @@ class CoreUtil {
     }
 
 
-    /** */
+    /** 
+     * Return a standard unique fingerprint for the provided string.
+     * @param seed The source string
+     * @return The unique fingerprint as a string
+     */
     static public String standardizedUniquifier(String seed) {
         assert seed != null
         assert seed.trim().length() > 0
@@ -104,14 +134,22 @@ class CoreUtil {
     }
 
 
-    /** */
+    /** 
+     * Return a standard computed filename for the provided object.
+     * @param obj The source object
+     * @return The standard filename as a string
+     */
     static public String standardizedFileName(Object obj) {
         assert obj != null
         standardizedFileName(obj.class)
     }
 
 
-    /** */
+    /** 
+     * Return a standard computed filename for the provided class.
+     * @param cl The source class
+     * @return The filename as a string
+     */
     static public String standardizedFileName(Class cl) {
         String cn = cl.name
         //println "cn: $cn"
@@ -129,7 +167,11 @@ class CoreUtil {
     }
 
 
-    /** */
+    /** 
+     * Return all the classes that apply to the provided object.
+     * @param obj The source object
+     * @return A set of class objects
+     */
     public static Set<Class> allClasses(Object obj) {
         Set<Class> classes = new HashSet<Class>()
         Class cl = obj.class

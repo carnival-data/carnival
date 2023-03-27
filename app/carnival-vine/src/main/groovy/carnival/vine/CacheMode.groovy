@@ -4,6 +4,7 @@ package carnival.vine
  * Represent the three cache modes of Carnival vines.
  */
 enum CacheMode {
+    
     /** Cache files will be written, but not read.*/
     IGNORE,
 

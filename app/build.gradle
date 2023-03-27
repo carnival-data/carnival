@@ -363,6 +363,9 @@ task allGroovydoc(type: Groovydoc, group: "Documentation") {
     source subprojects.collect { it.sourceSets.main.allGroovy }                                                
     classpath = files(subprojects.collect { it.sourceSets.main.compileClasspath })
     destinationDir = file("${buildDir}/docs/groovydoc")
+    overviewText = resources.text.fromFile("groovydoc-header.html")
+    windowTitle = "Carnival API"
+    docTitle "Carnival API"
 }
 
 task localPublishGroovydoc(type: Copy, group: "Documentation") {

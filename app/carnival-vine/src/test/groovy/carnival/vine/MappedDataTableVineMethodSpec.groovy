@@ -89,7 +89,7 @@ class MappedDataTableVineMethodSpec extends Specification {
         println "cfs: ${cfs}"
         cfs.delete()
         def mc1 = pv.call()
-        cfs.each {
+        cfs.toList().each {
             def cft = it.text
             cft = cft.replaceAll("alice", "bob")
             it.write(cft)

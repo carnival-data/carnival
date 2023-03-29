@@ -3,8 +3,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 @GrabResolver(name='io.github.carnival-data', root='https://s01.oss.sonatype.org/content/repositories/snapshots/')
-@Grab('io.github.carnival-data:carnival-core:3.0.1')
-@Grab('io.github.carnival-data:carnival-vine:3.0.1')
+@Grab('io.github.carnival-data:carnival-core:3.0.2-SNAPSHOT')
+@Grab('io.github.carnival-data:carnival-vine:3.0.2-SNAPSHOT')
 @Grab('org.apache.tinkerpop:gremlin-core:3.4.10')
 @Grab('com.fasterxml.jackson.core:jackson-databind:2.14.1')
 

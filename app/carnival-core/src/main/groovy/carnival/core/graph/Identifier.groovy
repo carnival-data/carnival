@@ -7,8 +7,6 @@ import groovy.transform.ToString
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import org.reflections.Reflections
-
 import org.apache.commons.configuration.Configuration
 import org.apache.commons.configuration.BaseConfiguration
 import org.apache.commons.configuration.PropertiesConfiguration
@@ -23,14 +21,16 @@ import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.structure.Edge
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 
-import carnival.core.config.Defaults
 import carnival.graph.Base
+import carnival.core.Core
 
 
 
 /** 
- * A domain class to represent Identifier objects in the graph.
- *
+ * A domain class to represent Identifier objects in the graph.  This class is
+ * deprecated.  It is recommended that identifier classes be modeled using as
+ * needed using standard Carnival graph models.
+ * @deprecated
  */
 @ToString
 class Identifier {

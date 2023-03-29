@@ -8,17 +8,19 @@ import spock.lang.Shared
 import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 
-import carnival.core.graph.Core
+import carnival.core.Core
 import carnival.graph.Base
+import carnival.graph.VertexModel
 import carnival.graph.VertexDefinition
-import carnival.graph.VertexDefTrait
+import carnival.core.CarnivalTinker
+import carnival.core.Core
 
 
 
 public class GraphMethodSpec extends Specification {
 
 
-    @VertexDefinition
+    @VertexModel
     static enum VX {
         SOME_REAPER_PROCESS_CLASS,
         SOME_REAPER_PROCESS,
@@ -31,13 +33,13 @@ public class GraphMethodSpec extends Specification {
     }
 
     static class TestGraphMethodProcessClassOveride extends GraphMethod {
-        VertexDefTrait processVertexDef = GraphMethodSpec.VX.SOME_REAPER_PROCESS
-        VertexDefTrait processClassVertexDef = GraphMethodSpec.VX.SOME_REAPER_PROCESS_CLASS
+        VertexDefinition processVertexDef = GraphMethodSpec.VX.SOME_REAPER_PROCESS
+        VertexDefinition processClassVertexDef = GraphMethodSpec.VX.SOME_REAPER_PROCESS_CLASS
         public void execute(Graph graph, GraphTraversalSource g) {}
     }
 
     static class TestGraphMethodProcessOveride extends GraphMethod {
-        VertexDefTrait processVertexDef = GraphMethodSpec.VX.SOME_REAPER_PROCESS
+        VertexDefinition processVertexDef = GraphMethodSpec.VX.SOME_REAPER_PROCESS
         public void execute(Graph graph, GraphTraversalSource g) {}
     }
 
@@ -66,7 +68,7 @@ public class GraphMethodSpec extends Specification {
     // SET UP
     ///////////////////////////////////////////////////////////////////////////
 
-    @Shared coreGraph
+    @Shared carnival
     @Shared graph
     @Shared g
 
@@ -76,13 +78,14 @@ public class GraphMethodSpec extends Specification {
     def cleanupSpec() { }
 
     def setup() {
-        coreGraph = CoreGraphTinker.create()
-        graph = coreGraph.graph
+        carnival = CarnivalTinker.create()
+        carnival.addModel(VX)
+        graph = carnival.graph
         g = graph.traversal()
     }
 
     def cleanup() {
-        if (coreGraph) coreGraph.close()
+        if (carnival) carnival.close()
         if (g) g.close()
     }
 

@@ -1,14 +1,20 @@
 package carnival.gradle
 
 
-
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 
-
+/**
+ * A simple Gradle plugin to add a consistent set of dependencies to code 
+ * that relies on Carnival.
+ *
+ */
 class CarnivalLibraryPlugin implements Plugin<Project> {
 
+    /**
+     * Apply a consistent set of Carnival dependencies to the Gradle project.
+     */
     void apply(Project project) {
         // dependency versions
         Locale locale = new Locale("en", "US");
@@ -19,12 +25,12 @@ class CarnivalLibraryPlugin implements Plugin<Project> {
         def neo4JavaDriverVersion = versions.getString("neo4JavaDriverVersion")
         def carnivalVersion = versions.getString("carnivalVersion")
 
-        println "[CarnivalLibrary] Java version: ${System.getProperty('java.version')}"
-        println "[CarnivalLibrary] Groovy version: ${groovyVersion}"
-        println "[CarnivalLibrary] Gremlin version: ${gremlinVersion}"
-        println "[CarnivalLibrary] Neo4j Tinkerpop version: ${neo4jTinkerpopVersion}"
-        println "[CarnivalLibrary] Neo4 Java Driver version: ${neo4JavaDriverVersion}"
-        println "[CarnivalLibrary] Carnival version: ${carnivalVersion}"
+        println "[Carnival] Java version: ${System.getProperty('java.version')}"
+        println "[Carnival] Groovy version: ${groovyVersion}"
+        println "[Carnival] Gremlin version: ${gremlinVersion}"
+        println "[Carnival] Neo4j Tinkerpop version: ${neo4jTinkerpopVersion}"
+        println "[Carnival] Neo4 Java Driver version: ${neo4JavaDriverVersion}"
+        println "[Carnival] Carnival version: ${carnivalVersion}"
 
         // apply dependencies
         project.dependencies {
@@ -45,6 +51,7 @@ class CarnivalLibraryPlugin implements Plugin<Project> {
             implementation("io.github.carnival-data:carnival-util:${carnivalVersion}")
             implementation("io.github.carnival-data:carnival-graph:${carnivalVersion}")
             implementation("io.github.carnival-data:carnival-core:${carnivalVersion}")
+            implementation("io.github.carnival-data:carnival-vine:${carnivalVersion}")
         }
     }
 }

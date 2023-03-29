@@ -16,6 +16,7 @@ RUN mkdir -p ${APP_SRC}/carnival-core ${APP_SRC}/carnival-util ${APP_SRC}/carniv
 COPY app/*.gradle                           ${APP_SRC}/
 COPY app/gradle.properties                  ${APP_SRC}/
 COPY app/carnival-core/*.gradle             ${APP_SRC}/carnival-core/
+COPY app/carnival-vine/*.gradle             ${APP_SRC}/carnival-vine/
 COPY app/carnival-util/*.gradle             ${APP_SRC}/carnival-util/
 COPY app/carnival-graph/*.gradle            ${APP_SRC}/carnival-graph/
 

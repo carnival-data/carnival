@@ -356,7 +356,7 @@ class MappedDataTable extends DataTable {
      *
      * @param idVal The record identifier.
      * @param fieldName The name of the field for which to get the value.
-     * @param args.verbose Defaults to [verbose:false].
+     * @param args.verbose Verbose logging; default is [verbose:false].
      * @return The value of field fieldName for the record identified by idVal
      * as a String if it exists, otherwise null.
      * 
@@ -692,7 +692,7 @@ class MappedDataTable extends DataTable {
      * Write the meta-data file for this MappedDataTable in the given
      * directory.
      *
-     * @see fileName(String, String, Map)
+     * @see #fileName(String, String, Map)
      * @param destDir The directory in which to write the file.
      * @param args Optional args passed to fileName().
      * @return The meta-data file. 

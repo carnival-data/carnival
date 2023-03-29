@@ -34,15 +34,17 @@ import carnival.util.FeatureDataType
 import carnival.util.StringPrinter
 import carnival.util.MarkdownPrinter
 
-import carnival.graph.EdgeDefTrait
-import carnival.graph.PropertyDefTrait
-import carnival.graph.VertexDefTrait
+import carnival.graph.EdgeDefinition
+import carnival.graph.PropertyDefinition
+import carnival.graph.VertexDefinition
+import carnival.core.Core
 
 
 
 
 /**
- *
+ * A persistence of a data set descriptor in a property graph.  This is
+ * experimental code and subject to rapid change. 
  *
  */
 class DataSetDescriptorGraph implements GremlinTrait {
@@ -52,7 +54,7 @@ class DataSetDescriptorGraph implements GremlinTrait {
     // GRAPH MODEL
     ///////////////////////////////////////////////////////////////////////////
 
-    static enum VX implements VertexDefTrait {
+    static enum VX implements VertexDefinition {
         FEATURE_REPORT(
             vertexProperties:[
                 Core.PX.NAME.withConstraints(required:true)
@@ -105,7 +107,7 @@ class DataSetDescriptorGraph implements GremlinTrait {
 
 
     /** */
-    static enum EX implements EdgeDefTrait {
+    static enum EX implements EdgeDefinition {
         HAS_FINAL_STEP
     }
 
@@ -412,7 +414,7 @@ class DataSetDescriptorGraph implements GremlinTrait {
 
 
     /** */
-    Vertex save(GraphTraversalSource g, VertexDefTrait vdt, DescribedEntity de) {
+    Vertex save(GraphTraversalSource g, VertexDefinition vdt, DescribedEntity de) {
         assert g
         assert vdt
         assert de
@@ -465,6 +467,4 @@ class FeatureSetRecipeStepGraphTraversal implements DescribedEntity {
     FeatureSetRecipeIngredient hasOutput
 
 }
-
-
 

@@ -15,8 +15,8 @@ Vine methods are functions that return data. In application code, vine method ar
 MappedDataTable vines return data in MappedDataTable objects.
 
 ```groovy
-@Grab(group='org.pmbb', module='carnival-util', version='2.1.1-SNAPSHOT')
-@Grab(group='org.pmbb', module='carnival-core', version='2.1.1-SNAPSHOT')
+@Grab(group='org.pmbb', module='carnival-util', version='2.1.5')
+@Grab(group='org.pmbb', module='carnival-core', version='2.1.5')
 
 import groovy.transform.ToString
 import carnival.util.MappedDataTable

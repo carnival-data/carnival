@@ -13,16 +13,29 @@ import org.apache.tinkerpop.gremlin.structure.Vertex
 
 
 
-/** */
+/** 
+ * Utilities useful for GremlinTrait.
+ */
 class GremlinTraitUtilities {
 
+    /** A log object used in a static context */
     static Logger log = LoggerFactory.getLogger(GremlinTraitUtilities)
 
 
     /**
      * Call the supplied closure passing in the graph and traversal source if
      * they are present.
-     *
+     * <p>
+     * If the closure accepts a single argument, it will be called with  the
+     * graph traversal source as the single argument.
+     * <p>
+     * If the closure accepts more than one argument, it will be called with
+     * the gremlin graph as the first argument and the graph traversal source
+     * as the second.
+     * @param graph A gremlin graph
+     * @param g A graph traversal source to use
+     * @param cl The closure to execute
+     * @return The result of the closure
      */
     static public Object withTraversal(Graph graph, GraphTraversalSource g, Closure cl) {
         def maxClosureParams = cl.getMaximumNumberOfParameters()
@@ -42,8 +55,14 @@ class GremlinTraitUtilities {
 
 
     /**
-     * cl(graph, g)
-     *
+     * Call the provided closure passing the gremlin graph and graph traversal 
+     * source.  If the gremlin graph supports transactions, the transaction
+     * will be rolled back of the closure throws an exception and committed
+     * otherwise.
+     * @param graph A gremlin graph
+     * @param g A graph traversal source
+     * @param cl The closure to execute
+     * @return The result of the closure
      */
     static public Object withGremlin(Graph graph, GraphTraversalSource g, Closure cl) {
         assert graph != null
@@ -81,13 +100,16 @@ class GremlinTraitUtilities {
 
 
 
-/** */
+/** 
+ * A trait to add methods helpful for interacting with a gremlin graph.
+ */
 trait GremlinTrait  {
     
     ///////////////////////////////////////////////////////////////////////////
     // STATIC FIELDS
     ///////////////////////////////////////////////////////////////////////////
-    static Logger sqllog = LoggerFactory.getLogger('sql')
+
+    /** A general log */
     static Logger log = LoggerFactory.getLogger(GremlinTrait)
 
 
@@ -95,7 +117,7 @@ trait GremlinTrait  {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** A gremlin graph that will be added with this trait */
     Graph graph
 
 
@@ -103,35 +125,28 @@ trait GremlinTrait  {
     // INTERFACE
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Getter for the gremlin graph.
+     * @return The gremlin graph
+     */
     public Graph getGraph() { this.graph }
 
-    /** */
+    /** 
+     * Setter for the gremlin graph.
+     * @param theGraph A gremlin graph
+     */
     public void setGraph(Graph theGraph) { this.graph = theGraph }
 
 
-    /** */
+    /** 
+     * Create and return a graph traversal source
+     * @return A new graph traversal source
+     */
     public GraphTraversalSource traversal() { 
         Graph theGraph = getGraph()
         assert theGraph
         def g = theGraph.traversal() 
         return g
-    }
-
-
-    /** */
-    public Object cypher(String q) {
-        sqllog.info("GrelinTrait.cypher:\n$q")
-        assert graph
-        return graph.cypher(q)
-    }
-
-
-    /** */
-    public Object cypher(String q, Map args) {
-        sqllog.info("GremlinTrait.cypher:\n$q\n$args")
-        assert graph
-        return graph.cypher(q, args)
     }
 
 

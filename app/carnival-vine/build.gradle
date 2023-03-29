@@ -1,0 +1,140 @@
+/**
+ *
+ * CARNIVAL
+ *
+ * (it's a party of information)
+ *
+ */
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+// maven publishing
+///////////////////////////////////////////////////////////////////////////////
+
+publishing {
+    publications {
+        mavenGroovy(MavenPublication) {
+            artifactId = 'carnival-vine'
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    name 'Carnival Vine'
+                    description 'The Carnival Vine module'
+                    url 'https://github.com/carnival-data/carnival'
+                    licenses {
+                        license {
+                            name 'GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007'
+                            url 'https://www.gnu.org/licenses/gpl-3.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'augustearth'
+                            name 'David Birtwell'
+                            email 'augustearth@gmail.com'
+                        }
+                        developer {
+                            id 'hjwilli'
+                            name 'Heather Williams'
+                            email 'hjwilli@gmail.com'
+                        }
+                    }
+                    scm {
+                        connection 'scm:git:git://github.com/carnival-data/carnival.git'
+                        developerConnection 'scm:git:ssh://github.com:carnival-data/carnival.git'
+                        url 'https://github.com/carnival-data/carnival'
+                    }
+                }
+            }
+            //pom.withXml {
+            //    Node pomNode = asNode()
+            //    pomNode.dependencies.'*'.findAll() {
+            //        it.artifactId.text() == 'ojdbc6'
+            //    }.each() {
+            //        it.parent().remove(it)
+            //    }
+            //}            
+        }
+    }
+    repositories {
+        maven {
+        // mavenCentral {
+            // change URLs to point to your repos, e.g. http://my.org/repo
+            def releasesRepoUrl = "$buildDir/repos/releases"
+            def snapshotsRepoUrl = "$buildDir/repos/snapshots"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenGroovy
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// dependencies
+///////////////////////////////////////////////////////////////////////////////
+
+
+configurations {
+    providedRuntime
+    apt
+}
+
+
+// Annotation Processors
+// 
+// Started getting the following:
+// The following annotation processors were detected on the compile classpath: 'org.apache.tinkerpop.gremlin.process.traversal.dsl.GremlinDslProcessor' and 'org.neo4j.kernel.impl.annotations.ServiceProcessor' and 'org.neo4j.kernel.impl.annotations.DocumentationProcessor'. Detecting annotation processors on the compile classpath is deprecated and Gradle 5.0 will ignore them. Please add them to the annotation processor path instead. If you did not intend to use annotation processors, you can use the '-proc:none' compiler argument to ignore them.
+// Found documentation on the issue at: https://blog.gradle.org/incremental-compiler-avoidance#about-annotation-processors
+// The apt configuration was added as per the docs.
+
+// In this section you declare the dependencies for your production and test code
+dependencies {
+    // Carnival module dependencies
+    implementation project(":carnival-util")
+    implementation project(":carnival-graph")
+
+    // Apache commons
+    // Required for DigestUtils.  Should probably find the lower
+    // level dependency that would work.
+    implementation 'org.apache.commons:commons-parent:53'
+
+    // for to serialize objects as json
+    implementation "com.fasterxml.jackson.core:jackson-annotations:2.13.3"
+    implementation "com.fasterxml.jackson.core:jackson-core:2.13.3"
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.13.3"
+}
+
+
+compileGroovy {
+    options.annotationProcessorPath = configurations.apt
+}
+
+
+
+
+/*
+///////////////////////////////////////////////////////////////////////////////
+// BUILD 
+///////////////////////////////////////////////////////////////////////////////
+task createProperties(dependsOn: processResources) {
+  doLast {
+    new File("$buildDir/resources/main/version.properties").withWriter { w ->
+        Properties p = new Properties()
+        p['version'] = project.version.toString()
+        p.store w, null
+    }
+  }
+}
+
+classes {
+    dependsOn createProperties
+}
+*/

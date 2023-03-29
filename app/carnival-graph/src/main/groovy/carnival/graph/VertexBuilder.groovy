@@ -16,9 +16,9 @@ import org.apache.tinkerpop.gremlin.structure.Edge
 
 
 /** 
- * Builder class used when creating verticies from a VertexDefTrait object.
+ * Builder class used when creating verticies from a VertexDefinition object.
  * 
- * @see carnival.graph.VertexDefTrait
+ * @see carnival.graph.VertexDefinition
  */
 @Slf4j
 class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
@@ -28,17 +28,20 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
     ///////////////////////////////////////////////////////////////////////////
 
     /** 
-     * Object that owns this builder.
-     * */
-    VertexDefTrait vertexDef
+     * The source vertex definition of this builder.
+     */
+    VertexDefinition vertexDef
 
 
     ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTOR
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
-    public VertexBuilder(VertexDefTrait vertexDef) {
+    /** 
+     * Constructor
+     * @param The source vertex definition of this builder.
+     */
+    public VertexBuilder(VertexDefinition vertexDef) {
         assert vertexDef
         this.vertexDef = vertexDef
     }
@@ -48,8 +51,10 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
     // GETTERS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
-    public ElementDefTrait getElementDef() { vertexDef }
+    /** 
+     * Return the source vertex definition as an element definition.
+     */
+    public ElementDefinition getElementDef() { vertexDef }
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -66,7 +71,7 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
 
      /** 
      * If the vertex with the specified properties exists return it, otherwise create it.
-     * Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexDefinition':
+     * Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexModel':
      * <p>
      * {@code Vertex rover = VX.SHIBA_INU.instance().ensure(graph) }
      * 
@@ -79,7 +84,7 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
 
      /** 
      * If the vertex with the specified properties exists return it, otherwise create it. 
-     * Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexDefinition':
+     * Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexModel':
      * <p>
      * {@code Vertex rover = VX.SHIBA_INU.instance().vertex(graph) }
      *
@@ -92,7 +97,7 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
         def traversal = traversal(graph, g)
 
         def pvs = allPropertyValues()
-        pvs.each { PropertyDefTrait vp, Object val -> 
+        pvs.each { PropertyDefinition vp, Object val -> 
             traversal.has(vp.label, val) 
         }
 
@@ -104,7 +109,13 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
     }
 
 
-    /** */
+    /** 
+     * Returns a graph traversal that starts with vertices that match this
+     * vertex builder.
+     * @param graph The property graph
+     * @param g A graph traversal source to use
+     * @return A graph traversal
+     */
     public Traversal traversal(Graph graph, GraphTraversalSource g) {
         assert graph
         assert g
@@ -126,7 +137,7 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
 
     /** 
      * Create a vertex with the specified properties.
-     * Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexDefinition':
+     * Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexModel':
      * <p>
      * {@code Vertex rover = VX.SHIBA_INU.instance().create(graph) }
      * 
@@ -140,7 +151,7 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
 
     /** 
      * Create a vertex with the specified properties.
-     * Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexDefinition':
+     * Usage example, assuming VX.SHIBA_INU is an enum decorated with '@VertexModel':
      * <p>
      * {@code Vertex rover = VX.SHIBA_INU.instance().create(graph) }
      * 
@@ -174,7 +185,10 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
     }
 
 
-    /** */
+    /** 
+     * Assert that all the properties required by the source vertex definition
+     * have been set in this builder.
+     */
     void assertRequiredProperties() {
         vertexDef.requiredProperties.each { requiredPropDef ->
             boolean found = allPropertyValues().find { k, v ->

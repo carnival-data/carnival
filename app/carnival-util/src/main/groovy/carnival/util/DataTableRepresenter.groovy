@@ -35,16 +35,12 @@ public class DataTableRepresenter extends Representer {
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
-    static Logger elog = LoggerFactory.getLogger('db-entity-report')
-
-    /** */
+    /** Log to use */
     static Logger log = LoggerFactory.getLogger(DataTableRepresenter)
 
 
     /**
      * No argument constructor.
-     *
      */
     public DataTableRepresenter() { 
        this.representers.put(org.codehaus.groovy.runtime.GStringImpl.class, new RepresentGString())
@@ -113,7 +109,6 @@ public class DataTableRepresenter extends Representer {
         } catch (org.yaml.snakeyaml.error.YAMLException e) {
             def msg = "representJavaBeanProperty failure javaBean:$javaBean property:$property propertyValue:$propertyValue customTag:$customTag"
             log.error(msg, e)
-            elog.error(msg, e)
         }
         
         return representation

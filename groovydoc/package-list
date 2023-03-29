@@ -1,10 +1,9 @@
-carnival.core.cli
-carnival.core.config
+carnival.core
 carnival.core.graph
 carnival.core.util
-carnival.core.vine
 carnival.gradle
 carnival.graph
 carnival.graph.ext
 carnival.util
+carnival.vine
 test

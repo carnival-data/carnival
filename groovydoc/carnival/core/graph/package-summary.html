@@ -22,7 +22,7 @@
 <html>
 <head>
 
-<title>carnival.core.graph (carnival 2.1.6-SNAPSHOT API)</title>
+<title>carnival.core.graph (Carnival API)</title>
 <meta name="keywords" content="carnival.core.graph package">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel ="stylesheet" TYPE="text/css" HREF="../../../stylesheet.css" title="Style">
@@ -31,7 +31,7 @@
 <script type="text/javascript">
 function windowTitle()
 {
-    parent.document.title="carnival.core.graph (carnival 2.1.6-SNAPSHOT API)";
+    parent.document.title="carnival.core.graph (Carnival API)";
 }
 </script>
 <noscript>
@@ -72,6 +72,11 @@ function windowTitle()
 </div>
 
 
+<h2 title="Package carnival.core.graph Description" class="title">Package carnival.core.graph Description</h2>
+<div class="header"> Graph schema, validation, and method classes.
+ 
+ </div>
+
 
 <div class="contentContainer">
 
@@ -86,6 +91,15 @@ function windowTitle()
                         <th class="colFirst" scope="col">Interface</th>
                         <th class="colLast" scope="col">Description</th>
                     </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="ElementConstraint.html" title="class in carnival/core/graph">
+                                    ElementConstraint
+                                </a></strong>
+                            </td>
+                            <td>An element constraint that puts limitations on graph elements,which may be
+ a vertex or an edge.</td>
+                        </tr>
 <tr class="altColor">
                             <td class="colOne">
                                 <strong><a href="GraphSchema.html" title="class in carnival/core/graph">
@@ -158,67 +172,46 @@ function windowTitle()
                     </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="Core.html" title="class in carnival/core/graph">
-                                    Core
-                                </a></strong>
-                            </td>
-                            <td></td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="CoreGraph.html" title="class in carnival/core/graph">
-                                    CoreGraph
-                                </a></strong>
-                            </td>
-                            <td>The core graph.  </td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="CoreGraphNeo4j.html" title="class in carnival/core/graph">
-                                    CoreGraphNeo4j
-                                </a></strong>
-                            </td>
-                            <td></td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="CoreGraphSchema.html" title="class in carnival/core/graph">
-                                    CoreGraphSchema
-                                </a></strong>
-                            </td>
-                            <td>The core graph.  </td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="CoreGraphTinker.html" title="class in carnival/core/graph">
-                                    CoreGraphTinker
-                                </a></strong>
-                            </td>
-                            <td></td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="CoreGraphUtils.html" title="class in carnival/core/graph">
-                                    CoreGraphUtils
-                                </a></strong>
-                            </td>
-                            <td></td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="CoreGraphValidator.html" title="class in carnival/core/graph">
-                                    CoreGraphValidator
-                                </a></strong>
-                            </td>
-                            <td></td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
                                 <strong><a href="DataSetDescriptorGraph.html" title="class in carnival/core/graph">
                                     DataSetDescriptorGraph
                                 </a></strong>
                             </td>
-                            <td></td>
+                            <td>A persistence of a data set descriptor in a property graph.  </td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="DefaultElementConstraint.html" title="class in carnival/core/graph">
+                                    DefaultElementConstraint
+                                </a></strong>
+                            </td>
+                            <td>A default implementation of ElementConstraint, which is used by the 
+ default graph validator.</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="DefaultGraphSchema.html" title="class in carnival/core/graph">
+                                    DefaultGraphSchema
+                                </a></strong>
+                            </td>
+                            <td>The core graph.  </td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="DefaultGraphValidator.html" title="class in carnival/core/graph">
+                                    DefaultGraphValidator
+                                </a></strong>
+                            </td>
+                            <td>A default implementation of GraphValidator that uses gremlin traversals to
+ perform the graph validation steps.</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="EdgeConstraint.html" title="class in carnival/core/graph">
+                                    EdgeConstraint
+                                </a></strong>
+                            </td>
+                            <td>Defined the valid vertex domain and range labels for a given
+ edge label.</td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
@@ -280,19 +273,11 @@ function windowTitle()
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="GremlinGraphValidator.html" title="class in carnival/core/graph">
-                                    GremlinGraphValidator
-                                </a></strong>
-                            </td>
-                            <td></td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
                                 <strong><a href="GremlinTraitUtilities.html" title="class in carnival/core/graph">
                                     GremlinTraitUtilities
                                 </a></strong>
                             </td>
-                            <td></td>
+                            <td>Utilities useful for GremlinTrait.</td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
@@ -300,7 +285,33 @@ function windowTitle()
                                     Identifier
                                 </a></strong>
                             </td>
-                            <td>A domain class to represent Identifier objects in the graph.</td>
+                            <td>A domain class to represent Identifier objects in the graph.  </td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="LegacyValidator.html" title="class in carnival/core/graph">
+                                    LegacyValidator
+                                </a></strong>
+                            </td>
+                            <td>An implementation of a graph validator.</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="VertexConstraint.html" title="class in carnival/core/graph">
+                                    VertexConstraint
+                                </a></strong>
+                            </td>
+                            <td>VertexConstraint binds a vertex label with a list
+ of VertexPropertyConstraints, the rules for which are
+ scoped by vertex label.</td>
+                        </tr>
+<tr class="altColor">
+                            <td class="colOne">
+                                <strong><a href="VertexPropertyConstraint.html" title="class in carnival/core/graph">
+                                    VertexPropertyConstraint
+                                </a></strong>
+                            </td>
+                            <td>Defines the rules governing the given property.</td>
                         </tr>
 
                     </tbody>
@@ -321,30 +332,6 @@ function windowTitle()
                         <th class="colFirst" scope="col">Enum</th>
                         <th class="colLast" scope="col">Description</th>
                     </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="Core.EX.html" title="class in carnival/core/graph">
-                                    Core.EX
-                                </a></strong>
-                            </td>
-                            <td></td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="Core.PX.html" title="class in carnival/core/graph">
-                                    Core.PX
-                                </a></strong>
-                            </td>
-                            <td></td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="Core.VX.html" title="class in carnival/core/graph">
-                                    Core.VX
-                                </a></strong>
-                            </td>
-                            <td></td>
-                        </tr>
 <tr class="altColor">
                             <td class="colOne">
                                 <strong><a href="DataSetDescriptorGraph.EX.html" title="class in carnival/core/graph">

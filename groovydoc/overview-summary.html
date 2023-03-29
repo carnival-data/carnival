@@ -22,7 +22,7 @@
 
 <html>
 <head>
-<title>Overview (carnival 2.1.6-SNAPSHOT API)</title>
+<title>Overview (Carnival API)</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="keywords" content="Overview">
 <link rel ="stylesheet" type="text/css" href="stylesheet.css" title="Style">
@@ -32,7 +32,7 @@
 <body class="center">
 <script type="text/javascript"><!--
 if (location.href.indexOf('is-external=true') == -1) {
-    parent.document.title="Overview (carnival 2.1.6-SNAPSHOT API)";
+    parent.document.title="Overview (Carnival API)";
 }
 //-->
 </script>
@@ -66,13 +66,15 @@ if (location.href.indexOf('is-external=true') == -1) {
     </a></div>
 <!-- ========= END OF TOP NAVBAR ========= -->
 <div class="header">
-    <h1 class="title">carnival 2.1.6-SNAPSHOT API</h1>
+    <h1 class="title">Carnival API</h1>
 </div>
 
 <div class="header">
     <div class="subTitle">
         <div class="block"></div>
     </div>
+    
+    <p>See: <a href="#overview_description">Description</a></p>
     
 </div>
 <div class="contentContainer">
@@ -85,38 +87,27 @@ if (location.href.indexOf('is-external=true') == -1) {
 <tbody>
 
 <tr class="altColor">
-    <td class="colFirst"><a href="carnival/core/cli/package-summary.html">carnival.core.cli</a></td>
-    <td class="colLast">&nbsp;</td>
+    <td class="colFirst"><a href="carnival/core/package-summary.html">carnival.core</a></td>
+    <td class="colLast">Top level package in the Carnival library that contains Carnival graph and 
+ graph method functionality.</td>
 </tr>
 
 
 <tr class="rowColor">
-    <td class="colFirst"><a href="carnival/core/config/package-summary.html">carnival.core.config</a></td>
-    <td class="colLast">&nbsp;</td>
-</tr>
-
-
-<tr class="altColor">
     <td class="colFirst"><a href="carnival/core/graph/package-summary.html">carnival.core.graph</a></td>
-    <td class="colLast">&nbsp;</td>
-</tr>
-
-
-<tr class="rowColor">
-    <td class="colFirst"><a href="carnival/core/util/package-summary.html">carnival.core.util</a></td>
-    <td class="colLast">&nbsp;</td>
+    <td class="colLast">Graph schema, validation, and method classes.</td>
 </tr>
 
 
 <tr class="altColor">
-    <td class="colFirst"><a href="carnival/core/vine/package-summary.html">carnival.core.vine</a></td>
-    <td class="colLast">&nbsp;</td>
+    <td class="colFirst"><a href="carnival/core/util/package-summary.html">carnival.core.util</a></td>
+    <td class="colLast">Utility classes for carnival core.</td>
 </tr>
 
 
 <tr class="rowColor">
     <td class="colFirst"><a href="carnival/gradle/package-summary.html">carnival.gradle</a></td>
-    <td class="colLast">&nbsp;</td>
+    <td class="colLast">The Carnival Gradle plugin.</td>
 </tr>
 
 
@@ -128,7 +119,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 
 <tr class="rowColor">
     <td class="colFirst"><a href="carnival/graph/ext/package-summary.html">carnival.graph.ext</a></td>
-    <td class="colLast">&nbsp;</td>
+    <td class="colLast">Classes that extend the Apache Tinkerpop-Gremlin API to work with Carnival
+ objects.</td>
 </tr>
 
 
@@ -139,8 +131,15 @@ if (location.href.indexOf('is-external=true') == -1) {
 
 
 <tr class="rowColor">
+    <td class="colFirst"><a href="carnival/vine/package-summary.html">carnival.vine</a></td>
+    <td class="colLast">Top level package in the Carnival library that contains functionality for 
+ reading and caching data from data sources.</td>
+</tr>
+
+
+<tr class="altColor">
     <td class="colFirst"><a href="test/package-summary.html">test</a></td>
-    <td class="colLast">&nbsp;</td>
+    <td class="colLast">Classes that support automated testing.</td>
 </tr>
 
 
@@ -152,6 +151,24 @@ if (location.href.indexOf('is-external=true') == -1) {
 </a>
 
 <P>
+
+    <div class="subTitle">
+        <div class="block"><p>
+    <b>Carnival</b> is a semantically driven informatics toolkit that enables
+    the aggregation of data from disparate sources into a unified property
+    graph and provides mechanisms to model and interact with property graph
+    data in well-defined ways.
+</p>
+<p>
+    There are two main components to Carnival. The first is a data caching
+    mechanism that supports the efficient aggregation of data from disparate
+    sources. The second is a layer built on top of
+    <a href="https://tinkerpop.apache.org">Apache Tinkerpop</a> that seeks to
+    provide more standardized and semantically driven methods of interacting
+    with a property graph.
+</p></div>
+    </div>
+
 
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
 <div class="bottomNav"><a name="navbar_bottom">

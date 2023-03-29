@@ -22,7 +22,7 @@
 <html>
 <head>
 
-<title>carnival.graph (carnival 2.1.6-SNAPSHOT API)</title>
+<title>carnival.graph (Carnival API)</title>
 <meta name="keywords" content="carnival.graph package">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel ="stylesheet" TYPE="text/css" HREF="../../stylesheet.css" title="Style">
@@ -31,7 +31,7 @@
 <script type="text/javascript">
 function windowTitle()
 {
-    parent.document.title="carnival.graph (carnival 2.1.6-SNAPSHOT API)";
+    parent.document.title="carnival.graph (Carnival API)";
 }
 </script>
 <noscript>
@@ -75,11 +75,11 @@ function windowTitle()
 <h2 title="Package carnival.graph Description" class="title">Package carnival.graph Description</h2>
 <div class="header"> Contains the framework for defining property, vertex and edge definitons of a Carnival graph model.
  <p>
- The graph model is specified by creating enums that are annotated with &#64;PropertyDefinition, &#64;EdgeDefinition 
- or &#64;VertexDefinition. Among other things, these annotations apply the traits PropertyDefTrait, EdgeDefTrait, 
- or VertexDefTrait to the enums.
+ The graph model is specified by creating enums that are annotated with &#64;PropertyModel, &#64;EdgeModel 
+ or &#64;VertexModel. Among other things, these annotations apply the traits PropertyDefinition, EdgeDefinition, 
+ or VertexDefinition to the enums.
  <p>
- Once VertexDefinition and EdgeDefinition have been created they can be used to add new elements to the 
+ Once VertexModel and EdgeModel have been created they can be used to add new elements to the 
  graph, for example:
  <TT>Edge edge1 = EX.IS_FRIENDS_WITH.instance().from(person1).to(person2).create()</TT>.
  The 'instance()' method invokes a builder class (EdgeBuilder or VertexBuilder) that the following methods 
@@ -90,7 +90,7 @@ function windowTitle()
  <p>
  Example of specifying verticies with class and instanceOf relationships:
  
-  <pre><TT>&#64;VertexDefinition
+  <pre><TT>&#64;VertexModel
  static enum VX {
      CLASS_OF_ALL_DOGS (
          isClass:true
@@ -103,7 +103,7 @@ function windowTitle()
          superClass: CLASS_OF_ALL_DOGS
      ),
   &rbrace;
- &#64;VertexDefinition
+ &#64;VertexModel
  static enum VX {    
      SHIBA_INU_CLASS,
      SHIBA_INU (
@@ -116,7 +116,7 @@ function windowTitle()
  <p>
  Example of specifying edges with properties:
 
- <pre><TT>&#64;EdgeDefinition
+ <pre><TT>&#64;EdgeModel
  static enum EX {
      IS_FRIENDS_WITH(
          domain:[VX.PERSON],
@@ -126,7 +126,7 @@ function windowTitle()
          PX.STRENGTH_OF_RELATIONSHIP.withConstraints(index:true)
      ]
  &rbrace;
- &#64;PropertyDefinition
+ &#64;PropertyModel
  static enum PX {
      STRENGTH_OF_RELATIONSHIP
  &rbrace;
@@ -152,38 +152,38 @@ function windowTitle()
                     </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="EdgeDefTrait.html" title="class in carnival/graph">
-                                    EdgeDefTrait
+                                <strong><a href="EdgeDefinition.html" title="class in carnival/graph">
+                                    EdgeDefinition
                                 </a></strong>
                             </td>
                             <td>Defines allowed edges in a graph model, automatically inherited by 
- enums with the `@EdgeDefinition` annotation.</td>
+ enums with the `@EdgeModel` annotation.</td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="ElementDefTrait.html" title="class in carnival/graph">
-                                    ElementDefTrait
+                                <strong><a href="ElementDefinition.html" title="class in carnival/graph">
+                                    ElementDefinition
                                 </a></strong>
                             </td>
-                            <td>Inherited by traits that can have PropertyDefs: VertexDefTrait and EdgedDefTrait</td>
+                            <td>Inherited by traits that can have PropertyDefs: VertexDefinition and EdgedDefTrait</td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="PropertyDefTrait.html" title="class in carnival/graph">
-                                    PropertyDefTrait
+                                <strong><a href="PropertyDefinition.html" title="class in carnival/graph">
+                                    PropertyDefinition
                                 </a></strong>
                             </td>
                             <td>Defines allowed properties in a graph model, automatically inherited by 
- enums with the `@PropertyDefinition` annotation.</td>
+ enums with the `@PropertyModel` annotation.</td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="VertexDefTrait.html" title="class in carnival/graph">
-                                    VertexDefTrait
+                                <strong><a href="VertexDefinition.html" title="class in carnival/graph">
+                                    VertexDefinition
                                 </a></strong>
                             </td>
                             <td>Defines allowed verticies in a graph model, automatically inherited by 
- enums with the `@VertexDefinition` annotation.</td>
+ enums with the `@VertexModel` annotation.</td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
@@ -191,7 +191,7 @@ function windowTitle()
                                     WithPropertyDefsTrait
                                 </a></strong>
                             </td>
-                            <td>Inherited by traits that can have PropertyDefs: VertexDefTrait and EdgedDefTrait</td>
+                            <td>Inherited by traits that can have PropertyDefs: VertexDefinition and EdgedDefTrait</td>
                         </tr>
 
                     </tbody>
@@ -223,12 +223,11 @@ function windowTitle()
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="DefinitionTransformation.html" title="class in carnival/graph">
-                                    DefinitionTransformation
+                                <strong><a href="Definition.html" title="class in carnival/graph">
+                                    Definition
                                 </a></strong>
                             </td>
-                            <td>Superclass for AST definition transformations that add traits to enum
- definitions.  </td>
+                            <td>A collection of static methods relevent to element definitions.</td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
@@ -236,7 +235,9 @@ function windowTitle()
                                     DynamicVertexDef
                                 </a></strong>
                             </td>
-                            <td></td>
+                            <td>DynamicVertexDef is a VertexDefinition that is created in code outside the
+ normal model definition construction of enumerated classes tagged with 
+ @VertexModel.</td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
@@ -244,23 +245,16 @@ function windowTitle()
                                     EdgeBuilder
                                 </a></strong>
                             </td>
-                            <td>Builder class used when creating edges from an EdgeDefTrait object.</td>
+                            <td>Builder class used when creating edges from an EdgeDefinition object.</td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="EdgeDef.html" title="class in carnival/graph">
-                                    EdgeDef
+                                <strong><a href="ModelTransformation.html" title="class in carnival/graph">
+                                    ModelTransformation
                                 </a></strong>
                             </td>
-                            <td></td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="ElementDef.html" title="class in carnival/graph">
-                                    ElementDef
-                                </a></strong>
-                            </td>
-                            <td></td>
+                            <td>Superclass for AST definition transformations that add traits to enum
+ definitions.  </td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
@@ -276,15 +270,7 @@ function windowTitle()
                                     VertexBuilder
                                 </a></strong>
                             </td>
-                            <td>Builder class used when creating verticies from a VertexDefTrait object.</td>
-                        </tr>
-<tr class="altColor">
-                            <td class="colOne">
-                                <strong><a href="VertexDef.html" title="class in carnival/graph">
-                                    VertexDef
-                                </a></strong>
-                            </td>
-                            <td></td>
+                            <td>Builder class used when creating verticies from a VertexDefinition object.</td>
                         </tr>
 
                     </tbody>
@@ -346,7 +332,8 @@ function windowTitle()
                                     EdgeDomainException
                                 </a></strong>
                             </td>
-                            <td></td>
+                            <td>EdgeDomainException is expected to be thrown when the domain rules of an
+ edge definition have been violated.</td>
                         </tr>
 
                     </tbody>
@@ -370,24 +357,24 @@ function windowTitle()
                     </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="EdgeDefinition.html" title="class in carnival/graph">
-                                    EdgeDefinition
+                                <strong><a href="EdgeModel.html" title="class in carnival/graph">
+                                    EdgeModel
                                 </a></strong>
                             </td>
                             <td>Used to specify edge definitions in a graph model.</td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="PropertyDefinition.html" title="class in carnival/graph">
-                                    PropertyDefinition
+                                <strong><a href="PropertyModel.html" title="class in carnival/graph">
+                                    PropertyModel
                                 </a></strong>
                             </td>
                             <td>Used to specify property definitions in a graph model.</td>
                         </tr>
 <tr class="altColor">
                             <td class="colOne">
-                                <strong><a href="VertexDefinition.html" title="class in carnival/graph">
-                                    VertexDefinition
+                                <strong><a href="VertexModel.html" title="class in carnival/graph">
+                                    VertexModel
                                 </a></strong>
                             </td>
                             <td>Used to specify vertex definitions in a graph model.</td>

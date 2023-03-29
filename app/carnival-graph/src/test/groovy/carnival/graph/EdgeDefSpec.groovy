@@ -19,13 +19,13 @@ import org.apache.tinkerpop.gremlin.structure.Edge
 class EdgeDefSpec extends Specification {
 
 
-    @VertexDefinition
+    @VertexModel
     static enum VX {
         THING,
         THING_1
     }
 
-    @EdgeDefinition
+    @EdgeModel
     static enum EX {
     	IS_NOT(
             domain:[VX.THING], 
@@ -76,7 +76,7 @@ class EdgeDefSpec extends Specification {
         Vertex v1 = VX.THING.instance().create(graph)
         Vertex v2 = VX.THING_1.instance().create(graph)
         Edge e = EX.IS_NOT.instance().from(v1).to(v2).create()
-        EdgeDefTrait edt = EdgeDef.lookup(e)
+        EdgeDefinition edt = Definition.lookup(e)
 
         then:
         edt == EX.IS_NOT

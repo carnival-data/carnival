@@ -25,7 +25,7 @@ See the API docs for the [carnival.graph package](https://carnival-data.github.i
 ### Model File Locations
 Models can be defined anywhere, as shown in the example scripts. However in a larger application, the convention is to either create a file named in `GraphModel.groovy` the main source directory or to create a subpackage named `model` that contains files with the model definitions.  
 
-See [CoreGraph.initializeGremlinGraph()](https://github.com/carnival-data/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/CoreGraph.groovy).
+See [CoreGraph.addModelsFromPackage()](https://github.com/carnival-data/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/CoreGraph.groovy).
 
 ### Annotation Processor
 Carnival contains a [Groovy AST transformation](https://groovy-lang.org/metaprogramming.html#developing-ast-xforms) that scans the source tree for `@PropertyDefinition`, `@EdgeDefinition` or `@VertexDefinition` annotations.

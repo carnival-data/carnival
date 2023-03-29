@@ -2,15 +2,15 @@ package test.carnival.graph
 
 
 
-import carnival.graph.VertexDefinition
-import carnival.graph.EdgeDefinition
-import carnival.graph.PropertyDefinition
+import carnival.graph.VertexModel
+import carnival.graph.EdgeModel
+import carnival.graph.PropertyModel
 
 
 
 class TestModel {
 
-    @VertexDefinition(global="true")
+    @VertexModel(global="true")
     static enum VXG {
         THING,
         THING_1(
@@ -22,7 +22,7 @@ class TestModel {
     }
 
 
-    @VertexDefinition
+    @VertexModel
     static enum VX {
         THING,
 
@@ -35,7 +35,7 @@ class TestModel {
     }
 
 
-    @EdgeDefinition
+    @EdgeModel
     static enum EX {
     	IS_NOT(
             domain:[VX.THING], 
@@ -44,7 +44,7 @@ class TestModel {
     }
 
 
-    @PropertyDefinition
+    @PropertyModel
     static enum PX {
         PROP_A,
         PROP_B,

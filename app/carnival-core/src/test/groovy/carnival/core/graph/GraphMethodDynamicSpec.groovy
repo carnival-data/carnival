@@ -8,11 +8,13 @@ import spock.lang.Shared
 import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 
-import carnival.core.graph.Core
+import carnival.core.Core
 import carnival.graph.Base
+import carnival.graph.VertexModel
 import carnival.graph.VertexDefinition
-import carnival.graph.VertexDefTrait
 import static carnival.core.graph.GraphMethodDynamic.GM
+import carnival.core.CarnivalTinker
+import carnival.core.Core
 
 
 
@@ -20,7 +22,7 @@ import static carnival.core.graph.GraphMethodDynamic.GM
 public class GraphMethodDynamicSpec extends Specification {
 
 
-    @VertexDefinition
+    @VertexModel
     static enum VX {
         SOME_REAPER_PROCESS_CLASS,
         SOME_REAPER_PROCESS,
@@ -43,7 +45,7 @@ public class GraphMethodDynamicSpec extends Specification {
     def cleanupSpec() { }
 
     def setup() {
-        coreGraph = CoreGraphTinker.create()
+        coreGraph = CarnivalTinker.create()
         graph = coreGraph.graph
         g = graph.traversal()
     }

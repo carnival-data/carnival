@@ -11,17 +11,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // maven publishing
 ///////////////////////////////////////////////////////////////////////////////
-task sourcesJar(type: Jar) {
-    from sourceSets.main.allJava
-    from sourceSets.main.allGroovy
-    classifier = 'sources'
-}
-
-task javadocJar(type: Jar) {
-    from javadoc
-    from groovydoc
-    classifier = 'javadoc'
-}
 
 publishing {
     publications {
@@ -66,17 +55,9 @@ publishing {
     }
 }
 
-
 signing {
-    required { 
-        (!version.endsWith("SNAPSHOT")) && 
-        gradle.taskGraph.hasTask("publish") &&
-        !gradle.taskGraph.hasTask("publishToMavenLocal")
-    }
-
     sign publishing.publications.mavenGroovy
 }
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -104,42 +85,7 @@ dependencies {
     implementation project(":carnival-graph")
 
     // reflections for dymamic class instantiation
-    implementation 'org.reflections:reflections:0.9.11'
-
-    // database connectors
-    implementation 'mysql:mysql-connector-java:5.1.49'
-    implementation 'com.microsoft.sqlserver:mssql-jdbc:8.4.1.jre8'
-    implementation 'org.postgresql:postgresql:42.2.17'
-    implementation 'com.h2database:h2:1.4.200'
-
-    // http libraries
-    // http-builder was deprecated by http-builder-ng
-    implementation 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
-    implementation 'io.github.http-builder-ng:http-builder-ng-core:1.0.4'
-
-    // Apache commons
-    implementation 'commons-collections:commons-collections:3.2.2'
-    implementation "org.apache.commons:commons-math3:3.6.1"
-
-    // GORM
-    implementation 'org.grails:grails-datastore-gorm-hibernate5:7.0.3.RELEASE'
-
-    // RDF4J and http dependencies
-    // see <http://graphdb.ontotext.com/documentation/free/using-graphdb-with-the-rdf4j-api.html#rdf4j-api>
-    //compile group: 'org.eclipse.rdf4j', name: 'rdf4j-runtime', version: '2.4.0-M1'
-    //compile group: 'org.eclipse.rdf4j', name: 'rdf4j-core', version: '2.4.0-M1'
-    //compile group: 'org.eclipse.rdf4j', name: 'rdf4j-repository-api', version: '2.4.0-M1'
-    
-    implementation "org.eclipse.rdf4j:rdf4j-model:3.4.3"
-    implementation "org.eclipse.rdf4j:rdf4j-repository-manager:3.4.3"
-    
-    // for to serialize objects as json (CachingJsonVine)
-    implementation "com.fasterxml.jackson.core:jackson-annotations:2.11.3"
-    implementation "com.fasterxml.jackson.core:jackson-core:2.11.3"
-    implementation "com.fasterxml.jackson.core:jackson-databind:2.11.3"
-
-    // Spock testing
-    implementation "cglib:cglib-nodep:3.3.0"
+    implementation 'org.reflections:reflections:0.10.2'
 }
 
 
@@ -148,39 +94,6 @@ compileGroovy {
 }
 
 
-
-///////////////////////////////////////////////////////////////////////////////
-// TASKS - CLI
-///////////////////////////////////////////////////////////////////////////////
-task carnivalLocalDirInit (type: JavaExec) {
-    description 'Run CarnivalLocalDirInit script to initilize the CARNIVAL_HOME directory'
-
-    mainClass = 'carnival.core.cli.CarnivalLocalDirInit'
-    classpath = sourceSets.main.runtimeClasspath
-    standardInput = System.in
-
-    if (System.getProperty('carnival.home')) {
-        systemProperty('carnival.home', System.getProperty('carnival.home'))
-        systemProperty('logback.configurationFile', System.getProperty('carnival.home') + '/config/logback.xml')
-    }
-    if (System.getenv('CARNIVAL_HOME')) {
-        systemProperty('carnival.home', System.getenv('CARNIVAL_HOME'))
-        systemProperty('logback.configurationFile', System.getenv('CARNIVAL_HOME') + '/config/logback.xml')
-    }
-    if (System.getProperty('logback.configurationFile')) {
-        systemProperty("logback.configurationFile", System.getProperty('logback.configurationFile'))
-    } else if (System.getenv('CARNIVAL_LOGBACK_CONFIG')) {
-        systemProperty("logback.configurationFile", System.getenv('CARNIVAL_LOGBACK_CONFIG'))
-    }
-    if (!(System.getProperty('carnival.home') || System.getenv('CARNIVAL_HOME'))) {
-        ant.echo "WARNING: Carnival home is not set. Use command line argument -Dcarnival.home= or environment variable CARNIVAL_HOME. See documentation."
-        if (!(System.getProperty('logback.configurationFile') || System.getenv('CARNIVAL_LOGBACK_CONFIG'))) {
-            ant.echo "WARNING: Logback configuration file not set. Use the -D command line argument like -Dlogback.configurationFile=/path/to/file.xml.  Or, set the environment variable CARNIVAL_LOGBACK_CONFIG to /path/to/file.xml. See documentation."
-        }
-    }
-}
-
-test.dependsOn 'carnivalLocalDirInit'
 
 
 /*

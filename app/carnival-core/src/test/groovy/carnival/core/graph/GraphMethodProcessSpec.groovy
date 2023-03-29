@@ -6,15 +6,16 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import spock.lang.Shared
 
-import carnival.core.graph.Core
-import carnival.graph.VertexDefinition
+import carnival.core.Core
+import carnival.graph.VertexModel
+import carnival.core.CarnivalTinker
 
 
 
 public class GraphMethodProcessSpec extends Specification {
 
 
-    @VertexDefinition
+    @VertexModel
     static enum VX {
         SOME_REAPER_PROCESS,
         SOME_REAPER_OUTPUT
@@ -38,7 +39,7 @@ public class GraphMethodProcessSpec extends Specification {
     }
 
     def setup() {
-        coreGraph = CoreGraphTinker.create()
+        coreGraph = CarnivalTinker.create()
         graph = coreGraph.graph
         g = graph.traversal()
     }

@@ -996,7 +996,7 @@ abstract class DataTable {
     /**
      * Convenience method to setOrderedKeys by variable arguments.
      *
-     * @see setOrderedKeys(List<String>)
+     * @see #setOrderedKeys(List)
      * @param keys Keys (field names) as individual ordered arguments.
      *
      */
@@ -1030,7 +1030,7 @@ abstract class DataTable {
      * This method has a side effect of replacing the existing keySet with a
      * LinkedHashSet.
      *
-     * @see addFieldNamesToKeySet()
+     * @see #addFieldNamesToKeySet(List)
      * @param fieldNameStrs The list of keys (field names).
      *
      */
@@ -1129,7 +1129,7 @@ abstract class DataTable {
      * @param destDir The directory in which to write the file.
      * @param args Optional map of arguments massed to helper methods.
      * @return The data file.
-     * @see writeDataToCsvFile()
+     * @see #writeDataToCsvFile(File, Map)
      *
      */
     @WithReadLock

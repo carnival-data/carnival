@@ -3,29 +3,35 @@
 
 ## Contents
 
-### Introduction
-- [Summary](#summary)
-- [Statement of Need](#statement-need)
-- [Features](#features)
+- Introduction
+  - [Statement of Need](#statement-need)
+  - [Overview](#summary)
+  - [Features](#features)
+- Carnival Library
+  - [Carnival API Development](#core-development)
+- Applications
+  - [Using the Carnival API](#using-carnival)
+  - [Groovy Scripts](#script-development)
+  - [Groovy Applications](#app-development)
+  - [Micronaut Applications](#micronaut-app-development)
+- Documentation
+  - [Reference Documentation](#reference-docs)
+  - [Application Programmer Interface (API)](#api)
 
-### Development
-- [Core Development](#core-development)
-- [Application Development](#app-development)
-- [Application Programmer Interface](#api)
+## <a name="statement-need"></a>Statement of need
 
-## <a name="summary"></a>Summary
 Loading, cleansing, and organizing data can dominate the time spent on a data science project [[Forbes]](https://www.forbes.com/sites/gilpress/2016/03/23/data-preparation-most-time-consuming-least-enjoyable-data-science-task-survey-says/?sh=5eebf58e6f63)[[Anaconda]](https://www.anaconda.com/state-of-data-science-2020?utm_medium=press&utm_source=anaconda&utm_campaign=sods-2020&utm_content=report).  This phenomenon is exacerbated in human subjects research at an academic medical institution where data are very complex, reside in disparate repositories with varying levels of accesibility, are coded by separate yet overlapping coding systems, frequently rely on manual data entry, and change over time.  Data provenance and reproducibility of results are important factors in human subjects research.  It is no easy task to implement a robust consistent data pipeline with clear data provenance that can be rerun when source data change.  While there are several mature libraries and toolkits that enable visualization and statistical computation once the analytical data set is generated, there are comparatively fewer informatics offerings to address these concerns.  
 
 Existing ETL technologies such as [Microsoft SQL Server Integration Services](https://docs.microsoft.com/en-us/sql/integration-services/sql-server-integration-services?view=sql-server-ver15) help with data staging.  Similarly, data manipulation tools like [pandas](https://pandas.pydata.org) facilitate transformation of series and matrix data.  **Carnival** distinguishes itself by offering a lightweight data caching mechanism coupled with data manipulation services built on a property graph rather than arrays and data frames.  This unique combination empowers informatics programmers to build pipelines, utilities, and applications that are comparatively richer in semantics and provenance.
 
 Knowledge bases in Resource Description Framework (RDF) triplestores can be valuable tools to harmonize and enrich complex data.  While there are relational to RDF mappers, transforming source relational data into RDF triples is challenging.  Property graphs offer a middle ground between relational and RDF.  They lack the native ability to benefit from ontologies represented in RDF, but are more friendly to algorithmic computation.  
 
-**Carnival** was developed to provide programmers with tools to go from source data to a well formatted property graph and onward to RDF with rich semantics and provenance.  There are two main components to Carnival.  The first is a data caching mechanism that supports the efficient aggregation of data from disparate sources.  The second is a layer built on top of [Apache Tinkerpop](https://tinkerpop.apache.org) that seeks to provide more standardized and semantically driven methods of interacting with a property graph.
 
+## <a name="summary"></a>Overview
 
-## <a name="statement-need"></a>Statement of need
+**Carnival** is a semantically driven informatics toolkit that enables the aggregation of data from disparate sources into a unified property graph and provides mechanisms to model and interact with property graph data in well-defined ways.
 
-**Carnival** is a semantically driven informatics toolkit that enables the aggregation of data from disparate sources into a unified property graph and provides mechanisms to model and interact with the graph in well-defined ways.
+There are two main components to Carnival.  The first is a data caching mechanism that supports the efficient aggregation of data from disparate sources.  The second is a layer built on top of [Apache Tinkerpop](https://tinkerpop.apache.org) that seeks to provide more standardized and semantically driven methods of interacting with a property graph.
 
 ### Key Features
 - A data caching mechanism to ease the computational burden of data aggregation during the development process and promotes data provenance
@@ -35,7 +41,7 @@ Knowledge bases in Resource Description Framework (RDF) triplestores can be valu
 ### Uses
 
 #### Production of analytical data sets
-Carnival was initially developed to facilitate the production of analytical data sets for human subjects research.  The source data repositories included a relational data warehouse accessible by SQL, a [REDCap](https://www.project-redcap.org) installation accessible by API, and manually curated data files in CSV format.  Data pertaining to the set of study subjects was striped across each of these data sources.  Using Carnival, a data pipeline was implemented to pull data from the data sources, instantiate them in a property graph, clean and harmonize them, and produce analytical data sets at required intervals.
+Carnival was initially developed to facilitate the production of analytical data sets for human subjects clinical research.  The source data repositories included a relational data warehouse accessible by SQL, a [REDCap](https://www.project-redcap.org) installation accessible by API, and data files in CSV format.  Data pertaining to the set of study subjects was striped across each of these data sources.  Using Carnival, a data pipeline was implemented to pull data from the data sources, instantiate them in a property graph, clean and harmonize them, and produce analytical data sets at required intervals.
 
 #### Queries over enriched data
 A key challenge of human subjects research is to locate patients to recruit to a study, frequently done by searching a research data set containing raw patient data.  Potential recruits need to be stratified by attributes, such as age, race, and ethnicity, matched against inclusion criteria, such as the presence of a diagnosis code, and filtered by exclusion criteria, such as a treatment modality.  **Carnival** has been used effectively in this area by loading the relevant raw data into a graph, stratifying and categorizing patients by the relevant criteria, then using graph traversals to extract the patients who are potential recruits.
@@ -152,7 +158,7 @@ class MyDomain {
      * and LAST.
      * 
      */ 
-    @VertexDefinition
+    @VertexModel
     static enum VX {
         PERSON,
 
@@ -170,7 +176,7 @@ class MyDomain {
      * have domain and range restrictions.
      * 
      */ 
-    @EdgeDefinition
+    @EdgeModel
     static enum EX {
         IS_NAMED(
             domain:[VX.PERSON],
@@ -183,7 +189,7 @@ class MyDomain {
      * The following enum defines allowed properties.
      * 
      */ 
-    @PropertyDefinition
+    @PropertyModel
     static enum PX {
         FIRST,
         LAST,
@@ -259,16 +265,93 @@ To learn more about graph methods, see [Graph Methods](graph-method.md).
 
 
 
-## <a name="core-development"></a>Core Development
+## <a name="core-development"></a>Carnival Development
+The following links contain instructions on how to code and publish the Carnival library itself.
+
 - [Developer Setup](developer-setup.md)
 - [Production Builds](production-builds.md)
 - [Building Documentation](documentation.md)
 - [Default Carnival Schemas](schema.md)
 
-## <a name="app-development"></a>Application Development
-- [Getting Started](app-dev-getting-started.md)
-    - [Create a library](app-dev-library.md)
-    - [Create an application](app-dev-application.md)
+## <a name="using-carnival"></a>Using Carnival
+Carnival is a library that can be used directly in scripts or included in a JVM application.  Carnival has been developed using [Groovy](https://groovy-lang.org) scripts and the [Micronaut](https://micronaut.io) framework as test application environments.
+
+The only requirement to use Carnival in a JVM application is to include the required Carnival dependencies.  There is a [Carnival Gradle Plugin](https://plugins.gradle.org/plugin/io.github.carnival-data.carnival) that will add the dependencies.  See the [Github repository](https://github.com/carnival-data/carnival/tree/master/app/carnival-gradle) and the file [CarnivalLibraryPlugin.groovy](https://github.com/carnival-data/carnival/blob/master/app/carnival-gradle/src/main/groovy/carnival/gradle/CarnivalLibraryPlugin.groovy) for more information about the plugin.
+
+Plugin usage:
+
+```Gradle
+plugins {
+    id "io.github.carnival-data.carnival" version "3.0.0"
+}
+```
+
+Without using the plugin, the dependencies can be added as follows:
+
+```Gradle
+dependencies {
+    // Groovy
+    implementation "org.codehaus.groovy:groovy-all:3.0.9"
+
+    // Tinkerpop
+    implementation "org.apache.tinkerpop:gremlin-core:3.4.10"
+    implementation "org.apache.tinkerpop:gremlin-groovy:3.4.10"
+    implementation "org.apache.tinkerpop:tinkergraph-gremlin:3.4.10"
+
+    // Neo4J
+    implementation "org.apache.tinkerpop:neo4j-gremlin:3.4.10"
+    implementation "org.neo4j:neo4j-tinkerpop-api-impl:0.9-3.4.0"
+    implementation "org.neo4j.driver:neo4j-java-driver:4.1.1"
+
+    // Carnival
+    implementation "io.github.carnival-data:carnival-util:3.0.0"
+    implementation "io.github.carnival-data:carnival-graph:3.0.0"
+    implementation "io.github.carnival-data:carnival-core:3.0.0"
+    implementation "io.github.carnival-data:carnival-vine:3.0.0"
+}  
+```
+
+
+## <a name="script-development"></a>Groovy Scripts
+The Carnival library can be included in Groovy scripts.  Example scripts can be found in [docs/groovy](groovy).  
+
+To run these scripts on the command line, first install [Groovy](https://groovy-lang.org)  version 3.0.9.  [SDKMAN Software Development Kit Manager](https://sdkman.io) is a useful tool to install Groovy and other JVM tools.
+ 
+These scripts can be run on the command line via the following command:
+
+```Shell
+groovy graph-method-1.groovy
+```
+
+The example scripts use [Groovy Grape](http://docs.groovy-lang.org/latest/html/documentation/grape.html) to download dependencies.  To see Groovy Grape debug output:
+
+```Shell
+groovy -Dgroovy.grape.report.downloads=true graph-model-1.groovy
+```
+
+
+## <a name="app-development"></a>Groovy Applications
+The Carnival library can be included in generic Groovy applications.  
+
+To create a Groovy application using Gradle as the build tool, the only requirement should be the inclusion of the Carnival Gradle plugin to add the Carnival dependencies.  
+
+
+Follow these [step-by-step instructions](app-dev-application.md) to create a Groovy app that uses Carnival.
+
+## <a name="micronaut-app-development"></a>Micronaut Applications
+The Carnival library can be included in Micronaut applications.  [carnival-demo-biomedical](https://github.com/carnival-data/carnival-demo-biomedical) provides an example of a working Micronaut application that uses Carnival.
+
+To create a new Micronaut application that uses Carnival:
+
+1. Follow the instructions at [CREATING YOUR FIRST MICRONAUT APPLICATION](https://guides.micronaut.io/latest/creating-your-first-micronaut-app-gradle-groovy.html) to create the skeleton application.
+2. Add the Carnival Gradle Plugin to include the Carnival dependencies.
+
+The application is now ready to use the Carnival library.  See [carnival-demo-biomedical](https://github.com/carnival-data/carnival-demo-biomedical) for examples on how common Carnival functionality can fit into a Micronaut application.
+
+
+    
+## <a name="reference-docs"></a>Reference Documentation
+    
 - [Data Tables](data-tables.md)
   - [Mapped Data Table](mapped-data-table.md)
   - [Generic Data Table](generic-data-table.md)
@@ -278,7 +361,8 @@ To learn more about graph methods, see [Graph Methods](graph-method.md).
 - [Graph Methods](graph-method.md)
 
 ## Graph Database Engines
+- [TinkerGraph](https://tinkerpop.apache.org/docs/current/reference/#tinkergraph-gremlin)
 - [Neo4j](neo4j.md)
 
-## <a name="api"></a> Application Programmer Interface 
-- [Groovy API documentation](groovydoc/index.html)
+## <a name="api"></a> Application Programmer Interface (API)
+- [GroovyDoc API documentation](https://carnival-data.github.io/carnival/groovydoc/index.html)

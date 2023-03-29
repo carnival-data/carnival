@@ -23,6 +23,8 @@ import carnival.util.FeatureSetRecipeIngredient
 import carnival.util.FeatureDataType
 
 import carnival.graph.*
+import carnival.core.CarnivalTinker
+import carnival.core.Core
 
 
 
@@ -36,7 +38,7 @@ class DataSetDescriptorGraphSpec extends Specification {
     // DEFS
     ///////////////////////////////////////////////////////////////////////////
 
-    static enum VX implements VertexDefTrait {
+    static enum VX implements VertexDefinition {
         CGS_SUITCASE
     }
 
@@ -44,15 +46,10 @@ class DataSetDescriptorGraphSpec extends Specification {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
     
-    @Shared appGraph
+    @Shared carnival
     @Shared graph
     @Shared g
     
-    @Shared controlledInstances = [
-        Core.VX.IDENTIFIER.controlledInstance().withProperty(Core.PX.VALUE, "1"),
-        Core.VX.IDENTIFIER.controlledInstance().withProperty(Core.PX.VALUE, "2"),
-    ]
-
 
     ///////////////////////////////////////////////////////////////////////////
     // SET UP
@@ -60,22 +57,20 @@ class DataSetDescriptorGraphSpec extends Specification {
     
 
     def setupSpec() {
-        CoreGraphNeo4j.clearGraph()
-        appGraph = CoreGraphNeo4j.create(controlledInstances:controlledInstances)
-        graph = appGraph.graph
     } 
 
     def setup() {
+        carnival = CarnivalTinker.create()
+        graph = carnival.graph
         g = graph.traversal()
     }
 
     def cleanup() {
         if (g) g.close()
-        if (appGraph) appGraph.graph.tx().rollback()
+        if (graph) graph.close()
     }
 
     def cleanupSpec() {
-        if (appGraph) appGraph.graph.close()
     }
 
 

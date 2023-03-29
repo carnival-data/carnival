@@ -1,11 +1,11 @@
 /**
 * Contains the framework for defining property, vertex and edge definitons of a Carnival graph model.
 * <p>
-* The graph model is specified by creating enums that are annotated with &#64;PropertyDefinition, &#64;EdgeDefinition 
-* or &#64;VertexDefinition. Among other things, these annotations apply the traits PropertyDefTrait, EdgeDefTrait, 
-* or VertexDefTrait to the enums.
+* The graph model is specified by creating enums that are annotated with &#64;PropertyModel, &#64;EdgeModel 
+* or &#64;VertexModel. Among other things, these annotations apply the traits PropertyDefinition, EdgeDefinition, 
+* or VertexDefinition to the enums.
 * <p>
-* Once VertexDefinition and EdgeDefinition have been created they can be used to add new elements to the 
+* Once VertexModel and EdgeModel have been created they can be used to add new elements to the 
 * graph, for example:
 * {@code Edge edge1 = EX.IS_FRIENDS_WITH.instance().from(person1).to(person2).create()}.
 * The 'instance()' method invokes a builder class (EdgeBuilder or VertexBuilder) that the following methods 
@@ -17,7 +17,7 @@
 * Example of specifying verticies with class and instanceOf relationships:
 * 
 *  <pre>{@code
-* &#64;VertexDefinition
+* &#64;VertexModel
 * static enum VX {
 *     CLASS_OF_ALL_DOGS (
 *         isClass:true
@@ -30,7 +30,7 @@
 *         superClass: CLASS_OF_ALL_DOGS
 *     ),
 *  &rbrace;
-* &#64;VertexDefinition
+* &#64;VertexModel
 * static enum VX {    
 *     SHIBA_INU_CLASS,
 *     SHIBA_INU (
@@ -44,7 +44,7 @@
 * Example of specifying edges with properties:
 *
 * <pre>{@code 
-* &#64;EdgeDefinition
+* &#64;EdgeModel
 * static enum EX {
 *     IS_FRIENDS_WITH(
 *         domain:[VX.PERSON],
@@ -54,7 +54,7 @@
 *         PX.STRENGTH_OF_RELATIONSHIP.withConstraints(index:true)
 *     ]
 * &rbrace;
-* &#64;PropertyDefinition
+* &#64;PropertyModel
 * static enum PX {
 *     STRENGTH_OF_RELATIONSHIP
 * &rbrace;

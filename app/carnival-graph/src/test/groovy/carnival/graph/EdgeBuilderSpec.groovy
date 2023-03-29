@@ -20,19 +20,19 @@ import org.apache.tinkerpop.gremlin.structure.Edge
  */
 class EdgeBuilderSpec extends Specification {
 
-    @VertexDefinition
+    @VertexModel
     static enum VX {
         EBS_THING_1,
         EBS_THING_2
     }
 
-    @PropertyDefinition
+    @PropertyModel
     static enum PX {
         EBS_PROP_A,
         EBS_PROP_B
     }
 
-    @EdgeDefinition
+    @EdgeModel
     static enum EX {
         EBS_REL_1(
             domain:[VX.EBS_THING_1],

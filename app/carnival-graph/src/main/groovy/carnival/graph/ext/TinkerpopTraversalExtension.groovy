@@ -15,9 +15,9 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal
 import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 
-import carnival.graph.EdgeDefTrait
-import carnival.graph.VertexDefTrait
-import carnival.graph.PropertyDefTrait
+import carnival.graph.EdgeDefinition
+import carnival.graph.VertexDefinition
+import carnival.graph.PropertyDefinition
 import carnival.graph.Base
 
 
@@ -37,7 +37,7 @@ class TinkerpopTraversalExtension {
      * @return          The modified traversal
      *
      */
-    static GraphTraversal properties(DefaultTraversal traversal, PropertyDefTrait pdef) {
+    static GraphTraversal properties(DefaultTraversal traversal, PropertyDefinition pdef) {
         traversal.properties(pdef.label)
     }
 
@@ -59,6 +59,7 @@ class TinkerpopTraversalExtension {
             )
         .in(Base.EX.IS_INSTANCE_OF)
     }
+    
 
     /** 
      * Filters elements to include only  instances of the given
@@ -69,7 +70,7 @@ class TinkerpopTraversalExtension {
      * @param vdef      The vertex definition
      * @return          The modified traversal
      */
-    static GraphTraversal isInstanceOf(DefaultTraversal traversal, VertexDefTrait vdef) {
+    static GraphTraversal isInstanceOf(DefaultTraversal traversal, VertexDefinition vdef) {
         traversal
             .as('ttev')
             .out(Base.EX.IS_INSTANCE_OF)
@@ -123,7 +124,7 @@ class TinkerpopTraversalExtension {
      * @param vdef      The vertex definition
      * @return          The modified traversal
      */
-    static GraphTraversal isa(DefaultTraversal traversal, VertexDefTrait vdef) {
+    static GraphTraversal isa(DefaultTraversal traversal, VertexDefinition vdef) {
         traversal.hasLabel(vdef.label).has(Base.PX.NAME_SPACE.label, vdef.nameSpace)
     }
 
@@ -136,7 +137,7 @@ class TinkerpopTraversalExtension {
      * @param edef      The edge definition
      * @return          The modified traversal
      */
-    static GraphTraversal isa(DefaultTraversal traversal, EdgeDefTrait edef) {
+    static GraphTraversal isa(DefaultTraversal traversal, EdgeDefinition edef) {
         traversal.hasLabel(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace)
     }
 
@@ -149,7 +150,7 @@ class TinkerpopTraversalExtension {
      * @param edef      The edge definition
      * @return          The modified traversal
      */
-    static GraphTraversal both(DefaultTraversal traversal, EdgeDefTrait edef) {
+    static GraphTraversal both(DefaultTraversal traversal, EdgeDefinition edef) {
         traversal.bothE(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace).otherV()
     }
 
@@ -162,7 +163,7 @@ class TinkerpopTraversalExtension {
      * @param edef      The edge definition
      * @return          The modified traversal
      */
-    static GraphTraversal bothE(DefaultTraversal traversal, EdgeDefTrait edef) {
+    static GraphTraversal bothE(DefaultTraversal traversal, EdgeDefinition edef) {
         traversal.bothE(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace)
     }
 
@@ -175,7 +176,7 @@ class TinkerpopTraversalExtension {
      * @param edef      The edge definition
      * @return          The modified traversal
      */
-    static GraphTraversal out(DefaultTraversal traversal, EdgeDefTrait edef) {
+    static GraphTraversal out(DefaultTraversal traversal, EdgeDefinition edef) {
         traversal.outE(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace).inV()
     }
 
@@ -188,7 +189,7 @@ class TinkerpopTraversalExtension {
      * @param edef      The edge definition
      * @return          The modified traversal
      */
-    static GraphTraversal outE(DefaultTraversal traversal, EdgeDefTrait edef) {
+    static GraphTraversal outE(DefaultTraversal traversal, EdgeDefinition edef) {
         traversal.outE(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace)
     }
 
@@ -201,7 +202,7 @@ class TinkerpopTraversalExtension {
      * @param edef      The edge definition
      * @return          The modified traversal
      */
-    static GraphTraversal "in"(DefaultTraversal traversal, EdgeDefTrait edef) {
+    static GraphTraversal "in"(DefaultTraversal traversal, EdgeDefinition edef) {
         traversal.inE(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace).outV()
     }
 
@@ -214,7 +215,7 @@ class TinkerpopTraversalExtension {
      * @param edef      The edge definition
      * @return          The modified traversal
      */
-    static GraphTraversal inE(DefaultTraversal traversal, EdgeDefTrait edef) {
+    static GraphTraversal inE(DefaultTraversal traversal, EdgeDefinition edef) {
         traversal.inE(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace)
     }
 
@@ -226,7 +227,7 @@ class TinkerpopTraversalExtension {
      * @param pdef      The property definition
      * @return          The modified traversal
      */
-    static GraphTraversal has(DefaultTraversal traversal, PropertyDefTrait pdef) {
+    static GraphTraversal has(DefaultTraversal traversal, PropertyDefinition pdef) {
         traversal.has(pdef.label)
     }
 
@@ -238,7 +239,7 @@ class TinkerpopTraversalExtension {
      * @param pdef      The property definition
      * @return          The modified traversal
      */
-    static GraphTraversal hasNot(DefaultTraversal traversal, PropertyDefTrait pdef) {
+    static GraphTraversal hasNot(DefaultTraversal traversal, PropertyDefinition pdef) {
         traversal.hasNot(pdef.label)
     }
 
@@ -252,7 +253,7 @@ class TinkerpopTraversalExtension {
      * @param value     The enum whose name() will be used as the property value
      * @return          The modified traversal
      */
-    static GraphTraversal has(DefaultTraversal traversal, PropertyDefTrait pdef, Enum value) {
+    static GraphTraversal has(DefaultTraversal traversal, PropertyDefinition pdef, Enum value) {
         traversal.has(pdef.label, value.name())
     }
 
@@ -266,7 +267,7 @@ class TinkerpopTraversalExtension {
      * @param value     The value to use as the property value
      * @return          The modified traversal
      */
-    static GraphTraversal has(DefaultTraversal traversal, PropertyDefTrait pdef, Object value) {
+    static GraphTraversal has(DefaultTraversal traversal, PropertyDefinition pdef, Object value) {
         traversal.has(pdef.label, value)
     }
 
@@ -282,7 +283,7 @@ class TinkerpopTraversalExtension {
      * @param vertex    THe vertex from which to get the property value
      * @return          The modified traversal
      */
-    static GraphTraversal matchesOn(DefaultTraversal traversal, PropertyDefTrait pdef, Vertex vertex) {
+    static GraphTraversal matchesOn(DefaultTraversal traversal, PropertyDefinition pdef, Vertex vertex) {
         if (pdef.of(vertex).isPresent()) {
             traversal.has(pdef.label, pdef.valueOf(vertex))
         } else {
@@ -307,9 +308,9 @@ class TinkerpopTraversalExtension {
      */
     static GraphTraversal matchesOn(
         DefaultTraversal traversal, 
-        PropertyDefTrait traversalPdef, 
+        PropertyDefinition traversalPdef, 
         Vertex vertex, 
-        PropertyDefTrait vertexPdef
+        PropertyDefinition vertexPdef
     ) {
         if (vertexPdef.of(vertex).isPresent()) {
             traversal.has(traversalPdef.label, vertexPdef.valueOf(vertex))

@@ -50,14 +50,23 @@ class StringUtils {
         text.replaceAll( /([A-Z0-9])/, /-$1/ ).toLowerCase().replaceAll( /^-/, '' )
     }
 
-    /** */
+    /** 
+     * Return a Markdown friendly string representation of an enum.
+     * @param en The enum to represent as a string
+     * @return The Markdown friendly string
+     */
     static public String toMarkdown(Enum en) {
         def text = en.name()
         text = text.replaceAll('_', ' ')
         text
     }    
 
-    /** */
+    /** 
+     * Escape the underscores contained in the provided string; returns a new
+     * string.
+     * @param text The string 
+     * @return A string with escaped underscores.
+     */
     static public String escapeUnderscores(String text) {
         text.replaceAll('_', '\\_')
     }

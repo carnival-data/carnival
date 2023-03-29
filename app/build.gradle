@@ -14,7 +14,7 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath group: 'org.yaml', name: 'snakeyaml', version: '1.27'
+        classpath group: 'org.yaml', name: 'snakeyaml', version: '1.31'
         classpath group: 'org.kordamp.gradle', name: 'stats-gradle-plugin', version: '0.2.2'
     }    
 }
@@ -36,15 +36,10 @@ plugins {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// Java
+// debug printing
 ///////////////////////////////////////////////////////////////////////////////
-task printJavaVersion {
-    doLast {
-        println "[Carnival] Java version: ${JavaVersion.current()}"
-    }
-}
-clean.dependsOn('printJavaVersion')
-compileGroovy.dependsOn('printJavaVersion')
+clean.dependsOn('printVersions')
+compileGroovy.dependsOn('printVersions')
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -55,8 +50,17 @@ compileGroovy.dependsOn('printJavaVersion')
 allprojects {
     group = carnivalGroup
     version = carnivalVersion   // see https://semver.org/
+    ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
     sourceCompatibility = JavaVersion.toVersion("${javaVersion}")
     targetCompatibility = JavaVersion.toVersion("${javaVersion}")
+
+    task printVersions {
+        doLast {
+            println "[Carnival] Java version: ${JavaVersion.current()}"
+            println "[Carnival] Carnival version: ${version}"
+            println "[Carnival] Is release version: ${isReleaseVersion}"
+        }
+    }
 
     repositories {
         mavenCentral()
@@ -95,17 +99,22 @@ subprojects {
         //implementation "org.neo4j:neo4j-community:${neo4JavaDriverVersion}"
         //implementation "org.neo4j:neo4j-bolt:${neo4JavaDriverVersion}"
 
+        // JanusGraph
+        //implementation 'org.janusgraph:janusgraph:0.6.2'
+        //implementation 'org.janusgraph:janusgraph-berkeleyje:0.6.2'
+        //implementation 'org.janusgraph:janusgraph-lucene:0.6.2'
+
         // Testing
         // there are test helpers implemented in the source tree, so the
         // implementation dependency tag is required
-        testImplementation 'org.spockframework:spock-core:2.0-M4-groovy-3.0'        
+        testImplementation 'org.spockframework:spock-core:2.2-M3-groovy-3.0'      
 
         // Logging
-        implementation 'org.slf4j:slf4j-api:1.7.30'
-        implementation 'ch.qos.logback:logback-classic:1.2.3'
+        implementation 'org.slf4j:slf4j-api:2.0.0'
+        implementation 'ch.qos.logback:logback-classic:1.4.0'
 
         // Data formats
-        implementation "org.yaml:snakeyaml:1.3"
+        implementation "org.yaml:snakeyaml:1.31"
         implementation "com.opencsv:opencsv:5.6"
 
         // Apache Commons
@@ -133,11 +142,28 @@ subprojects {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Github Publish
+// Publishing
 ///////////////////////////////////////////////////////////////////////////////
+
 subprojects {
     apply plugin: "maven-publish"
     apply plugin: "signing"
+    publishToMavenLocal.dependsOn 'printVersions'
+    
+    tasks.withType(Sign) { onlyIf { isReleaseVersion } }
+
+    task sourcesJar(type: Jar) {
+        from sourceSets.main.allJava
+        from sourceSets.main.allGroovy
+        classifier = 'sources'
+    }
+
+    task javadocJar(type: Jar) {
+        from javadoc
+        from groovydoc
+        classifier = 'javadoc'
+    }
+
     publishing {
         repositories {
             maven {
@@ -161,6 +187,7 @@ subprojects {
         }
     }
 }
+
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -336,6 +363,9 @@ task allGroovydoc(type: Groovydoc, group: "Documentation") {
     source subprojects.collect { it.sourceSets.main.allGroovy }                                                
     classpath = files(subprojects.collect { it.sourceSets.main.compileClasspath })
     destinationDir = file("${buildDir}/docs/groovydoc")
+    overviewText = resources.text.fromFile("groovydoc-header.html")
+    windowTitle = "Carnival API"
+    docTitle "Carnival API"
 }
 
 task localPublishGroovydoc(type: Copy, group: "Documentation") {

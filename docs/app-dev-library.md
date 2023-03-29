@@ -26,7 +26,7 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath group:'org.carnival', name:'carnival-gradle', version:'2.1.1-SNAPSHOT'
+        classpath group:'org.carnival', name:'carnival-gradle', version:'2.1.1'
     }    
 }
 ```
@@ -65,5 +65,5 @@ If the Carnival plugin is properly applied, you should see version information t
 [CarnivalLibrary] Gremlin version: 3.4.10
 [CarnivalLibrary] Neo4j Tinkerpop version: 0.9-3.4.0
 [CarnivalLibrary] Neo4 Java Driver version: 4.1.1
-[CarnivalLibrary] Carnival version: 2.1.0-SNAPSHOT
+[CarnivalLibrary] Carnival version: 2.1.0
 ```

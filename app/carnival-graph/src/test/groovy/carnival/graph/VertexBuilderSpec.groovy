@@ -1,6 +1,7 @@
 package carnival.graph
 
 
+import java.time.ZonedDateTime
 
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -25,6 +26,11 @@ class VertexBuilderSpec extends Specification {
             vertexProperties:[
                 PX.CIS_PROP_A.withConstraints(required:true), 
                 PX.CIS_PROP_B.defaultValue(1).withConstraints(required:true)
+            ]
+        ),
+        CIS_THING2(
+            vertexProperties:[
+                PX.CIS_PROP_A
             ]
         )
 
@@ -72,6 +78,43 @@ class VertexBuilderSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+    def "ensure works with zoned date times"() {
+        expect:
+        g.V().isa(VX.CIS_THING2).count().next() == 0
+
+        when:
+        ZonedDateTime d1 = ZonedDateTime.now()
+        VX.CIS_THING2.instance().withProperties(
+            PX.CIS_PROP_A, d1
+        ).ensure(graph, g)
+
+        then:
+        g.V().isa(VX.CIS_THING2).count().next() == 1
+
+        when:
+        VX.CIS_THING2.instance().withProperties(
+            PX.CIS_PROP_A, d1
+        ).ensure(graph, g)
+
+        then:
+        g.V().isa(VX.CIS_THING2).count().next() == 1
+
+        when:
+        ZonedDateTime d2 = d1.plusDays(1)
+
+        then:
+        !d1.equals(d2)
+
+        when:
+        VX.CIS_THING2.instance().withProperties(
+            PX.CIS_PROP_A, d2
+        ).ensure(graph, g)
+
+        then:
+        g.V().isa(VX.CIS_THING2).count().next() == 2
+    }
+
 
     def "try next"() {
         expect:

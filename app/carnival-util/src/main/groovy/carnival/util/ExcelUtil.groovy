@@ -31,13 +31,10 @@ class ExcelUtil {
 	// STATIC
 	///////////////////////////////////////////////////////////////////////////
 
-    /** */
-    static Logger elog = LoggerFactory.getLogger('db-entity-report')
-
-    /** */
+    /** A logger to use */
     static Logger log = LoggerFactory.getLogger(ExcelUtil)
 
-    /** */
+    /** Constants related to Excel processing */
     static enum EXCEL { ROW_NUM }
 
 
@@ -124,10 +121,19 @@ class ExcelUtil {
 	// READ AN INDIVIDUAL DATA SHEET
 	///////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Class to represent a row from an Excel worksheet.
+     */
     @ToString(includeNames=true)
     static class ExcelRow {
+
+        /** The row number */
         int rowNum
+
+        /** The row data as a list of strings */
         List<String> rawData
+
+        /** The row data as a map */
         Map mappedData
     }
 
@@ -187,7 +193,13 @@ class ExcelUtil {
     }
 
 
-    /** */
+    /** 
+     * Read the a sheet of the provided name from the provided input stream.
+     * @param input The input stream for the Excel file
+     * @param sheetName The name of the sheet to read
+     * @param params Optional additional parameters
+     * @return A list of Excel rows
+     */
     static List<ExcelRow> readExcelSheet(InputStream input, String sheetName, Map params = [:]) {
         assert input
         assert sheetName
@@ -207,7 +219,13 @@ class ExcelUtil {
     }
 
 
-    /** */
+    /** 
+     * Read a sheet named as the provided name from the provided workbook.
+     * @param wb The Excel workbook
+     * @param sheetName The name of the sheet to read
+     * @param params Optional additional parameters
+     * @return A list of Excel rows
+     */
     static List<ExcelRow> readSheet(XSSFWorkbook wb, String sheetName, Map params = [:]) {
         assert wb
         assert sheetName
@@ -322,13 +340,28 @@ class ExcelUtil {
     }
 
 
-    /** */
+    /** 
+     * Read the provided row and return the data as a list of strings.
+     * @param row The Excel row
+     * @return The data as a list of strings
+     */
     static List<String> readRow(XSSFRow row) {
         readRow(row, [:])
     }
 
 
-    /** */
+    /** 
+     * Read the provided row and return the data as a list of strings.
+     * @param row The Excel row
+     * @param params.colNameToIdx Map of column names to index
+     * @param params.dates.sourceFormat The format of dates in the Excel file
+     * @param params.dates.outputFormat The target format of dates
+     * @param params.dates.fields The fields that contain dates
+     * @param params.raws The raw indexes in the data
+     * @param params.integerIndexes The indexes in the data as integers
+     * @param params.failOnError If true, fail if an error is encountered
+     * @return The data in a list of strings
+     */
     static List<String> readRow(XSSFRow row, Map params) {
         assert row != null
         assert params != null
@@ -458,11 +491,15 @@ class ExcelUtil {
     }
 
 
-    /** */
+    /** 
+     * Return a map of index to value for the provided list of string values.
+     * @param vals A list of strings
+     * @return A map of integer to Strings
+     */
     static Map indexMap(List<String> vals) {
         assert vals
         
-        Map<String,Integer> im = new HashMap<String,Integer>()
+        Map<Integer,String> im = new HashMap<Integer,String>()
         vals.eachWithIndex { val, valIdx ->
             if (val == null || val.trim().length() == 0) return
             im.put(valIdx, val)

@@ -19,7 +19,8 @@ import static groovy.json.JsonOutput.*
 
 
 /** 
- *
+ * A class intended to help describe a data set.  This class is 
+ * incubating.
  *
  */
 @ToString(includeNames=true)
@@ -30,7 +31,12 @@ class DataSetDescriptor extends MarkdownRenderer implements DescribedEntity {
     // STATIC METHODS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Create a data set descriptor.
+     * @param args Map of args passed to the constructor; can be used to set
+     * data fields.
+     * @return A DataSetDescriptor object
+     */
     static DataSetDescriptor create(Map args = [:]) {
         new DataSetDescriptor(args)
     }
@@ -40,16 +46,25 @@ class DataSetDescriptor extends MarkdownRenderer implements DescribedEntity {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Default indent level for produced Markdown.
+     */
     int defaultLevel = 1
 
-    /** */
+    /** 
+     * A set of feature set descriptors that describe the target data set.
+     */
     Set<FeatureSetDescriptor> featureSetDescriptors = new HashSet<FeatureSetDescriptor>()
 
-    /** */
+    /**
+     * A set of recipe steps that describe the construction process of the 
+     * target data set. 
+     */
     Set<FeatureSetRecipeStep> recipeSteps = new HashSet<FeatureSetRecipeStep>()
 
-    /** */
+    /** 
+     * A set of ingredients used by the recipe steps.
+     */
     Set<FeatureSetRecipeIngredient> recipeIngredients = new HashSet<FeatureSetRecipeIngredient>()
 
 
@@ -57,7 +72,12 @@ class DataSetDescriptor extends MarkdownRenderer implements DescribedEntity {
     // METHODS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Render this data set descriptor as a Markdown document.
+     * @param args Map of arguments used to configure the markdown printer.
+     * @see MarkdownRenderer#printer(Map)
+     * @return Markdown text in string format.
+     */
     String toMarkdown(Map args = [:]) { 
         def sp = printer(args)
 
@@ -112,7 +132,12 @@ class DataSetDescriptor extends MarkdownRenderer implements DescribedEntity {
     }
 
 
-    /** */
+    /** 
+     * Traverse the data set descriptor and return a flat set of all feature
+     * set recipe steps.
+     * @return A flat set of all feature set recipe steps of this data set
+     * descriptor.
+     */
     Set<FeatureSetRecipeStep> findAllSteps() {
         Set<FeatureSetRecipeStep> steps = new HashSet<FeatureSetRecipeStep>()
         steps.addAll(recipeSteps)
@@ -123,7 +148,12 @@ class DataSetDescriptor extends MarkdownRenderer implements DescribedEntity {
     }
 
 
-    /** */
+    /** 
+     * Traverse the data set descriptor starting at the provided feature set
+     * descriptor and return a flat set of feature set recipe steps.
+     * @param fsd The feature set descriptor from which to start searching
+     * @return A flat set of feature set recipe steps
+     */
     Set<FeatureSetRecipeStep> findAllSteps(FeatureSetDescriptor fsd) {
         Set<FeatureSetRecipeStep> steps = new HashSet<FeatureSetRecipeStep>()
         findAllSteps(fsd.recipe.finalStep)
@@ -500,7 +530,9 @@ trait DescribedEntity extends NamedEntity {
 
 /** */
 abstract class MarkdownRenderer {
+    
     abstract String toMarkdown()
+    
     MarkdownPrinter printer(Map args = [:]) {
         Integer level = args.level
         if (level == null && this.hasProperty('defaultLevel')) level = this.defaultLevel

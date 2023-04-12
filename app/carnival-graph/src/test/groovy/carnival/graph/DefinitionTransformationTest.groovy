@@ -17,7 +17,7 @@ import test.carnival.graph.TestModel
 
 
 
-class DefinitionTransformationSpec extends Specification {
+class ModelTransformationSpec extends Specification {
 
 
     ///////////////////////////////////////////////////////////////////////////

@@ -2,7 +2,7 @@
 // DEPENDENCIES
 ///////////////////////////////////////////////////////////////////////////////
 
-@Grab('io.github.carnival-data:carnival-core:2.1.1-SNAPSHOT')
+@Grab('io.github.carnival-data:carnival-core:3.0.2-SNAPSHOT')
 @Grab('org.apache.tinkerpop:gremlin-core:3.4.10')
 
 
@@ -16,10 +16,10 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.structure.Edge
 
-import carnival.core.graph.CoreGraphTinker
-import carnival.graph.VertexDefinition
-import carnival.graph.EdgeDefinition
-import carnival.graph.EdgeDefinition
+import carnival.core.CarnivalTinker
+import carnival.graph.VertexModel
+import carnival.graph.EdgeModel
+import carnival.graph.PropertyModel
 import carnival.core.graph.GraphMethods
 import carnival.core.graph.GraphMethod
 
@@ -28,12 +28,13 @@ import carnival.core.graph.GraphMethod
 // SCRIPT
 ///////////////////////////////////////////////////////////////////////////////
 
-def cg = CoreGraphTinker.create()
+def cg = CarnivalTinker.create()
 def graph = cg.graph
 println """\
 An empty graph should have no model errors.
 model: ${cg.checkModel()}
 """
+//System.console().readLine 'Return to continue'
 
 graph.addVertex('Thing')
 println """\
@@ -41,7 +42,7 @@ We have added a vertex with the unmodeled label 'Thing'
 model: ${cg.checkModel()}
 """
 
-@VertexDefinition(global="true")
+@VertexModel(global="true")
 enum VX1 {
     THING
 }
@@ -52,14 +53,14 @@ graph model.  So, we will still see a model error.
 model: ${cg.checkModel()}
 """
 
-cg.addDefinitions(VX1)
+cg.addModel(VX1)
 println """\
 We have added the model for 'Thing' to the graph model.  So, there are no
 more errors.
 model: ${cg.checkModel()}
 """
 
-@VertexDefinition
+@VertexModel
 enum VX2 {
     THING,
     ANOTHER_THING
@@ -75,14 +76,14 @@ does cause an error.
 model: ${cg.checkModel()}
 """
 
-cg.addDefinitions(VX2)
+cg.addModel(VX2)
 println """\
 Now that we have added the VX2 model to our graph model, there are no model
 errors.
 model: ${cg.checkModel()}
 """
 
-@EdgeDefinition
+@EdgeModel
 enum EX1 {
     IS_NOT(
         domain:[VX1.THING], 
@@ -98,7 +99,7 @@ we have not added this model to our graph model, we will see a model error.
 model: ${cg.checkModel()}
 """
 
-cg.addDefinitions(EX1)
+cg.addModel(EX1)
 println """\
 Now that we have added the EX1 model to our graph model, there are no model
 errors.

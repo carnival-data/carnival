@@ -228,7 +228,7 @@ class SqlUtils {
 	/**
 	 * Return a collection of where clauses where the comparison is case insensitive.
 	 *
-	 * @see inClauses(Collection<String> allItems, int maxItemsPerClause, boolean quoteItems = true)
+	 * @see #inClauses(Collection<String> allItems, int maxItemsPerClause, boolean quoteItems = true)
 	 *
 	 */
 	static public Collection<String> chunkedWhereClausesCaseInsensitive(String fieldName, Collection<String> allItems, int maxItemsPerClause = 1000) {

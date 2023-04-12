@@ -15,7 +15,7 @@ import org.apache.tinkerpop.gremlin.structure.Edge
 
 
 /** 
- * Builder class used when creating edges from an EdgeDefTrait object.
+ * Builder class used when creating edges from an EdgeDefinition object.
  */
 @Slf4j
 class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
@@ -25,14 +25,14 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
     ///////////////////////////////////////////////////////////////////////////
 
     /** 
-     * Object that owns this builder.
-     * */
-    EdgeDefTrait edgeDef
+     * The edge definition that will be used to create edges.
+     */
+    EdgeDefinition edgeDef
 
-    /** */
+    /** The from or out vertex for created edges */
     Vertex fromVertex
 
-    /** */
+    /** The to or in vertex for created edges */
     Vertex toVertex
 
 
@@ -40,8 +40,11 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
     // CONSTRUCTOR
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
-    public EdgeBuilder(EdgeDefTrait edgeDef) {
+    /** 
+     * Constructor that takes the edge definition as an argument.
+     * @param edgeDef The edge definition this builder will use.
+     */
+    public EdgeBuilder(EdgeDefinition edgeDef) {
         assert edgeDef
         this.edgeDef = edgeDef
     }
@@ -51,22 +54,31 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
     // GETTERS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
-    public ElementDefTrait getElementDef() { edgeDef }
+    /** 
+     * Return the element element definition of this builder.
+     * @return The ElementDefinition
+     */
+    public ElementDefinition getElementDef() { edgeDef }
 
 
     ///////////////////////////////////////////////////////////////////////////
     // UTILITY METHODS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Convenience string representation of this object.
+     * @return A string representation of this object
+     */
     public String toString() {
         def str = "${edgeDef}"
         if (propertyValues.size() > 0) str += " ${propertyValues}"
         return str
     }
 
-    /** */
+    /** 
+     * Assert that the properties required by the edge definition have been
+     * set.
+     */
     void assertRequiredProperties() {
         edgeDef.requiredProperties.each { requiredPropDef ->
             boolean found = allPropertyValues().find { k, v ->
@@ -81,7 +93,11 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
     // BUILDER METHODS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Sets the from vertex for created edges.
+     * @param v The from vertex
+     * @return This object
+     */
     public EdgeBuilder from(Vertex v) {
         assert v != null
         edgeDef.assertDomain(v)
@@ -90,7 +106,11 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
     }
 
 
-    /** */
+    /** 
+     * Sets the to vertex for created edges.
+     * @param v The to vertex
+     * @return This object
+     */
     public EdgeBuilder to(Vertex v) {
         edgeDef.assertRange(v)
         toVertex = v
@@ -100,7 +120,7 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
 
     /** 
      * Create new edge using previously specified 'from' and 'to' Vertex objects.
-     * Usage example, assuming EX.IS_FIRENDS_WITH is an enum decorated with '@EdgeDefinition':
+     * Usage example, assuming EX.IS_FIRENDS_WITH is an enum decorated with '@EdgeModel':
      * <p>
      * {@code Edge edge1 = EX.IS_FRIENDS_WITH.instance().from(person1).to(person2).create() }
      * */
@@ -115,7 +135,7 @@ class EdgeBuilder extends PropertyValuesHolder<EdgeBuilder> {
 
     /** 
      * If the edge with the specified 'from', 'to', and properties exists return it, otherwise create it.
-     * Usage example, assuming EX.IS_FIRENDS_WITH is an enum decorated with '@EdgeDefinition':
+     * Usage example, assuming EX.IS_FIRENDS_WITH is an enum decorated with '@EdgeModel':
      * <p>
      * {@code Edge edge1 = EX.IS_FRIENDS_WITH.instance().from(person1).to(person2).ensure() }
      * */

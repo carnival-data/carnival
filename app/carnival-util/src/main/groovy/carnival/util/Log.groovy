@@ -45,7 +45,7 @@ class Log {
      * Convenience method to call the more general progress(...) using the log
      * method 'info'.
      *
-     * @see progress(Logger log, String logMethod, String msg, Integer total, Integer current)
+     * @see #progress(Logger log, String logMethod, String msg, Integer total, Integer current)
      *
      */
     static void progress(Logger log, String msg, Integer total, Integer current) {
@@ -54,8 +54,12 @@ class Log {
 
 
     /**
-     *
-     *
+     * Convenience method to write a log statement that writes at intervals.
+     * @param log The target log
+     * @param msg The string message to write
+     * @param items The collection of items over which a process is iterating
+     * @param current The current item
+     * @param interval The number if items in the log interval
      */
     static void interval(Logger log, String msg, Collection items, Integer current, Integer interval) {
         if (current++%interval != 0) return 
@@ -64,8 +68,12 @@ class Log {
 
 
     /**
-     *
-     *
+     * Convenience method to write a log statement that writes at a standard
+     * interval.
+     * @param log The target log
+     * @param msg The string message to write
+     * @param items The collection of items over which a process is iterating
+     * @param current The current item
      */
     static void interval(Logger log, String msg, Collection items, Integer current) {
         final int LOG_INTERVAL = Math.floorDiv(items.size(), 10) ?: 1

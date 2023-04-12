@@ -16,12 +16,12 @@ import org.apache.tinkerpop.gremlin.structure.VertexProperty
 
 
 /**
- * gradle test --tests "carnival.graph.VertexDefTraitSpec"
+ * gradle test --tests "carnival.graph.VertexDefinitionSpec"
  *
  */
-class VertexDefTraitSpec extends Specification {
+class VertexDefinitionSpec extends Specification {
 
-    static enum VX implements VertexDefTrait {
+    static enum VX implements VertexDefinition {
         THING,
 
         THING_1(
@@ -72,7 +72,7 @@ class VertexDefTraitSpec extends Specification {
     }
 
 
-    static enum PX implements PropertyDefTrait {
+    static enum PX implements PropertyDefinition {
         PROP_A,
         PROP_B
     }
@@ -117,8 +117,8 @@ class VertexDefTraitSpec extends Specification {
 
     def "instanceOf edge is automatically created"() {
         setup:
-        // these have to be explicitly set as we are not using CoreGraph, just
-        // creating a TinkerGraph and testing VertexDefTrait in isolation
+        // these have to be explicitly set as we are not using Carnival, just
+        // creating a TinkerGraph and testing VertexDefinition in isolation
         if (!VX.A_CLASS.vertex) VX.A_CLASS.vertex = VX.A_CLASS.instance().create(graph)
         if (!VX.B_CLASS.vertex) VX.B_CLASS.vertex = VX.B_CLASS.instance().create(graph)
 
@@ -134,7 +134,7 @@ class VertexDefTraitSpec extends Specification {
     }
 
 
-    class Something implements VertexDefTrait {
+    class Something implements VertexDefinition {
         String name
         String name() {
             this.name
@@ -259,13 +259,13 @@ class VertexDefTraitSpec extends Specification {
         def v
 
         when:
-        v = VX.THING.controlledInstance().vertex(graph, g)
+        v = VX.THING.instance().vertex(graph, g)
 
         then:
         v
         !v.property(Base.PX.IS_CLASS.label).isPresent()
         v.property(Base.PX.NAME_SPACE.label).isPresent()
-        v.value(Base.PX.NAME_SPACE.label) == 'carnival.graph.VertexDefTraitSpec$VX'
+        v.value(Base.PX.NAME_SPACE.label) == 'carnival.graph.VertexDefinitionSpec$VX'
     }
 
 
@@ -288,7 +288,7 @@ class VertexDefTraitSpec extends Specification {
         vDef.nameSpace == 'some.custom.NameSpace'
 
         when:
-        v = vDef.controlledInstance().vertex(graph, g)
+        v = vDef.instance().vertex(graph, g)
 
         then:
         v
@@ -303,7 +303,7 @@ class VertexDefTraitSpec extends Specification {
         def v
 
         expect:
-        VX.THING.getNameSpace() == 'carnival.graph.VertexDefTraitSpec$VX'
+        VX.THING.getNameSpace() == 'carnival.graph.VertexDefinitionSpec$VX'
 
         when:
         v = VX.THING.instance().vertex(graph, g)
@@ -312,7 +312,7 @@ class VertexDefTraitSpec extends Specification {
         v
         !v.property(Base.PX.IS_CLASS.label).isPresent()
         v.property(Base.PX.NAME_SPACE.label).isPresent()
-        v.value(Base.PX.NAME_SPACE.label) == 'carnival.graph.VertexDefTraitSpec$VX'
+        v.value(Base.PX.NAME_SPACE.label) == 'carnival.graph.VertexDefinitionSpec$VX'
     }
 
 

@@ -13,9 +13,9 @@ import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 
-import carnival.graph.VertexDefinition
-import carnival.graph.PropertyDefinition
-import carnival.graph.EdgeDefinition
+import carnival.graph.VertexModel
+import carnival.graph.PropertyModel
+import carnival.graph.EdgeModel
 import carnival.graph.Base
 
 
@@ -30,36 +30,36 @@ class TinkerpopAnonExtensionsSpec extends Specification {
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
 
-    @VertexDefinition
+    @VertexModel
     static enum VX {
         THING(
             vertexProperties:[PX.ID]
         )
     }
 
-    @VertexDefinition
+    @VertexModel
     static enum VX2 {
         THING(
             vertexProperties:[PX.ID]
         )
     }
 
-    @EdgeDefinition
+    @EdgeModel
     static enum EX {
         IS_NOT
     }
 
-    @EdgeDefinition
+    @EdgeModel
     static enum EX2{
         IS_NOT
     }
 
-    @PropertyDefinition
+    @PropertyModel
     static enum PX {
         ID
     }
 
-    @VertexDefinition
+    @VertexModel
     static enum VX3 {
         CLASS_OF_ALL_DOGS (
             isClass:true

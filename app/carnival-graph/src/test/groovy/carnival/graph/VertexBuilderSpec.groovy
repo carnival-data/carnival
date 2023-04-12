@@ -21,7 +21,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
  */
 class VertexBuilderSpec extends Specification {
 
-    static enum VX implements VertexDefTrait {
+    static enum VX implements VertexDefinition {
         CIS_THING(
             vertexProperties:[
                 PX.CIS_PROP_A.withConstraints(required:true), 
@@ -38,7 +38,7 @@ class VertexBuilderSpec extends Specification {
         VX(Map m) {m.each { k,v -> this."$k" = v }}
     }
 
-    static enum PX implements PropertyDefTrait {
+    static enum PX implements PropertyDefinition {
         CIS_PROP_A,
         CIS_PROP_B
     }

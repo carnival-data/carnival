@@ -16,23 +16,23 @@ import org.apache.tinkerpop.gremlin.structure.Property
 
 
 /**
- * gradle test --tests "carnival.graph.EdgeDefTraitSpec"
+ * gradle test --tests "carnival.graph.EdgeDefinitionSpec"
  *
  */
-class EdgeDefTraitSpec extends Specification {
+class EdgeDefinitionSpec extends Specification {
 
     ///////////////////////////////////////////////////////////////////////////
     // GRAPH DEFS
     ///////////////////////////////////////////////////////////////////////////
 
-    static final VertexDefTrait DYNAMIC_THING = new DynamicVertexDef('DYNAMIC_THING')
+    static final VertexDefinition DYNAMIC_THING = new DynamicVertexDef('DYNAMIC_THING')
 
-    static enum VX implements VertexDefTrait {
+    static enum VX implements VertexDefinition {
         THING,
         ANOTHER_THING
     }
 
-    static enum VX2 implements VertexDefTrait {
+    static enum VX2 implements VertexDefinition {
         THING (global:true),
         ANOTHER_THING (global:true)
 
@@ -40,7 +40,7 @@ class EdgeDefTraitSpec extends Specification {
         private VX2(Map m) { m.each { k,v -> this."$k" = v } }
     }
 
-    static enum EX1 implements EdgeDefTrait {
+    static enum EX1 implements EdgeDefinition {
         RELATION(            
             propertyDefs:[
                 PX.PROP_A.withConstraints(required:true)
@@ -56,7 +56,7 @@ class EdgeDefTraitSpec extends Specification {
         private EX1(Map m) {m.each { k,v -> this."$k" = v } }
     }
 
-    static enum EX2 implements EdgeDefTrait {
+    static enum EX2 implements EdgeDefinition {
         RELATION(
             propertyDefs:[
                 PX.PROP_A
@@ -69,7 +69,7 @@ class EdgeDefTraitSpec extends Specification {
         private EX2(Map m) {m.each { k,v -> this."$k" = v } }
     }
 
-    static enum EX3 implements EdgeDefTrait {
+    static enum EX3 implements EdgeDefinition {
         RELATION(
             propertyDefs:[
                 PX.PROP_A.defaultValue(1).withConstraints(required:true)
@@ -82,7 +82,7 @@ class EdgeDefTraitSpec extends Specification {
         private EX3(Map m) {m.each { k,v -> this."$k" = v } }
     }
 
-    static enum PX implements PropertyDefTrait {
+    static enum PX implements PropertyDefinition {
         PROP_A,
         PROP_B,
     }
@@ -190,8 +190,8 @@ class EdgeDefTraitSpec extends Specification {
         Throwable t
 
         when:
-        v1 = VX.THING.controlledInstance().vertex(graph, g)
-        v2 = VX2.ANOTHER_THING.controlledInstance().vertex(graph, g)
+        v1 = VX.THING.instance().vertex(graph, g)
+        v2 = VX2.ANOTHER_THING.instance().vertex(graph, g)
         e = EX2.RELATION.setRelationship(g, v1, v2)
 
         println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
@@ -216,8 +216,8 @@ class EdgeDefTraitSpec extends Specification {
         Throwable t
 
         when:
-        v1 = VX2.THING.controlledInstance().vertex(graph, g)
-        v2 = VX.ANOTHER_THING.controlledInstance().vertex(graph, g)
+        v1 = VX2.THING.instance().vertex(graph, g)
+        v2 = VX.ANOTHER_THING.instance().vertex(graph, g)
         e = EX2.RELATION.setRelationship(g, v1, v2)
 
         println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
@@ -242,8 +242,8 @@ class EdgeDefTraitSpec extends Specification {
         Throwable t
 
         when:
-        v1 = DYNAMIC_THING.controlledInstance().vertex(graph, g)
-        v2 = VX.ANOTHER_THING.controlledInstance().vertex(graph, g)
+        v1 = DYNAMIC_THING.instance().vertex(graph, g)
+        v2 = VX.ANOTHER_THING.instance().vertex(graph, g)
         e = EX3.RELATION.setRelationship(g, v1, v2)
 
         println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
@@ -268,8 +268,8 @@ class EdgeDefTraitSpec extends Specification {
         Throwable t
 
         when:
-        v1 = VX.THING.controlledInstance().vertex(graph, g)
-        v2 = VX.ANOTHER_THING.controlledInstance().vertex(graph, g)
+        v1 = VX.THING.instance().vertex(graph, g)
+        v2 = VX.ANOTHER_THING.instance().vertex(graph, g)
         e = EX2.RELATION.setRelationship(g, v1, v2)
 
         println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
@@ -294,8 +294,8 @@ class EdgeDefTraitSpec extends Specification {
         Throwable t
 
         when:
-        v1 = VX.THING.controlledInstance().vertex(graph, g)
-        v2 = VX.ANOTHER_THING.controlledInstance().vertex(graph, g)
+        v1 = VX.THING.instance().vertex(graph, g)
+        v2 = VX.ANOTHER_THING.instance().vertex(graph, g)
         e = EX2.RELATION.setRelationship(g, v1, v2)
 
         println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
@@ -320,14 +320,14 @@ class EdgeDefTraitSpec extends Specification {
         def e
 
         when:
-        v1 = VX.THING.controlledInstance().vertex(graph, g)
-        v2 = VX.THING.controlledInstance().vertex(graph, g)
+        v1 = VX.THING.instance().vertex(graph, g)
+        v2 = VX.THING.instance().vertex(graph, g)
         e = EX1.RELATION.setRelationship(g, v1, v2)
 
         then:
         e
         e.property(Base.PX.NAME_SPACE.label).isPresent()
-        e.value(Base.PX.NAME_SPACE.label) == 'carnival.graph.EdgeDefTraitSpec$EX1'
+        e.value(Base.PX.NAME_SPACE.label) == 'carnival.graph.EdgeDefinitionSpec$EX1'
     }
 
 }

@@ -15,18 +15,18 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 
 
 /**
- * gradle test --tests "carnival.graph.PropertyDefTraitSpec"
+ * gradle test --tests "carnival.graph.PropertyDefinitionSpec"
  *
  */
-class PropertyDefTraitSpec extends Specification {
+class PropertyDefinitionSpec extends Specification {
 
-    @PropertyDefinition
+    @PropertyModel
     static enum PX {
         PROP_A,
         PROP_B
     }
 
-    @VertexDefinition
+    @VertexModel
     static enum VX {
         THING_1,
 
@@ -79,6 +79,19 @@ class PropertyDefTraitSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+    def "base properties are defined"() {
+        when:
+        def v1 = VX.THING_2.instance().create(graph)
+        pm.valueOf(v1)
+
+        then:
+        noExceptionThrown()
+
+        where:
+        pm << EnumSet.allOf(Base.PX)
+    }
+    
 
     def "valueOf throws an exception for undefined property"() {
         when:

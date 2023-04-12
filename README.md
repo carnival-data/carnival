@@ -5,11 +5,7 @@
 
 # Carnival
 
-*It's a party of information!*
-
-**Carnival** Carnival is an open source JVM data unification framework that allows for a large variety of extract, transform, and load (ETL), integration, and analysis tasks related to relational data and property graphs. Some key functionality includes aggregation of data from disparate sources into a unified property graph and tools to reason over and interact with graph data using bounded operations. Carnival includes an architecture for tracking the provenance of data and providing evidence chains for conclusions or reasoning made on those data.
-
-While Carnival is a general purpose tool that is domain agnostic, there are extensions ([carnival-clinical](https://github.com/carnival-data/carnival-clinical), [carnival-openspecimen](https://github.com/carnival-data/carnival-openspecimen)) that provide models and algorithms specific to the clinical biobanking domain.
+**Carnival** Carnival is an open source JVM data unification framework that allows for a large variety of extract, transform, and load (ETL), integration, and analysis tasks related to relational data and property graphs. Some key functionality includes a graph model specification, the aggregation of data from disparate sources into a unified property graph, and tools to reason over and interact with graph data using bounded operations. 
 
 ## External Resources
 
@@ -24,7 +20,7 @@ While Carnival is a general purpose tool that is domain agnostic, there are exte
 
 ## <a name="overview"></a> Overview
 
-Carnival has three principal components: a graph modeling architecture, a caching facility for aggregating data from disparate data sources, and a framework for implementing graph algorithms.  The graph modeling architecture is a layer over Java enumerations and Tinkerpop that allow a graph model to be modeled and consumed by Tinkerpop traversals.  The caching facility supports the aggregation and caching of data from relational database and JSON API sources.  The graph algorithm framework provides a structured way to define and execute algorithms that operate over the property graph.
+Carnival has three principal components: a graph modeling architecture, a caching facility for aggregating data from disparate data sources, and a framework for implementing graph algorithms.  The graph modeling architecture is a layer over Java enumerations and Tinkerpop that allow a graph to be modeled and consumed by Tinkerpop traversal steps.  The caching facility supports the aggregation and caching of data from relational database and JSON API sources.  The graph algorithm framework provides a structured way to define and execute algorithms that operate over the property graph.
 
 
 ## <a name="packages"></a> Packages
@@ -33,20 +29,11 @@ Carnival has three principal components: a graph modeling architecture, a cachin
 
 Name | Description
 --- | ---
-carnival-core | Basic Carnival framework. Implements the basic Carnival framework classes (vines, reapers, reasonsers, etc). Defines the basic carnival graph schema (processes, databases). [Core model](https://github.com/pmbb-ibi/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/Core.groovy)
+[carnival-core](app/carnival-core/README.md) | Basic Carnival framework. Implements the basic Carnival framework classes (vines, reapers, reasonsers, etc). Defines the basic carnival graph schema (processes, databases). [Core model](https://github.com/pmbb-ibi/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/Core.groovy)
+[carnival-vine](app/carnival-vine/README.md) | Mechanisms to faciliate the aggregation of data with data caching.  
 [carnival-graph](app/carnival-graph/README.md) | Framework for defining carnival graph schemas (vertex and edge definitions). Contains the basic vertex, edge, and property classes.
 [carnival-util](app/carnival-util/README.md) | Standalone package that contains utility and helper classes such as data tables, reports, and SQL utilties, which are primarily used for dealing with relational data.
 [carnival-gradle](app/carnival-gradle/README.md) | Gradle plugin for building Carnival applications and libraries.
-
-
-
-
-### Extensions
-
-Name | Description
---- | ---
-[carnival-clinical](https://github.com/carnival-data/carnival-clinical) | Extension of carnival-core for clinical data and biobanking operations. Contains model extensions for concepts such as patients, patient cohorts and healthcare encounters. Implements algorithms for generating case-control patient cohorts. [Clinical Model Extension](https://github.com/carnival-data/carnival-clinical/blob/main/src/main/groovy/carnival/clinical/graph/Clinical.groovy)
-[carnival-openspecimen](https://github.com/carnival-data/carnival-openspecimen) | Extension of carnival-core that implements vines for interfacing with [OpenSpecimen](https://www.openspecimen.org/) inventory management system.
 
 ## <a name="contribution-guide"></a> Contribution Guide
 Carnival is an open source project and welcomes contributions! Here are some ways to help:

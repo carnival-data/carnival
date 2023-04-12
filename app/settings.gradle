@@ -9,4 +9,4 @@
  */
 
 rootProject.name = 'carnival'
-include('carnival-gradle', 'carnival-util', 'carnival-graph', 'carnival-core')
+include('carnival-gradle', 'carnival-util', 'carnival-graph', 'carnival-core', 'carnival-vine')

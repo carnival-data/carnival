@@ -13,6 +13,8 @@ import carnival.util.MethodsHolder
 
 
 /** 
+ * GraphMethods is a trait that facilitates the calling of methods on an 
+ * object.
  *
  */
 trait GraphMethods extends MethodsHolder {
@@ -21,7 +23,7 @@ trait GraphMethods extends MethodsHolder {
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** Logger */
     static Logger log = LoggerFactory.getLogger(this.class)
 
 
@@ -29,7 +31,9 @@ trait GraphMethods extends MethodsHolder {
     // CLIENT INTERFACE
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Look up a graph method.
+     */
     GraphMethod method(String name) {
         assert name != null
         assert name.trim().length() > 0

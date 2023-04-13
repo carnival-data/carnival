@@ -71,6 +71,9 @@ class CarnivalNeo4j extends Carnival {
 	 * @return A started CarnivalNeo4j object
 	 */
     public static CarnivalNeo4j create(CarnivalNeo4jConfiguration config, Map args = [:]) {
+		assert config != null
+		assert config instanceof CarnivalNeo4jConfiguration
+
 		// initialize the directory structure
 		initializeFiles(config)
 

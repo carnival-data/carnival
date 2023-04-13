@@ -25,8 +25,10 @@ import groovy.transform.EqualsAndHashCode
 @EqualsAndHashCode
 class FieldName {
 
+    /** do not use */
     static Map<String,FieldName> cache = new HashMap<String,FieldName>()
 
+    /** do not use */
     static FieldName create(String value) {
         assert value
         value = value.trim().toUpperCase()
@@ -39,10 +41,10 @@ class FieldName {
         return fn
     }
 
+    /** do not use */
     final String value
 
-    private FieldName() {
-    }
+    private FieldName() { }
 
     private FieldName(String value) {
         assert value

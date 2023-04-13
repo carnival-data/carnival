@@ -20,6 +20,7 @@ import org.codehaus.groovy.transform.GroovyASTTransformationClass
 @Target(ElementType.TYPE)
 @GroovyASTTransformationClass(["carnival.graph.VertexModelTransformation"])
 public @interface VertexModel {
+    /** Set to true if vertex model is global */
     public String global() default "";
 }
 

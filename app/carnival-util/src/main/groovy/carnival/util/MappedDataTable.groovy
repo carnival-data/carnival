@@ -58,14 +58,27 @@ class MappedDataTable extends DataTable {
     @ToString
     static class MetaData extends DataTable.MetaData {
 
+        /** The name of the id field name */
         String idFieldName
+
+        /** The date format */
         DateFormat dateFormat
+
+        /** Pattern of the date format */
         String dateFormatPattern
 
+        /**
+         * Constructor from map of args.
+         * @param args A map of args
+         */
         public MetaData(Map args) {
             setFields(args)
         }
 
+        /**
+         * Constructor from a mapped data table.
+         * @param mdt Source mapped data table
+         */
         public MetaData(MappedDataTable mdt) {
             assert mdt
             setFields (
@@ -142,7 +155,9 @@ class MappedDataTable extends DataTable {
 
 
     /**
-     *
+     * Create a mapped data table from cache files.
+     * @param cacheFiles The cache files
+     * @return A mapped data table
      */
     static public MappedDataTable createFromFiles(DataTableFiles cacheFiles) {
         def meta = loadMetaDataFromFile(cacheFiles.meta)

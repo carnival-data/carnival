@@ -31,42 +31,42 @@ import carnival.graph.Base
  */
 class TinkerpopAnonTraversalExtension {
 
-    /** */
+    /** @see TinkerpopTraversalExtension */
     static GraphTraversal out(__ traversal, EdgeDefinition edef) {
         __.outE(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace).inV()
     }
 
-    /** */
+    /** @see TinkerpopTraversalExtension */
     static GraphTraversal both(__ traversal, EdgeDefinition edef) {
         __.bothE(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace).otherV()
     }
 
-    /** */
+    /** @see TinkerpopTraversalExtension */
     static GraphTraversal "in"(__ traversal, EdgeDefinition edef) {
         __.inE(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace).outV()
     }
 
-    /** */
+    /** @see TinkerpopTraversalExtension */
     static GraphTraversal isa(__ traversal, VertexDefinition vdef) {
         __.hasLabel(vdef.label).has(Base.PX.NAME_SPACE.label, vdef.nameSpace)
     }
 
-    /** */
+    /** @see TinkerpopTraversalExtension */
     static GraphTraversal isa(__ traversal, EdgeDefinition edef) {
         __.hasLabel(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace)
     }
 
-    /** */
+    /** @see TinkerpopTraversalExtension */
     static GraphTraversal has(__ traversal, PropertyDefinition pdef) {
         traversal.has(pdef.label)
     }
 
-    /** */
+    /** @see TinkerpopTraversalExtension */
     static GraphTraversal has(__ traversal, PropertyDefinition pdef, Enum value) {
         traversal.has(pdef.label, value.name())
     }
 
-    /** */
+    /** @see TinkerpopTraversalExtension */
     static GraphTraversal has(__ traversal, PropertyDefinition pdef, Object value) {
         traversal.has(pdef.label, value)
     }

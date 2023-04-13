@@ -13,61 +13,7 @@ import groovy.sql.*
 
 
 
-/**
- * specific value with respect to all dates
- */
-enum FirstOrLastDateComparator {
-	All, ALL_MOSTRECENT
-}
 
-
-
-/**
- * Summary of data with respect to a given date
- *
- * For example, Average BMI for all encounter measurements that take place before a biobank encounter
- */
-enum SummaryDateComparator {
-	LT, LTEQ, EQ, GT, GTEQ, ALL, 
-	//LT_MOSTRECENT, LTEQ_MOSTRECENT, EQ_MOSTRECENT, GT_MOSTRECENT, GTEQ_MOSTRECENT, ALL_MOSTRECENT, 
-}
-
-
-
-/**
- * Specific value with respect to a given date
- *
- * For example, the most recent bmi that occured before the biobank recruitment date
- * 	or the lab value that occured closest to recruitment date
- *
- * if not %_MOSTRECENT or %_CLOSEST, return first occurance
- * if %_MOSTRECENT, return the latest occurence
- * if ALL_CLOSEST, return the closest occurance
- *
- */
-enum SingleValueDateComparator {
-	ALL (desc:'the oldest'),
-	ALL_MOSTRECENT (desc:'the most recent'), 
-	ALL_CLOSEST (desc:'the closest to the date before or after'),
-
-	LT (desc:'the oldest strictly before'), 
-	LTEQ (desc:'the oldest before or same time as'), 
-	EQ (desc:'same time as'), 
-	GTEQ (desc:'the oldest after or the same time as'),
-	GT (desc:'the oldest strictly after'), 
-
-	LT_MOSTRECENT (desc:'the most recent before'), 
-	LTEQ_MOSTRECENT (desc:'the most recent before or same time as'), 
-	EQ_MOSTRECENT (desc:'the most recent same time as'), 
-	GTEQ_MOSTRECENT (desc:'the most recent after or the same time'),
-	GT_MOSTRECENT (desc:'the most recent strictly after')
-
-    final String description
-
-    private SingleValueDateComparator(Map args) { 
-    	this.description = args.desc
-    }
-}
 
 
 

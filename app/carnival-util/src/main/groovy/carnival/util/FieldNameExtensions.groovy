@@ -8,6 +8,11 @@ package carnival.util
  */
 class FieldNameExtensions {
     
+    /**
+     * Return a field name based on the provided string.
+     * @param str The source string
+     * @return A field name object
+     */
     static FieldName getFieldName(String str) {
         FieldName.create(str)
         new FieldName(str)

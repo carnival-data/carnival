@@ -83,10 +83,18 @@ class FeatureReport extends MappedDataTable {
      */
     static class MetaData extends MappedDataTable.MetaData {
 
+        /**
+         * Construct a MetaData from the provided args.
+         * @param args A map of args
+         */
         public MetaData(Map args) {
             setMeta(args)
         }
 
+        /**
+         * Construct a MetaData from a feature report.
+         * @param mdt The source feature report
+         */
         public MetaData(FeatureReport mdt) {
             assert mdt
             setMeta (
@@ -100,6 +108,10 @@ class FeatureReport extends MappedDataTable {
             if (args.containsKey('reportDescriptor')) this.meta.reportDescriptor = args.reportDescriptor
         }
 
+        /**
+         * Return the report descriptor of this object.
+         * @return The report descriptor
+         */
         public Map getReportDescriptor() {
             return meta.reportDescriptor
         }
@@ -135,6 +147,7 @@ class FeatureReport extends MappedDataTable {
 
     /** Words that denote a date */
     static final enum DateWords {
+        /** date */
         DATE
     }
 

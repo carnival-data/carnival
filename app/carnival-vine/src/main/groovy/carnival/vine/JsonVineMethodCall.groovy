@@ -37,10 +37,17 @@ class JsonVineMethodCall<T> implements VineMethodCall<T> {
      */
     @JsonPropertyOrder(["thisClass", "vineMethodClass", "resultClass", "arguments"])
     static class Meta {
+
+        /** class of the "this" object */
         Class thisClass
+
+        /** class of the vine method */
         Class vineMethodClass
+
+        /** class of the result */
         Class resultClass
 
+        /** map of arguments */
         @JsonTypeInfo(use=Id.CLASS, include=As.WRAPPER_ARRAY)
         Map arguments
 
@@ -61,6 +68,8 @@ class JsonVineMethodCall<T> implements VineMethodCall<T> {
      *
      */
     static class Result {
+
+        /** value of the result */
         @JsonTypeInfo(use=Id.CLASS, include=As.WRAPPER_ARRAY)
         Object value
 

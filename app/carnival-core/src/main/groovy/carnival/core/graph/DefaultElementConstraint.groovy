@@ -16,8 +16,16 @@ import org.slf4j.LoggerFactory
 @ToString
 @EqualsAndHashCode(allProperties=true)
 class DefaultElementConstraint implements ElementConstraint {
+	
+	/** element label */
 	String label
+	
+	/** element name space */
 	String nameSpace
+	
+	/** whether the element constraing is global */
 	boolean global
+
+	/** return the global field */
 	boolean isGlobal() { return global }
 }

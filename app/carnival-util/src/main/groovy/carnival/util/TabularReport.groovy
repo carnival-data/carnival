@@ -92,12 +92,21 @@ class TabularReport extends GenericDataTable {
      */
     static class MetaData extends GenericDataTable.MetaData {
 
+        /** Report descriptor as a map */
         Map reportDescriptor = [:]
 
+        /**
+         * Constructor from a map of args
+         * @param args Map of args
+         */
         public MetaData(Map args) {
             setFields(args)
         }
 
+        /**
+         * Constructor from a tabular report.
+         * @param mdt Source tabular report
+         */
         public MetaData(TabularReport mdt) {
             assert mdt
             setFields (

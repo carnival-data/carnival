@@ -39,6 +39,7 @@ class JsonVineMethodListCall<T> extends JsonVineMethodCall<T> {
      *
      */
     static class ListHolder {
+        /** the list value */
         @JsonTypeInfo(use=Id.CLASS, include=As.WRAPPER_ARRAY)
         List value
     }

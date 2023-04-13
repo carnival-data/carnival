@@ -49,7 +49,7 @@ abstract class DataTable {
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
 
-	/** carnival logger */
+	/** logger */
     static Logger log = LoggerFactory.getLogger(DataTable)
 
 
@@ -63,7 +63,7 @@ abstract class DataTable {
      */
     static class FieldNameExtensions {
 
-        /** */
+        /** Create a field name from a string */
         static FieldName fn(String str) {
             return FieldName.create(str)
         }
@@ -72,15 +72,24 @@ abstract class DataTable {
 
 
     /**
-     * Each DataTable class will habe an associated MetaData class.
+     * Each DataTable class will have an associated MetaData class.
      *
      */
     static abstract class MetaData {
 
+        /** data table name */
         String name
+
+        /** True of meta-data is case sensitive */
         Boolean caseSensitive = false
+
+        /** The date the query was run */
         Date queryDate
+
+        /** The date the data source was updated */
         Date dataSourceDateOfUpdate
+
+        /** The vine */
         Map vine
 
         protected void setFields(Map args) {

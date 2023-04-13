@@ -35,7 +35,10 @@ class ExcelUtil {
     static Logger log = LoggerFactory.getLogger(ExcelUtil)
 
     /** Constants related to Excel processing */
-    static enum EXCEL { ROW_NUM }
+    static enum EXCEL { 
+        /** row number */
+        ROW_NUM 
+    }
 
 
 	///////////////////////////////////////////////////////////////////////////

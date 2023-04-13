@@ -2,7 +2,9 @@ package carnival.util
 
 
 
-/** */
+/** 
+ * Static utility methods for sting manipulation.
+ */
 class StringUtils {
 
     /** 

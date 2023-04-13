@@ -8,6 +8,9 @@ import carnival.util.StringUtils
 
 
 
+/**
+ * Static utility methods
+ */
 @Slf4j
 class CoreUtil {
 

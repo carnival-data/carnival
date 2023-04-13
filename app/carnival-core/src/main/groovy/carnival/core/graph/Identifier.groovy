@@ -39,7 +39,9 @@ class Identifier {
 	// STATIC
 	///////////////////////////////////////////////////////////////////////////
 
-	/** */
+	/** 
+	 * Get or create a vertex.
+	 */
 	public static Vertex getOrCreateVertex(Graph graph, GraphTraversalSource g, Map args) {
 		assert graph
 		assert g
@@ -54,9 +56,17 @@ class Identifier {
 	///////////////////////////////////////////////////////////////////////////
 	// FIELDS
 	///////////////////////////////////////////////////////////////////////////
+	
+	/** The vertex representing the identifier class */
 	Vertex identifierClass
+
+	/** The vertrex representing the identifier scope */
 	Vertex identifierScope
+
+	/** The vertex representing the identifier facility */
 	Vertex identifierFacility
+
+	/** The value of the identifier */
 	String value
 
 
@@ -64,14 +74,19 @@ class Identifier {
 	// METHODS
 	///////////////////////////////////////////////////////////////////////////
 
-	/** */
+	/** 
+	 * Get or create an identifier node (vertex) in the provided graph.
+	 */
 	public Vertex getOrCreateNode(Graph graph) {
 		def g = graph.traversal()
 		getOrCreateNode(graph, g)
 	}
 
 
-	/** */
+	/** 
+	 * Get or create an identifier node (vertex) in the provided graph using
+	 * the provided graph traversal source.
+	 */
 	public Vertex getOrCreateNode(Graph graph, GraphTraversalSource g) {
 		assert value
 		assert identifierClass

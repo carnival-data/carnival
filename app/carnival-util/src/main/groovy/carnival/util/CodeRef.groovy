@@ -15,13 +15,26 @@ import groovy.transform.EqualsAndHashCode
  *
  */
 enum CodeSystem {
-	ICD('ICD 9 or 10'), 
-	ICD9('ICD vesion 9'), 
+	/** ICD 9 or 10 */
+	ICD('ICD 9 or 10'),
+
+	/** ICD vesion 9 */ 
+	ICD9('ICD version 9'), 
+
+	/** ICD version 10 */
 	ICD10('ICD version 10'), 
+
+	/** Current Procedural Terminology */
 	CPT('Current Procedural Terminology'), 
+
+	/** Phecodes from phewascatalog.org */
 	PHECODE('Phecodes from phewascatalog.org'), 
-	LAB_DESCRIPTION('Penn Data Store lab descriptions'), 
-	SEARCH_TERM('Search term that will be transformed to %SERCH_TERM%')
+
+	/** Lab descriptions */
+	LAB_DESCRIPTION('Lab descriptions'), 
+
+	/** Search term that will be transformed to %SEARCH_TERM% */
+	SEARCH_TERM('Search term that will be transformed to %SEARCH_TERM%')
 
     final public String description
 

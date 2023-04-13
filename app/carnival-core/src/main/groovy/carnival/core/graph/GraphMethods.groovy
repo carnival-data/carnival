@@ -32,7 +32,9 @@ trait GraphMethods extends MethodsHolder {
     ///////////////////////////////////////////////////////////////////////////
 
     /** 
-     * Look up a graph method.
+     * Look up a graph method by name.
+     * @param name The name of the graph method
+     * @return The GraphMethod
      */
     GraphMethod method(String name) {
         assert name != null
@@ -41,7 +43,11 @@ trait GraphMethods extends MethodsHolder {
     }
 
 
-    /** */
+    /** 
+     * Look up a graph method by class.
+     * @param gmc The graph method class
+     * @return The GraphMethod
+     */
     GraphMethod method(Class gmc) {
         assert gmc != null
         Set<Class> allGmcs = allGraphMethodClasses()
@@ -51,7 +57,11 @@ trait GraphMethods extends MethodsHolder {
     }
 
 
-    /** */
+    /** 
+     * Return a list of graph methods matching the provided names.
+     * @param names The list of method names
+     * @return The GraphMethodList
+     */
     GraphMethodList methods(List<String> names) {
         assert names != null
 
@@ -65,7 +75,11 @@ trait GraphMethods extends MethodsHolder {
     }
 
 
-    /** */
+    /** 
+     * Return a list of graph methods matching the provided names.
+     * @param names The list of method names
+     * @return The GraphMethodList
+     */
     GraphMethodList methods(String... names) {
         methods(names.toList())
     }
@@ -75,17 +89,28 @@ trait GraphMethods extends MethodsHolder {
     // UTILITY
     ///////////////////////////////////////////////////////////////////////////    
 
-    /** */
+    /** 
+     * Return all the graph methods of this object.
+     * @return The set of all graph methods
+     */
     public Set<Class> allGraphMethodClasses() {
         allMethodClasses(GraphMethod)
     }
 
-    /** */
+    /** 
+     * Find a graph method class by name.
+     * @param name The name of the graph method to find.
+     * @return The graph method class.
+     */
     public Class findGraphMethodClass(String name) {
         findMethodClass(GraphMethod, name)
     }
 
-    /** */
+    /** 
+     * Create a graph method instance from a method name.
+     * @param methodName The name of the method.
+     * @return The GraphMethod
+     */
     public GraphMethod createGraphMethodInstance(String methodName) {
         log.trace "GraphMethods.createGraphMethodInstance methodName:${methodName}"
 

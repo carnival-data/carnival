@@ -16,17 +16,24 @@ import carnival.core.Core
  */
 class GraphMethodProcess {
 
-    /** */
+    /** The vertex representing the graph method process */
     public Vertex vertex
 
 
-    /** */
+    /** 
+     * Return the graph process vertex.
+     * @return The vertex representing the graph process.
+     */
     public Vertex vertex() {
         this.vertex
     }
 
 
-    /** */
+    /** 
+     * Get the outputs of the graph method process from the graph.
+     * @param g The graph traversal source to use
+     * @return The set of output vertices
+     */
     public Set<Vertex> outputs(GraphTraversalSource g) {
         assert g
         assert vertex
@@ -34,7 +41,11 @@ class GraphMethodProcess {
     }
 
 
-    /** */
+    /** 
+     * Get the inputs of the graph method process from the graph.
+     * @param g The graph traversal source to use
+     * @return The set of input vertices
+     */
     public Set<Vertex> inputs(GraphTraversalSource g) {
         assert g
         assert vertex

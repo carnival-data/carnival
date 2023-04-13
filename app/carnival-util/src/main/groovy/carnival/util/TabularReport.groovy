@@ -21,7 +21,6 @@ import static groovy.json.JsonOutput.*
  * methods for greating a tabular report.
  *
  */
-//@ToString(excludes=['data'], includeNames=true)
 @ToString(includeNames=true)
 class TabularReport extends GenericDataTable {
 
@@ -83,10 +82,7 @@ class TabularReport extends GenericDataTable {
     // STATIC CLASSES
     ///////////////////////////////////////////////////////////////////////////
 
-    /** error log */
-    static Logger elog = LoggerFactory.getLogger('db-entity-report')
-
-    /** carnival log */
+    /** logger */
     static Logger log = LoggerFactory.getLogger(TabularReport)
 
 

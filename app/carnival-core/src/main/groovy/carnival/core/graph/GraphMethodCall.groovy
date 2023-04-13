@@ -8,7 +8,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 
 
 /**
- *
+ * A class to represent the execution of a graph method.
  *
  */
 class GraphMethodCall {
@@ -21,8 +21,7 @@ class GraphMethodCall {
 
 
     /**
-     *
-     *
+     * The result of the execution.
      */
     Map result
 
@@ -35,7 +34,6 @@ class GraphMethodCall {
     
     /**
      * Return the arguments used by this method.
-     *
      */
     public Map arguments() {
         this.arguments
@@ -45,7 +43,8 @@ class GraphMethodCall {
     /**
      * Return a GraphMethodProcess object wrapper for the graph representation
      * of the executed method.
-     *
+     * @param g The graph traversal source to use
+     * @return The graph method process object
      */
     public GraphMethodProcess process(GraphTraversalSource g) {
         new GraphMethodProcess(vertex:processVertex)

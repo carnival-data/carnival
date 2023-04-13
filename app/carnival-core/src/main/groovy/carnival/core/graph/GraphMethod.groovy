@@ -41,6 +41,7 @@ abstract class GraphMethod extends GraphMethodBase {
     // RESULT
     ///////////////////////////////////////////////////////////////////////////
 
+    /** The method result */
     Map result = [:]
 
 
@@ -50,7 +51,9 @@ abstract class GraphMethod extends GraphMethodBase {
 
     /**
      * Calls the execute() method and represents the call in the graph.
-     *
+     * @param g The graph traversal source to use
+     * @param graph The graph
+     * @return The graph method call object
      */
     public GraphMethodCall call(Graph graph, GraphTraversalSource g) {
         assert graph != null
@@ -79,7 +82,13 @@ abstract class GraphMethod extends GraphMethodBase {
     // ENSURE
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Call the graph method if it has not already been called.
+     * @param g The graph traversal source to use
+     * @param graph The graph
+     * @return The graph method call object if the method was called; null
+     * otherwise.
+     */
     public GraphMethodCall ensure(Graph graph, GraphTraversalSource g) {
         assert graph != null
         assert g != null

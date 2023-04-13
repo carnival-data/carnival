@@ -184,7 +184,12 @@ public class DefaultGraphValidator implements GraphValidator {
 	}
 
 
-	/** */
+	/** 
+	 * Check modeled edges.
+	 * @param graphSchema The graph schema
+	 * @param g The graph traversal source to use
+	 * @return A collection of strings describing model errors
+	 */
 	public Collection<String> checkModelEdges(GraphTraversalSource g, GraphSchema graphSchema) {
 		assert g
 		assert graphSchema
@@ -202,7 +207,12 @@ public class DefaultGraphValidator implements GraphValidator {
 
 
 
-	/** */
+	/** 
+	 * Check modeled properties.
+	 * @param graphSchema The graph schema
+	 * @param g The graph traversal source to use
+	 * @return A collection of strings describing model errors
+	 */
 	public Collection<String> checkModelProperties(GraphTraversalSource g, GraphSchema graphSchema) {
 		assert g
 		assert graphSchema
@@ -227,7 +237,12 @@ public class DefaultGraphValidator implements GraphValidator {
 
 
 
-	/** */
+	/** 
+	 * Check modeled vertices.
+	 * @param graphSchema The graph schema
+	 * @param g The graph traversal source to use
+	 * @return A collection of strings describing model errors
+	 */
 	public Collection<String> checkModelVertices(GraphTraversalSource g, GraphSchema graphSchema) {
 		assert g
 		assert graphSchema
@@ -248,7 +263,13 @@ public class DefaultGraphValidator implements GraphValidator {
 	// UTILITY
 	///////////////////////////////////////////////////////////////////////////
 
-	/** */
+	/** 
+	 * Return a set of strings listing unmodeled elements using the provided 
+	 * traversal.
+	 * @param allModels The element constraints to check
+	 * @param traversal The graversal to use
+	 * @return A set of strings
+	 */
 	Set<String> unmodeledElements(Traversal traversal, Collection<ElementConstraint> allModels) {
 
 		def modelsByLabel = modelsByLabel(allModels)
@@ -280,7 +301,12 @@ public class DefaultGraphValidator implements GraphValidator {
 		return unmodeledElements		
 	}
 
-	/** */
+	/** 
+	 * Return a map of label to element constraints from the provided list of
+	 * element constraints.
+	 * @param allElementConstraints A collection of eleent constraints
+	 * @return A map of label to list of element constraints
+	 */
 	Map<String,Set<ElementConstraint>> modelsByLabel(Collection<ElementConstraint> allElementConstraints) {
 		Map<String,List<ElementConstraint>> mds = new HashMap<String,List<ElementConstraint>>()
 		allElementConstraints.each { ElementConstraint edef ->
@@ -295,14 +321,24 @@ public class DefaultGraphValidator implements GraphValidator {
 	}
 
 
-	/** */
+	/** 
+	 * Return a filtered set of element constraints that prioritizes global
+	 * constraints.
+	 * @param allModels A set of element constraints
+	 * @return A filtered set of element constraints
+	 */
 	Set<ElementConstraint> filteredModels(Set<ElementConstraint> allModels) {
 		def modelsByLabel = modelsByLabel(allModels)
 		filteredModels(modelsByLabel)
 	}
 
 
-	/** */
+	/** 
+	 * Return a filtered set of element constraints that prioritizes global
+	 * constraints.
+	 * @param modelsByLabel A map of element constraints by label
+	 * @return A filtered set of element constraints
+	 */
 	Set<ElementConstraint> filteredModels(Map<String,Set<ElementConstraint>> modelsByLabel) {
 		List<ElementConstraint> filteredModels = new ArrayList<ElementConstraint>()
 		modelsByLabel.each { lbl, edefs ->

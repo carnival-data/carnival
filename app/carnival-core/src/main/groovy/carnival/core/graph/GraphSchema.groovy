@@ -30,7 +30,9 @@ import carnival.graph.VertexBuilder
 
 
 
-/** */
+/** 
+ * Interface that defines a graph schema object.
+ */
 interface GraphSchema {
 
 	/** 
@@ -46,13 +48,23 @@ interface GraphSchema {
 	 */
 	Collection<VertexBuilder> getVertexBuilders()
 
-	/** */
+	/** 
+	 * Return the constraints on vertices.
+	 * @return The collection of vertex constraints
+	 */
 	Collection<VertexConstraint> getVertexConstraints()
 
-	/** */
+	/** 
+	 * Return true if the graph schema contains the provided vertex definition.
+	 * @param vDef The vertex definition
+	 * @return The boolean value
+	 */
 	boolean containsConstraint(VertexDefinition vDef)
 
-	/** */
+	/** 
+	 * Return the constraints on edges.
+	 * @return The collection of edge constraints
+	 */
 	Collection<EdgeConstraint> getEdgeConstraints()
 
 }

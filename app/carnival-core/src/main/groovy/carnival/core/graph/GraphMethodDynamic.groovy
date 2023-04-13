@@ -13,12 +13,12 @@ import carnival.graph.VertexDefinition
 
 
 /**
- *
+ * A dymamically created graph method.
  */
 class GraphMethodDynamic extends GraphMethodBase {   
 
 
-    /** */
+    /** A singleton GraphMethodDynamic that can be shared */
     static public final GM = new GraphMethodDynamic()
 
 
@@ -28,7 +28,10 @@ class GraphMethodDynamic extends GraphMethodBase {
 
     /**
      * Calls the execute() method and represents the call in the graph.
-     *
+     * @param cl The closure to call
+     * @param g The grpah traversal source to pass to the closure
+     * @param graph The graph to pass to the closure
+     * @return The graph method call object representing the execution.
      */
     public GraphMethodCall call(Graph graph, GraphTraversalSource g, Closure cl) {
         assert graph != null
@@ -67,7 +70,14 @@ class GraphMethodDynamic extends GraphMethodBase {
     // ENSURE
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Call the graph method if it has not already been called.
+     * @param cl The closure to call
+     * @param g The grpah traversal source to pass to the closure
+     * @param graph The graph to pass to the closure
+     * @return The graph method call object representing the execution if it
+     * happened; null otherwise
+     */
     public GraphMethodCall ensure(Graph graph, GraphTraversalSource g, Closure cl) {
         assert graph != null
         assert g != null

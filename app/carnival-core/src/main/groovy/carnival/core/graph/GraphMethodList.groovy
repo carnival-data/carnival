@@ -13,7 +13,7 @@ import carnival.graph.Base
 
 
 /**
- *
+ * A list of graph methods.
  */
 class GraphMethodList {    
 
@@ -21,6 +21,7 @@ class GraphMethodList {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
+    /** The underlying list of graph methods */
     List<GraphMethod> graphMethods = new ArrayList<GraphMethod>()
 
 
@@ -31,7 +32,8 @@ class GraphMethodList {
 
     /**
      * Set the arguments of the graph methods prior to executing them.
-     *
+     * @param args The  map of arguments to use for each call.
+     * @return This object
      */
     public GraphMethodList arguments(Map args) {
         assert args != null
@@ -46,7 +48,10 @@ class GraphMethodList {
 
 
     /**
-     *
+     * Call each of the graph methods in this list.
+     * @param g The graph traversal source to use
+     * @param graph The graph to use
+     * @return The list of graph method call objects
      */
     public List<GraphMethodCall> call(Graph graph, GraphTraversalSource g) {
         assert graph != null
@@ -64,7 +69,11 @@ class GraphMethodList {
 
 
     /**
-     *
+     * Call each of the graph methods in this list if it has not already been
+     * called.
+     * @param g The graph traversal source to use
+     * @param graph The graph to use
+     * @return The list of graph method call objects
      */
     public List<GraphMethodCall> ensure(Graph graph, GraphTraversalSource g) {
         assert graph != null

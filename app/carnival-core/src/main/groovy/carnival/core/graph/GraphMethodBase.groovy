@@ -15,7 +15,7 @@ import carnival.core.Core
 
 
 /**
- *
+ * A basic elements of a graph method.
  *
  */
 class GraphMethodBase {    
@@ -31,13 +31,13 @@ class GraphMethodBase {
      */
     Map arguments = new HashMap()
 
-    /** */
+    /** The process vertex definition */
     VertexDefinition processVertexDef = Core.VX.GRAPH_PROCESS
 
-    /** */
+    /** The process class vertex definition */
     VertexDefinition processClassVertexDef = Core.VX.GRAPH_PROCESS_CLASS
 
-    /** */
+    /** The name of this graph method */
     String name = this.class.name
 
 
@@ -45,7 +45,10 @@ class GraphMethodBase {
     // ACCESSORS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Return the args used during execution.
+     * @return A map of arguments
+     */
     public Map getArgs() {
         this.arguments
     }
@@ -57,7 +60,8 @@ class GraphMethodBase {
 
     /**
      * Set the arguments of a graph method prior to executing it.
-     *
+     * @param A map of arguments
+     * @return This object
      */
     public GraphMethodBase arguments(Map args) {
         assert args != null
@@ -67,8 +71,9 @@ class GraphMethodBase {
 
 
     /**
-     *
-     *
+     * Set the process vertex definition.
+     * @param vdt The vertex definition
+     * @return This object
      */
     public GraphMethodBase processDefinition(VertexDefinition vdt) {
         assert vdt != null
@@ -78,8 +83,9 @@ class GraphMethodBase {
 
 
     /**
-     *
-     *
+     * Set the process class vertex definition.
+     * @param vdt The class vertex definition
+     * @return This object
      */
     public GraphMethodBase processClassDefinition(VertexDefinition vdt) {
         assert vdt != null
@@ -89,8 +95,9 @@ class GraphMethodBase {
 
 
     /**
-     *
-     *
+     * Set the name of this graph method.
+     * @param name The name to use
+     * @return This object
      */
     public GraphMethodBase name(String name) {
         assert name != null
@@ -106,12 +113,24 @@ class GraphMethodBase {
 
     /**
      * Return the graph representations in the graph of executed graph methods.
-     *
+     * @param g The traph traversal source to use
+     * @return The set of graph method process
      */
     public Set<GraphMethodProcess> processes(GraphTraversalSource g) {
         assert g != null
+        processesVertices(g).collect({ new GraphMethodProcess(vertex:it) })
+    }
+
+
+    /**
+     * Return the set of graph method process vertices for this object.
+     * @param g The graph traversal source to use
+     * @return The set of graph method process vertices
+     */
+    public Set<Vertex> processesVertices(GraphTraversalSource g) {
+        assert g != null
         String argsHash = CoreUtil.argumentsUniquifier(this.arguments)
-        Set<Vertex> procVs = g.V()
+        g.V()
             .isa(getProcessVertexDef())
             .has(Core.PX.NAME, getName())
             .has(Core.PX.ARGUMENTS_HASH, argsHash)
@@ -125,8 +144,8 @@ class GraphMethodBase {
     ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * Calls the execute() method and represents the call in the graph.
-     *
+     * Creates a graph method call object and instantiates the representation
+     * in the graph.
      */
     protected GraphMethodCall graphMethodCall(
         Graph graph, 

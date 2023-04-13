@@ -360,19 +360,20 @@ public class GraphMethodSpec extends Specification {
         when:
         def gm = new TestGraphMethod()
         gm.arguments(a:'1', b:'2')
-        def procVs = gm.processes(g)
+        def procs = gm.processes(g)
 
         then:
-        procVs != null
-        procVs.size() == 0
+        procs != null
+        procs.size() == 0
 
         when:
         def gmc = gm.call(graph, g)
-        procVs = gm.processes(g)
+        procs = gm.processes(g)
 
         then:
-        procVs != null
-        procVs.size() == 1
+        procs != null
+        procs.size() == 1
+        procs[0] instanceof GraphMethodProcess
     }
 
 

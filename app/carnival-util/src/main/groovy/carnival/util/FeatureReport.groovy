@@ -31,7 +31,6 @@ import static groovy.json.JsonOutput.*
  * iteratively add feature sets.
  *
  */
-//@ToString(excludes=['data'], includeNames=true)
 @ToString(includeNames=true)
 class FeatureReport extends MappedDataTable {
 
@@ -66,13 +65,10 @@ class FeatureReport extends MappedDataTable {
     // STATIC FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
-    static Logger elog = LoggerFactory.getLogger('db-entity-report')
-
-    /** */
+    /** Log to use */
     static Logger log = LoggerFactory.getLogger(FeatureReport)
 
-    /** */
+    /** Suffix for shifted dates */
     static final String DATE_SHIFT_SUFFIX = '_SHIFTED'
 
 
@@ -137,7 +133,7 @@ class FeatureReport extends MappedDataTable {
     }
 
 
-    /** */
+    /** Words that denote a date */
     static final enum DateWords {
         DATE
     }

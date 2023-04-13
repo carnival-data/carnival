@@ -38,20 +38,33 @@ class Core {
 	// in this file.
 	///////////////////////////////////////////////////////////////////////////
 
-    /** Core vertex model. */
+    /** 
+     * Core vertex model. 
+     * @see carnival.core.Core
+     */
     @VertexModel
     static enum VX {
+        /** Application */
         APPLICATION (
             vertexProperties:[
                 PX.NAME.withConstraints(required:true, index:true),
                 PX.VERSION
             ]
         ),
+
+        /** Database */
     	DATABASE,
+
+        /** Relational data base */
     	RELATIONAL_DATABASE,
+
+        /** Relational database record */
     	RELATIONAL_DATABASE_RECORD,
 
+        /** Process class */
         PROCESS_CLASS,
+
+        /** Process */
         PROCESS(
             vertexProperties:[
                 PX.ARGUMENTS_HASH,
@@ -61,9 +74,12 @@ class Core {
             ]
         ),
 
+        /** Graph process class */
         GRAPH_PROCESS_CLASS(
             superClass: VX.PROCESS_CLASS
         ),
+
+        /** Graph process */
         GRAPH_PROCESS(
             vertexProperties:[
                 PX.NAME,
@@ -74,12 +90,15 @@ class Core {
             ]
         ),
 
+        /** Data transformation process class */
         DATA_TRANSFORMATION_PROCESS_CLASS(
             superClass: VX.PROCESS_CLASS            
         ),
 
+        /** Validation failure */
         VALIDATION_FAILURE,
 
+        /** Identifier class */
         IDENTIFIER_CLASS (
             vertexProperties:[
                 PX.NAME.withConstraints(required:true, unique:true), 
@@ -87,16 +106,22 @@ class Core {
                 PX.HAS_CREATION_FACILITY.defaultValue(false).withConstraints(required:true, index:true)
             ]
         ),
+
+        /** Identifier */
         IDENTIFIER (
             vertexProperties:[
                 PX.VALUE.withConstraints(required:true, index:true)
             ]
         ),
+
+        /** Identifier facility */
         IDENTIFIER_FACILITY (
             vertexProperties:[
                 PX.NAME.withConstraints(required:true, unique:true)
             ]
         ),
+
+        /** Identifier scope */
         IDENTIFIER_SCOPE (
             vertexProperties:[
                 PX.NAME.withConstraints(required:true, unique:true)
@@ -105,63 +130,133 @@ class Core {
     }
 
 
-    /** Core edge model */
+    /** 
+     * Core edge model 
+     * @see carnival.core.Core
+     */
     @EdgeModel
     static enum EX {
+
+        /** Is identified by */
     	IS_IDENTIFIED_BY,
+
+        /** Was identified by */
         WAS_IDENTIFIED_BY,
 
+        /** Is input of */
     	IS_INPUT_OF,
+
+        /** Is output of */
     	IS_OUTPUT_OF,
         
+        /** Is member of */
         IS_MEMBER_OF,
+
+        /** Was member of */
         WAS_MEMBER_OF,
+
+        /** Is not a member of */
         IS_NOT_MEMBER_OF,
+
+        /** Was not a member of */
         WAS_NOT_MEMBER_OF,
+
+        /** Has part */
         HAS_PART,
+
+        /** Depends on */
         DEPENDS_ON,
         
+        /** References */
     	REFERENCES,
+
+        /** Participates in */
     	PARTICIPATED_IN,
+
+        /** Is refernced by */
     	IS_REFERENCED_BY,
+
+        /** Is scoped by */
     	IS_SCOPED_BY (
             domain:[VX.IDENTIFIER],
             range:[VX.IDENTIFIER_SCOPE]
         ),
     	
+        /** Was created by */
         WAS_CREATED_BY (
             domain:[VX.IDENTIFIER], 
             range:[VX.IDENTIFIER_FACILITY]
         ),
     	
+        /** Contains */
         CONTAINS,
 
+        /** Is associated with */
     	IS_ASSOCIATED_WITH,
+
+        /** Describes */
         DESCRIBES,
 
+        /** Is invalid as described by */
         IS_INVALID_AS_DESCRIBED_BY,
+
+        /** Is derived from */
         IS_DERIVED_FROM
     }
 
 
-    /** Core property model */
+    /** 
+     * Core property model 
+     * @see carnival.core.Core
+     */
     @PropertyModel
     static enum PX {
+        /** Name */
         NAME,
+
+        /** Date */
         DATE,
+
+        /** Start time */
         START_TIME,
+
+        /** Stop time */
         STOP_TIME,
+
+        /** Value */
         VALUE,
+
+        /** Unit */
         UNIT,
+
+        /** Description */
         DESCRIPTION,
+
+        /** Version */
         VERSION,
+
+        /** Has scope */
         HAS_SCOPE,
+
+        /** Has creation facility */
         HAS_CREATION_FACILITY,
+
+        /** Success */
         SUCCESS,
+
+        /** Message */
         MESSAGE,
+
+        /** Excel row num */
         EXCEL_ROW_NUM,
+
+        /** Derivation source */
         DERIVATION_SOURCE,
+
+        /** Arguments hash */
         ARGUMENTS_HASH,
+
+        /** Exception message */
         EXCEPTION_MESSAGE
     }
 

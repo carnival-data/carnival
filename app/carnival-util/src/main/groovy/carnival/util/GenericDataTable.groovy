@@ -38,11 +38,8 @@ class GenericDataTable extends DataTable {
     // STATIC
     ///////////////////////////////////////////////////////////////////////////
 
-	/** carnival logger */
+	/** logger */
     static Logger log = LoggerFactory.getLogger(GenericDataTable)
-
-	/** error logger */
-	static Logger elog = LoggerFactory.getLogger('db-entity-report') 
 
 
 

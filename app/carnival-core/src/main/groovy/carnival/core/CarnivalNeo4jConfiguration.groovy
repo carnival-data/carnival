@@ -55,6 +55,7 @@ class CarnivalNeo4jConfiguration {
     @ToString(includeNames=true)
     static class Gremlin {
 
+        /** @see <a href="https://neo4j.com/docs/operations-manual/current/configuration/neo4j-conf/">Neo4j Configuration</a> */
         @ToString(includeNames=true)
         static class Neo4j {
 
@@ -68,23 +69,28 @@ class CarnivalNeo4jConfiguration {
              */
             Boolean directoryCreateIfNotPresent = true
 
+            /** @see <a href="https://neo4j.com/docs/operations-manual/current/configuration/neo4j-conf/">Neo4j Configuration</a> */
             @ToString(includeNames=true)
             static class Conf {
 
+                /** @see <a href="https://neo4j.com/docs/operations-manual/current/configuration/neo4j-conf/">Neo4j Configuration</a> */
                 @ToString(includeNames=true)
                 static class Dbms {
                     String unmanaged_extension_classes
 
+                    /** @see <a href="https://neo4j.com/docs/operations-manual/current/configuration/neo4j-conf/">Neo4j Configuration</a> */
                     @ToString(includeNames=true)
                     static class Directories {
                         String plugins
                     }
                     Directories directories = new Directories()
 
+                    /** @see <a href="https://neo4j.com/docs/operations-manual/current/configuration/neo4j-conf/">Neo4j Configuration</a> */
                     @ToString(includeNames=true)
                     static class Security {
                         String auth_enabled
 
+                        /** @see <a href="https://neo4j.com/docs/operations-manual/current/configuration/neo4j-conf/">Neo4j Configuration</a> */
                         @ToString(includeNames=true)
                         static class Procedures {
                             String unrestricted

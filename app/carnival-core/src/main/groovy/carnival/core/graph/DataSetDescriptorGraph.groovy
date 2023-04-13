@@ -54,47 +54,64 @@ class DataSetDescriptorGraph implements GremlinTrait {
     // GRAPH MODEL
     ///////////////////////////////////////////////////////////////////////////
 
+    /** Vertex model */
     static enum VX implements VertexDefinition {
+        
+        /** Feature report */
         FEATURE_REPORT(
             vertexProperties:[
                 Core.PX.NAME.withConstraints(required:true)
             ]
         ),
+
+        /** Data set description */
         DATA_SET_DESCRIPTOR(
             vertexProperties:[
                 Core.PX.NAME.withConstraints(required:true),
                 Core.PX.DESCRIPTION
             ]
         ),
+
+        /** Feature set description */
         FEATURE_SET_DESCRIPTOR(
             vertexProperties:[
                 Core.PX.NAME.withConstraints(required:true),
                 Core.PX.DESCRIPTION,
             ]
         ),
+
+        /** Feature set recipe */
         FEATURE_SET_RECIPE(
             vertexProperties:[
                 Core.PX.NAME.withConstraints(required:true),
                 Core.PX.DESCRIPTION,
             ]
         ),
+
+        /** Feature set recipe step */
         FEATURE_SET_RECIPE_STEP(
             vertexProperties:[
                 Core.PX.NAME.withConstraints(required:true),
                 Core.PX.DESCRIPTION,
             ]
         ),
+
+        /** Feature set recipe ingredient */
         FEATURE_SET_RECIPE_INGREDIENT(
             vertexProperties:[
                 Core.PX.NAME.withConstraints(required:true),
                 Core.PX.DESCRIPTION,
             ]
         ),
+
+        /** Feature data type */
         FEATURE_DATA_TYPE(
             vertexProperties:[
                 Core.PX.NAME.withConstraints(required:true),
             ]
         ),
+
+        /** Feature set name */
         FEATURE_SET_NAME(
             vertexProperties:[
                 Core.PX.VALUE.withConstraints(required:true),
@@ -106,8 +123,10 @@ class DataSetDescriptorGraph implements GremlinTrait {
     }
 
 
-    /** */
+    /** Edge model */
     static enum EX implements EdgeDefinition {
+        
+        /** Has final step */
         HAS_FINAL_STEP
     }
 
@@ -116,7 +135,10 @@ class DataSetDescriptorGraph implements GremlinTrait {
     // CONSTRUCTOR
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Create a DataSetDescriptorGraph.
+     * @param graph The graph to use.
+     */
     DataSetDescriptorGraph(Graph graph) {
         this.graph = graph
     }
@@ -126,7 +148,11 @@ class DataSetDescriptorGraph implements GremlinTrait {
     // METHODS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Load a data set descriptor from a vertex.
+     * @param dataSetDescriptorV The vertex
+     * @return A DataSetDescriptor
+     */
     DataSetDescriptor load(Vertex dataSetDescriptorV) {
         withTraversal { g ->
             load(g, dataSetDescriptorV)
@@ -134,7 +160,13 @@ class DataSetDescriptorGraph implements GremlinTrait {
     }
 
 
-    /** */
+    /** 
+     * Load a data set descriptor from a vertex using the provided graph
+     * traversal source.
+     * @param dataSetDescriptorV The vertex
+     * @param g The graph traversal source
+     * @return The data set descriptor object
+     */
     DataSetDescriptor load(GraphTraversalSource g, Vertex dataSetDescriptorV) {
 
         def dsd = new DataSetDescriptor()
@@ -180,8 +212,17 @@ class DataSetDescriptorGraph implements GremlinTrait {
     }
 
 
-    /** */
-    FeatureSetDescriptor loadFeatureSetDescriptor(GraphTraversalSource g, fsdV) {
+    /** 
+     * Load a feature set descriptor from a vertex and a graph traversal 
+     * source.
+     * @param fsdV The vertrex
+     * @param g The graph traversal source
+     * @return The feature set descriptor
+     */
+    FeatureSetDescriptor loadFeatureSetDescriptor(
+        GraphTraversalSource g, 
+        Vertex fsdV
+    ) {
         def fsd = load(g, FeatureSetDescriptor, fsdV)
 
         g.V(fsdV)
@@ -209,8 +250,15 @@ class DataSetDescriptorGraph implements GremlinTrait {
     }
 
 
-    /** */
-    FeatureSetRecipe loadFeatureSetRecipe(GraphTraversalSource g, fsrV) {
+    /** 
+     * Load a feature set recipe froma vertex and a graph traversal source.
+     * @param fsrV The vertrex
+     * @param g The graph traversal source
+     */
+    FeatureSetRecipe loadFeatureSetRecipe(
+        GraphTraversalSource g, 
+        Vertex fsrV
+    ) {
         def fsr = load(g, FeatureSetRecipe, fsrV)
 
         g.V(fsrV)
@@ -224,8 +272,16 @@ class DataSetDescriptorGraph implements GremlinTrait {
     }
 
 
-    /** */
-    FeatureSetRecipeStep loadFeatureSetRecipeStep(GraphTraversalSource g, fsrsV) {
+    /** 
+     * Load a feature set recipe from a vertex and a graph traversal source.
+     * @param fsrsV The vertex
+     * @param g The graph traversal source
+     * @return A feature set recipe object
+     */
+    FeatureSetRecipeStep loadFeatureSetRecipeStep(
+        GraphTraversalSource g, 
+        Vertex fsrsV
+    ) {
         def fsrs = load(g, FeatureSetRecipeStep, fsrsV)
 
         g.V(fsrsV)
@@ -248,8 +304,17 @@ class DataSetDescriptorGraph implements GremlinTrait {
     }
 
 
-    /** */
-    FeatureSetRecipeStep recursiveLoadFeatureSetRecipeSteps(GraphTraversalSource g, fsrsV) {
+    /** 
+     * Recursively load feature set recipe steps from a vertex using the
+     * provided graph traversal source.
+     * @param fsrsV The vertex
+     * @param g The graph traversal source
+     * @return Feature set recipe step
+     */
+    FeatureSetRecipeStep recursiveLoadFeatureSetRecipeSteps(
+        GraphTraversalSource g, 
+        Vertex fsrsV
+    ) {
         def fsrs = loadFeatureSetRecipeStep(g, fsrsV) 
 
         g.V(fsrsV)
@@ -264,13 +329,29 @@ class DataSetDescriptorGraph implements GremlinTrait {
     }
 
 
-    /** */
-    FeatureSetRecipeIngredient loadFeatureSetRecipeIngredient(GraphTraversalSource g, ingV) {
+    /** 
+     * Load a feature set recipe ingredient from a vertex using the graph
+     * traversal source.
+     * @param ingV The vertex
+     * @param g The graph traversal source
+     * @return The feature set recipe object
+     */
+    FeatureSetRecipeIngredient loadFeatureSetRecipeIngredient(
+        GraphTraversalSource g, 
+        Vertex ingV
+    ) {
         load(g, FeatureSetRecipeIngredient, ingV)
     }
 
 
-    /** */
+    /** 
+     * Load a described entity from a vertex, target class, and graph traversal
+     * source.
+     * @param entityV The vertex
+     * @param targetClass The target class
+     * @param g The graph traversal source
+     * @return The described entity object
+     */
     DescribedEntity load(GraphTraversalSource g, Class targetClass, Vertex entityV) {
         DescribedEntity ent = targetClass.newInstance()
         ent.eid = entityV.id()
@@ -280,13 +361,26 @@ class DataSetDescriptorGraph implements GremlinTrait {
     }
 
 
-    /** */
+    /** 
+     * Save feature report and data set desriptor using a new graph traversal
+     * source.
+     * @param report The feature report
+     * @param dsd The data set descriptor
+     * @return The vertex representing the saved entity
+     */
     Vertex save(DataSetDescriptor dsd, FeatureReport report) {
         withTraversal { g -> save(g, dsd) }
     }
 
 
-    /** */
+    /** 
+     * Save feature report and data set desriptor using thge graph traversal
+     * source provided.
+     * @param report The feature report
+     * @param dsd The data set descriptor
+     * @param g The graph traversal source
+     * @return The vertex representing the saved entity
+     */
     Vertex save(GraphTraversalSource g, DataSetDescriptor dsd, FeatureReport report) {
         assert g
         assert dsd
@@ -300,7 +394,12 @@ class DataSetDescriptorGraph implements GremlinTrait {
     }
 
 
-    /** */
+    /** 
+     * Save the data set descriptor using the provided grah traversal source.
+     * @param dsd The data set descriptor
+     * @param g The graph traversal source
+     * @return The vertex representing the saved entity
+     */
     Vertex save(GraphTraversalSource g, DataSetDescriptor dsd) {
         assert g
         assert dsd
@@ -322,7 +421,13 @@ class DataSetDescriptorGraph implements GremlinTrait {
     }
     
 
-    /** */
+    /** 
+     * Save the feature set descriptor using the provided graph traversal
+     * source.
+     * @param fsd The feature set descriptor
+     * @param g The graph traversal source
+     * @return The vertex representing the saved entity.
+     */
     Vertex save(GraphTraversalSource g, FeatureSetDescriptor fsd) {
         assert g
         assert fsd
@@ -348,7 +453,12 @@ class DataSetDescriptorGraph implements GremlinTrait {
     }
 
 
-    /** */
+    /** 
+     * Save the feature set recipe using the provided graph traversal source.
+     * @param fsr The feature set recipe
+     * @param g The graph traversal source to use
+     * @return The vertex representing the saved entity.
+     */
     Vertex save(GraphTraversalSource g, FeatureSetRecipe fsr) {
         assert g
         assert fsr
@@ -363,7 +473,15 @@ class DataSetDescriptorGraph implements GremlinTrait {
     }
 
 
-    /** */
+    /** 
+     * Recursively save the feature set recipe step to the feature set recipe
+     * represented by the provided vertex using the provided graph traversal
+     * source.
+     * @param fsrs The feature set recipe step
+     * @param fsrV The vertex representing the feature set recipe
+     * @param g The graph traversal source to use
+     * @return The vertex representing the saved entity
+     */
     Vertex recursiveSave(GraphTraversalSource g, Vertex fsrV, FeatureSetRecipeStep fsrs) {
         assert g
         assert fsrV
@@ -381,7 +499,13 @@ class DataSetDescriptorGraph implements GremlinTrait {
     }
 
 
-    /** */
+    /** 
+     * Save the feature set recipe step using the provided graph traversal
+     * source.
+     * @param fsrs The feature set recipe step
+     * @param g The graph traversal source to use
+     * @return The vertex representing the saved entity
+     */
     Vertex save(GraphTraversalSource g, FeatureSetRecipeStep fsrs) {
         assert g
         assert fsrs
@@ -402,7 +526,13 @@ class DataSetDescriptorGraph implements GremlinTrait {
     }
 
 
-    /** */
+    /** 
+     * Save the feature set recipe ingredient using the provided graph
+     * traversal source.
+     * @param ing The feature set recipe ingredient
+     * @param g The grpah traversal source
+     * @return The vertex representing the saved entity
+     */
     Vertex save(GraphTraversalSource g, FeatureSetRecipeIngredient ing) {
         assert g
         assert ing
@@ -413,7 +543,14 @@ class DataSetDescriptorGraph implements GremlinTrait {
     }
 
 
-    /** */
+    /** 
+     * Save the described entity using the provided vertex definition and graph
+     * traversal source.
+     * @param de The described entity
+     * @param vdt The vertex definition
+     * @param g The grpah traversal source
+     * @return The vertex representing the saved entity
+     */
     Vertex save(GraphTraversalSource g, VertexDefinition vdt, DescribedEntity de) {
         assert g
         assert vdt
@@ -436,9 +573,8 @@ class DataSetDescriptorGraph implements GremlinTrait {
 // NOT CURRENTLY USED
 ///////////////////////////////////////////////////////////////////////////////
 
-/**
- *
- */
+/*
+
 @ToString(includeNames=true)
 class FeatureSetRecipeStepVineMethod implements DescribedEntity {
 
@@ -446,16 +582,12 @@ class FeatureSetRecipeStepVineMethod implements DescribedEntity {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
     FeatureSetRecipeIngredient hasOutput
 
 }
 
 
 
-/**
- *
- */
 @ToString(includeNames=true)
 class FeatureSetRecipeStepGraphTraversal implements DescribedEntity {
 
@@ -463,8 +595,9 @@ class FeatureSetRecipeStepGraphTraversal implements DescribedEntity {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
     FeatureSetRecipeIngredient hasOutput
 
 }
+
+*/
 

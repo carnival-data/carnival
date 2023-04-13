@@ -106,6 +106,16 @@ if (location.href.indexOf('is-external=true') == -1) {
 class FeatureReport
 extends <a href='../../carnival/util/MappedDataTable.html'>MappedDataTable</a></pre>
 
+    <p> FeatureReport provides functionality to aggregate data into a single data
+ table with facilities to output those data in representation suitable for
+ input into a machine learning or other statistical computation process.
+
+ FeatureReport extends MappedDataTable, so there can be only one row per
+ subject.  It is expected that the first step in building a FeatureReport
+ will be adding all the unique subject identifiers.  Proceeding steps will
+ iteratively add feature sets.
+</p>
+
           </li>
     </ul>
 </div>
@@ -136,7 +146,7 @@ extends <a href='../../carnival/util/MappedDataTable.html'>MappedDataTable</a></
                         <tr class="rowColor">
                             <td class="colFirst"><code><strong>static&nbsp;enum</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href='../../carnival/util/FeatureReport.DateWords.html'>FeatureReport.DateWords</a></code></td>
-                            <td class="colLast"></td>
+                            <td class="colLast">Words that denote a date</td>
                         </tr>
                         
                         <tr class="altColor">
@@ -191,7 +201,7 @@ extends <a href='../../carnival/util/MappedDataTable.html'>MappedDataTable</a></
                         
                         <tr class="altColor">
                             <td class="colFirst"><code><strong>static&nbsp;java.lang.String</strong></code>&nbsp;</td>
-                            <td class="colLast"><code><a href="#DATE_SHIFT_SUFFIX">DATE_SHIFT_SUFFIX</a></code><br></td>
+                            <td class="colLast"><code><a href="#DATE_SHIFT_SUFFIX">DATE_SHIFT_SUFFIX</a></code><br>Suffix for shifted dates</td>
                         </tr>
                         
                         <tr class="rowColor">
@@ -200,21 +210,16 @@ extends <a href='../../carnival/util/MappedDataTable.html'>MappedDataTable</a></
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong>static&nbsp;org.slf4j.Logger</strong></code>&nbsp;</td>
-                            <td class="colLast"><code><a href="#elog">elog</a></code><br></td>
-                        </tr>
-                        
-                        <tr class="rowColor">
                             <td class="colFirst"><code><strong>java.util.Map&lt;java.lang.String, carnival.util.FeatureSetDescriptor&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#featureDescriptors">featureDescriptors</a></code><br>map of field name to feature descriptor</td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code><strong>static&nbsp;org.slf4j.Logger</strong></code>&nbsp;</td>
-                            <td class="colLast"><code><a href="#log">log</a></code><br></td>
+                            <td class="colLast"><code><a href="#log">log</a></code><br>Log to use</td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code><strong>java.util.Map</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#reportDescriptor">reportDescriptor</a></code><br>report descriptor</td>
                         </tr>
@@ -543,7 +548,7 @@ extends <a href='../../carnival/util/MappedDataTable.html'>MappedDataTable</a></
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;final&nbsp;java.lang.String <strong>DATE_SHIFT_SUFFIX</strong></h4>
-                                <p></p>
+                                <p>Suffix for shifted dates</p>
                             </li>
                         </ul>
                     
@@ -552,14 +557,6 @@ extends <a href='../../carnival/util/MappedDataTable.html'>MappedDataTable</a></
                             <li class="blockList">
                                 <h4>java.util.Set&lt;DataMode&gt; <strong>dataModes</strong></h4>
                                 <p>set of currently active data modes</p>
-                            </li>
-                        </ul>
-                    
-                        <a name="elog"><!-- --></a>
-                        <ul class="blockListLast">
-                            <li class="blockList">
-                                <h4>static&nbsp;org.slf4j.Logger <strong>elog</strong></h4>
-                                <p></p>
                             </li>
                         </ul>
                     
@@ -575,7 +572,7 @@ extends <a href='../../carnival/util/MappedDataTable.html'>MappedDataTable</a></
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.slf4j.Logger <strong>log</strong></h4>
-                                <p></p>
+                                <p>Log to use</p>
                             </li>
                         </ul>
                     

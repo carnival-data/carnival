@@ -105,7 +105,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <pre>class GraphMethodBase
 extends java.lang.Object</pre>
 
-    <p>
+    <p> A basic elements of a graph method.
 </p>
 
           </li>
@@ -144,17 +144,17 @@ extends java.lang.Object</pre>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code><strong>java.lang.String</strong></code>&nbsp;</td>
-                            <td class="colLast"><code><a href="#name">name</a></code><br></td>
+                            <td class="colLast"><code><a href="#name">name</a></code><br>The name of this graph method</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code><strong><a href='../../../carnival/graph/VertexDefinition.html'>VertexDefinition</a></strong></code>&nbsp;</td>
-                            <td class="colLast"><code><a href="#processClassVertexDef">processClassVertexDef</a></code><br></td>
+                            <td class="colLast"><code><a href="#processClassVertexDef">processClassVertexDef</a></code><br>The process class vertex definition</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code><strong><a href='../../../carnival/graph/VertexDefinition.html'>VertexDefinition</a></strong></code>&nbsp;</td>
-                            <td class="colLast"><code><a href="#processVertexDef">processVertexDef</a></code><br></td>
+                            <td class="colLast"><code><a href="#processVertexDef">processVertexDef</a></code><br>The process vertex definition</td>
                         </tr>
                         
                     </table>
@@ -214,37 +214,44 @@ extends java.lang.Object</pre>
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.Map</code></td>
-                            <td class="colLast"><code><strong><a href="#getArgs()">getArgs</a></strong>()</code><br></td>
+                            <td class="colLast"><code><strong><a href="#getArgs()">getArgs</a></strong>()</code><br>Return the args used during execution.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>protected&nbsp;<a href='../../../carnival/core/graph/GraphMethodCall.html'>GraphMethodCall</a></code></td>
-                            <td class="colLast"><code><strong><a href="#graphMethodCall(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, java.time.Instant, java.time.Instant, java.util.Map, java.lang.Exception)">graphMethodCall</a></strong>(org.apache.tinkerpop.gremlin.structure.Graph graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, java.time.Instant startTime, java.time.Instant stopTime, java.util.Map result, java.lang.Exception exception)</code><br>Calls the execute() method and represents the call in the graph.</td>
+                            <td class="colLast"><code><strong><a href="#graphMethodCall(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, java.time.Instant, java.time.Instant, java.util.Map, java.lang.Exception)">graphMethodCall</a></strong>(org.apache.tinkerpop.gremlin.structure.Graph graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, java.time.Instant startTime, java.time.Instant stopTime, java.util.Map result, java.lang.Exception exception)</code><br>Creates a graph method call object and instantiates the representation
+ in the graph.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code><a href='../../../carnival/core/graph/GraphMethodBase.html'>GraphMethodBase</a></code></td>
-                            <td class="colLast"><code><strong><a href="#name(java.lang.String)">name</a></strong>(java.lang.String name)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#name(java.lang.String)">name</a></strong>(java.lang.String name)</code><br>Set the name of this graph method.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code><a href='../../../carnival/core/graph/GraphMethodBase.html'>GraphMethodBase</a></code></td>
-                            <td class="colLast"><code><strong><a href="#processClassDefinition(carnival.graph.VertexDefinition)">processClassDefinition</a></strong>(<a href='../../../carnival/graph/VertexDefinition.html'>VertexDefinition</a> vdt)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#processClassDefinition(carnival.graph.VertexDefinition)">processClassDefinition</a></strong>(<a href='../../../carnival/graph/VertexDefinition.html'>VertexDefinition</a> vdt)</code><br>Set the process class vertex definition.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code><a href='../../../carnival/core/graph/GraphMethodBase.html'>GraphMethodBase</a></code></td>
-                            <td class="colLast"><code><strong><a href="#processDefinition(carnival.graph.VertexDefinition)">processDefinition</a></strong>(<a href='../../../carnival/graph/VertexDefinition.html'>VertexDefinition</a> vdt)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#processDefinition(carnival.graph.VertexDefinition)">processDefinition</a></strong>(<a href='../../../carnival/graph/VertexDefinition.html'>VertexDefinition</a> vdt)</code><br>Set the process vertex definition.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.Set&lt;<a href='../../../carnival/core/graph/GraphMethodProcess.html' title='GraphMethodProcess'>GraphMethodProcess</a>&gt;</code></td>
                             <td class="colLast"><code><strong><a href="#processes(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)">processes</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g)</code><br>Return the graph representations in the graph of executed graph methods.</td>
+                        </tr>
+                        
+                        <tr class="rowColor">
+                            <td class="colFirst"><code></code></td>
+                            <td class="colLast"><code>java.util.Set&lt;Vertex&gt;</code></td>
+                            <td class="colLast"><code><strong><a href="#processesVertices(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)">processesVertices</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g)</code><br>Return the set of graph method process vertices for this object.</td>
                         </tr>
                         
                     </table>
@@ -303,7 +310,7 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.lang.String <strong>name</strong></h4>
-                                <p></p>
+                                <p>The name of this graph method</p>
                             </li>
                         </ul>
                     
@@ -311,7 +318,7 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4><a href='../../../carnival/graph/VertexDefinition.html'>VertexDefinition</a> <strong>processClassVertexDef</strong></h4>
-                                <p></p>
+                                <p>The process class vertex definition</p>
                             </li>
                         </ul>
                     
@@ -319,7 +326,7 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4><a href='../../../carnival/graph/VertexDefinition.html'>VertexDefinition</a> <strong>processVertexDef</strong></h4>
-                                <p></p>
+                                <p>The process vertex definition</p>
                             </li>
                         </ul>
                     
@@ -362,8 +369,7 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4><a href='../../../carnival/core/graph/GraphMethodBase.html'>GraphMethodBase</a> <strong>arguments</strong>(java.util.Map args)</h4>
-                                <p> Set the arguments of a graph method prior to executing it.
-</p>
+                                <p> Set the arguments of a graph method prior to executing it. <DL><DT><B>Parameters:</B></DT><DD><code>A</code> -  map of arguments</DD></DL><DL><DT><B>Returns:</B></DT><DD>This object</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -371,7 +377,7 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.util.Map <strong>getArgs</strong>()</h4>
-                                <p></p>
+                                <p> Return the args used during execution. <DL><DT><B>Returns:</B></DT><DD>A map of arguments</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -379,8 +385,8 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>protected&nbsp;<a href='../../../carnival/core/graph/GraphMethodCall.html'>GraphMethodCall</a> <strong>graphMethodCall</strong>(org.apache.tinkerpop.gremlin.structure.Graph graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, java.time.Instant startTime, java.time.Instant stopTime, java.util.Map result, java.lang.Exception exception)</h4>
-                                <p> Calls the execute() method and represents the call in the graph.
-</p>
+                                <p> Creates a graph method call object and instantiates the representation
+ in the graph.</p>
                             </li>
                         </ul>
                     
@@ -388,8 +394,7 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4><a href='../../../carnival/core/graph/GraphMethodBase.html'>GraphMethodBase</a> <strong>name</strong>(java.lang.String name)</h4>
-                                <p>
-</p>
+                                <p> Set the name of this graph method. <DL><DT><B>Parameters:</B></DT><DD><code>name</code> -  The name to use</DD></DL><DL><DT><B>Returns:</B></DT><DD>This object</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -397,8 +402,7 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4><a href='../../../carnival/core/graph/GraphMethodBase.html'>GraphMethodBase</a> <strong>processClassDefinition</strong>(<a href='../../../carnival/graph/VertexDefinition.html'>VertexDefinition</a> vdt)</h4>
-                                <p>
-</p>
+                                <p> Set the process class vertex definition. <DL><DT><B>Parameters:</B></DT><DD><code>vdt</code> -  The class vertex definition</DD></DL><DL><DT><B>Returns:</B></DT><DD>This object</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -406,8 +410,7 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4><a href='../../../carnival/core/graph/GraphMethodBase.html'>GraphMethodBase</a> <strong>processDefinition</strong>(<a href='../../../carnival/graph/VertexDefinition.html'>VertexDefinition</a> vdt)</h4>
-                                <p>
-</p>
+                                <p> Set the process vertex definition. <DL><DT><B>Parameters:</B></DT><DD><code>vdt</code> -  The vertex definition</DD></DL><DL><DT><B>Returns:</B></DT><DD>This object</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -415,8 +418,15 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.util.Set&lt;<a href='../../../carnival/core/graph/GraphMethodProcess.html' title='GraphMethodProcess'>GraphMethodProcess</a>&gt; <strong>processes</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g)</h4>
-                                <p> Return the graph representations in the graph of executed graph methods.
-</p>
+                                <p> Return the graph representations in the graph of executed graph methods. <DL><DT><B>Parameters:</B></DT><DD><code>g</code> -  The traph traversal source to use</DD></DL><DL><DT><B>Returns:</B></DT><DD>The set of graph method process</DD></DL></p>
+                            </li>
+                        </ul>
+                    
+                        <a name="processesVertices(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)"><!-- --></a>
+                        <ul class="blockListLast">
+                            <li class="blockList">
+                                <h4>java.util.Set&lt;Vertex&gt; <strong>processesVertices</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g)</h4>
+                                <p> Return the set of graph method process vertices for this object. <DL><DT><B>Parameters:</B></DT><DD><code>g</code> -  The graph traversal source to use</DD></DL><DL><DT><B>Returns:</B></DT><DD>The set of graph method process vertices</DD></DL></p>
                             </li>
                         </ul>
                     

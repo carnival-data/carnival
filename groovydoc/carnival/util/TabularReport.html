@@ -106,6 +106,10 @@ if (location.href.indexOf('is-external=true') == -1) {
 class TabularReport
 extends <a href='../../carnival/util/GenericDataTable.html'>GenericDataTable</a></pre>
 
+    <p> TabularReport is an extension of GenericDataTable that has convenience
+ methods for greating a tabular report.
+</p>
+
           </li>
     </ul>
 </div>
@@ -178,27 +182,22 @@ extends <a href='../../carnival/util/GenericDataTable.html'>GenericDataTable</a>
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong>static&nbsp;org.slf4j.Logger</strong></code>&nbsp;</td>
-                            <td class="colLast"><code><a href="#elog">elog</a></code><br>error log</td>
-                        </tr>
-                        
-                        <tr class="rowColor">
                             <td class="colFirst"><code><strong>java.util.Map&lt;java.lang.String, java.util.Map&lt;java.lang.String, java.util.Collection&lt;java.util.Map&gt;&gt;&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#idvMappers">idvMappers</a></code><br>A dictionary designed to contain lookup maps of identifier fields to 
  records, keyed by the name of the identifier field.</td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code><strong>static&nbsp;org.slf4j.Logger</strong></code>&nbsp;</td>
-                            <td class="colLast"><code><a href="#log">log</a></code><br>carnival log</td>
+                            <td class="colLast"><code><a href="#log">log</a></code><br>logger</td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code><strong>java.util.Map</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#reportDescriptor">reportDescriptor</a></code><br>report descriptor</td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code><strong>boolean</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#started">started</a></code><br>a started report can be built out horizontally, ie adding new columns
  points, if not started, reports can be build vertically, ie adding new
@@ -234,8 +233,8 @@ extends <a href='../../carnival/util/GenericDataTable.html'>GenericDataTable</a>
                         
                         <tr class="rowColor">
                             <td class="colFirst">
-                                <code><a href="#TabularReport(carnival.util.TabularReport.MetaData)">TabularReport</a>
-                                (<a href='../../carnival/util/TabularReport.MetaData.html'>TabularReport.MetaData</a> args)</code><br>Make from MetaData.</td>
+                                <code><a href="#TabularReport(carnival.util.MappedDataTable.MetaData)">TabularReport</a>
+                                (<a href='../../carnival/util/MappedDataTable.MetaData.html'>MappedDataTable.MetaData</a> args)</code><br>Make from MetaData.</td>
                         </tr>
                         
                         <tr class="altColor">
@@ -357,14 +356,6 @@ extends <a href='../../carnival/util/GenericDataTable.html'>GenericDataTable</a>
                 </a>
                     <h3>Property Detail</h3>
                     
-                        <a name="elog"><!-- --></a>
-                        <ul class="blockListLast">
-                            <li class="blockList">
-                                <h4>static&nbsp;org.slf4j.Logger <strong>elog</strong></h4>
-                                <p>error log</p>
-                            </li>
-                        </ul>
-                    
                         <a name="idvMappers"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
@@ -379,7 +370,7 @@ extends <a href='../../carnival/util/GenericDataTable.html'>GenericDataTable</a>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.slf4j.Logger <strong>log</strong></h4>
-                                <p>carnival log</p>
+                                <p>logger</p>
                             </li>
                         </ul>
                     
@@ -424,10 +415,10 @@ extends <a href='../../carnival/util/GenericDataTable.html'>GenericDataTable</a>
                             </li>
                         </ul>
                     
-                        <a name="TabularReport(carnival.util.TabularReport.MetaData)"><!-- --></a>
+                        <a name="TabularReport(carnival.util.MappedDataTable.MetaData)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4><strong>TabularReport</strong>(<a href='../../carnival/util/TabularReport.MetaData.html'>TabularReport.MetaData</a> args)</h4>
+                                <h4><strong>TabularReport</strong>(<a href='../../carnival/util/MappedDataTable.MetaData.html'>MappedDataTable.MetaData</a> args)</h4>
                                 <p> Make from MetaData.
 </p>
                             </li>

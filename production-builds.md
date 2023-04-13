@@ -10,10 +10,11 @@ Carnival artifacts can be published to your local Maven repository usually found
 
 ## Publishing to Maven
 
-* Maven Repository Manager: https://s01.oss.sonatype.org/#welcome
-* Carnival-Core @ Maven: https://search.maven.org/artifact/io.github.carnival-data/carnival-core
-* Maven JIRA: https://issues.sonatype.org/secure/Dashboard.jspa
-* Maven publishing documentation: https://central.sonatype.org/publish/publish-maven/
+### Links
+* [Maven Repository Manager](https://s01.oss.sonatype.org/)
+* [Carnival-Core @ Maven](https://search.maven.org/artifact/io.github.carnival-data/carnival-core)
+* [Maven JIRA](https://issues.sonatype.org/secure/Dashboard.jspa)
+* [Maven publishing documentation](https://central.sonatype.org/publish/publish-maven/)
 
 ### Configuration
 Production builds will be signed with the [Gradle Signing Plugin](https://docs.gradle.org/current/userguide/signing_plugin.html).
@@ -24,7 +25,7 @@ Note that the [Gradle Signing Plugin](https://docs.gradle.org/current/userguide/
 
 ### Publish to Snapshot Repository
 
-When the carnivalVersion specified in `app\gradle.properties` ends with "-SNAPSHOT", the package will be published to the [snapshot repository](https://central.sonatype.org/publish/publish-maven/#performing-a-snapshot-deployment). Previous releases with the same version can be overwritten.
+When the carnivalVersion specified in `app\gradle.properties` ends with "-SNAPSHOT", the package will be [published to the snapshot repository](https://central.sonatype.org/publish/publish-maven/#performing-a-snapshot-deployment). Previous releases with the same version can be overwritten.
 
 #### Docker
 
@@ -74,21 +75,3 @@ source ../.env
 
 More detail can be found in the [Maven release instructions](https://central.sonatype.org/publish/release/).
 
-
-
-## Publishing Production Builds to Github (Deprecated)
-
-Production images are published to Github packages. In order to publish an image, you will need to create a Github personal access token with appropriate permissions to manage github packages (see Github Packages documentation for details). Then create local environment variables **GITHUB_USER** and **GITHUB_TOKEN** with your github user and personal access token.
-Once authorization has been set up, the procedure to publish production builds is:
-
--   Stage and test any changes in the master branch
--   Update the app version number in `app/build.gradle` using semantic versioning conventions
--   Merge changes into the production branch
--   Build and publish changes to Github with the command gradle publish . The build.grade file has been configured to use the authentication information in the environment variables **GITHUB_USER** and **GITHUB_TOKEN** when attempting to publish.
--   Check that the packages with the updated version number are listed in Carnival Packages
--   Go back to the master branch, and `app/build.gradle` increment the version number and add the `-SNAPSHOT` suffix (i.e. `0.2.9-SNAPSHOT`)
-
-For further details, see Configuring Gradle for use with GitHub Packages.
-
-## Related Issues
-* https://github.com/carnival-data/carnival/issues/67

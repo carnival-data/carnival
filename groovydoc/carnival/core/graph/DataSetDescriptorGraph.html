@@ -139,13 +139,13 @@ implements <a href='../../../carnival.core.graph.GremlinTrait.html'>GremlinTrait
                         <tr class="altColor">
                             <td class="colFirst"><code><strong>static&nbsp;enum</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href='../../../carnival/core/graph/DataSetDescriptorGraph.EX.html'>DataSetDescriptorGraph.EX</a></code></td>
-                            <td class="colLast"></td>
+                            <td class="colLast">Edge model</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code><strong>static&nbsp;enum</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href='../../../carnival/core/graph/DataSetDescriptorGraph.VX.html'>DataSetDescriptorGraph.VX</a></code></td>
-                            <td class="colLast"></td>
+                            <td class="colLast">Vertex model</td>
                         </tr>
                         
                     </table>
@@ -180,7 +180,7 @@ implements <a href='../../../carnival.core.graph.GremlinTrait.html'>GremlinTrait
                         <tr class="altColor">
                             <td class="colFirst">
                                 <code><a href="#DataSetDescriptorGraph(org.apache.tinkerpop.gremlin.structure.Graph)">DataSetDescriptorGraph</a>
-                                (org.apache.tinkerpop.gremlin.structure.Graph graph)</code><br></td>
+                                (org.apache.tinkerpop.gremlin.structure.Graph graph)</code><br>Create a DataSetDescriptorGraph.</td>
                         </tr>
                         
                     </table>
@@ -207,103 +207,116 @@ implements <a href='../../../carnival.core.graph.GremlinTrait.html'>GremlinTrait
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code><a href='../../../carnival/util/DataSetDescriptor.html'>DataSetDescriptor</a></code></td>
-                            <td class="colLast"><code><strong><a href="#load(org.apache.tinkerpop.gremlin.structure.Vertex)">load</a></strong>(org.apache.tinkerpop.gremlin.structure.Vertex dataSetDescriptorV)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#load(org.apache.tinkerpop.gremlin.structure.Vertex)">load</a></strong>(org.apache.tinkerpop.gremlin.structure.Vertex dataSetDescriptorV)</code><br>Load a data set descriptor from a vertex.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code><a href='../../../carnival/util/DataSetDescriptor.html'>DataSetDescriptor</a></code></td>
-                            <td class="colLast"><code><strong><a href="#load(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, org.apache.tinkerpop.gremlin.structure.Vertex)">load</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, org.apache.tinkerpop.gremlin.structure.Vertex dataSetDescriptorV)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#load(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, org.apache.tinkerpop.gremlin.structure.Vertex)">load</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, org.apache.tinkerpop.gremlin.structure.Vertex dataSetDescriptorV)</code><br>Load a data set descriptor from a vertex using the provided graph
+ traversal source.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>carnival.util.DescribedEntity</code></td>
-                            <td class="colLast"><code><strong><a href="#load(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, java.lang.Class, org.apache.tinkerpop.gremlin.structure.Vertex)">load</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, java.lang.Class targetClass, org.apache.tinkerpop.gremlin.structure.Vertex entityV)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#load(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, java.lang.Class, org.apache.tinkerpop.gremlin.structure.Vertex)">load</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, java.lang.Class targetClass, org.apache.tinkerpop.gremlin.structure.Vertex entityV)</code><br>Load a described entity from a vertex, target class, and graph traversal
+ source.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>carnival.util.FeatureSetDescriptor</code></td>
-                            <td class="colLast"><code><strong><a href="#loadFeatureSetDescriptor(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, java.lang.Object)">loadFeatureSetDescriptor</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, java.lang.Object fsdV)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#loadFeatureSetDescriptor(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, org.apache.tinkerpop.gremlin.structure.Vertex)">loadFeatureSetDescriptor</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, org.apache.tinkerpop.gremlin.structure.Vertex fsdV)</code><br>Load a feature set descriptor from a vertex and a graph traversal 
+ source.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>carnival.util.FeatureSetRecipe</code></td>
-                            <td class="colLast"><code><strong><a href="#loadFeatureSetRecipe(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, java.lang.Object)">loadFeatureSetRecipe</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, java.lang.Object fsrV)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#loadFeatureSetRecipe(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, org.apache.tinkerpop.gremlin.structure.Vertex)">loadFeatureSetRecipe</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, org.apache.tinkerpop.gremlin.structure.Vertex fsrV)</code><br>Load a feature set recipe froma vertex and a graph traversal source.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>carnival.util.FeatureSetRecipeIngredient</code></td>
-                            <td class="colLast"><code><strong><a href="#loadFeatureSetRecipeIngredient(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, java.lang.Object)">loadFeatureSetRecipeIngredient</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, java.lang.Object ingV)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#loadFeatureSetRecipeIngredient(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, org.apache.tinkerpop.gremlin.structure.Vertex)">loadFeatureSetRecipeIngredient</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, org.apache.tinkerpop.gremlin.structure.Vertex ingV)</code><br>Load a feature set recipe ingredient from a vertex using the graph
+ traversal source.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>carnival.util.FeatureSetRecipeStep</code></td>
-                            <td class="colLast"><code><strong><a href="#loadFeatureSetRecipeStep(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, java.lang.Object)">loadFeatureSetRecipeStep</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, java.lang.Object fsrsV)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#loadFeatureSetRecipeStep(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, org.apache.tinkerpop.gremlin.structure.Vertex)">loadFeatureSetRecipeStep</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, org.apache.tinkerpop.gremlin.structure.Vertex fsrsV)</code><br>Load a feature set recipe from a vertex and a graph traversal source.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>carnival.util.FeatureSetRecipeStep</code></td>
-                            <td class="colLast"><code><strong><a href="#recursiveLoadFeatureSetRecipeSteps(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, java.lang.Object)">recursiveLoadFeatureSetRecipeSteps</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, java.lang.Object fsrsV)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#recursiveLoadFeatureSetRecipeSteps(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, org.apache.tinkerpop.gremlin.structure.Vertex)">recursiveLoadFeatureSetRecipeSteps</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, org.apache.tinkerpop.gremlin.structure.Vertex fsrsV)</code><br>Recursively load feature set recipe steps from a vertex using the
+ provided graph traversal source.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>org.apache.tinkerpop.gremlin.structure.Vertex</code></td>
-                            <td class="colLast"><code><strong><a href="#recursiveSave(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, org.apache.tinkerpop.gremlin.structure.Vertex, carnival.util.FeatureSetRecipeStep)">recursiveSave</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, org.apache.tinkerpop.gremlin.structure.Vertex fsrV, carnival.util.FeatureSetRecipeStep fsrs)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#recursiveSave(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, org.apache.tinkerpop.gremlin.structure.Vertex, carnival.util.FeatureSetRecipeStep)">recursiveSave</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, org.apache.tinkerpop.gremlin.structure.Vertex fsrV, carnival.util.FeatureSetRecipeStep fsrs)</code><br>Recursively save the feature set recipe step to the feature set recipe
+ represented by the provided vertex using the provided graph traversal
+ source.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>org.apache.tinkerpop.gremlin.structure.Vertex</code></td>
-                            <td class="colLast"><code><strong><a href="#save(carnival.util.DataSetDescriptor, carnival.util.FeatureReport)">save</a></strong>(<a href='../../../carnival/util/DataSetDescriptor.html'>DataSetDescriptor</a> dsd, <a href='../../../carnival/util/FeatureReport.html'>FeatureReport</a> report)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#save(carnival.util.DataSetDescriptor, carnival.util.FeatureReport)">save</a></strong>(<a href='../../../carnival/util/DataSetDescriptor.html'>DataSetDescriptor</a> dsd, <a href='../../../carnival/util/FeatureReport.html'>FeatureReport</a> report)</code><br>Save feature report and data set desriptor using a new graph traversal
+ source.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>org.apache.tinkerpop.gremlin.structure.Vertex</code></td>
-                            <td class="colLast"><code><strong><a href="#save(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.util.DataSetDescriptor, carnival.util.FeatureReport)">save</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, <a href='../../../carnival/util/DataSetDescriptor.html'>DataSetDescriptor</a> dsd, <a href='../../../carnival/util/FeatureReport.html'>FeatureReport</a> report)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#save(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.util.DataSetDescriptor, carnival.util.FeatureReport)">save</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, <a href='../../../carnival/util/DataSetDescriptor.html'>DataSetDescriptor</a> dsd, <a href='../../../carnival/util/FeatureReport.html'>FeatureReport</a> report)</code><br>Save feature report and data set desriptor using thge graph traversal
+ source provided.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>org.apache.tinkerpop.gremlin.structure.Vertex</code></td>
-                            <td class="colLast"><code><strong><a href="#save(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.util.DataSetDescriptor)">save</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, <a href='../../../carnival/util/DataSetDescriptor.html'>DataSetDescriptor</a> dsd)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#save(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.util.DataSetDescriptor)">save</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, <a href='../../../carnival/util/DataSetDescriptor.html'>DataSetDescriptor</a> dsd)</code><br>Save the data set descriptor using the provided grah traversal source.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>org.apache.tinkerpop.gremlin.structure.Vertex</code></td>
-                            <td class="colLast"><code><strong><a href="#save(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.util.FeatureSetDescriptor)">save</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, carnival.util.FeatureSetDescriptor fsd)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#save(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.util.FeatureSetDescriptor)">save</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, carnival.util.FeatureSetDescriptor fsd)</code><br>Save the feature set descriptor using the provided graph traversal
+ source.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>org.apache.tinkerpop.gremlin.structure.Vertex</code></td>
-                            <td class="colLast"><code><strong><a href="#save(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.util.FeatureSetRecipe)">save</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, carnival.util.FeatureSetRecipe fsr)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#save(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.util.FeatureSetRecipe)">save</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, carnival.util.FeatureSetRecipe fsr)</code><br>Save the feature set recipe using the provided graph traversal source.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>org.apache.tinkerpop.gremlin.structure.Vertex</code></td>
-                            <td class="colLast"><code><strong><a href="#save(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.util.FeatureSetRecipeStep)">save</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, carnival.util.FeatureSetRecipeStep fsrs)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#save(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.util.FeatureSetRecipeStep)">save</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, carnival.util.FeatureSetRecipeStep fsrs)</code><br>Save the feature set recipe step using the provided graph traversal
+ source.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>org.apache.tinkerpop.gremlin.structure.Vertex</code></td>
-                            <td class="colLast"><code><strong><a href="#save(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.util.FeatureSetRecipeIngredient)">save</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, carnival.util.FeatureSetRecipeIngredient ing)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#save(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.util.FeatureSetRecipeIngredient)">save</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, carnival.util.FeatureSetRecipeIngredient ing)</code><br>Save the feature set recipe ingredient using the provided graph
+ traversal source.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>org.apache.tinkerpop.gremlin.structure.Vertex</code></td>
-                            <td class="colLast"><code><strong><a href="#save(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.graph.VertexDefinition, carnival.util.DescribedEntity)">save</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, <a href='../../../carnival/graph/VertexDefinition.html'>VertexDefinition</a> vdt, carnival.util.DescribedEntity de)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#save(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.graph.VertexDefinition, carnival.util.DescribedEntity)">save</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, <a href='../../../carnival/graph/VertexDefinition.html'>VertexDefinition</a> vdt, carnival.util.DescribedEntity de)</code><br>Save the described entity using the provided vertex definition and graph
+ traversal source.</td>
                         </tr>
                         
                     </table>
@@ -357,7 +370,7 @@ implements <a href='../../../carnival.core.graph.GremlinTrait.html'>GremlinTrait
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4><strong>DataSetDescriptorGraph</strong>(org.apache.tinkerpop.gremlin.structure.Graph graph)</h4>
-                                <p></p>
+                                <p> Create a DataSetDescriptorGraph. <DL><DT><B>Parameters:</B></DT><DD><code>graph</code> -  The graph to use.</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -378,7 +391,7 @@ implements <a href='../../../carnival.core.graph.GremlinTrait.html'>GremlinTrait
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4><a href='../../../carnival/util/DataSetDescriptor.html'>DataSetDescriptor</a> <strong>load</strong>(org.apache.tinkerpop.gremlin.structure.Vertex dataSetDescriptorV)</h4>
-                                <p></p>
+                                <p> Load a data set descriptor from a vertex. <DL><DT><B>Parameters:</B></DT><DD><code>dataSetDescriptorV</code> -  The vertex</DD></DL><DL><DT><B>Returns:</B></DT><DD>A DataSetDescriptor</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -386,7 +399,8 @@ implements <a href='../../../carnival.core.graph.GremlinTrait.html'>GremlinTrait
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4><a href='../../../carnival/util/DataSetDescriptor.html'>DataSetDescriptor</a> <strong>load</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, org.apache.tinkerpop.gremlin.structure.Vertex dataSetDescriptorV)</h4>
-                                <p></p>
+                                <p> Load a data set descriptor from a vertex using the provided graph
+ traversal source. <DL><DT><B>Parameters:</B></DT><DD><code>dataSetDescriptorV</code> -  The vertex</DD><DD><code>g</code> -  The graph traversal source</DD></DL><DL><DT><B>Returns:</B></DT><DD>The data set descriptor object</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -394,47 +408,51 @@ implements <a href='../../../carnival.core.graph.GremlinTrait.html'>GremlinTrait
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>carnival.util.DescribedEntity <strong>load</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, java.lang.Class targetClass, org.apache.tinkerpop.gremlin.structure.Vertex entityV)</h4>
-                                <p></p>
+                                <p> Load a described entity from a vertex, target class, and graph traversal
+ source. <DL><DT><B>Parameters:</B></DT><DD><code>entityV</code> -  The vertex</DD><DD><code>targetClass</code> -  The target class</DD><DD><code>g</code> -  The graph traversal source</DD></DL><DL><DT><B>Returns:</B></DT><DD>The described entity object</DD></DL></p>
                             </li>
                         </ul>
                     
-                        <a name="loadFeatureSetDescriptor(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, java.lang.Object)"><!-- --></a>
+                        <a name="loadFeatureSetDescriptor(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, org.apache.tinkerpop.gremlin.structure.Vertex)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>carnival.util.FeatureSetDescriptor <strong>loadFeatureSetDescriptor</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, java.lang.Object fsdV)</h4>
-                                <p></p>
+                                <h4>carnival.util.FeatureSetDescriptor <strong>loadFeatureSetDescriptor</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, org.apache.tinkerpop.gremlin.structure.Vertex fsdV)</h4>
+                                <p> Load a feature set descriptor from a vertex and a graph traversal 
+ source. <DL><DT><B>Parameters:</B></DT><DD><code>fsdV</code> -  The vertrex</DD><DD><code>g</code> -  The graph traversal source</DD></DL><DL><DT><B>Returns:</B></DT><DD>The feature set descriptor</DD></DL></p>
                             </li>
                         </ul>
                     
-                        <a name="loadFeatureSetRecipe(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, java.lang.Object)"><!-- --></a>
+                        <a name="loadFeatureSetRecipe(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, org.apache.tinkerpop.gremlin.structure.Vertex)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>carnival.util.FeatureSetRecipe <strong>loadFeatureSetRecipe</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, java.lang.Object fsrV)</h4>
-                                <p></p>
+                                <h4>carnival.util.FeatureSetRecipe <strong>loadFeatureSetRecipe</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, org.apache.tinkerpop.gremlin.structure.Vertex fsrV)</h4>
+                                <p> Load a feature set recipe froma vertex and a graph traversal source. <DL><DT><B>Parameters:</B></DT><DD><code>fsrV</code> -  The vertrex</DD><DD><code>g</code> -  The graph traversal source</DD></DL></p>
                             </li>
                         </ul>
                     
-                        <a name="loadFeatureSetRecipeIngredient(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, java.lang.Object)"><!-- --></a>
+                        <a name="loadFeatureSetRecipeIngredient(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, org.apache.tinkerpop.gremlin.structure.Vertex)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>carnival.util.FeatureSetRecipeIngredient <strong>loadFeatureSetRecipeIngredient</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, java.lang.Object ingV)</h4>
-                                <p></p>
+                                <h4>carnival.util.FeatureSetRecipeIngredient <strong>loadFeatureSetRecipeIngredient</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, org.apache.tinkerpop.gremlin.structure.Vertex ingV)</h4>
+                                <p> Load a feature set recipe ingredient from a vertex using the graph
+ traversal source. <DL><DT><B>Parameters:</B></DT><DD><code>ingV</code> -  The vertex</DD><DD><code>g</code> -  The graph traversal source</DD></DL><DL><DT><B>Returns:</B></DT><DD>The feature set recipe object</DD></DL></p>
                             </li>
                         </ul>
                     
-                        <a name="loadFeatureSetRecipeStep(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, java.lang.Object)"><!-- --></a>
+                        <a name="loadFeatureSetRecipeStep(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, org.apache.tinkerpop.gremlin.structure.Vertex)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>carnival.util.FeatureSetRecipeStep <strong>loadFeatureSetRecipeStep</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, java.lang.Object fsrsV)</h4>
-                                <p></p>
+                                <h4>carnival.util.FeatureSetRecipeStep <strong>loadFeatureSetRecipeStep</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, org.apache.tinkerpop.gremlin.structure.Vertex fsrsV)</h4>
+                                <p> Load a feature set recipe from a vertex and a graph traversal source. <DL><DT><B>Parameters:</B></DT><DD><code>fsrsV</code> -  The vertex</DD><DD><code>g</code> -  The graph traversal source</DD></DL><DL><DT><B>Returns:</B></DT><DD>A feature set recipe object</DD></DL></p>
                             </li>
                         </ul>
                     
-                        <a name="recursiveLoadFeatureSetRecipeSteps(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, java.lang.Object)"><!-- --></a>
+                        <a name="recursiveLoadFeatureSetRecipeSteps(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, org.apache.tinkerpop.gremlin.structure.Vertex)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>carnival.util.FeatureSetRecipeStep <strong>recursiveLoadFeatureSetRecipeSteps</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, java.lang.Object fsrsV)</h4>
-                                <p></p>
+                                <h4>carnival.util.FeatureSetRecipeStep <strong>recursiveLoadFeatureSetRecipeSteps</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, org.apache.tinkerpop.gremlin.structure.Vertex fsrsV)</h4>
+                                <p> Recursively load feature set recipe steps from a vertex using the
+ provided graph traversal source. <DL><DT><B>Parameters:</B></DT><DD><code>fsrsV</code> -  The vertex</DD><DD><code>g</code> -  The graph traversal source</DD></DL><DL><DT><B>Returns:</B></DT><DD>Feature set recipe step</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -442,7 +460,9 @@ implements <a href='../../../carnival.core.graph.GremlinTrait.html'>GremlinTrait
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>org.apache.tinkerpop.gremlin.structure.Vertex <strong>recursiveSave</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, org.apache.tinkerpop.gremlin.structure.Vertex fsrV, carnival.util.FeatureSetRecipeStep fsrs)</h4>
-                                <p></p>
+                                <p> Recursively save the feature set recipe step to the feature set recipe
+ represented by the provided vertex using the provided graph traversal
+ source. <DL><DT><B>Parameters:</B></DT><DD><code>fsrs</code> -  The feature set recipe step</DD><DD><code>fsrV</code> -  The vertex representing the feature set recipe</DD><DD><code>g</code> -  The graph traversal source to use</DD></DL><DL><DT><B>Returns:</B></DT><DD>The vertex representing the saved entity</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -450,7 +470,8 @@ implements <a href='../../../carnival.core.graph.GremlinTrait.html'>GremlinTrait
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>org.apache.tinkerpop.gremlin.structure.Vertex <strong>save</strong>(<a href='../../../carnival/util/DataSetDescriptor.html'>DataSetDescriptor</a> dsd, <a href='../../../carnival/util/FeatureReport.html'>FeatureReport</a> report)</h4>
-                                <p></p>
+                                <p> Save feature report and data set desriptor using a new graph traversal
+ source. <DL><DT><B>Parameters:</B></DT><DD><code>report</code> -  The feature report</DD><DD><code>dsd</code> -  The data set descriptor</DD></DL><DL><DT><B>Returns:</B></DT><DD>The vertex representing the saved entity</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -458,7 +479,8 @@ implements <a href='../../../carnival.core.graph.GremlinTrait.html'>GremlinTrait
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>org.apache.tinkerpop.gremlin.structure.Vertex <strong>save</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, <a href='../../../carnival/util/DataSetDescriptor.html'>DataSetDescriptor</a> dsd, <a href='../../../carnival/util/FeatureReport.html'>FeatureReport</a> report)</h4>
-                                <p></p>
+                                <p> Save feature report and data set desriptor using thge graph traversal
+ source provided. <DL><DT><B>Parameters:</B></DT><DD><code>report</code> -  The feature report</DD><DD><code>dsd</code> -  The data set descriptor</DD><DD><code>g</code> -  The graph traversal source</DD></DL><DL><DT><B>Returns:</B></DT><DD>The vertex representing the saved entity</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -466,7 +488,7 @@ implements <a href='../../../carnival.core.graph.GremlinTrait.html'>GremlinTrait
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>org.apache.tinkerpop.gremlin.structure.Vertex <strong>save</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, <a href='../../../carnival/util/DataSetDescriptor.html'>DataSetDescriptor</a> dsd)</h4>
-                                <p></p>
+                                <p> Save the data set descriptor using the provided grah traversal source. <DL><DT><B>Parameters:</B></DT><DD><code>dsd</code> -  The data set descriptor</DD><DD><code>g</code> -  The graph traversal source</DD></DL><DL><DT><B>Returns:</B></DT><DD>The vertex representing the saved entity</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -474,7 +496,8 @@ implements <a href='../../../carnival.core.graph.GremlinTrait.html'>GremlinTrait
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>org.apache.tinkerpop.gremlin.structure.Vertex <strong>save</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, carnival.util.FeatureSetDescriptor fsd)</h4>
-                                <p></p>
+                                <p> Save the feature set descriptor using the provided graph traversal
+ source. <DL><DT><B>Parameters:</B></DT><DD><code>fsd</code> -  The feature set descriptor</DD><DD><code>g</code> -  The graph traversal source</DD></DL><DL><DT><B>Returns:</B></DT><DD>The vertex representing the saved entity.</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -482,7 +505,7 @@ implements <a href='../../../carnival.core.graph.GremlinTrait.html'>GremlinTrait
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>org.apache.tinkerpop.gremlin.structure.Vertex <strong>save</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, carnival.util.FeatureSetRecipe fsr)</h4>
-                                <p></p>
+                                <p> Save the feature set recipe using the provided graph traversal source. <DL><DT><B>Parameters:</B></DT><DD><code>fsr</code> -  The feature set recipe</DD><DD><code>g</code> -  The graph traversal source to use</DD></DL><DL><DT><B>Returns:</B></DT><DD>The vertex representing the saved entity.</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -490,7 +513,8 @@ implements <a href='../../../carnival.core.graph.GremlinTrait.html'>GremlinTrait
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>org.apache.tinkerpop.gremlin.structure.Vertex <strong>save</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, carnival.util.FeatureSetRecipeStep fsrs)</h4>
-                                <p></p>
+                                <p> Save the feature set recipe step using the provided graph traversal
+ source. <DL><DT><B>Parameters:</B></DT><DD><code>fsrs</code> -  The feature set recipe step</DD><DD><code>g</code> -  The graph traversal source to use</DD></DL><DL><DT><B>Returns:</B></DT><DD>The vertex representing the saved entity</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -498,7 +522,8 @@ implements <a href='../../../carnival.core.graph.GremlinTrait.html'>GremlinTrait
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>org.apache.tinkerpop.gremlin.structure.Vertex <strong>save</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, carnival.util.FeatureSetRecipeIngredient ing)</h4>
-                                <p></p>
+                                <p> Save the feature set recipe ingredient using the provided graph
+ traversal source. <DL><DT><B>Parameters:</B></DT><DD><code>ing</code> -  The feature set recipe ingredient</DD><DD><code>g</code> -  The grpah traversal source</DD></DL><DL><DT><B>Returns:</B></DT><DD>The vertex representing the saved entity</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -506,7 +531,8 @@ implements <a href='../../../carnival.core.graph.GremlinTrait.html'>GremlinTrait
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>org.apache.tinkerpop.gremlin.structure.Vertex <strong>save</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, <a href='../../../carnival/graph/VertexDefinition.html'>VertexDefinition</a> vdt, carnival.util.DescribedEntity de)</h4>
-                                <p></p>
+                                <p> Save the described entity using the provided vertex definition and graph
+ traversal source. <DL><DT><B>Parameters:</B></DT><DD><code>de</code> -  The described entity</DD><DD><code>vdt</code> -  The vertex definition</DD><DD><code>g</code> -  The grpah traversal source</DD></DL><DL><DT><B>Returns:</B></DT><DD>The vertex representing the saved entity</DD></DL></p>
                             </li>
                         </ul>
                     

@@ -103,6 +103,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 
 <pre>interface GraphSchema</pre>
 
+    <p> Interface that defines a graph schema object.</p>
+
           </li>
     </ul>
 </div>
@@ -144,13 +146,13 @@ if (location.href.indexOf('is-external=true') == -1) {
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>abstract&nbsp;boolean</code></td>
-                            <td class="colLast"><code><strong><a href="#containsConstraint(carnival.graph.VertexDefinition)">containsConstraint</a></strong>(<a href='../../../carnival/graph/VertexDefinition.html'>VertexDefinition</a> vDef)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#containsConstraint(carnival.graph.VertexDefinition)">containsConstraint</a></strong>(<a href='../../../carnival/graph/VertexDefinition.html'>VertexDefinition</a> vDef)</code><br>Return true if the graph schema contains the provided vertex definition.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>abstract&nbsp;java.util.Collection&lt;<a href='../../../carnival/core/graph/EdgeConstraint.html' title='EdgeConstraint'>EdgeConstraint</a>&gt;</code></td>
-                            <td class="colLast"><code><strong><a href="#getEdgeConstraints()">getEdgeConstraints</a></strong>()</code><br></td>
+                            <td class="colLast"><code><strong><a href="#getEdgeConstraints()">getEdgeConstraints</a></strong>()</code><br>Return the constraints on edges.</td>
                         </tr>
                         
                         <tr class="altColor">
@@ -163,7 +165,7 @@ if (location.href.indexOf('is-external=true') == -1) {
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>abstract&nbsp;java.util.Collection&lt;<a href='../../../carnival/core/graph/VertexConstraint.html' title='VertexConstraint'>VertexConstraint</a>&gt;</code></td>
-                            <td class="colLast"><code><strong><a href="#getVertexConstraints()">getVertexConstraints</a></strong>()</code><br></td>
+                            <td class="colLast"><code><strong><a href="#getVertexConstraints()">getVertexConstraints</a></strong>()</code><br>Return the constraints on vertices.</td>
                         </tr>
                         
                     </table>
@@ -202,7 +204,7 @@ if (location.href.indexOf('is-external=true') == -1) {
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>abstract&nbsp;boolean <strong>containsConstraint</strong>(<a href='../../../carnival/graph/VertexDefinition.html'>VertexDefinition</a> vDef)</h4>
-                                <p></p>
+                                <p> Return true if the graph schema contains the provided vertex definition. <DL><DT><B>Parameters:</B></DT><DD><code>vDef</code> -  The vertex definition</DD></DL><DL><DT><B>Returns:</B></DT><DD>The boolean value</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -210,7 +212,7 @@ if (location.href.indexOf('is-external=true') == -1) {
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>abstract&nbsp;java.util.Collection&lt;<a href='../../../carnival/core/graph/EdgeConstraint.html' title='EdgeConstraint'>EdgeConstraint</a>&gt; <strong>getEdgeConstraints</strong>()</h4>
-                                <p></p>
+                                <p> Return the constraints on edges. <DL><DT><B>Returns:</B></DT><DD>The collection of edge constraints</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -234,7 +236,7 @@ if (location.href.indexOf('is-external=true') == -1) {
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>abstract&nbsp;java.util.Collection&lt;<a href='../../../carnival/core/graph/VertexConstraint.html' title='VertexConstraint'>VertexConstraint</a>&gt; <strong>getVertexConstraints</strong>()</h4>
-                                <p></p>
+                                <p> Return the constraints on vertices. <DL><DT><B>Returns:</B></DT><DD>The collection of vertex constraints</DD></DL></p>
                             </li>
                         </ul>
                     

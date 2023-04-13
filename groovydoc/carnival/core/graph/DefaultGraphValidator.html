@@ -192,37 +192,40 @@ implements <a href='../../../carnival/core/graph/GraphValidator.html'>GraphValid
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.Collection&lt;java.lang.String&gt;</code></td>
-                            <td class="colLast"><code><strong><a href="#checkModelEdges(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.core.graph.GraphSchema)">checkModelEdges</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, <a href='../../../carnival/core/graph/GraphSchema.html'>GraphSchema</a> graphSchema)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#checkModelEdges(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.core.graph.GraphSchema)">checkModelEdges</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, <a href='../../../carnival/core/graph/GraphSchema.html'>GraphSchema</a> graphSchema)</code><br>Check modeled edges.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.Collection&lt;java.lang.String&gt;</code></td>
-                            <td class="colLast"><code><strong><a href="#checkModelProperties(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.core.graph.GraphSchema)">checkModelProperties</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, <a href='../../../carnival/core/graph/GraphSchema.html'>GraphSchema</a> graphSchema)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#checkModelProperties(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.core.graph.GraphSchema)">checkModelProperties</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, <a href='../../../carnival/core/graph/GraphSchema.html'>GraphSchema</a> graphSchema)</code><br>Check modeled properties.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.Collection&lt;java.lang.String&gt;</code></td>
-                            <td class="colLast"><code><strong><a href="#checkModelVertices(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.core.graph.GraphSchema)">checkModelVertices</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, <a href='../../../carnival/core/graph/GraphSchema.html'>GraphSchema</a> graphSchema)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#checkModelVertices(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, carnival.core.graph.GraphSchema)">checkModelVertices</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, <a href='../../../carnival/core/graph/GraphSchema.html'>GraphSchema</a> graphSchema)</code><br>Check modeled vertices.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.Set&lt;<a href='../../../carnival/core/graph/ElementConstraint.html' title='ElementConstraint'>ElementConstraint</a>&gt;</code></td>
-                            <td class="colLast"><code><strong><a href="#filteredModels(Set)">filteredModels</a></strong>(java.util.Set&lt;<a href='../../../carnival/core/graph/ElementConstraint.html' title='ElementConstraint'>ElementConstraint</a>&gt; allModels)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#filteredModels(Set)">filteredModels</a></strong>(java.util.Set&lt;<a href='../../../carnival/core/graph/ElementConstraint.html' title='ElementConstraint'>ElementConstraint</a>&gt; allModels)</code><br>Return a filtered set of element constraints that prioritizes global
+ constraints.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.Set&lt;<a href='../../../carnival/core/graph/ElementConstraint.html' title='ElementConstraint'>ElementConstraint</a>&gt;</code></td>
-                            <td class="colLast"><code><strong><a href="#filteredModels(Map)">filteredModels</a></strong>(java.util.Map&lt;java.lang.String, java.util.Set&lt;<a href='../../../carnival/core/graph/ElementConstraint.html' title='ElementConstraint'>ElementConstraint</a>&gt;&gt; modelsByLabel)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#filteredModels(Map)">filteredModels</a></strong>(java.util.Map&lt;java.lang.String, java.util.Set&lt;<a href='../../../carnival/core/graph/ElementConstraint.html' title='ElementConstraint'>ElementConstraint</a>&gt;&gt; modelsByLabel)</code><br>Return a filtered set of element constraints that prioritizes global
+ constraints.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.Map&lt;java.lang.String, java.util.Set&lt;<a href='../../../carnival/core/graph/ElementConstraint.html' title='ElementConstraint'>ElementConstraint</a>&gt;&gt;</code></td>
-                            <td class="colLast"><code><strong><a href="#modelsByLabel(Collection)">modelsByLabel</a></strong>(java.util.Collection&lt;<a href='../../../carnival/core/graph/ElementConstraint.html' title='ElementConstraint'>ElementConstraint</a>&gt; allElementConstraints)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#modelsByLabel(Collection)">modelsByLabel</a></strong>(java.util.Collection&lt;<a href='../../../carnival/core/graph/ElementConstraint.html' title='ElementConstraint'>ElementConstraint</a>&gt; allElementConstraints)</code><br>Return a map of label to element constraints from the provided list of
+ element constraints.</td>
                         </tr>
                         
                         <tr class="altColor">
@@ -235,7 +238,8 @@ implements <a href='../../../carnival/core/graph/GraphValidator.html'>GraphValid
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.Set&lt;java.lang.String&gt;</code></td>
-                            <td class="colLast"><code><strong><a href="#unmodeledElements(org.apache.tinkerpop.gremlin.process.traversal.Traversal, Collection)">unmodeledElements</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.Traversal traversal, java.util.Collection&lt;<a href='../../../carnival/core/graph/ElementConstraint.html' title='ElementConstraint'>ElementConstraint</a>&gt; allModels)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#unmodeledElements(org.apache.tinkerpop.gremlin.process.traversal.Traversal, Collection)">unmodeledElements</a></strong>(org.apache.tinkerpop.gremlin.process.traversal.Traversal traversal, java.util.Collection&lt;<a href='../../../carnival/core/graph/ElementConstraint.html' title='ElementConstraint'>ElementConstraint</a>&gt; allModels)</code><br>Return a set of strings listing unmodeled elements using the provided 
+ traversal.</td>
                         </tr>
                         
                     </table>
@@ -329,7 +333,7 @@ implements <a href='../../../carnival/core/graph/GraphValidator.html'>GraphValid
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.util.Collection&lt;java.lang.String&gt; <strong>checkModelEdges</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, <a href='../../../carnival/core/graph/GraphSchema.html'>GraphSchema</a> graphSchema)</h4>
-                                <p></p>
+                                <p> Check modeled edges. <DL><DT><B>Parameters:</B></DT><DD><code>graphSchema</code> -  The graph schema</DD><DD><code>g</code> -  The graph traversal source to use</DD></DL><DL><DT><B>Returns:</B></DT><DD>A collection of strings describing model errors</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -337,7 +341,7 @@ implements <a href='../../../carnival/core/graph/GraphValidator.html'>GraphValid
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.util.Collection&lt;java.lang.String&gt; <strong>checkModelProperties</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, <a href='../../../carnival/core/graph/GraphSchema.html'>GraphSchema</a> graphSchema)</h4>
-                                <p></p>
+                                <p> Check modeled properties. <DL><DT><B>Parameters:</B></DT><DD><code>graphSchema</code> -  The graph schema</DD><DD><code>g</code> -  The graph traversal source to use</DD></DL><DL><DT><B>Returns:</B></DT><DD>A collection of strings describing model errors</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -345,7 +349,7 @@ implements <a href='../../../carnival/core/graph/GraphValidator.html'>GraphValid
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.util.Collection&lt;java.lang.String&gt; <strong>checkModelVertices</strong>(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g, <a href='../../../carnival/core/graph/GraphSchema.html'>GraphSchema</a> graphSchema)</h4>
-                                <p></p>
+                                <p> Check modeled vertices. <DL><DT><B>Parameters:</B></DT><DD><code>graphSchema</code> -  The graph schema</DD><DD><code>g</code> -  The graph traversal source to use</DD></DL><DL><DT><B>Returns:</B></DT><DD>A collection of strings describing model errors</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -353,7 +357,8 @@ implements <a href='../../../carnival/core/graph/GraphValidator.html'>GraphValid
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.util.Set&lt;<a href='../../../carnival/core/graph/ElementConstraint.html' title='ElementConstraint'>ElementConstraint</a>&gt; <strong>filteredModels</strong>(java.util.Set&lt;<a href='../../../carnival/core/graph/ElementConstraint.html' title='ElementConstraint'>ElementConstraint</a>&gt; allModels)</h4>
-                                <p></p>
+                                <p> Return a filtered set of element constraints that prioritizes global
+ constraints. <DL><DT><B>Parameters:</B></DT><DD><code>allModels</code> -  A set of element constraints</DD></DL><DL><DT><B>Returns:</B></DT><DD>A filtered set of element constraints</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -361,7 +366,8 @@ implements <a href='../../../carnival/core/graph/GraphValidator.html'>GraphValid
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.util.Set&lt;<a href='../../../carnival/core/graph/ElementConstraint.html' title='ElementConstraint'>ElementConstraint</a>&gt; <strong>filteredModels</strong>(java.util.Map&lt;java.lang.String, java.util.Set&lt;<a href='../../../carnival/core/graph/ElementConstraint.html' title='ElementConstraint'>ElementConstraint</a>&gt;&gt; modelsByLabel)</h4>
-                                <p></p>
+                                <p> Return a filtered set of element constraints that prioritizes global
+ constraints. <DL><DT><B>Parameters:</B></DT><DD><code>modelsByLabel</code> -  A map of element constraints by label</DD></DL><DL><DT><B>Returns:</B></DT><DD>A filtered set of element constraints</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -369,7 +375,8 @@ implements <a href='../../../carnival/core/graph/GraphValidator.html'>GraphValid
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.util.Map&lt;java.lang.String, java.util.Set&lt;<a href='../../../carnival/core/graph/ElementConstraint.html' title='ElementConstraint'>ElementConstraint</a>&gt;&gt; <strong>modelsByLabel</strong>(java.util.Collection&lt;<a href='../../../carnival/core/graph/ElementConstraint.html' title='ElementConstraint'>ElementConstraint</a>&gt; allElementConstraints)</h4>
-                                <p></p>
+                                <p> Return a map of label to element constraints from the provided list of
+ element constraints. <DL><DT><B>Parameters:</B></DT><DD><code>allElementConstraints</code> -  A collection of eleent constraints</DD></DL><DL><DT><B>Returns:</B></DT><DD>A map of label to list of element constraints</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -386,7 +393,8 @@ implements <a href='../../../carnival/core/graph/GraphValidator.html'>GraphValid
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.util.Set&lt;java.lang.String&gt; <strong>unmodeledElements</strong>(org.apache.tinkerpop.gremlin.process.traversal.Traversal traversal, java.util.Collection&lt;<a href='../../../carnival/core/graph/ElementConstraint.html' title='ElementConstraint'>ElementConstraint</a>&gt; allModels)</h4>
-                                <p></p>
+                                <p> Return a set of strings listing unmodeled elements using the provided 
+ traversal. <DL><DT><B>Parameters:</B></DT><DD><code>allModels</code> -  The element constraints to check</DD><DD><code>traversal</code> -  The graversal to use</DD></DL><DL><DT><B>Returns:</B></DT><DD>A set of strings</DD></DL></p>
                             </li>
                         </ul>
                     

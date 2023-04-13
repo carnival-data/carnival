@@ -106,6 +106,10 @@ if (location.href.indexOf('is-external=true') == -1) {
 trait GraphMethods
 extends <a href='../../../carnival/util/MethodsHolder.html'>MethodsHolder</a></pre>
 
+    <p> GraphMethods is a trait that facilitates the calling of methods on an 
+ object.
+</p>
+
           </li>
     </ul>
 </div>
@@ -136,7 +140,7 @@ extends <a href='../../../carnival/util/MethodsHolder.html'>MethodsHolder</a></p
                         
                         <tr class="altColor">
                             <td class="colFirst"><code><strong>static&nbsp;org.slf4j.Logger</strong></code>&nbsp;</td>
-                            <td class="colLast"><code><a href="#log">log</a></code><br></td>
+                            <td class="colLast"><code><a href="#log">log</a></code><br>Logger</td>
                         </tr>
                         
                     </table>
@@ -168,43 +172,43 @@ extends <a href='../../../carnival/util/MethodsHolder.html'>MethodsHolder</a></p
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.Set&lt;java.lang.Class&gt;</code></td>
-                            <td class="colLast"><code><strong><a href="#allGraphMethodClasses()">allGraphMethodClasses</a></strong>()</code><br></td>
+                            <td class="colLast"><code><strong><a href="#allGraphMethodClasses()">allGraphMethodClasses</a></strong>()</code><br>Return all the graph methods of this object.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code><a href='../../../carnival/core/graph/GraphMethod.html'>GraphMethod</a></code></td>
-                            <td class="colLast"><code><strong><a href="#createGraphMethodInstance(java.lang.String)">createGraphMethodInstance</a></strong>(java.lang.String methodName)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#createGraphMethodInstance(java.lang.String)">createGraphMethodInstance</a></strong>(java.lang.String methodName)</code><br>Create a graph method instance from a method name.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.lang.Class</code></td>
-                            <td class="colLast"><code><strong><a href="#findGraphMethodClass(java.lang.String)">findGraphMethodClass</a></strong>(java.lang.String name)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#findGraphMethodClass(java.lang.String)">findGraphMethodClass</a></strong>(java.lang.String name)</code><br>Find a graph method class by name.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code><a href='../../../carnival/core/graph/GraphMethod.html'>GraphMethod</a></code></td>
-                            <td class="colLast"><code><strong><a href="#method(java.lang.String)">method</a></strong>(java.lang.String name)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#method(java.lang.String)">method</a></strong>(java.lang.String name)</code><br>Look up a graph method by name.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code><a href='../../../carnival/core/graph/GraphMethod.html'>GraphMethod</a></code></td>
-                            <td class="colLast"><code><strong><a href="#method(java.lang.Class)">method</a></strong>(java.lang.Class gmc)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#method(java.lang.Class)">method</a></strong>(java.lang.Class gmc)</code><br>Look up a graph method by class.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code><a href='../../../carnival/core/graph/GraphMethodList.html'>GraphMethodList</a></code></td>
-                            <td class="colLast"><code><strong><a href="#methods(List)">methods</a></strong>(java.util.List&lt;java.lang.String&gt; names)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#methods(List)">methods</a></strong>(java.util.List&lt;java.lang.String&gt; names)</code><br>Return a list of graph methods matching the provided names.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code><a href='../../../carnival/core/graph/GraphMethodList.html'>GraphMethodList</a></code></td>
-                            <td class="colLast"><code><strong><a href="#methods(java.lang.String)">methods</a></strong>(java.lang.String[] names)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#methods(java.lang.String)">methods</a></strong>(java.lang.String[] names)</code><br>Return a list of graph methods matching the provided names.</td>
                         </tr>
                         
                     </table>
@@ -254,7 +258,7 @@ extends <a href='../../../carnival/util/MethodsHolder.html'>MethodsHolder</a></p
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>static&nbsp;org.slf4j.Logger <strong>log</strong></h4>
-                                <p></p>
+                                <p>Logger</p>
                             </li>
                         </ul>
                     
@@ -279,7 +283,7 @@ extends <a href='../../../carnival/util/MethodsHolder.html'>MethodsHolder</a></p
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.util.Set&lt;java.lang.Class&gt; <strong>allGraphMethodClasses</strong>()</h4>
-                                <p></p>
+                                <p> Return all the graph methods of this object. <DL><DT><B>Returns:</B></DT><DD>The set of all graph methods</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -287,7 +291,7 @@ extends <a href='../../../carnival/util/MethodsHolder.html'>MethodsHolder</a></p
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4><a href='../../../carnival/core/graph/GraphMethod.html'>GraphMethod</a> <strong>createGraphMethodInstance</strong>(java.lang.String methodName)</h4>
-                                <p></p>
+                                <p> Create a graph method instance from a method name. <DL><DT><B>Parameters:</B></DT><DD><code>methodName</code> -  The name of the method.</DD></DL><DL><DT><B>Returns:</B></DT><DD>The GraphMethod</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -295,7 +299,7 @@ extends <a href='../../../carnival/util/MethodsHolder.html'>MethodsHolder</a></p
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.lang.Class <strong>findGraphMethodClass</strong>(java.lang.String name)</h4>
-                                <p></p>
+                                <p> Find a graph method class by name. <DL><DT><B>Parameters:</B></DT><DD><code>name</code> -  The name of the graph method to find.</DD></DL><DL><DT><B>Returns:</B></DT><DD>The graph method class.</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -303,7 +307,7 @@ extends <a href='../../../carnival/util/MethodsHolder.html'>MethodsHolder</a></p
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4><a href='../../../carnival/core/graph/GraphMethod.html'>GraphMethod</a> <strong>method</strong>(java.lang.String name)</h4>
-                                <p></p>
+                                <p> Look up a graph method by name. <DL><DT><B>Parameters:</B></DT><DD><code>name</code> -  The name of the graph method</DD></DL><DL><DT><B>Returns:</B></DT><DD>The GraphMethod</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -311,7 +315,7 @@ extends <a href='../../../carnival/util/MethodsHolder.html'>MethodsHolder</a></p
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4><a href='../../../carnival/core/graph/GraphMethod.html'>GraphMethod</a> <strong>method</strong>(java.lang.Class gmc)</h4>
-                                <p></p>
+                                <p> Look up a graph method by class. <DL><DT><B>Parameters:</B></DT><DD><code>gmc</code> -  The graph method class</DD></DL><DL><DT><B>Returns:</B></DT><DD>The GraphMethod</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -319,7 +323,7 @@ extends <a href='../../../carnival/util/MethodsHolder.html'>MethodsHolder</a></p
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4><a href='../../../carnival/core/graph/GraphMethodList.html'>GraphMethodList</a> <strong>methods</strong>(java.util.List&lt;java.lang.String&gt; names)</h4>
-                                <p></p>
+                                <p> Return a list of graph methods matching the provided names. <DL><DT><B>Parameters:</B></DT><DD><code>names</code> -  The list of method names</DD></DL><DL><DT><B>Returns:</B></DT><DD>The GraphMethodList</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -327,7 +331,7 @@ extends <a href='../../../carnival/util/MethodsHolder.html'>MethodsHolder</a></p
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4><a href='../../../carnival/core/graph/GraphMethodList.html'>GraphMethodList</a> <strong>methods</strong>(java.lang.String[] names)</h4>
-                                <p></p>
+                                <p> Return a list of graph methods matching the provided names. <DL><DT><B>Parameters:</B></DT><DD><code>names</code> -  The list of method names</DD></DL><DL><DT><B>Returns:</B></DT><DD>The GraphMethodList</DD></DL></p>
                             </li>
                         </ul>
                     

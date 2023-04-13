@@ -105,6 +105,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 <pre>class GraphMethodList
 extends java.lang.Object</pre>
 
+    <p> A list of graph methods.</p>
+
           </li>
     </ul>
 </div>
@@ -135,7 +137,7 @@ extends java.lang.Object</pre>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code><strong>java.util.List&lt;<a href='../../../carnival/core/graph/GraphMethod.html' title='GraphMethod'>GraphMethod</a>&gt;</strong></code>&nbsp;</td>
-                            <td class="colLast"><code><a href="#graphMethods">graphMethods</a></code><br></td>
+                            <td class="colLast"><code><a href="#graphMethods">graphMethods</a></code><br>The underlying list of graph methods</td>
                         </tr>
                         
                     </table>
@@ -195,13 +197,14 @@ extends java.lang.Object</pre>
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.List&lt;<a href='../../../carnival/core/graph/GraphMethodCall.html' title='GraphMethodCall'>GraphMethodCall</a>&gt;</code></td>
-                            <td class="colLast"><code><strong><a href="#call(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)">call</a></strong>(org.apache.tinkerpop.gremlin.structure.Graph graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#call(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)">call</a></strong>(org.apache.tinkerpop.gremlin.structure.Graph graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g)</code><br>Call each of the graph methods in this list.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.List&lt;<a href='../../../carnival/core/graph/GraphMethodCall.html' title='GraphMethodCall'>GraphMethodCall</a>&gt;</code></td>
-                            <td class="colLast"><code><strong><a href="#ensure(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)">ensure</a></strong>(org.apache.tinkerpop.gremlin.structure.Graph graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#ensure(org.apache.tinkerpop.gremlin.structure.Graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource)">ensure</a></strong>(org.apache.tinkerpop.gremlin.structure.Graph graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g)</code><br>Call each of the graph methods in this list if it has not already been
+ called.</td>
                         </tr>
                         
                     </table>
@@ -251,7 +254,7 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.util.List&lt;<a href='../../../carnival/core/graph/GraphMethod.html' title='GraphMethod'>GraphMethod</a>&gt; <strong>graphMethods</strong></h4>
-                                <p></p>
+                                <p>The underlying list of graph methods</p>
                             </li>
                         </ul>
                     
@@ -294,8 +297,7 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4><a href='../../../carnival/core/graph/GraphMethodList.html'>GraphMethodList</a> <strong>arguments</strong>(java.util.Map args)</h4>
-                                <p> Set the arguments of the graph methods prior to executing them.
-</p>
+                                <p> Set the arguments of the graph methods prior to executing them. <DL><DT><B>Parameters:</B></DT><DD><code>args</code> -  The  map of arguments to use for each call.</DD></DL><DL><DT><B>Returns:</B></DT><DD>This object</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -303,7 +305,7 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.util.List&lt;<a href='../../../carnival/core/graph/GraphMethodCall.html' title='GraphMethodCall'>GraphMethodCall</a>&gt; <strong>call</strong>(org.apache.tinkerpop.gremlin.structure.Graph graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g)</h4>
-                                <p></p>
+                                <p> Call each of the graph methods in this list. <DL><DT><B>Parameters:</B></DT><DD><code>g</code> -  The graph traversal source to use</DD><DD><code>graph</code> -  The graph to use</DD></DL><DL><DT><B>Returns:</B></DT><DD>The list of graph method call objects</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -311,7 +313,8 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.util.List&lt;<a href='../../../carnival/core/graph/GraphMethodCall.html' title='GraphMethodCall'>GraphMethodCall</a>&gt; <strong>ensure</strong>(org.apache.tinkerpop.gremlin.structure.Graph graph, org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g)</h4>
-                                <p></p>
+                                <p> Call each of the graph methods in this list if it has not already been
+ called. <DL><DT><B>Parameters:</B></DT><DD><code>g</code> -  The graph traversal source to use</DD><DD><code>graph</code> -  The graph to use</DD></DL><DL><DT><B>Returns:</B></DT><DD>The list of graph method call objects</DD></DL></p>
                             </li>
                         </ul>
                     

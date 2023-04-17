@@ -8,4 +8,4 @@ permalink: /about/
 
 **It's a party of Information!**
 
-[Github](https://github.com/pmbb-ibi/carnival)
+[Github](https://github.com/carnival-data/carnival)

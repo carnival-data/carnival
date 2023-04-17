@@ -14,7 +14,7 @@ If you do not already have one, install the Java JDK. We recommend [Amazon Corre
 
 1. If you do not already have one, create a free account on [Github](https://github.com).
 1. Install [Github Desktop](https://desktop.github.com).
-1. Clone the [Carnival repository from Github](https://github.com/pmbb-ibi/carnival).
+1. Clone the [Carnival repository from Github](https://github.com/carnival-data/carnival).
 
 ### Carnival Home
 

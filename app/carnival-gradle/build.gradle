@@ -1,16 +1,39 @@
 /**
  * Carnival Gradle Plugin
  *
-*/
+ */
 
 ///////////////////////////////////////////////////////////////////////////////
-// plugins needed to publish to the Gradle plugin repository
+// Publish to the Gradle plugin repository
+// The Maven and Gradle publish plugins clash. To publish to the Gradle plugin
+// repository, uncomment this block and comment the Maven block.
 ///////////////////////////////////////////////////////////////////////////////
 
+/*
 plugins {
     id 'java-gradle-plugin'                           
     id 'com.gradle.plugin-publish' version '1.1.0'   
 }
+
+pluginBundle {
+    website = 'https://carnival-data.github.io/carnival/' 
+    vcsUrl = 'https://github.com/carnival-data/carnival/' 
+    tags = ['carnival', 'graph', 'data']     
+}
+
+gradlePlugin {
+    plugins { 
+        greetingsPlugin { 
+            id = 'io.github.carnival-data.carnival' 
+            displayName = 'Carnival' 
+            description = 'The Carnival plugin adds the necessary dependencies for an application that relies on Carnival' 
+            implementationClass = 'carnival.gradle.CarnivalLibraryPlugin'
+        }
+    }
+}
+*/
+
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // properties file
@@ -35,8 +58,10 @@ processResources.dependsOn 'writePropertiesFile'
 
 ///////////////////////////////////////////////////////////////////////////////
 // maven publishing
+// The Maven and Gradle publish plugins clash. To publish to the Maven central
+// repository, uncomment this block and comment the Gradle block.
 ///////////////////////////////////////////////////////////////////////////////
-/*publishToMavenLocal.dependsOn 'compileGroovy'
+publishToMavenLocal.dependsOn 'compileGroovy'
 
 publishing {
     publications {
@@ -50,7 +75,7 @@ publishing {
                     resolveStrategy = Closure.DELEGATE_FIRST
                     name 'Carnival Gradle Plugin'
                     description 'A Gradle plugin to facilitate creation of a Carnival libraries and applications.'
-                    url 'https://github.com/pmbb-ibi/carnival'
+                    url 'https://github.com/carnival-data/carnival'
                     licenses {
                         license {
                             name 'GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007'
@@ -65,9 +90,9 @@ publishing {
                         }
                     }
                     scm {
-                        connection 'scm:git:git://github.com:pmbb-ibi/carnival.git'
-                        developerConnection 'scm:git:ssh://github.com:pmbb-ibi/carnival.git'
-                        url 'https://github.com/pmbb-ibi/carnival'
+                        connection 'scm:git:git://github.com:carnival-data/carnival.git'
+                        developerConnection 'scm:git:ssh://github.com:carnival-data/carnival.git'
+                        url 'https://github.com/carnival-data/carnival'
                     }
                 }
             }
@@ -76,35 +101,9 @@ publishing {
 }
 
 signing {
-    //required { 
-    //    isReleaseVersion && 
-    //    gradle.taskGraph.hasTask("publish") &&
-    //    !gradle.taskGraph.hasTask("publishToMavenLocal")
-    //}
     sign publishing.publications.mavenGroovy
-}*/
-
-
-///////////////////////////////////////////////////////////////////////////////
-// Gradle publishing
-///////////////////////////////////////////////////////////////////////////////
-
-pluginBundle {
-    website = 'https://carnival-data.github.io/carnival/' 
-    vcsUrl = 'https://github.com/carnival-data/carnival/' 
-    tags = ['carnival', 'graph', 'data']     
 }
 
-gradlePlugin {
-    plugins { 
-        greetingsPlugin { 
-            id = 'io.github.carnival-data.carnival' 
-            displayName = 'Carnival' 
-            description = 'The Carnival plugin adds the necessary dependencies for an application that relies on Carnival' 
-            implementationClass = 'carnival.gradle.CarnivalLibraryPlugin'
-        }
-    }
-}
 
 
 ///////////////////////////////////////////////////////////////////////////////

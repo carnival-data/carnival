@@ -157,6 +157,7 @@ abstract class JsonVineMethod<T> extends VineMethod {
      * @return A vine method call object.
      */
     JsonVineMethodCall<T> _fetchAndCache() {
+        log.trace "_fetchAndCache"
         T fetchResult = fetch(this.arguments)
         JsonVineMethodCall<T> methodCall = _createCallObject(this.arguments, fetchResult)
         _writeCacheFile(methodCall)
@@ -171,6 +172,7 @@ abstract class JsonVineMethod<T> extends VineMethod {
      * @return A vine method call objet.
      */
     JsonVineMethodCall<T> _readFromCache(File cacheFile) {
+        log.trace "_readFromCache cacheFile:${cacheFile}"
         assert cacheFile.exists()
         assert cacheFile.canRead()
         JsonVineMethodCall.createFromFile(cacheFile)
@@ -183,7 +185,9 @@ abstract class JsonVineMethod<T> extends VineMethod {
      * @return The list of files written.
      */
     List<File> _writeCacheFile(JsonVineMethodCall<T> methodCall) {
+        log.trace "_writeCacheFile methodCall:${methodCall?.class.simpleName}"
         File cacheDir = _cacheDirectoryValidated()
+        log.trace "cacheDir:${cacheDir}"
         if (cacheDir == null) {
             log.warn "cache directory is invalid. no cache file will be written."
             return null

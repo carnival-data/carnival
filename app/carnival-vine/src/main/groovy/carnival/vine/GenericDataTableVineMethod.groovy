@@ -33,6 +33,7 @@ abstract class GenericDataTableVineMethod extends DataTableVineMethod<GenericDat
      * @return A vine method call object.
      */
     GenericDataTableVineMethodCall _readFromCache(DataTableFiles cacheFiles) {
+        log.trace "_readFromCache cacheFiles: ${cacheFiles}"
         assert cacheFiles != null
         assert cacheFiles.exist()
         assert cacheFiles.areReadable()

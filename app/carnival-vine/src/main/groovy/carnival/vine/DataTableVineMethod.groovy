@@ -188,6 +188,7 @@ abstract class DataTableVineMethod<T,U extends VineMethodCall> extends VineMetho
      * @return A vine method call object
      */
     U _fetchAndCache() {
+        log.trace "_fetchAndCache"
         T fetchResult = fetch(this.arguments)
         U methodCall = _createCallObject(this.arguments, fetchResult)
         _writeCacheFile(methodCall)
@@ -204,7 +205,9 @@ abstract class DataTableVineMethod<T,U extends VineMethodCall> extends VineMetho
      * @return The written cache files.
      */
     List<File> _writeCacheFile(U methodCall) {
+        log.trace "_writeCacheFile methodCall:${methodCall?.class.simpleName}"
         File cacheDir = _cacheDirectoryValidated()
+        log.trace "cacheDir:${cacheDir}"
         if (cacheDir == null) {
             log.warn "cache directory is invalid. no cache file will be written."
             return null

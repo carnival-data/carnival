@@ -32,6 +32,7 @@ abstract class MappedDataTableVineMethod extends DataTableVineMethod<MappedDataT
      * @return A vine method call object.
      */
     MappedDataTableVineMethodCall _readFromCache(DataTableFiles cacheFiles) {
+        log.trace "_readFromCache cacheFiles: ${cacheFiles}"
         assert cacheFiles != null
         assert cacheFiles.exist()
         assert cacheFiles.areReadable()

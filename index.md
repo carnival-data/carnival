@@ -274,7 +274,7 @@ The following links contain instructions on how to code and publish the Carnival
 - [Default Carnival Schemas](schema.md)
 
 ## <a name="using-carnival"></a>Using Carnival
-Carnival is a library that can be used directly in scripts or included in a JVM application.  Carnival has been developed and tested using [Groovy](https://groovy-lang.org) scripts and the [Micronaut](https://micronaut.io) framework as test application environments.
+Carnival is a library that can be used directly in scripts or included in a Gradle Groovy project.  Carnival has been developed and tested using [Groovy](https://groovy-lang.org) scripts and the [Micronaut](https://micronaut.io) application framework.
 
 
 ## <a name="script-development"></a>Groovy Scripts

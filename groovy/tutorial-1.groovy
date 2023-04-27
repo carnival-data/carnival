@@ -2,7 +2,10 @@
 // DEPENDENCIES
 ///////////////////////////////////////////////////////////////////////////////
 
-@GrabResolver(name='io.github.carnival-data', root='https://s01.oss.sonatype.org/content/repositories/snapshots/')
+// Uncomment the following to enable pulling Carnival dependencies from the
+// public snapshot repository
+//@GrabResolver(name='io.github.carnival-data', root='https://s01.oss.sonatype.org/content/repositories/snapshots/')
+
 @Grab('io.github.carnival-data:carnival-core:3.0.2-SNAPSHOT')
 @Grab('io.github.carnival-data:carnival-vine:3.0.2-SNAPSHOT')
 @Grab('org.apache.tinkerpop:gremlin-core:3.4.10')

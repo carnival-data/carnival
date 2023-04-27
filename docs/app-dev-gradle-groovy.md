@@ -1,15 +1,9 @@
-# Create a Groovy Application
+# Create a Gradle Groovy Application
 
-Create a generic Groovy application that used the Carnival library using Gradle as the build tool.
+Create a Groovy application that used the Carnival library using Gradle as the build tool.
 
 ## Directions
 
-### Publish Carnival to your local maven repository
-
-**REMOVE AFTER 3.0.0 IS PUBLISHED TO MAVEN CENTRAL**
-
-- Download the code for Carnival
-- Run publishToMavenLocal() to publish the libraries to your local maven repository
 
 ### Use Gradle Init to create an empty application
 
@@ -28,7 +22,8 @@ Apply the following edits to `app/build.gradle`.
 
 
 #### Apply the Carnival plugin
-In addition the groovy plugin and any other plugins already included from `gradle init`, the following plugins are required.  The Carnival gradle plugin currently requires the `apply` keyword. 
+
+In addition the groovy plugin and any other plugins already included from `gradle init`, the following plugins are required.  
 
 ```Gradle
 plugins {
@@ -43,18 +38,6 @@ plugins {
     id 'com.github.ManifestClasspath' version '0.1.0-RELEASE'
 }
 ```
-
-
-### Add mavenLocal() to repositories
-
-**REMOVE AFTER 3.0.0 IS PUBLISHED TO MAVEN CENTRAL**
-
-```Gradle
-repositories {
-    mavenLocal()
-}
-```
-
 
 ### Test the build
 Run a `clean` to test the build configuration.

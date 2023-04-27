@@ -274,9 +274,31 @@ The following links contain instructions on how to code and publish the Carnival
 - [Default Carnival Schemas](schema.md)
 
 ## <a name="using-carnival"></a>Using Carnival
-Carnival is a library that can be used directly in scripts or included in a JVM application.  Carnival has been developed using [Groovy](https://groovy-lang.org) scripts and the [Micronaut](https://micronaut.io) framework as test application environments.
+Carnival is a library that can be used directly in scripts or included in a JVM application.  Carnival has been developed and tested using [Groovy](https://groovy-lang.org) scripts and the [Micronaut](https://micronaut.io) framework as test application environments.
 
-The only requirement to use Carnival in a JVM application is to include the required Carnival dependencies.  There is a [Carnival Gradle Plugin](https://plugins.gradle.org/plugin/io.github.carnival-data.carnival) that will add the dependencies.  See the [Github repository](https://github.com/carnival-data/carnival/tree/master/app/carnival-gradle) and the file [CarnivalLibraryPlugin.groovy](https://github.com/carnival-data/carnival/blob/master/app/carnival-gradle/src/main/groovy/carnival/gradle/CarnivalLibraryPlugin.groovy) for more information about the plugin.
+
+## <a name="script-development"></a>Groovy Scripts
+The Carnival library can be included in Groovy scripts.  Example scripts can be found in [docs/groovy](groovy).  
+
+To run these scripts on the command line, first install [Groovy](https://groovy-lang.org) version 3.0.9.  [SDKMAN Software Development Kit Manager](https://sdkman.io) is a useful tool to install Groovy and other JVM tools.
+ 
+These scripts can be run on the command line via the following command:
+
+```Shell
+groovy graph-method-1.groovy
+```
+
+The example scripts use [Groovy Grape](http://docs.groovy-lang.org/latest/html/documentation/grape.html) to download dependencies.  To see Groovy Grape debug output:
+
+```Shell
+groovy -Dgroovy.grape.report.downloads=true graph-model-1.groovy
+```
+
+
+## <a name="app-development"></a>Groovy Gradle
+The Carnival library can be included in Gradle Groovy applications and libraries.  
+
+The only requirement to use Carnival in a Groovy project is to include the required Carnival dependencies.  There is a [Carnival Gradle Plugin](https://plugins.gradle.org/plugin/io.github.carnival-data.carnival) that will add the dependencies.  See the [Github repository](https://github.com/carnival-data/carnival/tree/master/app/carnival-gradle) and the file [CarnivalLibraryPlugin.groovy](https://github.com/carnival-data/carnival/blob/master/app/carnival-gradle/src/main/groovy/carnival/gradle/CarnivalLibraryPlugin.groovy) for more information about the plugin.
 
 Plugin usage:
 
@@ -309,34 +331,10 @@ dependencies {
     implementation "io.github.carnival-data:carnival-core:3.0.0"
     implementation "io.github.carnival-data:carnival-vine:3.0.0"
 }  
-```
+```  
 
 
-## <a name="script-development"></a>Groovy Scripts
-The Carnival library can be included in Groovy scripts.  Example scripts can be found in [docs/groovy](groovy).  
-
-To run these scripts on the command line, first install [Groovy](https://groovy-lang.org)  version 3.0.9.  [SDKMAN Software Development Kit Manager](https://sdkman.io) is a useful tool to install Groovy and other JVM tools.
- 
-These scripts can be run on the command line via the following command:
-
-```Shell
-groovy graph-method-1.groovy
-```
-
-The example scripts use [Groovy Grape](http://docs.groovy-lang.org/latest/html/documentation/grape.html) to download dependencies.  To see Groovy Grape debug output:
-
-```Shell
-groovy -Dgroovy.grape.report.downloads=true graph-model-1.groovy
-```
-
-
-## <a name="app-development"></a>Groovy Applications
-The Carnival library can be included in generic Groovy applications.  
-
-To create a Groovy application using Gradle as the build tool, the only requirement should be the inclusion of the Carnival Gradle plugin to add the Carnival dependencies.  
-
-
-Follow these [step-by-step instructions](app-dev-application.md) to create a Groovy app that uses Carnival.
+Follow these [step-by-step instructions](app-dev-gradle-groovy.md) to create a Groovy app that uses Carnival.
 
 ## <a name="micronaut-app-development"></a>Micronaut Applications
 The Carnival library can be included in Micronaut applications.  [carnival-demo-biomedical](https://github.com/carnival-data/carnival-demo-biomedical) provides an example of a working Micronaut application that uses Carnival.

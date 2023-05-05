@@ -49,6 +49,60 @@ class CarnivalNeo4j extends Carnival {
     static Logger sqllog = LoggerFactory.getLogger('sql')
 
 
+	/** 
+	 * Utility method to run a closure in the context of a fresh transaction
+	 * that will be comitted and closed upon successful termination of the
+	 * closure. 
+	 * If there is a prior open transaction, it will be closed, but not 
+	 * committed.
+	 * If the closure accepts no arguments, it will be called without 
+	 * arguments.
+	 * If the closure accepts one argument, it will be called with the 
+	 * transaction object as the argument.
+	 * If the closure accepts any other number of arguments, a runtime
+	 * exception will be thrown.
+	 * Note that if the gremlin graph does not support transactions, then an
+	 * error will be thrown.
+	 * @param graph The gremlin graph.
+	 * @param cl The closure to execute.
+	 */
+	static public void withTransaction(Graph graph, Closure cl) {
+		assert graph != null
+		assert cl != null
+
+		// open a new transaction
+		def tx = graph.tx()
+		if (tx.isOpen()) tx.close()
+		tx.open()
+
+		// execute the closure
+        def maxClosureParams = cl.getMaximumNumberOfParameters()
+		try {
+			if (maxClosureParams == 0) {
+				cl()
+			} else if (maxClosureParams == 1) {
+				cl(tx)
+			} else {
+				throw new RuntimeException("closure must accept zero or one arguments")
+			}
+        } catch (Exception e) {
+			try {
+				tx.rollback()
+			} catch (Exception e2) {
+				log.error("could not rollback", e2)
+			}
+            throw e
+		} finally {
+			try {
+				tx.commit()
+				tx.close()
+			} catch (Exception e3) {
+				log.error("could not commit", e3)
+			}
+		}
+	}
+
+
     /** 
 	 * Create a CarnivalNeo4j object using the default configuration modified
 	 * by any provided arguments.
@@ -240,7 +294,7 @@ class CarnivalNeo4j extends Carnival {
 		log.trace "CarnivalNeo4j neo4jConstraints"
 
 		// create uniqueness constraints
-		withTransaction(graph) {
+		CarnivalNeo4j.withTransaction(graph) {
 	    	graphSchema.vertexConstraints.each { labelDef ->
 					labelDef.uniquePropertyKeys.each { property ->
 						log.trace "attempting to create constraint: ${labelDef.label}.${property}"
@@ -262,7 +316,7 @@ class CarnivalNeo4j extends Carnival {
 		log.trace "CarnivalNeo4j createIndexes"
 
         // create indexes
-        withTransaction(graph) {
+        CarnivalNeo4j.withTransaction(graph) {
 	    	graphSchema.vertexConstraints.each { labelDef ->
 					labelDef.indexedPropertyKeys.each { property ->
 	    			graph.cypher("CREATE INDEX ON :${labelDef.label}(${property})")

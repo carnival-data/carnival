@@ -30,6 +30,7 @@ import carnival.graph.VertexDefinition
 import carnival.graph.DynamicVertexDef
 import carnival.graph.VertexBuilder
 import carnival.core.graph.GremlinTrait
+import carnival.core.graph.GremlinTraitUtilities
 import carnival.core.graph.GraphSchema
 import carnival.core.graph.DefaultGraphSchema
 import carnival.core.graph.GraphValidator
@@ -52,98 +53,6 @@ import carnival.core.util.DuplicateModelException
  */
 @Slf4j
 abstract class Carnival implements GremlinTrait {
-
-	///////////////////////////////////////////////////////////////////////////
-	// UTILITY
-	///////////////////////////////////////////////////////////////////////////
-
-	/** 
-	 * Utility method to run a closure in the context of a fresh transaction
-	 * that will be comitted and closed upon successful termination of the
-	 * closure. 
-	 * If there is a prior open transaction, it will be closed, but not 
-	 * committed.
-	 * If the closure accepts no arguments, it will be called without 
-	 * arguments.
-	 * If the closure accepts one argument, it will be called with the 
-	 * transaction object as the argument.
-	 * If the closure accepts any other number of arguments, a runtime
-	 * exception will be thrown.
-	 * Note that if the gremlin graph does not support transactions, then an
-	 * error will be thrown.
-	 * @param graph The gremlin graph.
-	 * @param cl The closure to execute.
-	 */
-	static public void withTransaction(Graph graph, Closure cl) {
-		def tx = graph.tx()
-		if (tx.isOpen()) tx.close()
-		tx.open()
-
-        def maxClosureParams = cl.getMaximumNumberOfParameters()
-
-		try {
-			if (maxClosureParams == 0) {
-				cl()
-			} else if (maxClosureParams == 1) {
-				cl(tx)
-			} else {
-				throw new RuntimeException("withTransaction closure must accept zero or one arguments")
-			}
-		} finally {
-			tx.commit()
-			tx.close()
-		}
-	}
-
-
-	/** 
-	 * Utility method to run a closure in the context of a fresh transaction
-	 * that will be comitted and closed upon successful termination of the
-	 * closure IF the gremlin graph supports transactions. 
-	 * If the gremlin graph supports transactions and there is a prior open
-	 * transaction, it will be closed, but not committed.
-	 * If the gremlin graph does not support transactions, then the closure 
-	 * will be called with no parameters.
-	 * If the gremlin graph supports transactions and the closure accepts no 
-	 * arguments, it will be called without arguments.
-	 * If the gremlin graph supports transactions and the closure accepts one 
-	 * argument, it will be called with the transaction object as the argument.
-	 * If the closure accepts any other number of arguments, a runtime
-	 * exception will be thrown.
-	 * @param graph The gremlin graph.
-	 * @param cl The closure to execute.
-	 */	
-	static public void withTransactionIfSupported(Graph graph, Closure cl) {
-		def transactionsAreSupported = graph.features().graph().supportsTransactions()
-		log.trace "transactionsAreSupported:${transactionsAreSupported}"
-
-		def tx
-		if (transactionsAreSupported) {
-			tx = graph.tx()
-			if (tx.isOpen()) tx.close()
-			tx.open()
-		}
-
-        def maxClosureParams = cl.getMaximumNumberOfParameters()
-
-		try {
-			if (maxClosureParams == 0) {
-				cl()
-			} else if (maxClosureParams == 1) {
-				if (transactionsAreSupported) cl(tx)
-				else cl()
-			} else {
-				throw new RuntimeException("withTransactionIfSupported closure must accept zero or one arguments")
-			}
-		} finally {
-			if (transactionsAreSupported) {
-				tx.commit()
-				tx.close()
-			}
-		}
-	}
-
-
 
 	///////////////////////////////////////////////////////////////////////////
 	// INSTANCE
@@ -242,7 +151,7 @@ abstract class Carnival implements GremlinTrait {
 			addConstraint(vc)
 		}
 
-		withTransactionIfSupported(graph) {
+		GremlinTraitUtilities.withGremlin(graph, g) {
 			addClassVertices(graph, g, vertexConstraints)
 		}
     }
@@ -395,7 +304,7 @@ abstract class Carnival implements GremlinTrait {
 		vertexConstraints.each { vc ->
 			addConstraint(vc)
 		}
-		withTransactionIfSupported(graph) {
+		GremlinTraitUtilities.withGremlin(graph, g) {
 			addClassVertices(graph, g, vertexConstraints)
 		}
 	}
@@ -608,7 +517,7 @@ abstract class Carnival implements GremlinTrait {
 
 		List<Vertex> verts = new ArrayList<Vertex>()
 		
-		withTransactionIfSupported(graph) {
+		GremlinTraitUtilities.withGremlin(graph, g) {
 			graphSchema.vertexBuilders.each { ci ->
 				log.trace "creating controlled instance ${ci.class.simpleName} $ci"
 				assert ci instanceof VertexBuilder
@@ -628,7 +537,7 @@ abstract class Carnival implements GremlinTrait {
 	 * @param g A graph traversal to use.
 	 */
 	public void addClassVertices(Graph graph, GraphTraversalSource g, Set<VertexConstraint> vcs) {
-		withTransactionIfSupported(graph) {
+		GremlinTraitUtilities.withGremlin(graph, g) {
 	        vcs.each { vc ->
 				createClassVertex(graph, g, vc)
 			}
@@ -736,46 +645,5 @@ abstract class Carnival implements GremlinTrait {
 		return graph.traversal()
 	}
 
-
-	/** 
-	 * Run the provided closure in the context of a transaction of this
-	 * carnival.
-	 * If the closure accepts no arguments, it will be called with none.
-	 * If the closure accepts one argument, it will be called with the
-	 * transaction as the only parameter.
-	 * If the closure accepts two arguments, it will be called with the
-	 * transaction as the first parameter and a graph traversal source as the
-	 * second.
-	 * If the closure accepts more than two arguments, it will be called with
-	 * the transaction as the first parameter, the graph traversal source as
-	 * as the second, and the gremlin graph as the third.
-	 * @param The closure to execute.
-	 */
-	public void withTransaction(Closure cl) {
-		def tx = graph.tx()
-		if (tx.isOpen()) tx.close()
-		tx.open()
-
-        def maxClosureParams = cl.getMaximumNumberOfParameters()
-
-        def g
-		try {
-			if (maxClosureParams == 0) {
-				cl()
-			} else if (maxClosureParams == 1) {
-				cl(tx)
-			} else if (maxClosureParams == 2) {
-				g = traversal()
-				cl(tx, g)
-			} else {
-				g = traversal()
-				cl(tx, g, graph)
-			}
-		} finally {
-			tx.commit()
-			tx.close()
-			if (g) g.close()
-		}
-	}
 
 }

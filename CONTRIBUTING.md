@@ -17,8 +17,4 @@ Feature requests can be made in the issue tracker using the [feature report form
 
 
 # Solving Issues
-To submit bug fixes, open a new GitHub pull request with the bug fix. The PR description should clearly describe the problem and solution and should include the relevant issue numbers if applicable. Before submitting, all the tests should pass.
-
-
-# Creating carnival extensions, demonstrations, or other external projects
-** coming soon **
+To submit bug fixes, open a new GitHub pull request with the bug fix. The PR description should clearly describe the problem and solution and should include the relevant issue numbers if applicable. Before submitting, the test suite should be run locally and all the tests should pass. Instructions for how to set up a local carnival development environment and run the tests can be found in the [developers documentation](https://carnival-data.github.io/carnival/developer-setup.html).

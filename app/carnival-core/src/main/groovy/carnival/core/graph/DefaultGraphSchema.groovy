@@ -105,10 +105,12 @@ class DefaultGraphSchema implements GraphSchema {
 	/** edge constraints */
 	private Set<EdgeConstraint> edgeConstraints = new HashSet<EdgeConstraint>()
 
-	/* get edge constraints */
+	/** 
+	 * Get edge constraints 
+	 * @return Set of EdgeConstraint
+	 */
 	public Set<EdgeConstraint> getEdgeConstraints() {
 		return edgeConstraints
 	}
-
 
 }

@@ -115,6 +115,10 @@ class TabularReport extends GenericDataTable {
             )
         }
 
+        /**
+         * Set the fields of this object from the provided vals.
+         * @param args Map of provided values.
+         */
         protected void setFields(Map args) {
             super.setFields(args)
             if (args.containsKey('reportDescriptor')) this.reportDescriptor = args.reportDescriptor

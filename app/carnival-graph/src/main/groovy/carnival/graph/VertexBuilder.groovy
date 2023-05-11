@@ -61,7 +61,10 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
     // METHODS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Render this object as a String.
+     * @return String representation of this object.
+     */
     public String toString() {
         def str = "${vertexDef}"
         if (propertyValues.size() > 0) str += " ${propertyValues}"

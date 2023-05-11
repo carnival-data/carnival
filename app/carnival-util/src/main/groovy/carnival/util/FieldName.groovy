@@ -25,10 +25,15 @@ import groovy.transform.EqualsAndHashCode
 @EqualsAndHashCode
 class FieldName {
 
-    /** do not use */
-    static Map<String,FieldName> cache = new HashMap<String,FieldName>()
+    /** cache of field names */
+    private static Map<String,FieldName> cache = new HashMap<String,FieldName>()
 
-    /** do not use */
+    /** 
+     * Create a FieldName object using the provided value.
+     * @param value The value to use
+     * @return A FieldName object
+     * 
+     */
     static FieldName create(String value) {
         assert value
         value = value.trim().toUpperCase()
@@ -41,7 +46,7 @@ class FieldName {
         return fn
     }
 
-    /** do not use */
+    /** the value of the field name */
     final String value
 
     private FieldName() { }
@@ -51,10 +56,18 @@ class FieldName {
         this.value = value.trim().toUpperCase()
     }
 
+    /**
+     * Get this object.
+     * @return this object
+     */
     public FieldName getFieldName() {
         return this
     }
 
+    /**
+     * Return a string representation of this object.
+     * @return A string representation of this object.
+     */
     public String toString() {
         return value
     }

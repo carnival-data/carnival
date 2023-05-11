@@ -160,14 +160,23 @@ class DataSetDescriptor extends MarkdownRenderer implements DescribedEntity {
         steps
     }
 
-    /** */
+    /** 
+     * Traverse the data set descriptor starting at the provided feature set
+     * descriptor and add to a flat set of feature set recipe steps.
+     * @param fsd The feature set descriptor from which to start searching
+     * @param steps A flat set of feature set recipe steps
+     */
     void findAllSteps(Set<FeatureSetRecipeStep> steps, FeatureSetRecipeStep fs) {
         if (fs == null) return
         steps.add(fs)
         fs.dependencies.each { findAllSteps(steps, it) }
     }
 
-    /** */
+    /** 
+     * Traverse the data set descriptor and return a flat set of feature set
+     * recipe ingredients.
+     * @return The set of all FeatureSetRecipeIngredient
+     */
     Set<FeatureSetRecipeIngredient> findAllIngredients() {
         Set<FeatureSetRecipeIngredient> ings = new HashSet<FeatureSetRecipeIngredient>()
         recipeSteps.each { findAllIngredients(ings, it) }
@@ -175,14 +184,24 @@ class DataSetDescriptor extends MarkdownRenderer implements DescribedEntity {
         ings
     }
 
-    /** */
+    /** 
+     * Traverse the data set descriptor starting at the provided feature set
+     * desctiptor and return a flat set of feature set recipe ingredients.
+     * @param fsd The feature set descriptor starting point
+     * @return A set of FeatureSetRecipeIngredient
+     */
     Set<FeatureSetRecipeIngredient> findAllIngredients(FeatureSetDescriptor fsd) {
         Set<FeatureSetRecipeIngredient> ings = new HashSet<FeatureSetRecipeIngredient>()
         findAllIngredients(fsd.recipe.finalStep)
         ings
     }
 
-    /** */
+    /** 
+     * Traverse the data set descriptor starting at the provided feature set
+     * desctiptor and add to a flat set of feature set recipe ingredients.
+     * @param fsd The feature set descriptor starting point
+     * @param ings A set of FeatureSetRecipeIngredient
+     */
     void findAllIngredients(Set<FeatureSetRecipeIngredient> ings, FeatureSetRecipeStep fs) {
         if (fs == null) return
         ings.addAll(fs.inputs)
@@ -219,16 +238,16 @@ class FeatureSetDescriptor extends MarkdownRenderer implements DescribedEntity {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** default indentiation level */
     int defaultLevel = 2
 
-    /** */
+    /** set of feature data types */
     Set<FeatureDataType> dataTypes = new HashSet<FeatureDataType>()
 
-    /** NAME_1, NAME_2, etc. */
+    /** feature set names: NAME_1, NAME_2, etc. */
     Set<String> featureSetNames = new HashSet<String>()
 
-    /** */
+    /** the feature set recipe */
     FeatureSetRecipe recipe
 
 
@@ -236,7 +255,12 @@ class FeatureSetDescriptor extends MarkdownRenderer implements DescribedEntity {
     // METHODS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Return this feature set descriptor as Markdown text.
+     * @see MarkdownRenderer#toMarkdown(Map)
+     * @param args Optional args passed to MarkdownRenderer.printer
+     * @return A Mardown representation of this object.
+     */
     String toMarkdown(Map args = [:]) { 
         def sp = printer(args)
 
@@ -268,7 +292,7 @@ class FeatureSetDescriptor extends MarkdownRenderer implements DescribedEntity {
 
 
 /**
- *
+ * A description of a recipe used to create a feature set.
  */
 @ToString(includeNames=true)
 @Slf4j
@@ -278,7 +302,11 @@ class FeatureSetRecipe extends MarkdownRenderer implements DescribedEntity {
     // STATIC METHODS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Create a feature set recipe.
+     * @args Optional args to pass to the FeatureSetRecipe map constructor.
+     * @return A FeatureSetRecipe object.
+     */
     static FeatureSetRecipe create(Map args = [:]) {
         new FeatureSetRecipe(args)
     }
@@ -288,10 +316,12 @@ class FeatureSetRecipe extends MarkdownRenderer implements DescribedEntity {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** The final step of this recipe */
     FeatureSetRecipeStep finalStep
 
-    /** */
+    /** 
+     * Default indent level for produced Markdown.
+     */
     int defaultLevel = 3
 
 
@@ -299,7 +329,7 @@ class FeatureSetRecipe extends MarkdownRenderer implements DescribedEntity {
     // METHODS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** @see MarkdownRenderer#toMarkdown(Map) */
     String toMarkdown(Map args = [:]) {
         def sp = printer(args)
 
@@ -310,7 +340,11 @@ class FeatureSetRecipe extends MarkdownRenderer implements DescribedEntity {
         sp.finalRender()
     }
 
-    /** */
+    /**
+     * Render the provided feature recipe step to the provided MarkdownPrinter.
+     * @param sp The MarkdownPrinter to use
+     * @param step The step to render
+     */
     void toMarkdownSteps(MarkdownPrinter sp, FeatureSetRecipeStep step) {
         log.trace "toMarkdownSteps $sp $step"
 
@@ -326,7 +360,7 @@ class FeatureSetRecipe extends MarkdownRenderer implements DescribedEntity {
 
 
 /**
- *
+ * A step in a feature set recipe.
  */
 @ToString(includeNames=true)
 @Slf4j
@@ -337,7 +371,11 @@ class FeatureSetRecipeStep extends MarkdownRenderer implements DescribedEntity {
     // STATIC METHODS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Create a feature set recipe step.
+     * @param args Args to pass to the FeatureSetRecipeStep map constructor.
+     * @return A FeatureSetRecipeStep object.
+     */
     static FeatureSetRecipeStep create(Map args = [:]) {
         new FeatureSetRecipeStep(args)
     }
@@ -346,16 +384,16 @@ class FeatureSetRecipeStep extends MarkdownRenderer implements DescribedEntity {
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** Default Markdown indentetion level */
     int defaultLevel = 4
 
-    /** */
+    /** the inputs of this step */
     Set<FeatureSetRecipeIngredient> inputs = new HashSet<FeatureSetRecipeIngredient>()
 
-    /** */
+    /** the outputs of this step */
     Set<FeatureSetRecipeIngredient> outputs = new HashSet<FeatureSetRecipeIngredient>()
 
-    /** */
+    /** the dependencies of this step */
     Set<FeatureSetRecipeStep> dependencies = new HashSet<FeatureSetRecipeStep>()
 
 
@@ -363,7 +401,7 @@ class FeatureSetRecipeStep extends MarkdownRenderer implements DescribedEntity {
     // METHODS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** @see MarkdownRenderer#toMarkdown(Map) */
     String toMarkdown(Map args = [:]) {
         log.trace "FeatureSetRecipeStep toMarkdown $name $args"
 
@@ -391,31 +429,55 @@ class FeatureSetRecipeStep extends MarkdownRenderer implements DescribedEntity {
         sp.finalRender()
     }
 
-    /** */
+    /** 
+     * Add a dependent step.
+     * @param priorStep The dependent step.
+     * @return The priorStep argument.
+     */
     FeatureSetRecipeStep dependsOn(FeatureSetRecipeStep priorStep) {
         this.dependencies << priorStep
         priorStep
     }
 
-    /** */
+    /** 
+     * Add an input ingredient to this step.
+     * @param ingredient The input ingredient
+     * @return This object
+     */
     FeatureSetRecipeStep input(FeatureSetRecipeIngredient ingredient) {
         this.inputs << ingredient
         this
     }
 
-    /** */
+    /** 
+     * Create a new feature set recipe ingredient using the optional args
+     * and add it as an input.
+     * @param args An optional map to sent to the FeatureSetRecipeIngredient 
+     * map constructor.
+     * @return This object
+     */
     FeatureSetRecipeStep input(Map args = [:]) {
         this.inputs << new FeatureSetRecipeIngredient(args)
         this
     }
 
-    /** */
+    /** 
+     * Add an output ingredient to this step.
+     * @param ingredient The output ingredient
+     * @return This object
+     */
     FeatureSetRecipeStep output(FeatureSetRecipeIngredient ingredient) {
         this.outputs << ingredient
         this
     }
 
-    /** */
+    /** 
+     * Create a new feature set recipe ingredient using the optional args
+     * and add it as an output.
+     * @param args An optional map to sent to the FeatureSetRecipeIngredient 
+     * map constructor.
+     * @return This object
+     */
     FeatureSetRecipeStep output(Map args = [:]) {
         this.outputs << new FeatureSetRecipeIngredient(args)
         this
@@ -426,7 +488,7 @@ class FeatureSetRecipeStep extends MarkdownRenderer implements DescribedEntity {
 
 
 /**
- *
+ * A feature set recipe ingredient.
  */
 @ToString(includeNames=true)
 @Slf4j
@@ -436,10 +498,10 @@ class FeatureSetRecipeIngredient extends MarkdownRenderer implements DescribedEn
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** default Markdown indentation level */
     int defaultLevel = 3
 
-    /** */
+    /** The step that produced this ingredient */
     FeatureSetRecipeStep outputOf
 
 
@@ -447,7 +509,7 @@ class FeatureSetRecipeIngredient extends MarkdownRenderer implements DescribedEn
     // METHODS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** @see MarkdownRenderer#toMarkdown(Map) */
     String toMarkdown(Map args = [:]) {
         def sp = printer(args)
         sp.printHeader(this, 'INGREDIENT')
@@ -456,52 +518,128 @@ class FeatureSetRecipeIngredient extends MarkdownRenderer implements DescribedEn
 }
 
 
-/** */
+/** 
+ * A convenience object to encapsulate string printing.
+ */
 @ToString(includeNames=true)
 class StringPrinter {
+    /** internal StringWriter */
     StringWriter sw = new StringWriter()
+
+    /** internal PrintWriter */
     PrintWriter pw = new PrintWriter(sw)
+
+    /**
+     * Render the text as a String and close this writer.
+     * @return The String.
+     */
     String finalRender() {
         def str = this.sw.toString()
         this.close()
         str
     }
+
+    /**
+     * Render the text as a String.
+     * @return The String.
+     */
     String render() {
         this.sw.toString()
     }
+
+    /**
+     * Close this writer and any internal writers.
+     */
     void close() {
         this.sw.close()
         this.pw.close()
     }
+
+    /**
+     * @see PrintWriter#print(String) 
+     */
     void print(String str) { pw.print(str) }
+
+    /**
+     * @see PrintWriter#println(String)
+     */
     void println(String str) { pw.println(str) }
+
+    /**
+     * @see PrintWriter#println()
+     */
     void println() { pw.println() }
 }
 
 
-/** */
+/** 
+ * An object to facilitate printing in Markdown format.
+ *
+ */
 @ToString(includeNames=true)
 class MarkdownPrinter extends StringPrinter {
+
+    /** header level */
     int level = 1
+
+    /**
+     * Set the header level.
+     * @param i The header level
+     */
     void setLevel(int i) { level = i }
+
+    /**
+     * Incremenet the header level by 1.
+     */
     void incrementLevel() { level++ }
+
+    /**
+     * Decrement the header level by 1.
+     */
     void decrementLevel() { level-- }
+
+    /**
+     * Return hashes per the current header level.
+     * @return A string of hashes
+     */
     String hashes() { 
         def buf = new StringBuffer()
         (1..level).each { buf.append('#') }
         buf.toString()
     }
+
+    /**
+     * Print the provided string as a header at the current header level.
+     * @param str The string
+     */
     void printHeader(String str) {
         println "${hashes()} $str"
     }
+
+    /**
+     * Return a Markdown with a header level +1 of this object.
+     * @return A MarkdownPrinter one header level down.
+     */
     MarkdownPrinter subPrinter() {
         new MarkdownPrinter(level:this.level+1)
     }
+
+    /**
+     * Create a sub-printer, pass it to the provided closure as a parameter,
+     * call the closure, then print the result to this object.
+     * @param cl Closure that accepts and prints to a MarkdownPrinter
+     */
     void printSub(Closure cl) {
         def mp = subPrinter()
         cl(mp)
         this.print(mp.finalRender())
     }
+
+    /**
+     * Print a header for the provided described entity with an optional tag.
+     * @param desc The DescribedEntity to print
+     * @param tag Optional string tag to include in printed text.
+     */
     void printHeader(DescribedEntity desc, String tag = null) {
         def str = tag ? "${tag}: " : ""
         str = "${str}${desc.name}"
@@ -512,33 +650,56 @@ class MarkdownPrinter extends StringPrinter {
 }
 
 
-/** */
+/** 
+ * Addes a randomly generated UUID.
+ */
 trait IdentifiedEntity {
+    /** randomly generated UUID stripped of dashes. */
     String eid = randomUUID().toString().replaceAll('-','')
 }
 
-/** */
+/**
+ * Adds a name property.
+ */
 trait NamedEntity extends IdentifiedEntity {
+
+    /** String name */
     String name
 }
 
-/** */
+/** 
+ * Adds a description property.
+ */
 trait DescribedEntity extends NamedEntity {
+
+    /** String description */
     String description
 }
 
 
-/** */
+/** 
+ * Abstract class to facilitate rendering an object as Markdown.
+ */
 abstract class MarkdownRenderer {
     
+    /**
+     * Return the object as Markdown text
+     * @return The Markdown text as a string
+     */
     abstract String toMarkdown()
     
+    /**
+     * Create a MarkdownPrinter.
+     * @param args.level Optional set the printer indentation level
+     * @return A MarkdownPrinter
+     */
     MarkdownPrinter printer(Map args = [:]) {
         Integer level = args.level
         if (level == null && this.hasProperty('defaultLevel')) level = this.defaultLevel
         if (level == null) level = 1
         new MarkdownPrinter(level:level)
     }
+
     /*void toMarkdownEntityTree(MarkdownPrinter sp, MarkdownRenderer entity, String propertyName) {
         log.trace "toMarkdownEntityTree $sp $entity $propertyName"
 
@@ -557,24 +718,52 @@ abstract class MarkdownRenderer {
  *
  */
 enum FeatureDataType {
+    /** a real number */
     NUMBER('a real number'), 
+
+    /** a rational number */
     RATIONAL('a rational number'), 
+
+    /** an integer */
     INTEGER('an integer'),
     
+    /** a non-negative number */
     NON_NEGATIVE('a non-negative number'),
+
+    /** a positive number */
     POSITIVE('a positive number'),
+
+    /** a negative number */
     NEGATIVE('a negative number'),
+
+    /** the magnitude of a number without regard to its sign*/
     ABSOLUTE_VALUE('the magnitude of a number without regard to its sign'),
+
+    /** represents a count of things */
     COUNT('represents a count of things'),
 
+    /** a Boolean true/false value */
     BOOLEAN('a Boolean true/false value'), 
+
+    /** a sequence of alphanumeric characters */
     STRING('a sequence of alphanumeric characters'),
+
+    /** a date at least as specific as the day of year, potentially without a time of day component */
     DATE('a date at least as specific as the day of year, potentially without a time of day component'),
+
+    /** a date with a time of day component */
     DATETIME('a date with a time of day component'),
+
+    /** a value whose meaning is defined in a dictionary */
     CODE('a value whose meaning is defined in a dictionary')
 
+    /** a description of the enum value */
     String description
 
+    /**
+     * Constructor that sets the description.
+     * @param description The description to use
+     */
     FeatureDataType(String description) {
         this.description = description
     }
@@ -582,13 +771,26 @@ enum FeatureDataType {
 
 
 
-/** */
+/** 
+ * A class that counts things.
+*/
 class EntityCounter {
+    /** map of counts of things */
     Map<String,Integer> counts = new HashMap<String,Integer>()
+    
+    /**
+     * Add to the count of things keyed by the provided string.
+     * @str The String key
+     */
     void count(String str) {
         if (!counts.containsKey(str)) counts.put(str, 0)
         counts.out(str, counts.get(str)+1)
     }
+
+    /** 
+     * Add to the count of things keyed by the provided enum.
+     * @en The Enum key
+     */
     void count(Enum en) { count(en.name()) }
 }
 

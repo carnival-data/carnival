@@ -14,6 +14,10 @@ import org.gradle.api.Project
  */
 class CarnivalApplicationPlugin implements Plugin<Project> {
 
+    /**
+     * Implementation of Plugin.apply(Project).
+     * @see <a href="https://docs.gradle.org/current/javadoc/org/gradle/api/Plugin.html">Plugin</a>
+     */
     void apply(Project project) {
         def pn = project.rootProject.name
         println "[CarnivalApplication] root project name: $pn"

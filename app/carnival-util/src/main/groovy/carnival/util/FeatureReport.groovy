@@ -103,6 +103,10 @@ class FeatureReport extends MappedDataTable {
             )
         }
 
+        /**
+         * Set the metadata using the provided settings.
+         * @param args Map of settings.
+         */
         protected void setMeta(Map args) {
             super.setMeta(args)
             if (args.containsKey('reportDescriptor')) this.meta.reportDescriptor = args.reportDescriptor
@@ -253,7 +257,11 @@ class FeatureReport extends MappedDataTable {
     // KEY SET
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Chage ordering of keys by moving one key before another.
+     * @param keyToMove The key to move
+     * @param objectKey The key to move keyToMove before
+     */
     public void moveKeyBefore(String keyToMove, String objectKey) {
         assert keyToMove != null
         assert objectKey != null
@@ -532,7 +540,13 @@ class FeatureReport extends MappedDataTable {
 
 
 
-
+    /**
+     * Try to parse the provided data useing the provided formats returning
+     * null of no parses were successful.
+     * @param dateFormats The data formats to try in order.
+     * @param dateStr The string to parse
+     * @return A map with the parsed data and formatter that was used or null
+     */
     @Memoized
     static tryParseDate(List<DateFormat> dateFormats, String dateStr) {
         def parsedDate
@@ -805,10 +819,7 @@ class FeatureReport extends MappedDataTable {
 
 
     /** 
-     * @param data Collection<Map> matrix of data
-     * @param subjectIdKey String data key for subjectId
-     * @param featureName String name of feature
-     * @param featureValueKeys String data keys for the feature values pertaining to the linked entity
+     * Extract compount multi-features from a provided map.
      *
      * Data example:
      *   EMPI   STAGE   DATE
@@ -831,6 +842,10 @@ class FeatureReport extends MappedDataTable {
      *   2      1                         5/1/2017
      *   3      4                         11/8/2016
      *
+     * @param data Collection<Map> matrix of data
+     * @param subjectIdKey String data key for subjectId
+     * @param featureName String name of feature
+     * @param featureValueKeys String data keys for the feature values pertaining to the linked entity
      */
     public void extractCompoundMultiFeatures(Map args) {
         // check mode
@@ -902,12 +917,7 @@ class FeatureReport extends MappedDataTable {
 
 
     /** 
-     * @param data Collection<Map> matrix of data
-     * @param subjectIdKey String data key for subjectId
-     * @param featureName String name of feature
-     * @param featureIdKey String data key for field that identifies the linked entity
-     * @param featureValueKey String data key for the feature value pertaining to the linked entity
-     * @param includeNum Boolean if true, add an _COUNT feature
+     * Extract multi-features from a provided map.
      *
      * Data example:
      *   EMPI   STAGE
@@ -930,6 +940,12 @@ class FeatureReport extends MappedDataTable {
      *   2      1                                       1
      *   3      4                                       1
      *
+     * @param data Collection<Map> matrix of data
+     * @param subjectIdKey String data key for subjectId
+     * @param featureName String name of feature
+     * @param featureIdKey String data key for field that identifies the linked entity
+     * @param featureValueKey String data key for the feature value pertaining to the linked entity
+     * @param includeNum Boolean if true, add an _COUNT feature
      */
     public void extractMultiFeatures(Map args) {
         // check mode

@@ -55,10 +55,19 @@ class GenericDataTable extends DataTable {
 
         public MetaData() { }
 
+        /**
+         * Construct MetaData using provided values.
+         * @param args Provided values.
+         */
         public MetaData(Map args) {
             setFields(args)
         }
 
+        /**
+         * Construct a MetaData based on values in the provided generic data
+         * table.
+         * @param mdt The generic data table
+         */
         public MetaData(GenericDataTable mdt) {
             assert mdt
             setFields (

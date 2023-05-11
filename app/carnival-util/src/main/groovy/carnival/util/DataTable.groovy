@@ -92,6 +92,10 @@ abstract class DataTable {
         /** The vine */
         Map vine
 
+        /**
+         * Set the fields of this object from the provided vals.
+         * @param args Map of provided values.
+         */
         protected void setFields(Map args) {
             assert args != null
 
@@ -798,8 +802,12 @@ abstract class DataTable {
     }
 
 
-    /**
+    /** 
+     * Load MappedDataTable meta-data from a file.
      *
+     * @param metaFile the meta-data file
+     *
+     * @return A map of meta-data.
      *
      */
     static protected Map loadMetaDataFromFile(File metaFile) {
@@ -825,7 +833,7 @@ abstract class DataTable {
      * 
      * @param dir The directory in which to look for the file.
      * @param name The name of the file.
-     * @param mdt The DataTable to populate with data.
+     * @param dataTable The DataTable to populate with data.
      *
      */
     static protected void loadDataFromFile(File dir, String name, DataTable dataTable) {
@@ -834,8 +842,12 @@ abstract class DataTable {
     }
 
 
-    /**
-     *
+    /** 
+     * Load data from a CSV file and write it to the provided DataTable
+     * instance.
+     * 
+     * @param dataFile The data file
+     * @param dataTable The DataTable to populate with data.
      *
      */
     static protected void loadDataFromFile(File dataFile, DataTable dataTable) {
@@ -863,13 +875,22 @@ abstract class DataTable {
     // METHODS - CASE SENSITIVE
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /** 
+     * Default arguments to handle string case sensitivity as per settings of
+     * this object.
+     * @return String handling args as a map.
+     */
     public Map stringHandlingArgs() {
         [caseSensitive:this.caseSensitive]
     }
 
 
-    /** */
+    /** 
+     * Convenience method to call fieldname(String, Map) using 
+     * stringHandlingArgs().
+     * @see stringHandlingArgs()
+     * @see fieldName(String, Map)
+     */
     String toFieldName(String val) {
         DataTable.fieldName(val, stringHandlingArgs())
     }
@@ -970,7 +991,9 @@ abstract class DataTable {
     }
 
 
-    /** */
+    /** 
+     * Set key order by order of insertion.
+     */
     public void setOrderKeysByInsertion() {
         def existingKeys = this.keySet
         this.keySet = new LinkedHashSet<String>()
@@ -1014,7 +1037,12 @@ abstract class DataTable {
     }
 
 
-    /** */
+    /** 
+     * Set key order by list of Boolean closure.  The closures will be passed to
+     * keys.findAll() in order.  Found keys will be moved to the front of the 
+     * ordering.
+     * @param booleanClosures List of boolean closures.
+     */
     public void setOrderedKeysBooleanCriteria(List<Closure> booleanClosures) {
         List<String> keys = this.keySet.toList()
         List<String> oks = new ArrayList<String>()
@@ -1027,7 +1055,9 @@ abstract class DataTable {
     }
 
 
-    /** */
+    /** 
+     * @see setOrderedKeysBooleanCriteria(List)
+     */
     public void setOrderedKeysBooleanCriteria(Closure... booleanClosures) {
         setOrderedKeysBooleanCriteria(booleanClosures.toList())
     }
@@ -1362,13 +1392,21 @@ abstract class DataTable {
      * file and Map.dataFile the data file.
      *
      */
-    
     public List<File> writeFiles(File destDir, Map args = [:]) {
         log.trace "DataTable.writeFiles: ${this.name} ${destDir?.canonicalPath}"
         writeDataTableFiles(destDir, args).toList()
     }
 
 
+    /**
+     * Write this DataTable to disk.  Two files are written, the .csv
+     * data file and the .yaml meta-data file.
+     *
+     * @param args - possible keys: [missingVal, nullVal]
+     *
+     * @return A DataTableFiles object encapsulating the written files.
+     *
+     */
     @WithReadLock
     public DataTableFiles writeDataTableFiles(File destDir, Map args = [:]) {
         assert destDir != null

@@ -7,13 +7,13 @@
   - [Statement of Need](#statement-need)
   - [Overview](#summary)
   - [Features](#features)
-- Carnival Library
-  - [Carnival API Development](#core-development)
-- Applications
+- How to Use Carnival
   - [Using the Carnival API](#using-carnival)
-  - [Groovy Scripts](#script-development)
-  - [Groovy Applications](#app-development)
-  - [Micronaut Applications](#micronaut-app-development)
+    - [Groovy Scripts](#script-development)
+    - [Groovy Applications](#app-development)
+    - [Micronaut Applications](#micronaut-app-development)
+- Developing and Extending Carnival
+  - [Carnival Development](#core-development)
 - Documentation
   - [Reference Documentation](#reference-docs)
   - [Application Programmer Interface (API)](#api)
@@ -264,20 +264,11 @@ class Reasoners implements GraphMethods {
 To learn more about graph methods, see [Graph Methods](graph-method.md).
 
 
-
-## <a name="core-development"></a>Carnival Development
-The following links contain instructions on how to code and publish the Carnival library itself.
-
-- [Developer Setup](developer-setup.md)
-- [Production Builds](production-builds.md)
-- [Building Documentation](documentation.md)
-- [Default Carnival Schemas](schema.md)
-
-## <a name="using-carnival"></a>Using Carnival
+## <a name="using-carnival"></a>How to Use Carnival
 Carnival is a library that can be used directly in scripts or included in a Gradle Groovy project.  Carnival has been developed and tested using [Groovy](https://groovy-lang.org) scripts and the [Micronaut](https://micronaut.io) application framework.
 
 
-## <a name="script-development"></a>Groovy Scripts
+### <a name="script-development"></a>Groovy Scripts
 The Carnival library can be included in Groovy scripts.  Example scripts can be found in [docs/groovy](groovy).  
 
 To run these scripts on the command line, first install [Groovy](https://groovy-lang.org) version 3.0.9.  [SDKMAN Software Development Kit Manager](https://sdkman.io) is a useful tool to install Groovy and other JVM tools.
@@ -295,7 +286,7 @@ groovy -Dgroovy.grape.report.downloads=true graph-model-1.groovy
 ```
 
 
-## <a name="app-development"></a>Groovy Gradle
+### <a name="app-development"></a>Groovy Applications
 The Carnival library can be included in Gradle Groovy applications and libraries.  
 
 The only requirement to use Carnival in a Groovy project is to include the required Carnival dependencies.  There is a [Carnival Gradle Plugin](https://plugins.gradle.org/plugin/io.github.carnival-data.carnival) that will add the dependencies.  See the [Github repository](https://github.com/carnival-data/carnival/tree/master/app/carnival-gradle) and the file [CarnivalLibraryPlugin.groovy](https://github.com/carnival-data/carnival/blob/master/app/carnival-gradle/src/main/groovy/carnival/gradle/CarnivalLibraryPlugin.groovy) for more information about the plugin.
@@ -336,7 +327,7 @@ dependencies {
 
 Follow these [step-by-step instructions](app-dev-gradle-groovy.md) to create a Groovy app that uses Carnival.
 
-## <a name="micronaut-app-development"></a>Micronaut Applications
+### <a name="micronaut-app-development"></a>Micronaut Applications
 The Carnival library can be included in Micronaut applications.  [carnival-demo-biomedical](https://github.com/carnival-data/carnival-demo-biomedical) provides an example of a working Micronaut application that uses Carnival.
 
 To create a new Micronaut application that uses Carnival:
@@ -346,7 +337,13 @@ To create a new Micronaut application that uses Carnival:
 
 The application is now ready to use the Carnival library.  See [carnival-demo-biomedical](https://github.com/carnival-data/carnival-demo-biomedical) for examples on how common Carnival functionality can fit into a Micronaut application.
 
+## <a name="core-development"></a>Carnival Development
+The following links contain instructions on how to code and publish the Carnival library itself.
 
+- [Developer Setup](developer-setup.md)
+- [Production Builds](production-builds.md)
+- [Building Documentation](documentation.md)
+- [Default Carnival Schemas](schema.md)
     
 ## <a name="reference-docs"></a>Reference Documentation
     

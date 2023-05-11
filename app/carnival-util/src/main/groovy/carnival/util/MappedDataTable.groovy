@@ -93,6 +93,10 @@ class MappedDataTable extends DataTable {
             )
         }
 
+        /**
+         * Set the fields of this object from the provided vals.
+         * @param args Map of provided values.
+         */
         protected void setFields(Map args) {
             super.setFields(args)
 
@@ -296,13 +300,22 @@ class MappedDataTable extends DataTable {
     // METHODS - CASE SENSITIVE METHODS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** */
+    /**
+     * Convert the provided value to an id value.
+     * @param val The string value
+     * @return The string value as an id value. 
+     */
     String toIdValue(String val) {
         DataTable.toIdValue(val, stringHandlingArgs())
     }
 
 
-    /** */
+    /** 
+     * Convenience method to call DataTable.findFieldName using the default
+     * string handling args.
+     * @see DataTable#findFieldName(String, Map, Map)
+     * @see DataTable#stringHandlingArgs()
+     */
     String findFieldName(String qFieldName, Map<String,String> vals) {
         DataTable.findFieldName(qFieldName, vals, stringHandlingArgs())
     }

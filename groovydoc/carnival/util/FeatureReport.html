@@ -390,19 +390,19 @@ extends <a href='../../carnival/util/MappedDataTable.html'>MappedDataTable</a></
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
-                            <td class="colLast"><code><strong><a href="#extractCompoundMultiFeatures(java.util.Map)">extractCompoundMultiFeatures</a></strong>(java.util.Map args)</code><br> <DL><DT><B>Parameters:</B></DT><DD><code>data</code> -  Collection<Map> matrix of data</DD></DL></td>
+                            <td class="colLast"><code><strong><a href="#extractCompoundMultiFeatures(java.util.Map)">extractCompoundMultiFeatures</a></strong>(java.util.Map args)</code><br>Extract compount multi-features from a provided map.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
-                            <td class="colLast"><code><strong><a href="#extractMultiFeatures(java.util.Map)">extractMultiFeatures</a></strong>(java.util.Map args)</code><br> <DL><DT><B>Parameters:</B></DT><DD><code>data</code> -  Collection<Map> matrix of data</DD></DL></td>
+                            <td class="colLast"><code><strong><a href="#extractMultiFeatures(java.util.Map)">extractMultiFeatures</a></strong>(java.util.Map args)</code><br>Extract multi-features from a provided map.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
-                            <td class="colLast"><code><strong><a href="#moveKeyBefore(java.lang.String, java.lang.String)">moveKeyBefore</a></strong>(java.lang.String keyToMove, java.lang.String objectKey)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#moveKeyBefore(java.lang.String, java.lang.String)">moveKeyBefore</a></strong>(java.lang.String keyToMove, java.lang.String objectKey)</code><br>Chage ordering of keys by moving one key before another.</td>
                         </tr>
                         
                         <tr class="rowColor">
@@ -462,7 +462,8 @@ extends <a href='../../carnival/util/MappedDataTable.html'>MappedDataTable</a></
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>static&nbsp;java.lang.Object</code></td>
-                            <td class="colLast"><code><strong><a href="#tryParseDate(List, java.lang.String)">tryParseDate</a></strong>(java.util.List&lt;DateFormat&gt; dateFormats, java.lang.String dateStr)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#tryParseDate(List, java.lang.String)">tryParseDate</a></strong>(java.util.List&lt;DateFormat&gt; dateFormats, java.lang.String dateStr)</code><br>Try to parse the provided data useing the provided formats returning
+ null of no parses were successful.</td>
                         </tr>
                         
                         <tr class="altColor">
@@ -829,8 +830,7 @@ void <strong>addSubject</strong>(java.lang.String subjectId, java.util.Map&lt;ja
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>void <strong>extractCompoundMultiFeatures</strong>(java.util.Map args)</h4>
-                                <p>
- <DL><DT><B>Parameters:</B></DT><DD><code>data</code> -  Collection<Map> matrix of data</DD><DD><code>subjectIdKey</code> -  String data key for subjectId</DD><DD><code>featureName</code> -  String name of feature</DD><DD><code>featureValueKeys</code> -  String data keys for the feature values pertaining to the linked entity
+                                <p> Extract compount multi-features from a provided map.
 
  Data example:
    EMPI   STAGE   DATE
@@ -851,7 +851,7 @@ void <strong>addSubject</strong>(java.lang.String subjectId, java.util.Map&lt;ja
    EMPI   CANCER_SEVERITY_1_STAGE   CANCER_SEVERITY_1_DATE   CANCER_SEVERITY_2_STAGE   CANCER_SEVERITY_2_DATE
    1      3a                        1/1/2019                 3                         2/1/2019
    2      1                         5/1/2017
-   3      4                         11/8/2016</DD></DL></p>
+   3      4                         11/8/2016 <DL><DT><B>Parameters:</B></DT><DD><code>data</code> -  Collection<Map> matrix of data</DD><DD><code>subjectIdKey</code> -  String data key for subjectId</DD><DD><code>featureName</code> -  String name of feature</DD><DD><code>featureValueKeys</code> -  String data keys for the feature values pertaining to the linked entity</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -859,8 +859,7 @@ void <strong>addSubject</strong>(java.lang.String subjectId, java.util.Map&lt;ja
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>void <strong>extractMultiFeatures</strong>(java.util.Map args)</h4>
-                                <p>
- <DL><DT><B>Parameters:</B></DT><DD><code>data</code> -  Collection<Map> matrix of data</DD><DD><code>subjectIdKey</code> -  String data key for subjectId</DD><DD><code>featureName</code> -  String name of feature</DD><DD><code>featureIdKey</code> -  String data key for field that identifies the linked entity</DD><DD><code>featureValueKey</code> -  String data key for the feature value pertaining to the linked entity</DD><DD><code>includeNum</code> -  Boolean if true, add an _COUNT feature
+                                <p> Extract multi-features from a provided map.
 
  Data example:
    EMPI   STAGE
@@ -881,7 +880,7 @@ void <strong>addSubject</strong>(java.lang.String subjectId, java.util.Map&lt;ja
    EMPI   CANCER_SEVERITY_1   CANCER_SEVERITY_2   CANCER_SEVERITY_COUNT
    1      3a                  3                   2
    2      1                                       1
-   3      4                                       1</DD></DL></p>
+   3      4                                       1 <DL><DT><B>Parameters:</B></DT><DD><code>data</code> -  Collection<Map> matrix of data</DD><DD><code>subjectIdKey</code> -  String data key for subjectId</DD><DD><code>featureName</code> -  String name of feature</DD><DD><code>featureIdKey</code> -  String data key for field that identifies the linked entity</DD><DD><code>featureValueKey</code> -  String data key for the feature value pertaining to the linked entity</DD><DD><code>includeNum</code> -  Boolean if true, add an _COUNT feature</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -889,7 +888,7 @@ void <strong>addSubject</strong>(java.lang.String subjectId, java.util.Map&lt;ja
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>void <strong>moveKeyBefore</strong>(java.lang.String keyToMove, java.lang.String objectKey)</h4>
-                                <p></p>
+                                <p> Chage ordering of keys by moving one key before another. <DL><DT><B>Parameters:</B></DT><DD><code>keyToMove</code> -  The key to move</DD><DD><code>objectKey</code> -  The key to move keyToMove before</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -1017,7 +1016,8 @@ static&nbsp;java.lang.String <strong>shiftDate</strong>(java.lang.String dateStr
                             <li class="blockList">
                                 <h4>@groovy.transform.Memoized
 static&nbsp;java.lang.Object <strong>tryParseDate</strong>(java.util.List&lt;DateFormat&gt; dateFormats, java.lang.String dateStr)</h4>
-                                <p></p>
+                                <p> Try to parse the provided data useing the provided formats returning
+ null of no parses were successful. <DL><DT><B>Parameters:</B></DT><DD><code>dateFormats</code> -  The data formats to try in order.</DD><DD><code>dateStr</code> -  The string to parse</DD></DL><DL><DT><B>Returns:</B></DT><DD>A map with the parsed data and formatter that was used or null</DD></DL></p>
                             </li>
                         </ul>
                     

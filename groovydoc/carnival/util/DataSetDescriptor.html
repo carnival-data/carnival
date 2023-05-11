@@ -243,19 +243,22 @@ implements carnival.util.DescribedEntity</pre>
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.Set&lt;carnival.util.FeatureSetRecipeIngredient&gt;</code></td>
-                            <td class="colLast"><code><strong><a href="#findAllIngredients()">findAllIngredients</a></strong>()</code><br></td>
+                            <td class="colLast"><code><strong><a href="#findAllIngredients()">findAllIngredients</a></strong>()</code><br>Traverse the data set descriptor and return a flat set of feature set
+ recipe ingredients.</td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.Set&lt;carnival.util.FeatureSetRecipeIngredient&gt;</code></td>
-                            <td class="colLast"><code><strong><a href="#findAllIngredients(carnival.util.FeatureSetDescriptor)">findAllIngredients</a></strong>(carnival.util.FeatureSetDescriptor fsd)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#findAllIngredients(carnival.util.FeatureSetDescriptor)">findAllIngredients</a></strong>(carnival.util.FeatureSetDescriptor fsd)</code><br>Traverse the data set descriptor starting at the provided feature set
+ desctiptor and return a flat set of feature set recipe ingredients.</td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
-                            <td class="colLast"><code><strong><a href="#findAllIngredients(Set, carnival.util.FeatureSetRecipeStep)">findAllIngredients</a></strong>(java.util.Set&lt;carnival.util.FeatureSetRecipeIngredient&gt; ings, carnival.util.FeatureSetRecipeStep fs)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#findAllIngredients(Set, carnival.util.FeatureSetRecipeStep)">findAllIngredients</a></strong>(java.util.Set&lt;carnival.util.FeatureSetRecipeIngredient&gt; ings, carnival.util.FeatureSetRecipeStep fs)</code><br>Traverse the data set descriptor starting at the provided feature set
+ desctiptor and add to a flat set of feature set recipe ingredients.</td>
                         </tr>
                         
                         <tr class="altColor">
@@ -275,7 +278,8 @@ implements carnival.util.DescribedEntity</pre>
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
-                            <td class="colLast"><code><strong><a href="#findAllSteps(Set, carnival.util.FeatureSetRecipeStep)">findAllSteps</a></strong>(java.util.Set&lt;carnival.util.FeatureSetRecipeStep&gt; steps, carnival.util.FeatureSetRecipeStep fs)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#findAllSteps(Set, carnival.util.FeatureSetRecipeStep)">findAllSteps</a></strong>(java.util.Set&lt;carnival.util.FeatureSetRecipeStep&gt; steps, carnival.util.FeatureSetRecipeStep fs)</code><br>Traverse the data set descriptor starting at the provided feature set
+ descriptor and add to a flat set of feature set recipe steps.</td>
                         </tr>
                         
                         <tr class="rowColor">
@@ -408,7 +412,8 @@ implements carnival.util.DescribedEntity</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.util.Set&lt;carnival.util.FeatureSetRecipeIngredient&gt; <strong>findAllIngredients</strong>()</h4>
-                                <p></p>
+                                <p> Traverse the data set descriptor and return a flat set of feature set
+ recipe ingredients. <DL><DT><B>Returns:</B></DT><DD>The set of all FeatureSetRecipeIngredient</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -416,7 +421,8 @@ implements carnival.util.DescribedEntity</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.util.Set&lt;carnival.util.FeatureSetRecipeIngredient&gt; <strong>findAllIngredients</strong>(carnival.util.FeatureSetDescriptor fsd)</h4>
-                                <p></p>
+                                <p> Traverse the data set descriptor starting at the provided feature set
+ desctiptor and return a flat set of feature set recipe ingredients. <DL><DT><B>Parameters:</B></DT><DD><code>fsd</code> -  The feature set descriptor starting point</DD></DL><DL><DT><B>Returns:</B></DT><DD>A set of FeatureSetRecipeIngredient</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -424,7 +430,8 @@ implements carnival.util.DescribedEntity</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>void <strong>findAllIngredients</strong>(java.util.Set&lt;carnival.util.FeatureSetRecipeIngredient&gt; ings, carnival.util.FeatureSetRecipeStep fs)</h4>
-                                <p></p>
+                                <p> Traverse the data set descriptor starting at the provided feature set
+ desctiptor and add to a flat set of feature set recipe ingredients. <DL><DT><B>Parameters:</B></DT><DD><code>fsd</code> -  The feature set descriptor starting point</DD><DD><code>ings</code> -  A set of FeatureSetRecipeIngredient</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -451,7 +458,8 @@ implements carnival.util.DescribedEntity</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>void <strong>findAllSteps</strong>(java.util.Set&lt;carnival.util.FeatureSetRecipeStep&gt; steps, carnival.util.FeatureSetRecipeStep fs)</h4>
-                                <p></p>
+                                <p> Traverse the data set descriptor starting at the provided feature set
+ descriptor and add to a flat set of feature set recipe steps. <DL><DT><B>Parameters:</B></DT><DD><code>fsd</code> -  The feature set descriptor from which to start searching</DD><DD><code>steps</code> -  A flat set of feature set recipe steps</DD></DL></p>
                             </li>
                         </ul>
                     

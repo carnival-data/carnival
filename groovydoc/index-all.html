@@ -218,7 +218,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="test/TestModel.VX.html#APPLICATION" title="Field in TestModel.VX">APPLICATION</a></span> - Field in <a href="test/TestModel.VX.html">TestModel.VX</a>
 </dt><dd> <div class="block">Application</div></dd>
 <dt><span class="strong"><a href="carnival/gradle/CarnivalApplicationPlugin.html#apply(org.gradle.api.Project)" title="Method in CarnivalApplicationPlugin">apply(org.gradle.api.Project)</a></span> - Method in <a href="carnival/gradle/CarnivalApplicationPlugin.html">CarnivalApplicationPlugin</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Implementation of Plugin.apply(Project).</div></dd>
 <dt><span class="strong"><a href="carnival/gradle/CarnivalLibraryPlugin.html#apply(org.gradle.api.Project)" title="Method in CarnivalLibraryPlugin">apply(org.gradle.api.Project)</a></span> - Method in <a href="carnival/gradle/CarnivalLibraryPlugin.html">CarnivalLibraryPlugin</a>
 </dt><dd> <div class="block">Apply a consistent set of Carnival dependencies to the Gradle project.</div></dd>
 <dt><span class="strong"><a href="carnival/util/DataTable.html#applyFilenameModifications(java.lang.String, java.util.Map)" title="Method in DataTable">applyFilenameModifications(java.lang.String, java.util.Map)</a></span> - Method in <a href="carnival/util/DataTable.html">DataTable</a>
@@ -295,7 +295,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/graph/Base.html#Base()" title="Constructor in Base">Base()</a></span> - Constructor in <a href="carnival/graph/Base.html">Base</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html#both(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__, carnival.graph.EdgeDefinition)" title="Method in TinkerpopAnonTraversalExtension">both(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__, carnival.graph.EdgeDefinition)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html">TinkerpopAnonTraversalExtension</a>
-</dt><dd> <div class="block"> <DL><DT><B>See Also:</B></DT><DD><a href='../../../carnival/graph/ext/TinkerpopTraversalExtension.html' title='TinkerpopTraversalExtension'>TinkerpopTraversalExtension</a></DD></DL></div></dd>
+</dt><dd> <div class="block"> <DL><DT><B>See Also:</B></DT><DD><a href='../../../carnival/graph/ext/TinkerpopTraversalExtension.html#both(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefinition)' title='TinkerpopTraversalExtension.both'>TinkerpopTraversalExtension.both</a></DD></DL></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#both(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefinition)" title="Method in TinkerpopTraversalExtension">both(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefinition)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
 </dt><dd> <div class="block">Extension of the Both step that traverses edges matching the given edge
  definition.</div></dd>
@@ -312,8 +312,6 @@ if (location.href.indexOf('is-external=true') == -1) {
 <h2 class="title">C</h2>
 <dl>
 
-<dt><span class="strong"><a href="carnival/util/FieldName.html#cache" title="Property in FieldName">cache</a></span> - Property in <a href="carnival/util/FieldName.html">FieldName</a>
-</dt><dd> <div class="block">do not use</div></dd>
 <dt><span class="strong"><a href="carnival/vine/VineConfiguration.html#CACHE_PATH_DEFAULT" title="Property in VineConfiguration">CACHE_PATH_DEFAULT</a></span> - Property in <a href="carnival/vine/VineConfiguration.html">VineConfiguration</a>
 </dt><dd> <div class="block">the default cache directory path</div></dd>
 <dt><span class="strong"><a href="carnival/vine/VineConfiguration.html#cache" title="Property in VineConfiguration">cache</a></span> - Property in <a href="carnival/vine/VineConfiguration.html">VineConfiguration</a>
@@ -538,7 +536,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/core/graph/EdgeConstraint.html#create(carnival.graph.EdgeDefinition)" title="Method in EdgeConstraint">create(carnival.graph.EdgeDefinition)</a></span> - Method in <a href="carnival/core/graph/EdgeConstraint.html">EdgeConstraint</a>
 </dt><dd> <div class="block">Create an edge constraint from an edge definition.</div></dd>
 <dt><span class="strong"><a href="carnival/util/FieldName.html#create(java.lang.String)" title="Method in FieldName">create(java.lang.String)</a></span> - Method in <a href="carnival/util/FieldName.html">FieldName</a>
-</dt><dd> <div class="block">do not use</div></dd>
+</dt><dd> <div class="block">Create a FieldName object using the provided value.</div></dd>
 <dt><span class="strong"><a href="carnival/util/IterativeCsvWriter.html#create(java.lang.String)" title="Method in IterativeCsvWriter">create(java.lang.String)</a></span> - Method in <a href="carnival/util/IterativeCsvWriter.html">IterativeCsvWriter</a>
 </dt><dd> <div class="block">Factory: Create an IterativeCsvWriter for a file in the current
  directory with the given file name.</div></dd>
@@ -916,9 +914,9 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">Sets a boolean feature to true if a value with the given feature name is 
  present in the data for a particular subject.</div></dd>
 <dt><span class="strong"><a href="carnival/util/FeatureReport.html#extractCompoundMultiFeatures(java.util.Map)" title="Method in FeatureReport">extractCompoundMultiFeatures(java.util.Map)</a></span> - Method in <a href="carnival/util/FeatureReport.html">FeatureReport</a>
-</dt><dd> <div class="block"> <DL><DT><B>Parameters:</B></DT><DD><code>data</code> -  Collection<Map> matrix of data</DD></DL></div></dd>
+</dt><dd> <div class="block">Extract compount multi-features from a provided map.</div></dd>
 <dt><span class="strong"><a href="carnival/util/FeatureReport.html#extractMultiFeatures(java.util.Map)" title="Method in FeatureReport">extractMultiFeatures(java.util.Map)</a></span> - Method in <a href="carnival/util/FeatureReport.html">FeatureReport</a>
-</dt><dd> <div class="block"> <DL><DT><B>Parameters:</B></DT><DD><code>data</code> -  Collection<Map> matrix of data</DD></DL></div></dd>
+</dt><dd> <div class="block">Extract multi-features from a provided map.</div></dd>
 </dl>
 
     
@@ -1004,11 +1002,13 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">Return a filtered set of element constraints that prioritizes global
  constraints.</div></dd>
 <dt><span class="strong"><a href="carnival/util/DataSetDescriptor.html#findAllIngredients(Set<FeatureSetRecipeIngredient>, carnival.util.FeatureSetRecipeStep)" title="Method in DataSetDescriptor">findAllIngredients(Set&lt;FeatureSetRecipeIngredient&gt;, carnival.util.FeatureSetRecipeStep)</a></span> - Method in <a href="carnival/util/DataSetDescriptor.html">DataSetDescriptor</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Traverse the data set descriptor starting at the provided feature set
+ desctiptor and add to a flat set of feature set recipe ingredients.</div></dd>
 <dt><span class="strong"><a href="carnival/util/MethodsHolder.html#findAllMethodClasses(java.lang.Class, java.lang.String)" title="Method in MethodsHolder">findAllMethodClasses(java.lang.Class, java.lang.String)</a></span> - Method in <a href="carnival/util/MethodsHolder.html">MethodsHolder</a>
 </dt><dd> <div class="block">Find all method classes by case insensitive matching of the name.</div></dd>
 <dt><span class="strong"><a href="carnival/util/DataSetDescriptor.html#findAllSteps(Set<FeatureSetRecipeStep>, carnival.util.FeatureSetRecipeStep)" title="Method in DataSetDescriptor">findAllSteps(Set&lt;FeatureSetRecipeStep&gt;, carnival.util.FeatureSetRecipeStep)</a></span> - Method in <a href="carnival/util/DataSetDescriptor.html">DataSetDescriptor</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Traverse the data set descriptor starting at the provided feature set
+ descriptor and add to a flat set of feature set recipe steps.</div></dd>
 <dt><span class="strong"><a href="carnival/vine/JsonVineMethod.html#findCacheFile()" title="Method in JsonVineMethod">findCacheFile()</a></span> - Method in <a href="carnival/vine/JsonVineMethod.html">JsonVineMethod</a>
 </dt><dd> <div class="block">Find the cache file inside the cache directory of this vine method</div></dd>
 <dt><span class="strong"><a href="carnival/vine/DataTableVineMethod.html#findCacheFiles()" title="Method in DataTableVineMethod">findCacheFiles()</a></span> - Method in <a href="carnival/vine/DataTableVineMethod.html">DataTableVineMethod</a>
@@ -1025,7 +1025,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">Get the value of the given set that corresponds to the field name of this
  DataTable.</div></dd>
 <dt><span class="strong"><a href="carnival/util/MappedDataTable.html#findFieldName(java.lang.String, Map<String, String>)" title="Method in MappedDataTable">findFieldName(java.lang.String, Map&lt;String, String&gt;)</a></span> - Method in <a href="carnival/util/MappedDataTable.html">MappedDataTable</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Convenience method to call DataTable.findFieldName using the default
+ string handling args.</div></dd>
 <dt><span class="strong"><a href="carnival/vine/JsonVineMethodCall.html#findFile(java.io.File, java.lang.Class, java.util.Map)" title="Method in JsonVineMethodCall">findFile(java.io.File, java.lang.Class, java.util.Map)</a></span> - Method in <a href="carnival/vine/JsonVineMethodCall.html">JsonVineMethodCall</a>
 </dt><dd> <div class="block">Find the file in a directory for the given vine method class and args
  returning null if not found.</div></dd>
@@ -1099,7 +1100,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/graph/EdgeDefinition.html#getDomainLabels()" title="Method in EdgeDefinition">getDomainLabels()</a></span> - Method in <a href="carnival/graph/EdgeDefinition.html">EdgeDefinition</a>
 </dt><dd> <div class="block">Return the list of labels of the domain vertex definitions.</div></dd>
 <dt><span class="strong"><a href="carnival/core/graph/DefaultGraphSchema.html#getEdgeConstraints()" title="Method in DefaultGraphSchema">getEdgeConstraints()</a></span> - Method in <a href="carnival/core/graph/DefaultGraphSchema.html">DefaultGraphSchema</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Get edge constraints</div></dd>
 <dt><span class="strong"><a href="carnival/core/graph/GraphSchema.html#getEdgeConstraints()" title="Method in GraphSchema">getEdgeConstraints()</a></span> - Method in <a href="carnival/core/graph/GraphSchema.html">GraphSchema</a>
 </dt><dd> <div class="block">Return the constraints on edges.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/EdgeDefinition.html#getEdgeProperties()" title="Method in EdgeDefinition">getEdgeProperties()</a></span> - Method in <a href="carnival/graph/EdgeDefinition.html">EdgeDefinition</a>
@@ -1112,7 +1113,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">Return a string representation of the element definition class of this 
  element definition.</div></dd>
 <dt><span class="strong"><a href="carnival/util/FieldName.html#getFieldName()" title="Method in FieldName">getFieldName()</a></span> - Method in <a href="carnival/util/FieldName.html">FieldName</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Get this object.</div></dd>
 <dt><span class="strong"><a href="carnival/util/FieldNameExtensions.html#getFieldName(java.lang.String)" title="Method in FieldNameExtensions">getFieldName(java.lang.String)</a></span> - Method in <a href="carnival/util/FieldNameExtensions.html">FieldNameExtensions</a>
 </dt><dd> <div class="block">Return a field name based on the provided string.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/ElementDefinition.html#getGlobal()" title="Method in ElementDefinition">getGlobal()</a></span> - Method in <a href="carnival/graph/ElementDefinition.html">ElementDefinition</a>
@@ -1310,7 +1311,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/core/Core.PX.html#HAS_SCOPE" title="Field in Core.PX">HAS_SCOPE</a></span> - Field in <a href="carnival/core/Core.PX.html">Core.PX</a>
 </dt><dd> <div class="block">Has scope</div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html#has(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__, carnival.graph.PropertyDefinition, java.lang.Object)" title="Method in TinkerpopAnonTraversalExtension">has(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__, carnival.graph.PropertyDefinition, java.lang.Object)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html">TinkerpopAnonTraversalExtension</a>
-</dt><dd> <div class="block"> <DL><DT><B>See Also:</B></DT><DD><a href='../../../carnival/graph/ext/TinkerpopTraversalExtension.html' title='TinkerpopTraversalExtension'>TinkerpopTraversalExtension</a></DD></DL></div></dd>
+</dt><dd> <div class="block"> <DL><DT><B>See Also:</B></DT><DD><a href='../../../carnival/graph/ext/TinkerpopTraversalExtension.html#has(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefinition, java.lang.Object)' title='TinkerpopTraversalExtension.has'>TinkerpopTraversalExtension.has</a></DD></DL></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#has(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefinition, java.lang.Object)" title="Method in TinkerpopTraversalExtension">has(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.PropertyDefinition, java.lang.Object)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
 </dt><dd> <div class="block">Extension of the Has step that accepts a property definition and a 
  value.</div></dd>
@@ -1372,7 +1373,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/core/Carnival.html#ignoreDuplicateModels" title="Property in Carnival">ignoreDuplicateModels</a></span> - Property in <a href="carnival/core/Carnival.html">Carnival</a>
 </dt><dd> <div class="block">If true, if duplicate models are added, ignore the duplicates.  </div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html#in(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__, carnival.graph.EdgeDefinition)" title="Method in TinkerpopAnonTraversalExtension">in(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__, carnival.graph.EdgeDefinition)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html">TinkerpopAnonTraversalExtension</a>
-</dt><dd> <div class="block"> <DL><DT><B>See Also:</B></DT><DD><a href='../../../carnival/graph/ext/TinkerpopTraversalExtension.html' title='TinkerpopTraversalExtension'>TinkerpopTraversalExtension</a></DD></DL></div></dd>
+</dt><dd> <div class="block"> <DL><DT><B>See Also:</B></DT><DD><a href='../../../carnival/graph/ext/TinkerpopTraversalExtension.html#in(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefinition)' title='TinkerpopTraversalExtension.in'>TinkerpopTraversalExtension.in</a></DD></DL></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#in(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefinition)" title="Method in TinkerpopTraversalExtension">in(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefinition)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
 </dt><dd> <div class="block">Extension of the In step that traverses edges matching the given edge
  definition.</div></dd>
@@ -1448,7 +1449,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">Implementation of isa(Vertex) that will always return false since this
  object defines edges, not vertices.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html#isa(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__, carnival.graph.EdgeDefinition)" title="Method in TinkerpopAnonTraversalExtension">isa(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__, carnival.graph.EdgeDefinition)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html">TinkerpopAnonTraversalExtension</a>
-</dt><dd> <div class="block"> <DL><DT><B>See Also:</B></DT><DD><a href='../../../carnival/graph/ext/TinkerpopTraversalExtension.html' title='TinkerpopTraversalExtension'>TinkerpopTraversalExtension</a></DD></DL></div></dd>
+</dt><dd> <div class="block"> <DL><DT><B>See Also:</B></DT><DD><a href='../../../carnival/graph/ext/TinkerpopTraversalExtension.html#isa(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefinition)' title='TinkerpopTraversalExtension.isa'>TinkerpopTraversalExtension.isa</a></DD></DL></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#isa(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefinition)" title="Method in TinkerpopTraversalExtension">isa(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefinition)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
 </dt><dd> <div class="block">Filters the elements in the traversal to include only those that match
  the given edge definition.</div></dd>
@@ -1551,7 +1552,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">Load a described entity from a vertex, target class, and graph traversal
  source.</div></dd>
 <dt><span class="strong"><a href="carnival/util/DataTable.html#loadDataFromFile(java.io.File, carnival.util.DataTable)" title="Method in DataTable">loadDataFromFile(java.io.File, carnival.util.DataTable)</a></span> - Method in <a href="carnival/util/DataTable.html">DataTable</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Load data from a CSV file and write it to the provided DataTable
+ instance.</div></dd>
 <dt><span class="strong"><a href="carnival/core/graph/DataSetDescriptorGraph.html#loadFeatureSetDescriptor(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, org.apache.tinkerpop.gremlin.structure.Vertex)" title="Method in DataSetDescriptorGraph">loadFeatureSetDescriptor(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, org.apache.tinkerpop.gremlin.structure.Vertex)</a></span> - Method in <a href="carnival/core/graph/DataSetDescriptorGraph.html">DataSetDescriptorGraph</a>
 </dt><dd> <div class="block">Load a feature set descriptor from a vertex and a graph traversal 
  source.</div></dd>
@@ -1563,7 +1565,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/core/graph/DataSetDescriptorGraph.html#loadFeatureSetRecipeStep(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, org.apache.tinkerpop.gremlin.structure.Vertex)" title="Method in DataSetDescriptorGraph">loadFeatureSetRecipeStep(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, org.apache.tinkerpop.gremlin.structure.Vertex)</a></span> - Method in <a href="carnival/core/graph/DataSetDescriptorGraph.html">DataSetDescriptorGraph</a>
 </dt><dd> <div class="block">Load a feature set recipe from a vertex and a graph traversal source.</div></dd>
 <dt><span class="strong"><a href="carnival/util/DataTable.html#loadMetaDataFromFile(java.io.File)" title="Method in DataTable">loadMetaDataFromFile(java.io.File)</a></span> - Method in <a href="carnival/util/DataTable.html">DataTable</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Load MappedDataTable meta-data from a file.</div></dd>
 <dt><span class="strong"><a href="carnival/util/DataTable.html#loadMetaFileData(java.io.File)" title="Method in DataTable">loadMetaFileData(java.io.File)</a></span> - Method in <a href="carnival/util/DataTable.html">DataTable</a>
 </dt><dd> <div class="block">Load a meta file and return it as a map.</div></dd>
 <dt><span class="strong"><a href="carnival/util/Log.html" title="Class in carnival.util">Log</a></span> - Class in <a href="./carnival/util/package-summary.html">carnival.util</a>
@@ -1686,7 +1688,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/util/FeatureReport.MetaData.html#MetaData(carnival.util.FeatureReport)" title="Constructor in FeatureReport.MetaData">MetaData(carnival.util.FeatureReport)</a></span> - Constructor in <a href="carnival/util/FeatureReport.MetaData.html">FeatureReport.MetaData</a>
 </dt><dd> <div class="block">Construct a MetaData from a feature report.</div></dd>
 <dt><span class="strong"><a href="carnival/util/GenericDataTable.MetaData.html#MetaData(carnival.util.GenericDataTable)" title="Constructor in GenericDataTable.MetaData">MetaData(carnival.util.GenericDataTable)</a></span> - Constructor in <a href="carnival/util/GenericDataTable.MetaData.html">GenericDataTable.MetaData</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Construct a MetaData based on values in the provided generic data
+ table.</div></dd>
 <dt><span class="strong"><a href="carnival/util/MappedDataTable.MetaData.html#MetaData(carnival.util.MappedDataTable)" title="Constructor in MappedDataTable.MetaData">MetaData(carnival.util.MappedDataTable)</a></span> - Constructor in <a href="carnival/util/MappedDataTable.MetaData.html">MappedDataTable.MetaData</a>
 </dt><dd> <div class="block">Constructor from a mapped data table.</div></dd>
 <dt><span class="strong"><a href="carnival/util/TabularReport.MetaData.html#MetaData(carnival.util.TabularReport)" title="Constructor in TabularReport.MetaData">MetaData(carnival.util.TabularReport)</a></span> - Constructor in <a href="carnival/util/TabularReport.MetaData.html">TabularReport.MetaData</a>
@@ -1757,7 +1760,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/graph/ModelTransformation.html#ModelTransformation()" title="Constructor in ModelTransformation">ModelTransformation()</a></span> - Constructor in <a href="carnival/graph/ModelTransformation.html">ModelTransformation</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="carnival/util/FeatureReport.html#moveKeyBefore(java.lang.String, java.lang.String)" title="Method in FeatureReport">moveKeyBefore(java.lang.String, java.lang.String)</a></span> - Method in <a href="carnival/util/FeatureReport.html">FeatureReport</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Chage ordering of keys by moving one key before another.</div></dd>
 <dt><span class="strong"><a href="carnival/util/FeatureReport.html#multiFeatureName(java.lang.String, int)" title="Method in FeatureReport">multiFeatureName(java.lang.String, int)</a></span> - Method in <a href="carnival/util/FeatureReport.html">FeatureReport</a>
 </dt><dd> <div class="block">Given an integer and a feature name, return a String like:
    SOME_NAME_1.</div></dd>
@@ -1870,7 +1873,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/vine/CacheMode.html#OPTIONAL" title="Field in CacheMode">OPTIONAL</a></span> - Field in <a href="carnival/vine/CacheMode.html">CacheMode</a>
 </dt><dd> <div class="block">If a cache file exists, it will be used. </div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html#out(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__, carnival.graph.EdgeDefinition)" title="Method in TinkerpopAnonTraversalExtension">out(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__, carnival.graph.EdgeDefinition)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopAnonTraversalExtension.html">TinkerpopAnonTraversalExtension</a>
-</dt><dd> <div class="block"> <DL><DT><B>See Also:</B></DT><DD><a href='../../../carnival/graph/ext/TinkerpopTraversalExtension.html' title='TinkerpopTraversalExtension'>TinkerpopTraversalExtension</a></DD></DL></div></dd>
+</dt><dd> <div class="block"> <DL><DT><B>See Also:</B></DT><DD><a href='../../../carnival/graph/ext/TinkerpopTraversalExtension.html#out(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefinition)' title='TinkerpopTraversalExtension.out'>TinkerpopTraversalExtension.out</a></DD></DL></div></dd>
 <dt><span class="strong"><a href="carnival/graph/ext/TinkerpopTraversalExtension.html#out(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefinition)" title="Method in TinkerpopTraversalExtension">out(org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal, carnival.graph.EdgeDefinition)</a></span> - Method in <a href="carnival/graph/ext/TinkerpopTraversalExtension.html">TinkerpopTraversalExtension</a>
 </dt><dd> <div class="block">Extension of the Out step that traverses edges matching the given edge
  definition.</div></dd>
@@ -2126,11 +2129,11 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">Set the properties of the provided graph element to the property values 
  held by this object.</div></dd>
 <dt><span class="strong"><a href="carnival/util/DataTable.MetaData.html#setFields(java.util.Map)" title="Method in DataTable.MetaData">setFields(java.util.Map)</a></span> - Method in <a href="carnival/util/DataTable.MetaData.html">DataTable.MetaData</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Set the fields of this object from the provided vals.</div></dd>
 <dt><span class="strong"><a href="carnival/util/MappedDataTable.MetaData.html#setFields(java.util.Map)" title="Method in MappedDataTable.MetaData">setFields(java.util.Map)</a></span> - Method in <a href="carnival/util/MappedDataTable.MetaData.html">MappedDataTable.MetaData</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Set the fields of this object from the provided vals.</div></dd>
 <dt><span class="strong"><a href="carnival/util/TabularReport.MetaData.html#setFields(java.util.Map)" title="Method in TabularReport.MetaData">setFields(java.util.Map)</a></span> - Method in <a href="carnival/util/TabularReport.MetaData.html">TabularReport.MetaData</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Set the fields of this object from the provided vals.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/ElementDefinition.html#setGlobal(boolean)" title="Method in ElementDefinition">setGlobal(boolean)</a></span> - Method in <a href="carnival/graph/ElementDefinition.html">ElementDefinition</a>
 </dt><dd> <div class="block">Setter for the global property.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/PropertyDefinition.html#setIf(org.apache.tinkerpop.gremlin.structure.Element, groovy.lang.Closure)" title="Method in PropertyDefinition">setIf(org.apache.tinkerpop.gremlin.structure.Element, groovy.lang.Closure)</a></span> - Method in <a href="carnival/graph/PropertyDefinition.html">PropertyDefinition</a>
@@ -2143,7 +2146,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">Set the comparator for keySet to an OrderBy comprised of the given
  list of closures.  </div></dd>
 <dt><span class="strong"><a href="carnival/util/FeatureReport.MetaData.html#setMeta(java.util.Map)" title="Method in FeatureReport.MetaData">setMeta(java.util.Map)</a></span> - Method in <a href="carnival/util/FeatureReport.MetaData.html">FeatureReport.MetaData</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Set the metadata using the provided settings.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/DynamicVertexDef.html#setNameSpace(java.lang.String)" title="Method in DynamicVertexDef">setNameSpace(java.lang.String)</a></span> - Method in <a href="carnival/graph/DynamicVertexDef.html">DynamicVertexDef</a>
 </dt><dd> <div class="block">Set the name space of this definition to the provided value, which will
  be used in getNameSpace() rather than the calculated value.</div></dd>
@@ -2152,14 +2155,14 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/util/DataTable.html#setOrderedKeysAlphabetical()" title="Method in DataTable">setOrderedKeysAlphabetical()</a></span> - Method in <a href="carnival/util/DataTable.html">DataTable</a>
 </dt><dd> <div class="block">Convenience method to order keys by alphabetical order.</div></dd>
 <dt><span class="strong"><a href="carnival/util/DataTable.html#setOrderedKeysBooleanCriteria(groovy.lang.Closure)" title="Method in DataTable">setOrderedKeysBooleanCriteria(groovy.lang.Closure)</a></span> - Method in <a href="carnival/util/DataTable.html">DataTable</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block"> <DL><DT><B>See Also:</B></DT><DD>setOrderedKeysBooleanCriteria(java.util.List)</DD></DL></div></dd>
 <dt><span class="strong"><a href="carnival/util/MappedDataTable.html#setOrderedKeysMappedDataTableDefault()" title="Method in MappedDataTable">setOrderedKeysMappedDataTableDefault()</a></span> - Method in <a href="carnival/util/MappedDataTable.html">MappedDataTable</a>
 </dt><dd> <div class="block">Retore the key (field) ordering to the default, which orders keys:
    id field
    secondary id fields
    all other fields</div></dd>
 <dt><span class="strong"><a href="carnival/util/DataTable.html#setOrderKeysByInsertion()" title="Method in DataTable">setOrderKeysByInsertion()</a></span> - Method in <a href="carnival/util/DataTable.html">DataTable</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Set key order by order of insertion.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/EdgeDefinition.html#setRelationship(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, org.apache.tinkerpop.gremlin.structure.Vertex, org.apache.tinkerpop.gremlin.structure.Vertex)" title="Method in EdgeDefinition">setRelationship(org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource, org.apache.tinkerpop.gremlin.structure.Vertex, org.apache.tinkerpop.gremlin.structure.Vertex)</a></span> - Method in <a href="carnival/graph/EdgeDefinition.html">EdgeDefinition</a>
 </dt><dd> <div class="block">Create an edge between the from and to vertices if the edge is not
  already present.</div></dd>
@@ -2222,7 +2225,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/core/Core.PX.html#STOP_TIME" title="Field in Core.PX">STOP_TIME</a></span> - Field in <a href="carnival/core/Core.PX.html">Core.PX</a>
 </dt><dd> <div class="block">Stop time</div></dd>
 <dt><span class="strong"><a href="carnival/util/DataTable.html#stringHandlingArgs()" title="Method in DataTable">stringHandlingArgs()</a></span> - Method in <a href="carnival/util/DataTable.html">DataTable</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Default arguments to handle string case sensitivity as per settings of
+ this object.</div></dd>
 <dt><span class="strong"><a href="carnival/util/StringUtils.html" title="Class in carnival.util">StringUtils</a></span> - Class in <a href="./carnival/util/package-summary.html">carnival.util</a>
 </dt><dd><div class="block">Static utility methods for sting manipulation.</div></dd>
 <dt><span class="strong"><a href="carnival/util/StringUtils.html#StringUtils()" title="Constructor in StringUtils">StringUtils()</a></span> - Constructor in <a href="carnival/util/StringUtils.html">StringUtils</a>
@@ -2302,12 +2306,13 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">Return a String representation of v suitable to be added to the
  data as a value.</div></dd>
 <dt><span class="strong"><a href="carnival/util/DataTable.html#toFieldName(java.lang.String)" title="Method in DataTable">toFieldName(java.lang.String)</a></span> - Method in <a href="carnival/util/DataTable.html">DataTable</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Convenience method to call fieldname(String, Map) using 
+ stringHandlingArgs().</div></dd>
 <dt><span class="strong"><a href="carnival/util/DataTable.html#toIdValue(java.math.BigDecimal, java.util.Map)" title="Method in DataTable">toIdValue(java.math.BigDecimal, java.util.Map)</a></span> - Method in <a href="carnival/util/DataTable.html">DataTable</a>
 </dt><dd> <div class="block">Convenience method to convert a BigDecimal to an id value by first
  converting it to a String and then passing it to toIdValue(String)</div></dd>
 <dt><span class="strong"><a href="carnival/util/MappedDataTable.html#toIdValue(java.lang.String)" title="Method in MappedDataTable">toIdValue(java.lang.String)</a></span> - Method in <a href="carnival/util/MappedDataTable.html">MappedDataTable</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Convert the provided value to an id value.</div></dd>
 <dt><span class="strong"><a href="carnival/vine/JsonVineMethodCall.html#toJson()" title="Method in JsonVineMethodCall">toJson()</a></span> - Method in <a href="carnival/vine/JsonVineMethodCall.html">JsonVineMethodCall</a>
 </dt><dd> <div class="block">Return this object as a JSON string.</div></dd>
 <dt><span class="strong"><a href="carnival/util/StringUtils.html#toKebabCase(java.lang.String)" title="Method in StringUtils">toKebabCase(java.lang.String)</a></span> - Method in <a href="carnival/util/StringUtils.html">StringUtils</a>
@@ -2331,11 +2336,11 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/graph/EdgeBuilder.html#toString()" title="Method in EdgeBuilder">toString()</a></span> - Method in <a href="carnival/graph/EdgeBuilder.html">EdgeBuilder</a>
 </dt><dd> <div class="block">Convenience string representation of this object.</div></dd>
 <dt><span class="strong"><a href="carnival/util/FieldName.html#toString()" title="Method in FieldName">toString()</a></span> - Method in <a href="carnival/util/FieldName.html">FieldName</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Return a string representation of this object.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/PropertyDefinition.html#toString()" title="Method in PropertyDefinition">toString()</a></span> - Method in <a href="carnival/graph/PropertyDefinition.html">PropertyDefinition</a>
 </dt><dd> <div class="block">Returns a string representation of this object</div></dd>
 <dt><span class="strong"><a href="carnival/graph/VertexBuilder.html#toString()" title="Method in VertexBuilder">toString()</a></span> - Method in <a href="carnival/graph/VertexBuilder.html">VertexBuilder</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Render this object as a String.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/VertexDefinition.html#toString()" title="Method in VertexDefinition">toString()</a></span> - Method in <a href="carnival/graph/VertexDefinition.html">VertexDefinition</a>
 </dt><dd> <div class="block">Return a string representation of this object.</div></dd>
 <dt><span class="strong"><a href="carnival/graph/EdgeBuilder.html#toVertex" title="Property in EdgeBuilder">toVertex</a></span> - Property in <a href="carnival/graph/EdgeBuilder.html">EdgeBuilder</a>
@@ -2355,7 +2360,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/util/MappedDataTable.html#trimRows()" title="Method in MappedDataTable">trimRows()</a></span> - Method in <a href="carnival/util/MappedDataTable.html">MappedDataTable</a>
 </dt><dd> <div class="block">Remove rows that have no data associated with them besides the ID value.</div></dd>
 <dt><span class="strong"><a href="carnival/util/FeatureReport.html#tryParseDate(List<DateFormat>, java.lang.String)" title="Method in FeatureReport">tryParseDate(List&lt;DateFormat&gt;, java.lang.String)</a></span> - Method in <a href="carnival/util/FeatureReport.html">FeatureReport</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Try to parse the provided data useing the provided formats returning
+ null of no parses were successful.</div></dd>
 <dt><span class="strong"><a href="carnival/util/CoreUtil.html#typedString(java.lang.Object)" title="Method in CoreUtil">typedString(java.lang.Object)</a></span> - Method in <a href="carnival/util/CoreUtil.html">CoreUtil</a>
 </dt><dd> <div class="block">Return a string representation of the provided object tagged with the
  type of the object.</div></dd>
@@ -2398,7 +2404,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/core/Core.PX.html#VALUE" title="Field in Core.PX">VALUE</a></span> - Field in <a href="carnival/core/Core.PX.html">Core.PX</a>
 </dt><dd> <div class="block">Value</div></dd>
 <dt><span class="strong"><a href="carnival/util/FieldName.html#value" title="Property in FieldName">value</a></span> - Property in <a href="carnival/util/FieldName.html">FieldName</a>
-</dt><dd> <div class="block">do not use</div></dd>
+</dt><dd> <div class="block">the value of the field name</div></dd>
 <dt><span class="strong"><a href="carnival/core/graph/Identifier.html#value" title="Property in Identifier">value</a></span> - Property in <a href="carnival/core/graph/Identifier.html">Identifier</a>
 </dt><dd> <div class="block">The value of the identifier</div></dd>
 <dt><span class="strong"><a href="carnival/vine/JsonVineMethodCall.Result.html#value" title="Property in JsonVineMethodCall.Result">value</a></span> - Property in <a href="carnival/vine/JsonVineMethodCall.Result.html">JsonVineMethodCall.Result</a>
@@ -2636,7 +2642,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="carnival/util/FeatureReport.html#writeDataFile(java.io.File, java.util.Map)" title="Method in FeatureReport">writeDataFile(java.io.File, java.util.Map)</a></span> - Method in <a href="carnival/util/FeatureReport.html">FeatureReport</a>
 </dt><dd> <div class="block">Write the data file.</div></dd>
 <dt><span class="strong"><a href="carnival/util/DataTable.html#writeDataTableFiles(java.io.File, java.util.Map)" title="Method in DataTable">writeDataTableFiles(java.io.File, java.util.Map)</a></span> - Method in <a href="carnival/util/DataTable.html">DataTable</a>
-</dt><dd> <div class="block"></div></dd>
+</dt><dd> <div class="block">Write this DataTable to disk.  </div></dd>
 <dt><span class="strong"><a href="carnival/vine/DataTableVineMethodCall.html#writeDataTableFiles(java.io.File)" title="Method in DataTableVineMethodCall">writeDataTableFiles(java.io.File)</a></span> - Method in <a href="carnival/vine/DataTableVineMethodCall.html">DataTableVineMethodCall</a>
 </dt><dd> <div class="block">Write the cache files for this vine method call in the provided
  directory return a DataTableFiles object.</div></dd>

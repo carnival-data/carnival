@@ -573,7 +573,8 @@ extends java.lang.Object</pre>
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>protected&nbsp;static&nbsp;void</code></td>
-                            <td class="colLast"><code><strong><a href="#loadDataFromFile(java.io.File, carnival.util.DataTable)">loadDataFromFile</a></strong>(java.io.File dataFile, <a href='../../carnival/util/DataTable.html'>DataTable</a> dataTable)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#loadDataFromFile(java.io.File, carnival.util.DataTable)">loadDataFromFile</a></strong>(java.io.File dataFile, <a href='../../carnival/util/DataTable.html'>DataTable</a> dataTable)</code><br>Load data from a CSV file and write it to the provided DataTable
+ instance.</td>
                         </tr>
                         
                         <tr class="rowColor">
@@ -585,7 +586,7 @@ extends java.lang.Object</pre>
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>protected&nbsp;static&nbsp;java.util.Map</code></td>
-                            <td class="colLast"><code><strong><a href="#loadMetaDataFromFile(java.io.File)">loadMetaDataFromFile</a></strong>(java.io.File metaFile)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#loadMetaDataFromFile(java.io.File)">loadMetaDataFromFile</a></strong>(java.io.File metaFile)</code><br>Load MappedDataTable meta-data from a file.</td>
                         </tr>
                         
                         <tr class="rowColor">
@@ -643,7 +644,7 @@ extends java.lang.Object</pre>
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
-                            <td class="colLast"><code><strong><a href="#setOrderKeysByInsertion()">setOrderKeysByInsertion</a></strong>()</code><br></td>
+                            <td class="colLast"><code><strong><a href="#setOrderKeysByInsertion()">setOrderKeysByInsertion</a></strong>()</code><br>Set key order by order of insertion.</td>
                         </tr>
                         
                         <tr class="altColor">
@@ -668,19 +669,20 @@ extends java.lang.Object</pre>
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
-                            <td class="colLast"><code><strong><a href="#setOrderedKeysBooleanCriteria(List)">setOrderedKeysBooleanCriteria</a></strong>(java.util.List&lt;groovy.lang.Closure&gt; booleanClosures)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#setOrderedKeysBooleanCriteria(List)">setOrderedKeysBooleanCriteria</a></strong>(java.util.List&lt;groovy.lang.Closure&gt; booleanClosures)</code><br>Set key order by list of Boolean closure.  </td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
-                            <td class="colLast"><code><strong><a href="#setOrderedKeysBooleanCriteria(groovy.lang.Closure)">setOrderedKeysBooleanCriteria</a></strong>(groovy.lang.Closure[] booleanClosures)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#setOrderedKeysBooleanCriteria(groovy.lang.Closure)">setOrderedKeysBooleanCriteria</a></strong>(groovy.lang.Closure[] booleanClosures)</code><br> <DL><DT><B>See Also:</B></DT><DD>setOrderedKeysBooleanCriteria(java.util.List)</DD></DL></td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.util.Map</code></td>
-                            <td class="colLast"><code><strong><a href="#stringHandlingArgs()">stringHandlingArgs</a></strong>()</code><br></td>
+                            <td class="colLast"><code><strong><a href="#stringHandlingArgs()">stringHandlingArgs</a></strong>()</code><br>Default arguments to handle string case sensitivity as per settings of
+ this object.</td>
                         </tr>
                         
                         <tr class="altColor">
@@ -693,7 +695,8 @@ extends java.lang.Object</pre>
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>java.lang.String</code></td>
-                            <td class="colLast"><code><strong><a href="#toFieldName(java.lang.String)">toFieldName</a></strong>(java.lang.String val)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#toFieldName(java.lang.String)">toFieldName</a></strong>(java.lang.String val)</code><br>Convenience method to call fieldname(String, Map) using 
+ stringHandlingArgs().</td>
                         </tr>
                         
                         <tr class="altColor">
@@ -720,7 +723,7 @@ extends java.lang.Object</pre>
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code><a href='../../carnival/util/DataTableFiles.html'>DataTableFiles</a></code></td>
-                            <td class="colLast"><code><strong><a href="#writeDataTableFiles(java.io.File, java.util.Map)">writeDataTableFiles</a></strong>(java.io.File destDir, java.util.Map args)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#writeDataTableFiles(java.io.File, java.util.Map)">writeDataTableFiles</a></strong>(java.io.File destDir, java.util.Map args)</code><br>Write this DataTable to disk.  </td>
                         </tr>
                         
                         <tr class="altColor">
@@ -1327,7 +1330,7 @@ extends java.lang.Object</pre>
                                 <h4>protected&nbsp;static&nbsp;void <strong>loadDataFromFile</strong>(java.io.File dir, java.lang.String name, <a href='../../carnival/util/DataTable.html'>DataTable</a> dataTable)</h4>
                                 <p> Load data from a CSV file and write it to the provided DataTable
  instance.
- <DL><DT><B>Parameters:</B></DT><DD><code>dir</code> -  The directory in which to look for the file.</DD><DD><code>name</code> -  The name of the file.</DD><DD><code>mdt</code> -  The DataTable to populate with data.</DD></DL></p>
+ <DL><DT><B>Parameters:</B></DT><DD><code>dir</code> -  The directory in which to look for the file.</DD><DD><code>name</code> -  The name of the file.</DD><DD><code>dataTable</code> -  The DataTable to populate with data.</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -1335,8 +1338,9 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>protected&nbsp;static&nbsp;void <strong>loadDataFromFile</strong>(java.io.File dataFile, <a href='../../carnival/util/DataTable.html'>DataTable</a> dataTable)</h4>
-                                <p>
-</p>
+                                <p> Load data from a CSV file and write it to the provided DataTable
+ instance.
+ <DL><DT><B>Parameters:</B></DT><DD><code>dataFile</code> -  The data file</DD><DD><code>dataTable</code> -  The DataTable to populate with data.</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -1353,8 +1357,8 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>protected&nbsp;static&nbsp;java.util.Map <strong>loadMetaDataFromFile</strong>(java.io.File metaFile)</h4>
-                                <p>
-</p>
+                                <p> Load MappedDataTable meta-data from a file.
+ <DL><DT><B>Parameters:</B></DT><DD><code>metaFile</code> -  the meta-data file</DD></DL><DL><DT><B>Returns:</B></DT><DD>A map of meta-data.</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -1448,7 +1452,7 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>void <strong>setOrderKeysByInsertion</strong>()</h4>
-                                <p></p>
+                                <p> Set key order by order of insertion.</p>
                             </li>
                         </ul>
                     
@@ -1489,7 +1493,9 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>void <strong>setOrderedKeysBooleanCriteria</strong>(java.util.List&lt;groovy.lang.Closure&gt; booleanClosures)</h4>
-                                <p></p>
+                                <p> Set key order by list of Boolean closure.  The closures will be passed to
+ keys.findAll() in order.  Found keys will be moved to the front of the 
+ ordering. <DL><DT><B>Parameters:</B></DT><DD><code>booleanClosures</code> -  List of boolean closures.</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -1497,7 +1503,7 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>void <strong>setOrderedKeysBooleanCriteria</strong>(groovy.lang.Closure[] booleanClosures)</h4>
-                                <p></p>
+                                <p> <DL><DT><B>See Also:</B></DT><DD>setOrderedKeysBooleanCriteria(java.util.List)</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -1505,7 +1511,8 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.util.Map <strong>stringHandlingArgs</strong>()</h4>
-                                <p></p>
+                                <p> Default arguments to handle string case sensitivity as per settings of
+ this object. <DL><DT><B>Returns:</B></DT><DD>String handling args as a map.</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -1523,7 +1530,8 @@ extends java.lang.Object</pre>
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>java.lang.String <strong>toFieldName</strong>(java.lang.String val)</h4>
-                                <p></p>
+                                <p> Convenience method to call fieldname(String, Map) using 
+ stringHandlingArgs(). <DL><DT><B>See Also:</B></DT><DD>stringHandlingArgs()</DD><DD>fieldName(java.lang.String, java.util.Map)</DD></DL></p>
                             </li>
                         </ul>
                     
@@ -1564,7 +1572,9 @@ java.io.File <strong>writeDataFile</strong>(java.io.File destDir, java.util.Map 
                             <li class="blockList">
                                 <h4>@groovy.transform.WithReadLock
 <a href='../../carnival/util/DataTableFiles.html'>DataTableFiles</a> <strong>writeDataTableFiles</strong>(java.io.File destDir, java.util.Map args)</h4>
-                                <p></p>
+                                <p> Write this DataTable to disk.  Two files are written, the .csv
+ data file and the .yaml meta-data file.
+ <DL><DT><B>Parameters:</B></DT><DD><code>args</code> -  - possible keys: [missingVal, nullVal]</DD></DL><DL><DT><B>Returns:</B></DT><DD>A DataTableFiles object encapsulating the written files.</DD></DL></p>
                             </li>
                         </ul>
                     

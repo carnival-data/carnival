@@ -20,6 +20,8 @@ authors:
   - name: Louis Lee
     orcid: 0000-0002-7297-3915
     affiliation: 2
+  - name: Hayden Freedman
+    affiliation: 3
   - name: Christian Stoeckert
     orcid: 0000-0002-5714-991X
     affiliation: 1
@@ -28,6 +30,8 @@ affiliations:
    index: 1
  - name: USC Norris Cancer Center, USA
    index: 2
+ - name: University of California Irvine, Department of Informatics
+   index: 3
 date: 12 May 2022
 bibliography: paper.bib
 ---
@@ -36,7 +40,7 @@ bibliography: paper.bib
 Research activities in data rich areas such as biomedical informatics face many data challenges including harmonizing complex and disparate data, integrating existing knowledge bases into data sets for manual or machine learning analysis, and reproducibility of results. Graphs are a powerful data structure for naturally describing complex data. Information about data provenance can be embedded in the graph itself to aid in quality control and reproducibility. **Carnival** is a semantically driven informatics toolkit that enables the aggregation of data from disparate sources into a unified property graph and provides mechanisms to model and interact with the graph in well-defined ways inspired by the Open Biological and Biomedical Ontology (OBO) Foundry ontologies.  
 
 # Statement of need
-Loading, cleansing, and organizing data can dominate the time spent on a data science project[@forbes1]. This phenomenon is exacerbated in human subjects research at an academic medical institution where data are very complex, reside in disparate repositories with varying levels of accessibility, are coded by separate yet overlapping coding systems, frequently rely on manual data entry, and change over time. Data provenance and reproducibility of results are important factors in human subjects research. It is no easy task to implement a robust consistent data pipeline with clear data provenance that can be rerun when source data change. While there are several mature libraries and toolkits that enable visualization and statistical computation once the analytical data set is generated, there are comparatively fewer data preparation tools.
+Loading, cleansing, and organizing data can dominate the time spent on a data science project [@forbes1]. This phenomenon is exacerbated in human subjects research at an academic medical institution where data are very complex, reside in disparate repositories with varying levels of accessibility, are coded by separate yet overlapping coding systems, frequently rely on manual data entry, and change over time. Data provenance and reproducibility of results are important factors in human subjects research. It is no easy task to implement a robust consistent data pipeline with clear data provenance that can be rerun when source data change. While there are several mature libraries and toolkits that enable visualization and statistical computation once the analytical data set is generated, there are comparatively fewer data preparation tools.
 
 Existing extract, transform and load (ETL) technologies such as [Microsoft SQL Server Integration Services](https://docs.microsoft.com/en-us/sql/integration-services/sql-server-integration-services) help with data staging. Similarly, data manipulation tools like [pandas](https://pandas.pydata.org) facilitate transformation of series and matrix data. **Carnival** distinguishes itself by offering a lightweight data caching mechanism coupled with data manipulation services built on a property graph rather than arrays and data frames. Graphs present an alternative to relational data structures that more naturally represent complex and highly relational data and are more adaptive to change. A property graph database is an implementation of the graph structure that represents data as nodes and directed edges (relationships) between the nodes, where nodes and edges can have properties (key/value pairs) associated with them. Carnival’s combination of features and graph data representation empowers informaticians and programmers working in complex data domains to build pipelines, utilities, and applications that are comparatively richer in semantics and provenance.
 
@@ -49,12 +53,12 @@ Knowledge bases in Resource Description Framework (RDF) triplestores can be valu
 ### Key Features
 - a graph modeling framework that ensures graph data remain consistent
 - a data caching mechanism to ease the computational burden of data aggregation during the development process and promotes data provenance
-- a lightweight graph algorithm framework that promotes graph building recipes with automated provenance
+- a lightweight graph algorithm framework that facilitates the creation of graph building components with automated provenance tracking
 
 ### Uses
 
 #### Production of analytical data sets
-Carnival was initially developed to facilitate the production of analytical data sets for human subjects research. The source data repositories included a relational data warehouse accessible by SQL, a REDCap[@HARRIS2019103208; @HARRIS2009377] installation accessible by API, and manually curated data files in CSV format. Data pertaining to the set of study subjects was distributed across each of these data sources. Using Carnival, a data pipeline was implemented to pull data from the data sources, instantiate them in a property graph, clean and harmonize them, and produce analytical data sets at required intervals.
+Carnival was initially developed to facilitate the production of analytical data sets for human subjects research. The source data repositories included a relational data warehouse accessible by SQL, a REDCap [@HARRIS2019103208; @HARRIS2009377] installation accessible by API, and manually curated data files in CSV format. Data pertaining to the set of study subjects was distributed across each of these data sources. Using Carnival, a data pipeline was implemented to pull data from the data sources, instantiate them in a property graph, clean and harmonize them, and produce analytical data sets at required intervals.
 
 #### Queries over enriched data
 A key challenge of human subjects research is to locate patients to recruit to a study, frequently done by searching a research data set containing raw patient data. Potential recruits need to be stratified by attributes, such as age, race, and ethnicity, matched against inclusion criteria, such as the presence of a diagnosis code, and filtered by exclusion criteria, such as a treatment modality. **Carnival** has been used effectively in this area by loading the relevant raw data into a graph, stratifying and categorizing patients by the relevant criteria, then using graph traversals to extract the patients who are potential recruits[@FREEDMAN2020100086; @carnivalcohort].

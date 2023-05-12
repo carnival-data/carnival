@@ -1,0 +1,14 @@
+# Provided as a convience to run the example .groovy files in this directory
+version: '3.9'
+
+
+services:
+  runner:
+    image: groovy:3.0.9-jdk11
+    working_dir: /appsrc
+    command: bash -c "groovy graph-method-1.groovy"
+    stdin_open: true 
+    tty: true
+    volumes:
+      - "./:/appsrc"
+

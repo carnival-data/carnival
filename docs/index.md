@@ -286,7 +286,7 @@ groovy -Dgroovy.grape.report.downloads=true graph-model-1.groovy
 ```
 
 > **Note**
-> To assist with running the example scripts, `docs/groovy` contains a docker-compose file to start an interactive shell with groovy available on the command line as an alternative to installing Groovy. To start the shell, from the example directory run `docker-compose run runner bash`. Scripts can be run with commands such as `groovy graph-model-1.groovy`.
+> To assist with running the example scripts, as an alternative to installing Groovy `docs/groovy` contains a docker-compose file to start an interactive shell with groovy available on the command line. To start the shell, from the example directory run `docker-compose run runner bash`. Scripts can be run with commands such as `groovy graph-model-1.groovy`.
 
 
 ### <a name="app-development"></a>Groovy Applications

@@ -26,7 +26,7 @@ trait Vine extends MethodsHolder {
     ///////////////////////////////////////////////////////////////////////////
 
     /** The log object to use. */
-    static Logger log = LoggerFactory.getLogger(this.class)
+    static Logger log = LoggerFactory.getLogger(this.metaClass.theClass)
 
 
     ///////////////////////////////////////////////////////////////////////////

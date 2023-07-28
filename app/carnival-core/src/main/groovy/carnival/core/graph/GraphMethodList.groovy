@@ -3,6 +3,7 @@ package carnival.core.graph
 
 
 import java.time.Instant
+import groovy.util.logging.Slf4j
 import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
@@ -15,6 +16,7 @@ import carnival.graph.Base
 /**
  * A list of graph methods.
  */
+@Slf4j
 class GraphMethodList {    
 
     ///////////////////////////////////////////////////////////////////////////
@@ -60,6 +62,7 @@ class GraphMethodList {
         List<GraphMethodCall> methodCalls = new ArrayList<GraphMethodCall>()
 
         graphMethods.each {
+            log.trace "call graph method ${it.name}"
             GraphMethodCall gmc = it.call(graph, g)
             methodCalls.add(gmc)
         }
@@ -82,6 +85,7 @@ class GraphMethodList {
         List<GraphMethodCall> methodCalls = new ArrayList<GraphMethodCall>()
 
         graphMethods.each {
+            log.trace "ensure graph method ${it.name}"
             GraphMethodCall gmc = it.ensure(graph, g)
             methodCalls.add(gmc)
         }

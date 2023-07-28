@@ -24,7 +24,7 @@ trait GraphMethods extends MethodsHolder {
     ///////////////////////////////////////////////////////////////////////////
 
     /** Logger */
-    static Logger log = LoggerFactory.getLogger(this.class)
+    static Logger log = LoggerFactory.getLogger(this.metaClass.theClass)
 
 
     ///////////////////////////////////////////////////////////////////////////

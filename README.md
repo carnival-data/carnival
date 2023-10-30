@@ -23,13 +23,13 @@ Carnival has three principal components: a graph modeling architecture, a cachin
 
 ### Core Packages
 
-Name | Description
---- | ---
-[carnival-core](app/carnival-core/README.md) | Basic Carnival framework. Implements the basic Carnival framework classes (vines, carnival modeling framework, carnival graph algorithm framework, etc). Defines the [core carnival graph model](https://github.com/carnival-data/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/Core.groovy). This model defines key carnival concepts such as processes, databases, and namespaces.
-[carnival-vine](app/carnival-vine/README.md) | Framework for data adaptors called vines which faciliate loading and aggregation of source data. Implements data caching facilities.
-[carnival-graph](app/carnival-graph/README.md) | Framework for defining carnival graph schemas (vertex and edge definitions). Contains the basic vertex, edge, and property classes.
-[carnival-util](app/carnival-util/README.md) | Standalone package that contains utility and helper classes such as data tables, reports, and SQL utilties, which are primarily used for dealing with relational data.
-[carnival-gradle](app/carnival-gradle/README.md) | Gradle plugin for building Carnival applications and libraries.
+API Docs | Source | Description
+--- | --- | ---
+[carnival-core API](https://carnival-data.github.io/carnival/groovydoc/index.html?carnival/core/package-summary.html) | [app/carnival-core/src/main/groovy/carnival/core](app/carnival-core/src/main/groovy/carnival/core) | Basic Carnival framework. Implements the basic Carnival framework classes (vines, carnival modeling framework, carnival graph algorithm framework, etc). Defines the [core carnival graph model](https://github.com/carnival-data/carnival/blob/master/app/carnival-core/src/main/groovy/carnival/core/graph/Core.groovy). This model defines key carnival concepts such as processes, databases, and namespaces.
+[carnival-vine API](https://carnival-data.github.io/carnival/groovydoc/index.html?carnival/vine/package-summary.html) | [app/carnival-vine/src/main/groovy/carnival/vine](app/carnival-vine/src/main/groovy/carnival/vine) | Framework for data adaptors called vines which faciliate loading and aggregation of source data. Implements data caching facilities.
+[carnival-graph API](https://carnival-data.github.io/carnival/groovydoc/index.html?carnival/graph/package-summary.html) | [app/carnival-graph/src/main/groovy/carnival/graph](app/carnival-graph/src/main/groovy/carnival/graph) | Framework for defining carnival graph schemas (vertex and edge definitions). Contains the basic vertex, edge, and property classes.
+[carnival-util API](https://carnival-data.github.io/carnival/groovydoc/index.html?carnival/util/package-summary.html) | [app/carnival-util/src/main/groovy/carnival/util](app/carnival-util/src/main/groovy/carnival/util) | Standalone package that contains utility and helper classes such as data tables, reports, and SQL utilties, which are primarily used for dealing with relational data.
+[Plugin Docs](app/carnival-gradle/README.md) | [app/carnival-gradle](app/carnival-gradle) | Gradle plugin for building Carnival applications and libraries.
 
 ## <a name="contribution-guide"></a> Contribution Guide
 Carnival is an open source project and welcomes contributions! Please see the [Contribution Guide](CONTRIBUTING.md) for ways to contribute.

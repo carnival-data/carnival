@@ -2,7 +2,7 @@
 // DEPENDENCIES
 ///////////////////////////////////////////////////////////////////////////////
 
-@Grab('io.github.carnival-data:carnival-core:3.0.2-SNAPSHOT')
+@Grab('io.github.carnival-data:carnival-core:3.0.1')
 @Grab('org.apache.tinkerpop:gremlin-core:3.4.10')
 
 
@@ -106,14 +106,14 @@ class Expanders implements GraphMethods {
 
                 String val = PX.NAME.valueOf(recV)
                 List<String> words = val.trim().split(/\s+/)
-                if (words.size == 0) return
+                if (words.size() == 0) return
 
                 Vertex nameV
 
-                if (words.size == 1) {
+                if (words.size() == 1) {
                     nameV = VX.NAME.instance().withProperty(PX.FIRST, words[0]).ensure(graph, g)
                 }
-                if (words.size == 2) {
+                if (words.size() == 2) {
                     nameV = VX.NAME.instance().withProperties(
                         PX.FIRST, words[0],
                         PX.LAST, words[1]

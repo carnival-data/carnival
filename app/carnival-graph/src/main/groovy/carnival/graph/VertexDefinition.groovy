@@ -70,6 +70,9 @@ trait VertexDefinition extends ElementDefinition {
      */
     Boolean isClass = null
 
+    // NOTE: propertyDefs come from WithPropertyDefsTrait, via
+    // ElementDefinition extends WithPropertyDefsTrait
+
 
     ///////////////////////////////////////////////////////////////////////////
     // GETTERS / SETTERS

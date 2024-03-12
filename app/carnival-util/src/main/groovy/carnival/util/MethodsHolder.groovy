@@ -66,10 +66,26 @@ trait MethodsHolder {
         assert methodName != null
 
         def matches = findAllMethodClasses(methodClass, methodName)
-        if (matches.size() > 1) throw new RuntimeException("multiple matches for $methodName: ${matches}")
-        if (matches.size() < 1) return null
 
-        def match = matches.first()
+        // if no matches, we need to return null
+        if (matches.size() == 0) return null
+
+        // if there is only one match, we want to return it whether
+        // it was defined in the 'this' class or not
+        if (matches.size() == 1) return matches[0]
+
+        // there are multiple matches, try to find the one defined in 
+        // this class.  this needs to be refined to look up the inheritance
+        // tree and pick the first that matches.
+        matches = matches.findAll({
+            it.enclosingClass == this.class
+        })
+
+        // if matches does not equal 1 exactly, it means that there were
+        // multiple matches that could not be resolved
+        if (matches.size() != 1) throw new RuntimeException("multiple matches for $methodName: ${matches}")
+
+        def match = matches[0]
         return match
     }
   

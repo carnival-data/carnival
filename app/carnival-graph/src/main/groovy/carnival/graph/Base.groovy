@@ -70,8 +70,8 @@ class Base {
         NAME_SPACE,
 
         /**
-         * If the name space if global, the class that defined the model is
-         * stored in the vertex definition class property, which is requried by
+         * If the name space is global, the class that defines the model is
+         * stored in the vertex definition class property, which is required by
          * parts of the Carnival machinery.
          */
         VERTEX_DEFINITION_CLASS

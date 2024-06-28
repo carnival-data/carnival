@@ -11,7 +11,7 @@
 
 -   [Documentation](https://carnival-data.github.io/carnival/)
 -   [API Documentation](https://carnival-data.github.io/carnival/groovydoc/index.html)
--   [Example Demonstration Project](https://github.com/carnival-data/carnival-micronaut)
+-   [Example Demonstration Project](https://github.com/carnival-data/carnival-demo-biomedical)
 
 
 ## <a name="overview"></a> Overview

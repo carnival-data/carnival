@@ -62,11 +62,13 @@ abstract class GraphMethod extends GraphMethodBase {
         Instant stopTime
         Exception exception
         Instant startTime
+        GraphMethodCall gmcOut
         
         // execute the graph method recording the start
         // and stop times
         try {
             startTime = Instant.now()
+            gmcOut = graphMethodCallStart(graph, g, startTime)
             execute(graph, g)
         } catch (Exception e) {
             exception = e
@@ -74,7 +76,9 @@ abstract class GraphMethod extends GraphMethodBase {
             stopTime = Instant.now()
         }
 
-        graphMethodCall(graph, g, startTime, stopTime, result, exception)
+        //graphMethodCall(graph, g, startTime, stopTime, result, exception)
+        graphMethodCallStop(gmcOut, stopTime, result, exception)
+        return gmcOut
     }
 
 

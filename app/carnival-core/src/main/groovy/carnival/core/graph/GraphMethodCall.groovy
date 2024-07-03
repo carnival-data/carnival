@@ -31,6 +31,12 @@ class GraphMethodCall {
      */
     Vertex processVertex
 
+
+    /**
+     * An exception if one was thrown.
+     */
+    Exception exception
+
     
     /**
      * Return the arguments used by this method.

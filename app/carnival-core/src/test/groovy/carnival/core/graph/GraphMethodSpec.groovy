@@ -2,6 +2,7 @@ package carnival.core.graph
 
 
 
+import groovy.util.logging.Slf4j
 import spock.lang.Specification
 import spock.lang.Unroll
 import spock.lang.Shared
@@ -17,6 +18,7 @@ import carnival.core.Core
 
 
 
+@Slf4j
 public class GraphMethodSpec extends Specification {
 
 
@@ -50,6 +52,12 @@ public class GraphMethodSpec extends Specification {
     static class TestGraphMethodThrowsException extends GraphMethod {
         public void execute(Graph graph, GraphTraversalSource g) {
             throw new Exception('boom')
+        }
+    }
+
+    static class TestGraphMethodCheckProcessVertex extends GraphMethod {
+        public void execute(Graph graph, GraphTraversalSource g) {
+            if (!processVertex) throw new Exception('no process vertex')
         }
     }
 
@@ -103,6 +111,18 @@ public class GraphMethodSpec extends Specification {
 
         then:
         noExceptionThrown()
+    }
+
+    
+    void "processVertex is set"() {
+        when:
+        def gm = new TestGraphMethodCheckProcessVertex()
+        def gmc = gm.call(graph, g)
+
+        then:
+        gm.processVertex
+        gmc.processVertex
+        !gmc.exception
     }
 
 

@@ -40,6 +40,12 @@ class GraphMethodBase {
     /** The name of this graph method */
     String name = this.class.name
 
+    /** 
+     * Make the process vertex available in a non-thread-safe way for use by
+     * the execute methods.
+     */
+    protected Vertex processVertex
+
 
     ///////////////////////////////////////////////////////////////////////////
     // ACCESSORS
@@ -147,6 +153,110 @@ class GraphMethodBase {
      * Creates a graph method call object and instantiates the representation
      * in the graph.
      */
+    protected GraphMethodCall graphMethodCallStart(
+        Graph graph, 
+        GraphTraversalSource g,
+        Instant startTime
+    ) {
+        log.trace "graphMethodCallStart startTime:${startTime}"
+
+        assert graph != null
+        assert g != null
+        assert startTime != null
+
+        // compute a hash to record in the process vertex
+        String argsHash = CoreUtil.argumentsUniquifier(this.arguments)
+
+        // grab the defs
+        def pcvDef = getProcessClassVertexDef()
+        def pvDef = getProcessVertexDef()
+
+        // assert that the process def has the required properties
+        pvDef.propertyDefs.addAll(Core.VX.GRAPH_PROCESS.propertyDefs)
+        
+        // create the process vertex
+        Vertex procV = pvDef.instance().withProperties(
+            Core.PX.NAME, getName(),
+            Core.PX.ARGUMENTS_HASH, argsHash,
+            Core.PX.START_TIME, startTime.toEpochMilli()
+        ).create(graph)
+        
+        // the process vertex is an instance of the process class
+        Base.EX.IS_INSTANCE_OF.instance()
+            .from(procV)
+            .to(pcvDef.vertex)
+        .create()
+        
+        // ensure that the process class is a subclass of GRAPH_PROCESS_CLASS
+        // it is troubling that this happens every time a graph method is called
+        if (
+            pcvDef.label != Core.VX.GRAPH_PROCESS_CLASS.label ||
+            pcvDef.nameSpace != Core.VX.GRAPH_PROCESS_CLASS.nameSpace
+        ) {
+            Base.EX.IS_SUBCLASS_OF.instance()
+                .from(pcvDef.vertex)
+                .to(Core.VX.GRAPH_PROCESS_CLASS.vertex)
+            .ensure(g)
+        }
+
+        // set the internal process vertex
+        this.processVertex = procV
+
+        // construct and return a graph method call
+        GraphMethodCall gmc = new GraphMethodCall(
+            arguments: this.arguments,
+            processVertex: procV
+        )
+
+        gmc
+    }
+
+
+    /**
+     *
+     *
+     */
+    protected void graphMethodCallStop(
+        GraphMethodCall gmc,
+        Instant stopTime,
+        Map result,
+        Exception exception        
+    ) {
+        log.trace "graphMethodCallStop gmc:${gmc}"
+        log.trace "graphMethodCallStop stopTime:${stopTime}"
+        log.trace "graphMethodCallStop result:${result}"
+        log.trace "graphMethodCallStop exception:${exception}"
+
+        assert gmc != null
+        assert gmc.processVertex
+        assert stopTime != null
+
+        def procV = gmc.processVertex
+
+        Core.PX.STOP_TIME.set(
+            procV, 
+            stopTime.toEpochMilli()
+        )
+
+        if (exception != null) {
+            try {
+                String msg = exception.message ?: "${exception.class}"
+                Core.PX.EXCEPTION_MESSAGE.set(procV, msg)
+            } catch (Exception e) {
+                log.warn "could not set exception message of process vertex ${procV} ${e.message}"
+            }
+            throw exception
+        }
+        
+        if (result != null) gmc.result = result
+        if (exception != null) gmc.exception = exception
+    }
+
+
+    /**
+     * Creates a graph method call object and instantiates the representation
+     * in the graph.
+     */
     protected GraphMethodCall graphMethodCall(
         Graph graph, 
         GraphTraversalSource g,
@@ -213,6 +323,7 @@ class GraphMethodBase {
             result: result,
             processVertex: procV
         )
+        if (exception != null) gmc.exception = exception
 
         gmc
     }

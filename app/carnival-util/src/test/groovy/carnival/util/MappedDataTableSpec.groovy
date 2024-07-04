@@ -1226,13 +1226,19 @@ class MappedDataTableSpec extends Specification {
         mdtFromFile.vine
         mdtFromFile.vine.name.equals(vine.name)
         mdtFromFile.vine.method.equals(vine.method)
-        for(e in vine.args) {
+        for (e in vine.args) {
             assert mdtFromFile.vine.args.get(e.key)
-            assert mdtFromFile.vine.args.get(e.key).equals(e.value)
             println "${mdtFromFile.vine.args.get(e.key)} -> ${e.value}"
+            def sourceVal = e.value
+            def targetVal = mdtFromFile.vine.args.get(e.key)
+            if (sourceVal instanceof GString) {
+                assert String.valueOf(sourceVal) == String.valueOf(targetVal)
+            } else {
+                assert sourceVal.equals(targetVal)    
+            }
             //assert mdtFromFile.vine.args.get(e.key) instanceof e.value.class
         }
-        for(e in vineReorder.args) {
+        for (e in vineReorder.args) {
             assert mdtFromFile.vine.args.get(e.key)
             assert mdtFromFile.vine.args.get(e.key) == e.value
             println "${mdtFromFile.vine.args.get(e.key)} -> ${e.value}"

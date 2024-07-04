@@ -8,7 +8,6 @@ import spock.lang.Shared
 import org.apache.tinkerpop.gremlin.structure.T
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
-import static org.apache.tinkerpop.gremlin.neo4j.process.traversal.LabelP.of
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
 
 import carnival.core.graph.DefaultGraphSchema

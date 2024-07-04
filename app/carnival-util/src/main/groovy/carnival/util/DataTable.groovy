@@ -21,10 +21,12 @@ import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.introspector.Property
 import org.yaml.snakeyaml.nodes.NodeTuple
 import org.yaml.snakeyaml.nodes.Tag
-import org.yaml.snakeyaml.representer.*
-import org.yaml.snakeyaml.*
-import org.yaml.snakeyaml.DumperOptions.FlowStyle
-import org.yaml.snakeyaml.constructor.*
+//import org.yaml.snakeyaml.representer.*
+//import org.yaml.snakeyaml.*
+//import org.yaml.snakeyaml.constructor.*
+import org.yaml.snakeyaml.inspector.TagInspector
+import org.yaml.snakeyaml.constructor.Constructor
+import org.yaml.snakeyaml.LoaderOptions
 
 
 
@@ -466,6 +468,18 @@ abstract class DataTable {
 
 
     /**
+     * 
+     */
+    static private Yaml createYaml(Object source) {
+        LoaderOptions loaderOptions = new LoaderOptions();
+        loaderOptions.setTagInspector({tag -> true});
+        Yaml yaml = new Yaml(loaderOptions);
+
+        return yaml
+    }
+
+
+    /**
      * Load a meta file and return it as a map.
      *
      * @param metaFile The meta file.
@@ -473,7 +487,8 @@ abstract class DataTable {
      *
      */
     static public Map loadMetaFileData(File metaFile) {
-        def yaml = new org.yaml.snakeyaml.Yaml(new DataTableConstructor())
+        //def yaml = new org.yaml.snakeyaml.Yaml(new DataTableConstructor())
+        def yaml = createYaml(new DataTableConstructor())
         def meta = yaml.load(metaFile.text)
         assert meta.name
         assert meta.queryDate
@@ -802,6 +817,7 @@ abstract class DataTable {
     }
 
 
+
     /** 
      * Load MappedDataTable meta-data from a file.
      *
@@ -815,7 +831,8 @@ abstract class DataTable {
         assert metaFile.exists()
         assert metaFile.length() > 0
 
-        def yaml = new org.yaml.snakeyaml.Yaml(new DataTableConstructor())
+        //def yaml = new org.yaml.snakeyaml.Yaml(new DataTableConstructor())
+        def yaml = createYaml(new DataTableConstructor())
        
         def meta = yaml.load(metaFile.text)
         assert meta != null

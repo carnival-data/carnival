@@ -14,7 +14,7 @@ buildscript {
         //mavenLocal()
     }
     dependencies {
-        classpath group: 'org.yaml', name: 'snakeyaml', version: '1.31'
+        classpath group: 'org.yaml', name: 'snakeyaml', version: '2.2'
         classpath group: 'org.kordamp.gradle', name: 'stats-gradle-plugin', version: '0.2.2'
     }    
 }
@@ -84,7 +84,7 @@ subprojects {
         // see gradle.properties for versions
 
         // Groovy
-        implementation "org.codehaus.groovy:groovy-all:${groovyVersion}"
+        implementation "org.apache.groovy:groovy-all:${groovyVersion}"
 
         // Tinkerpop
         implementation "org.apache.tinkerpop:gremlin-core:${gremlinVersion}"
@@ -92,9 +92,9 @@ subprojects {
         implementation "org.apache.tinkerpop:tinkergraph-gremlin:${gremlinVersion}"
 
         // Neo4J
-        implementation "org.apache.tinkerpop:neo4j-gremlin:${gremlinVersion}"
-        implementation "org.neo4j:neo4j-tinkerpop-api-impl:${neo4jTinkerpopVersion}"
-        implementation "org.neo4j.driver:neo4j-java-driver:${neo4JavaDriverVersion}"
+        //implementation "org.apache.tinkerpop:neo4j-gremlin:${gremlinVersion}"
+        //implementation "org.neo4j:neo4j-tinkerpop-api-impl:${neo4jTinkerpopVersion}"
+        //implementation "org.neo4j.driver:neo4j-java-driver:${neo4JavaDriverVersion}"
         //implementation "org.neo4j:parent:${neo4JavaDriverVersion}"
         //implementation "org.neo4j:neo4j-community:${neo4JavaDriverVersion}"
         //implementation "org.neo4j:neo4j-bolt:${neo4JavaDriverVersion}"
@@ -107,18 +107,19 @@ subprojects {
         // Testing
         // there are test helpers implemented in the source tree, so the
         // implementation dependency tag is required
-        testImplementation 'org.spockframework:spock-core:2.2-M3-groovy-3.0'      
+        testImplementation 'org.spockframework:spock-core:2.4-M4-groovy-4.0'
+        //testImplementation 'org.spockframework:spock-core:2.2-M3-groovy-3.0'      
 
         // Logging
-        implementation 'org.slf4j:slf4j-api:2.0.0'
-        implementation 'ch.qos.logback:logback-classic:1.4.6'
+        implementation 'org.slf4j:slf4j-api:2.0.13'
+        implementation 'ch.qos.logback:logback-classic:1.5.6'
 
         // Data formats
-        implementation "org.yaml:snakeyaml:1.31"
-        implementation "com.opencsv:opencsv:5.6"
+        implementation "org.yaml:snakeyaml:2.2"
+        implementation "com.opencsv:opencsv:5.9"
 
         // Apache Commons
-        implementation "commons-io:commons-io:2.11.0"
+        implementation "commons-io:commons-io:2.16.1"
     }
 }
 
@@ -152,17 +153,35 @@ subprojects {
     
     tasks.withType(Sign) { onlyIf { isReleaseVersion } }
 
+
+    /*task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    artifacts {
+        archives sourcesJar
+        archives javadocJar
+    }*/
+
+
     task sourcesJar(type: Jar) {
         from sourceSets.main.allJava
         from sourceSets.main.allGroovy
-        classifier = 'sources'
+        archiveClassifier = 'sources'
     }
 
     task javadocJar(type: Jar) {
         from javadoc
         from groovydoc
-        classifier = 'javadoc'
+        archiveClassifier = 'javadoc'
     }
+
 
     publishing {
         repositories {
@@ -300,6 +319,8 @@ def browse(path) {
 // JaCoCo code coverage
 ///////////////////////////////////////////////////////////////////////////////
 
+/*
+
 // Only report code coverage for projects that are distributed
 def publishedProjects = subprojects.findAll()
 
@@ -338,6 +359,7 @@ tasks.coveralls {
 
     dependsOn jacocoRootReport
 }
+*/
 
 
 /////////////////////////////////

@@ -187,10 +187,10 @@ class GenericDataTable extends DataTable {
         log.trace "createFromFiles dir:${dir?.canonicalPath} name:$name"
 
         // get the metadata from file
-        def meta = loadMetaDataFromFile(dir, name)
+        Map meta = loadMetaDataFromFile(dir, name)
 
         // construct a mapped data table object from 
-        def mdt = new GenericDataTable(meta)
+        GenericDataTable mdt = new GenericDataTable(meta)
 
         // load the file data
         loadDataFromFile(dir, name, mdt)

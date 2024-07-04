@@ -3,11 +3,13 @@ package carnival.graph
 
 
 import groovy.transform.CompileStatic
+import groovy.beans.VetoableASTTransformation
 import org.codehaus.groovy.macro.methods.MacroGroovyMethods
+import org.codehaus.groovy.control.CompilePhase
 import org.codehaus.groovy.transform.AbstractASTTransformation
 import org.codehaus.groovy.transform.GroovyASTTransformation
-import org.codehaus.groovy.control.CompilePhase
 import org.codehaus.groovy.transform.ASTTransformation
+import org.codehaus.groovy.transform.AbstractASTTransformation
 import org.codehaus.groovy.ast.ASTNode
 import org.codehaus.groovy.control.SourceUnit
 import org.codehaus.groovy.ast.MethodNode
@@ -17,8 +19,13 @@ import org.codehaus.groovy.ast.MixinNode
 import org.codehaus.groovy.ast.AnnotationNode
 import org.codehaus.groovy.ast.ConstructorNode
 import org.codehaus.groovy.ast.Parameter
-import org.codehaus.groovy.ast.stmt.*
-import org.codehaus.groovy.ast.expr.*
+
+import org.codehaus.groovy.ast.expr.Expression
+
+import org.codehaus.groovy.ast.stmt.Statement
+import org.codehaus.groovy.ast.stmt.BlockStatement
+import org.codehaus.groovy.ast.stmt.EmptyStatement
+
 
 
 
@@ -68,7 +75,7 @@ abstract class ModelTransformation extends AbstractASTTransformation {
         assert classNode != null
         ConstructorNode noArgConstructor = 
             new ConstructorNode(
-                ClassNode.ACC_PRIVATE, 
+                VetoableASTTransformation.ACC_PRIVATE, 
                 [] as Parameter[],
                 [] as ClassNode[],
                 stmt
@@ -93,7 +100,7 @@ abstract class ModelTransformation extends AbstractASTTransformation {
         )
         ConstructorNode mapConstructor = 
             new ConstructorNode(
-                ClassNode.ACC_PRIVATE, 
+                VetoableASTTransformation.ACC_PRIVATE, 
                 [mapParam] as Parameter[],
                 [] as ClassNode[],
                 stmt
@@ -210,7 +217,7 @@ class VertexModelTransformation extends ModelTransformation {
         )
         ConstructorNode constructor = 
             new ConstructorNode(
-                ClassNode.ACC_PRIVATE, 
+                VetoableASTTransformation.ACC_PRIVATE, 
                 [enumClassParam] as Parameter[],
                 [] as ClassNode[],
                 constructorStmt

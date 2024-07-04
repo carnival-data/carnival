@@ -14,8 +14,6 @@ import org.apache.tinkerpop.gremlin.structure.T
 import org.apache.tinkerpop.gremlin.process.traversal.P
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 
-import static org.apache.tinkerpop.gremlin.neo4j.process.traversal.LabelP.of
-
 
 
 

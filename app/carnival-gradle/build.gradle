@@ -36,6 +36,25 @@ gradlePlugin {
 
 
 ///////////////////////////////////////////////////////////////////////////////
+// dependencies
+///////////////////////////////////////////////////////////////////////////////
+
+plugins {
+    id 'groovy'
+    id 'maven-publish'
+    id 'signing'
+    id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
+}
+
+dependencies {
+    implementation gradleApi()
+    implementation localGroovy()
+}
+
+group = carnivalGroup
+version = carnivalVersion
+
+///////////////////////////////////////////////////////////////////////////////
 // properties file
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -48,8 +67,8 @@ task writePropertiesFile(type: WriteProperties) {
     outputFile = file('src/main/resources/carnival/gradle/Version.properties')
     property 'groovyVersion', groovyVersion
     property 'gremlinVersion', gremlinVersion
-    property 'neo4jTinkerpopVersion', neo4jTinkerpopVersion
-    property 'neo4JavaDriverVersion', neo4JavaDriverVersion
+    //property 'neo4jTinkerpopVersion', neo4jTinkerpopVersion
+    //property 'neo4JavaDriverVersion', neo4JavaDriverVersion
     property 'carnivalVersion', version
 }
 compileGroovy.dependsOn 'writePropertiesFile'
@@ -62,6 +81,18 @@ processResources.dependsOn 'writePropertiesFile'
 // repository, uncomment this block and comment the Gradle block.
 ///////////////////////////////////////////////////////////////////////////////
 publishToMavenLocal.dependsOn 'compileGroovy'
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    from sourceSets.main.allGroovy
+    archiveClassifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    from groovydoc
+    archiveClassifier = 'javadoc'
+}
 
 publishing {
     publications {
@@ -105,14 +136,4 @@ signing {
 }
 
 
-
-///////////////////////////////////////////////////////////////////////////////
-// dependencies
-///////////////////////////////////////////////////////////////////////////////
-
-// In this section you declare the dependencies for your production and test code
-dependencies {
-    implementation gradleApi()
-    implementation localGroovy()
-}
 

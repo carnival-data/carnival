@@ -15,10 +15,10 @@ import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.introspector.Property
 import org.yaml.snakeyaml.nodes.NodeTuple
 import org.yaml.snakeyaml.nodes.Tag
-import org.yaml.snakeyaml.representer.*
-import org.yaml.snakeyaml.*
 import org.yaml.snakeyaml.DumperOptions.FlowStyle
-import org.yaml.snakeyaml.constructor.*
+import org.yaml.snakeyaml.constructor.Constructor
+import org.yaml.snakeyaml.constructor.AbstractConstruct
+import org.yaml.snakeyaml.LoaderOptions
 
 
 
@@ -36,7 +36,11 @@ public class DataTableConstructor extends Constructor {
      *
      */
     public DataTableConstructor() {
-        this.yamlConstructors.put(new Tag("!GStringImpl"), new ConstructGStringImpl());
+        super(new LoaderOptions())
+        this.yamlConstructors.put(
+            new Tag("!GStringImpl"), 
+            new ConstructGStringImpl()
+        );
     }
 
 

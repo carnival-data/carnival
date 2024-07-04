@@ -79,31 +79,22 @@ class CarnivalApplicationPlugin implements Plugin<Project> {
         ResourceBundle versions = ResourceBundle.getBundle("carnival.gradle.Version", locale);        
         def groovyVersion = versions.getString("groovyVersion")
         def gremlinVersion = versions.getString("gremlinVersion")
-        def neo4jTinkerpopVersion = versions.getString("neo4jTinkerpopVersion")
-        def neo4JavaDriverVersion = versions.getString("neo4JavaDriverVersion")
         def carnivalVersion = versions.getString("carnivalVersion")
 
         println "[CarnivalApplication] Java version: ${System.getProperty('java.version')}"
         println "[CarnivalApplication] Groovy version: ${groovyVersion}"
         println "[CarnivalApplication] Gremlin version: ${gremlinVersion}"
-        println "[CarnivalApplication] Neo4j Tinkerpop version: ${neo4jTinkerpopVersion}"
-        println "[CarnivalApplication] Neo4 Java Driver version: ${neo4JavaDriverVersion}"
         println "[CarnivalApplication] Carnival version: ${carnivalVersion}"
 
         // apply dependencies
         project.dependencies {
             // Groovy
-            implementation "org.codehaus.groovy:groovy-all:${groovyVersion}"
+            implementation "org.apache.groovy:groovy-all:${groovyVersion}"
 
             // Tinkerpop
             implementation "org.apache.tinkerpop:gremlin-core:${gremlinVersion}"
             implementation "org.apache.tinkerpop:gremlin-groovy:${gremlinVersion}"
             implementation "org.apache.tinkerpop:tinkergraph-gremlin:${gremlinVersion}"
-
-            // Neo4J
-            implementation "org.apache.tinkerpop:neo4j-gremlin:${gremlinVersion}"
-            implementation "org.neo4j:neo4j-tinkerpop-api-impl:${neo4jTinkerpopVersion}"
-            implementation "org.neo4j.driver:neo4j-java-driver:${neo4JavaDriverVersion}"
 
             // Carnival
             implementation("io.github.carnival-data:carnival-util:${carnivalVersion}")

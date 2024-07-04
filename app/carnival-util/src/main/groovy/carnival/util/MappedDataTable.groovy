@@ -68,6 +68,11 @@ class MappedDataTable extends DataTable {
         String dateFormatPattern
 
         /**
+         * Needed for inheritance.
+         */
+        protected MetaData() { }
+
+        /**
          * Constructor from map of args.
          * @param args A map of args
          */

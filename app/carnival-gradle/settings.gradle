@@ -8,5 +8,5 @@
  * in the user guide at https://docs.gradle.org/4.4/userguide/multi_project_builds.html
  */
 
-rootProject.name = 'carnival'
-include('carnival-util', 'carnival-graph', 'carnival-core', 'carnival-vine')
+rootProject.name = 'carnival-gradle'
+

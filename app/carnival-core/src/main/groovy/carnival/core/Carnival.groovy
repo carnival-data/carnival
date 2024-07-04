@@ -7,10 +7,6 @@ import groovy.util.logging.Slf4j
 
 import org.reflections.Reflections
 
-import org.apache.commons.configuration.Configuration
-import org.apache.commons.configuration.BaseConfiguration
-import org.apache.commons.configuration.PropertiesConfiguration
-
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 import org.apache.tinkerpop.gremlin.process.traversal.P

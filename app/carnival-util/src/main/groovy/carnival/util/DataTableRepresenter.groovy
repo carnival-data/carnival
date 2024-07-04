@@ -15,10 +15,10 @@ import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.introspector.Property
 import org.yaml.snakeyaml.nodes.NodeTuple
 import org.yaml.snakeyaml.nodes.Tag
-import org.yaml.snakeyaml.representer.*
-import org.yaml.snakeyaml.*
+import org.yaml.snakeyaml.representer.Represent
+import org.yaml.snakeyaml.representer.Representer
 import org.yaml.snakeyaml.DumperOptions.FlowStyle
-import org.yaml.snakeyaml.constructor.*
+import org.yaml.snakeyaml.DumperOptions
 
 
 
@@ -42,8 +42,28 @@ public class DataTableRepresenter extends Representer {
     /**
      * No argument constructor.
      */
-    public DataTableRepresenter() { 
-       this.representers.put(org.codehaus.groovy.runtime.GStringImpl.class, new RepresentGString())
+    public DataTableRepresenter() {
+        super(new DumperOptions())
+        
+        this.representers.put(
+            org.codehaus.groovy.runtime.GStringImpl.class, 
+            new RepresentGString()
+        )
+
+        def stringRep = this.representers.get(String)
+        assert stringRep
+        this.representers.put(
+            org.codehaus.groovy.runtime.GStringImpl.class, 
+            stringRep
+        )
+
+        /*
+        def representer = new Representer() {{
+            this.multiRepresenters.put(
+                GString, 
+                this.representers.get(String))   
+        }}
+        */
     }
 
 

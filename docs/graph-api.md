@@ -1,8 +1,10 @@
 # Graph API
 
-Carnival defines a graph API layered over the standard Tinkerpop API whose goal is to provide a more semantic approach to property graph operations.  Graph objects are modelled in Carnival with enums to which traits have been applied.  EdgeDefTrait provides methods to work with defined traits including a hook to an EdgeBuilder class that attaches logic to the creation of edges.  There are analogous classes for the creation and manipulation of Vertices.
+Carnival defines a graph API layered over the standard [TinkerPop API](https://tinkerpop.apache.org/docs/current/reference/) whose goal is to provide a more semantic approach to property graph operations.  Graph objects (vertices, edges, and properties) are modelled in Carnival with enums to which traits have been applied (see [carnival graph modeling](graph-model.md) for details on how to define a graph model).  The graph API provides ways to interact with the graph using the model. For example, EdgeDefTrait provides methods to work with defined traits including a hook to an EdgeBuilder class that attaches logic to the creation of edges.  There are analogous classes for the creation and manipulation of Vertices.
 
-The underlying Tinkerpop classes, including Vertex and Edge, are always available.  A Carnival graph is just a property graph.  The facilities of the graph database engine and the full Tinkerpop API can be used to operate over the graph.  However, in order to keep the graph properly formatted, using the Carnival API is recommended.
+The underlying TinkerPop classes, including Vertex and Edge, are always available.  A Carnival graph is just a property graph.  The facilities of the graph database engine and the full Tinkerpop API can be used to operate over the graph.  However, in order to keep the graph properly formatted, using the Carnival API is recommended.
+
+Basic knowledge of the Tinkerpop API will be helpful, and introduction can be found [here](https://tinkerpop.apache.org/docs/current/tutorials/getting-started/).
 
 ## Contents
 - [Vertices](#vertices)

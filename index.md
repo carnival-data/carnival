@@ -12,7 +12,12 @@
     - [Groovy Scripts](#script-development)
     - [Groovy Applications](#app-development)
     - [Micronaut Applications](#micronaut-app-development)
-- Developing and Extending Carnival
+- Carnival Framework Components
+  - [Vines](vines.md)
+  - [Graph Model](graph-model.md)
+  - [Graph API](graph-api.md)
+  - [Graph Methods](graph-method.md)
+- Developing and Contributing to the Carnival Project
   - [Carnival Development](#core-development)
 - Documentation
   - [Reference Documentation](#reference-docs)

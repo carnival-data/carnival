@@ -1224,6 +1224,32 @@ class FeatureReport extends MappedDataTable {
     }
 
 
+    /**
+     * Check if a feature with the given name already exists for the given 
+     * subjectId.
+     *
+     * @param subjectId The subject identifier.
+     * @param featureName The feature name.
+     * @return True if the subject has a feature of the given name, false 
+     * otherwise.
+     * 
+     */
+    public boolean containsFeature(String subjectId, String featureName) {
+        assert subjectId != null : "subjectId cannot be null. featureName:${featureName} featureValue:${featureValue}"
+        assert featureName != null : "featureName cannot be null. subjectId:${subjectId} featureValue:${featureValue}"
+
+        // check if feature already exists
+        def fv = this.dataGet(subjectId)
+        if (fv == null) throw new RuntimeException("no feature vector for ${subjectId}")
+
+        def ffn = this.toFieldName(featureName)
+
+        return fv.containsKey(ffn)
+    }
+
+
+
+
     /** 
      * Add a feature to the subject identified by subjectId.
      *

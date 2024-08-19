@@ -717,6 +717,24 @@ class FeatureReportSpec extends Specification {
     }
 
 
+    def "contains feature"() {
+        given:
+        Exception e
+        def frp = new FeatureReport(name:'frp-test', idFieldName:'ID')
+        frp.dataModes([FeatureReport.DataMode.ADD_SUBJECT, FeatureReport.DataMode.ADD_FEATURE])
+        frp.addSubject('id1')
+
+        when:
+        frp.addFeature('id1', 'v1', 'v11')
+        boolean b1 = frp.containsFeature('id1', 'v1')
+        boolean b2 = frp.containsFeature('id1', 'v2')
+
+        then:
+        b1
+        !b2
+    }
+
+
     def "add feature"() {
         given:
         Exception e

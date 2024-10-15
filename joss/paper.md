@@ -46,14 +46,10 @@ Existing extract, transform and load (ETL) technologies such as [Microsoft SQL S
 
 Knowledge bases in Resource Description Framework (RDF) triplestores can be valuable tools to harmonize and enrich complex data. Transforming source relational data into RDF triples reflecting a data model is challenging. While there exist relational-to-RDF mappers such as Karma [@10.1007/978-3-662-46641-4_40], the configuration process is labor intensive and the resulting triples may not match a data model particularly one of sufficient complexity.
 
-**Carnival** was developed to create domain-specific property graph data models, and provide tools to create robust pipelines to import and manage data in that model. There are two main components to Carnival. The primary component is a layer built on top of [Apache Tinkerpop](https://tinkerpop.apache.org) that seeks to provide more standardized and semantically driven methods of interacting with a property graph. An additional component is a data caching mechanism that supports the efficient aggregation of data from disparate sources.
-
-
-
-### Key Features
-- a graph modeling framework that ensures graph data remain consistent
-- a data caching mechanism to ease the computational burden of data aggregation during the development process and promotes data provenance
-- a lightweight graph algorithm framework that facilitates the creation of graph building components with automated provenance tracking
+**Carnival** was developed to create domain-specific property graph data models, and provide tools to create robust pipelines to import and manage data in that model. There are two main components to Carnival. The primary component is a layer built on top of [Apache Tinkerpop](https://tinkerpop.apache.org) that seeks to provide more standardized and semantically driven methods of interacting with a property graph. An additional component is a data caching mechanism that supports the efficient aggregation of data from disparate sources. The main features of Carnival are:
+- a graph modeling framework that ensures graph data remain consistent,
+- a data caching mechanism to ease the computational burden of data aggregation during the development process and promotes data provenance,
+- a lightweight graph algorithm framework that facilitates the creation of graph building components with automated provenance tracking.
 
 ### Uses
 

@@ -13,6 +13,9 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.structure.Edge
 
+import carnival.graph.EdgeDefinition.Multiplicity
+
+
 
 
 /**
@@ -25,7 +28,7 @@ class DefAnnotationsSpec extends Specification {
     static enum VX {
         THING,
 
-        THING_1(
+        THING_A(
             vertexProperties:[
                 PX.PROP_A.withConstraints(required:true),
                 PX.PROP_B
@@ -38,9 +41,16 @@ class DefAnnotationsSpec extends Specification {
     static enum EX {
     	IS_NOT(
             domain:[VX.THING], 
-            range:[VX.THING_1]            
+            range:[VX.THING_A]            
+        ),
+        CONTAINS(
+            multiplicity: Multiplicity.ONE2MANY
+        ),
+        IS_CONTAINED_BY(
+            multiplicity: Multiplicity.MANY2ONE
         )
     }
+
 
 
     @PropertyModel
@@ -94,9 +104,16 @@ class DefAnnotationsSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
+    def "edge multiplicity"() {
+        expect:
+        EX.CONTAINS.multiplicity == Multiplicity.ONE2MANY
+        EX.IS_NOT.multiplicity == Multiplicity.MULTI
+    }
+
+
     def "edge domain"() {
         when:
-        Vertex v1 = VX.THING_1.instance().withProperty(
+        Vertex v1 = VX.THING_A.instance().withProperty(
             PX.PROP_A, 'a'
         ).create(graph)
 
@@ -109,7 +126,7 @@ class DefAnnotationsSpec extends Specification {
     def "vertex props"() {
         when:
         Vertex v1 = VX.THING.instance().create(graph)
-        Vertex v2 = VX.THING_1.instance().withProperty(
+        Vertex v2 = VX.THING_A.instance().withProperty(
             PX.PROP_A, 'a'
         ).create(graph)
         Edge e1 = EX.IS_NOT.instance().from(v1).to(v2).create()

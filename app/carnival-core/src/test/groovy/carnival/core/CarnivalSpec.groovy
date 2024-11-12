@@ -26,7 +26,7 @@ class CarnivalSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
 
     static enum VX implements VertexDefinition {
-        CGS_SUITCASE
+        SUITCASE
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -39,6 +39,10 @@ class CarnivalSpec extends Specification {
         Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, "1"),
         Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, "2"),
     ]
+
+    @Shared String idlbl = 'Identifier0CarnivalCoreCoreVx'
+    @Shared String idClassLbl = 'IdentifierClass0CarnivalCoreCoreVx'
+    @Shared String pxValueLbl = 'Value0CarnivalCoreCorePx'
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -100,28 +104,28 @@ class CarnivalSpec extends Specification {
     	//carnival.graphSchema.vertexBuilders?.size() == vertexBuilders?.size()
 
     	when:
-    	vs = g.V().hasLabel('Identifier').toList()
+    	vs = g.V().hasLabel(idlbl).toList()
 
     	then:
     	vs
     	vs.size() == 2
 
     	when:
-    	vs = g.V().hasLabel('Identifier').has("value", "1").toList()
+    	vs = g.V().hasLabel(idlbl).has(pxValueLbl, "1").toList()
 
     	then:
     	vs
     	vs.size() == 1
 
     	when:
-    	vs = g.V().hasLabel('Identifier').has("value", "2").toList()
+    	vs = g.V().hasLabel(idlbl).has(pxValueLbl, "2").toList()
 
     	then:
     	vs
     	vs.size() == 1
 
     	when:
-    	vs = g.V().hasLabel('Identifier').has("value", "3").toList()
+    	vs = g.V().hasLabel(idlbl).has(pxValueLbl, "3").toList()
 
     	then:
     	vs.size() == 0
@@ -138,8 +142,10 @@ class CarnivalSpec extends Specification {
     	carnival.checkConstraints().size() == 0
 
     	when:
-    	g.V().hasLabel('Identifier').has("value", "1").next().remove()
-    	vs = g.V().hasLabel('Identifier').has("value", "1").toList()
+        println "--- Core.PX.VALUE: ${Core.PX.VALUE.label}"
+
+    	g.V().hasLabel(idlbl).has(pxValueLbl, "1").next().remove()
+    	vs = g.V().hasLabel(idlbl).has(pxValueLbl, "1").toList()
 
     	then:
     	vs.size() == 0
@@ -148,8 +154,7 @@ class CarnivalSpec extends Specification {
 
     	when:
         Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, "1").vertex(graph, g)
-    	//graph.addVertex(T.label, "Identifier", "value", "1")
-    	vs = g.V().hasLabel('Identifier').has("value", "1").toList()
+    	vs = g.V().hasLabel(idlbl).has(pxValueLbl, "1").toList()
 
     	then:
     	vs.size() == 1
@@ -157,11 +162,11 @@ class CarnivalSpec extends Specification {
 
     	when:
     	graph.addVertex(
-            T.label, "Identifier",
+            T.label, idlbl,
             Base.PX.NAME_SPACE.label, Core.VX.IDENTIFIER.nameSpace, 
-            "value", "1"
+            pxValueLbl, "1"
         )
-    	vs = g.V().hasLabel('Identifier').has("value", "1").toList()
+    	vs = g.V().hasLabel(idlbl).has(pxValueLbl, "1").toList()
 
     	then:
     	vs.size() == 2
@@ -179,8 +184,9 @@ class CarnivalSpec extends Specification {
     	carnival.checkConstraints().size() == 0
 
     	when:
+        println "--- Core.VX.IDENTIFIER_CLASS: ${Core.VX.IDENTIFIER_CLASS.label}"
     	vert = graph.addVertex(
-            T.label, "IdentifierClass",
+            T.label, idClassLbl,
             Base.PX.NAME_SPACE.label, Core.VX.IDENTIFIER_CLASS.nameSpace
         )
 
@@ -219,7 +225,7 @@ class CarnivalSpec extends Specification {
         //    "hasScope", false, 
         //    "hasCreationFacility", true
         //)
-        suitcase = VX.CGS_SUITCASE.instance().vertex(graph, g)
+        suitcase = VX.SUITCASE.instance().vertex(graph, g)
 
         then:
         carnival.checkConstraints().size() == 0
@@ -264,7 +270,7 @@ class CarnivalSpec extends Specification {
             Core.PX.HAS_SCOPE, false,
             Core.PX.HAS_CREATION_FACILITY, true
         ).vertex(graph, g)
-        suitcase = VX.CGS_SUITCASE.instance().vertex(graph, g)
+        suitcase = VX.SUITCASE.instance().vertex(graph, g)
 
         then:
         carnival.checkConstraints().size() == 0
@@ -387,8 +393,12 @@ class CarnivalSpec extends Specification {
         def facility1 = Core.VX.IDENTIFIER_FACILITY.instance().withProperty(Core.PX.NAME, 'facility1').vertex(graph, g)
         def facility2 = Core.VX.IDENTIFIER_FACILITY.instance().withProperty(Core.PX.NAME, 'facility2').vertex(graph, g)
 
+
+
         def id1Class1 = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, 'id1').vertex(graph, g)
         Base.EX.IS_INSTANCE_OF.relate(g, id1Class1, idClass1) 
+
+        println "--- id1Class1: ${id1Class1.label}"
 
         def id2Class1 = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, 'id2').vertex(graph, g)
         Base.EX.IS_INSTANCE_OF.relate(g, id2Class1, idClass1) 
@@ -432,10 +442,10 @@ class CarnivalSpec extends Specification {
 
         // existing nodes
         when:
-        preIdCount = g.V().hasLabel("Identifier").toList().size()
+        preIdCount = g.V().hasLabel(idlbl).toList().size()
         identifier = new Identifier(identifierClass:idClass1, identifierScope:null, value:"id1" )
         idNode = identifier.getOrCreateNode(graph) 
-        postIdCount = g.V().hasLabel("Identifier").toList().size()
+        postIdCount = g.V().hasLabel(idlbl).toList().size()
 
         then:
         idNode == id1Class1
@@ -443,10 +453,10 @@ class CarnivalSpec extends Specification {
 
 
         when:
-        preIdCount = g.V().hasLabel("Identifier").toList().size()
+        preIdCount = g.V().hasLabel(idlbl).toList().size()
         identifier = new Identifier(identifierClass:idClass1, identifierScope:null, value:"id2" )
         idNode = identifier.getOrCreateNode(graph) 
-        postIdCount = g.V().hasLabel("Identifier").toList().size()
+        postIdCount = g.V().hasLabel(idlbl).toList().size()
 
         then:
         idNode == id2Class1
@@ -454,10 +464,10 @@ class CarnivalSpec extends Specification {
 
 
         when:
-        preIdCount = g.V().hasLabel("Identifier").toList().size()
+        preIdCount = g.V().hasLabel(idlbl).toList().size()
         identifier = new Identifier(identifierClass:idClass2, identifierScope:null, value:"id1" )
         idNode = identifier.getOrCreateNode(graph) 
-        postIdCount = g.V().hasLabel("Identifier").toList().size()
+        postIdCount = g.V().hasLabel(idlbl).toList().size()
 
         then:
         idNode == id1Class2
@@ -465,20 +475,20 @@ class CarnivalSpec extends Specification {
 
 
         when:
-        preIdCount = g.V().hasLabel("Identifier").toList().size()
+        preIdCount = g.V().hasLabel(idlbl).toList().size()
         identifier = new Identifier(identifierClass:scopedIdClass, identifierScope:scope1, value:"scopedId1" )
         idNode = identifier.getOrCreateNode(graph) 
-        postIdCount = g.V().hasLabel("Identifier").toList().size()
+        postIdCount = g.V().hasLabel(idlbl).toList().size()
 
         then:
         preIdCount == postIdCount
         idNode == scopedId
 
         when:
-        preIdCount = g.V().hasLabel("Identifier").toList().size()
+        preIdCount = g.V().hasLabel(idlbl).toList().size()
         identifier = new Identifier(identifierClass:facilityIdClass, identifierFacility:facility1, value:"facilityId1" )
         idNode = identifier.getOrCreateNode(graph) 
-        postIdCount = g.V().hasLabel("Identifier").toList().size()
+        postIdCount = g.V().hasLabel(idlbl).toList().size()
 
         then:
         preIdCount == postIdCount
@@ -487,10 +497,10 @@ class CarnivalSpec extends Specification {
 
         // new nodes
         when:
-        preIdCount = g.V().hasLabel("Identifier").toList().size()
+        preIdCount = g.V().hasLabel(idlbl).toList().size()
         identifier = new Identifier(identifierClass:idClass2, identifierScope:null, value:"id2" )
         idNode = identifier.getOrCreateNode(graph) 
-        postIdCount = g.V().hasLabel("Identifier").toList().size()
+        postIdCount = g.V().hasLabel(idlbl).toList().size()
 
         then:
         !(idNode in allIdVerts)
@@ -498,20 +508,20 @@ class CarnivalSpec extends Specification {
 
 
         when:
-        preIdCount = g.V().hasLabel("Identifier").toList().size()
+        preIdCount = g.V().hasLabel(idlbl).toList().size()
         identifier = new Identifier(identifierClass:scopedId, identifierScope:scope2, value:"scopedId1" )
         idNode = identifier.getOrCreateNode(graph) 
-        postIdCount = g.V().hasLabel("Identifier").toList().size()
+        postIdCount = g.V().hasLabel(idlbl).toList().size()
 
         then:
         !(idNode in allIdVerts)
         preIdCount == postIdCount - 1
 
         when:
-        preIdCount = g.V().hasLabel("Identifier").toList().size()
+        preIdCount = g.V().hasLabel(idlbl).toList().size()
         identifier = new Identifier(identifierClass:facilityId, identifierFacility:scope2, value:"facilityId1" )
         idNode = identifier.getOrCreateNode(graph) 
-        //postIdCount = g.V().hasLabel("Identifier").toList().size()
+        //postIdCount = g.V().hasLabel(idlbl).toList().size()
 
         then:
         //!(idNode in allIdVerts)

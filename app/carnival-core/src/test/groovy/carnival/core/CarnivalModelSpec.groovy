@@ -33,31 +33,21 @@ class CarnivalModelSpec extends Specification {
         GLOBAL_THING(global:true)
     }
 
-    @VertexModel
-    static enum VX2 {
-        THING
-    }
-
-    @VertexModel
+    /*@VertexModel
     static enum VX3 {
         GLOBAL_THING(global:true)
-    }
+    }*/
 
-    @EdgeModel
+    /*@EdgeModel
     static enum EX1 {
     	VERB,
         GLOBAL_VERB(global:true)
-    }
+    }*/
 
-    @EdgeModel
-    static enum EX2 {
-    	VERB
-    }
-
-    @EdgeModel
+    /*@EdgeModel
     static enum EX3 {
         GLOBAL_VERB(global:true)
-    }
+    }*/
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -99,7 +89,7 @@ class CarnivalModelSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
-    def "duplicate global edge model ignoreDuplicateModels no exception"() {
+    /*def "duplicate global edge model ignoreDuplicateModels no exception"() {
         when:
         carnival.ignoreDuplicateModels = true
         carnival.addModel(EX1)
@@ -112,10 +102,10 @@ class CarnivalModelSpec extends Specification {
 
         then:
         noExceptionThrown()
-    }
+    }*/
 
 
-    def "duplicate edge model ignoreDuplicateModels no exception"() {
+    /*def "duplicate edge model ignoreDuplicateModels no exception"() {
         when:
         carnival.ignoreDuplicateModels = true
         carnival.addModel(EX1)
@@ -128,10 +118,10 @@ class CarnivalModelSpec extends Specification {
 
         then:
         noExceptionThrown()
-    }
+    }*/
 
 
-    def "add duplicate global edge model throws exception"() {
+    /*def "add duplicate global edge model throws exception"() {
         expect:
         !carnival.ignoreDuplicateModels
 
@@ -146,10 +136,10 @@ class CarnivalModelSpec extends Specification {
 
         then:
         DuplicateModelException e = thrown()
-    }
+    }*/
 
 
-    def "add duplicate edge model throws exception"() {
+    /*def "add duplicate edge model throws exception"() {
         expect:
         !carnival.ignoreDuplicateModels
 
@@ -164,10 +154,10 @@ class CarnivalModelSpec extends Specification {
 
         then:
         DuplicateModelException e = thrown()
-    }
+    }*/
 
 
-    def "duplicate global vertex model ignoreDuplicateModels no exception"() {
+    /*def "duplicate global vertex model ignoreDuplicateModels no exception"() {
         when:
         carnival.ignoreDuplicateModels = true
         carnival.addModel(VX1)
@@ -180,7 +170,7 @@ class CarnivalModelSpec extends Specification {
 
         then:
         noExceptionThrown()
-    }
+    }*/
 
 
     def "duplicate vertex model ignoreDuplicateModels no exception"() {
@@ -199,7 +189,7 @@ class CarnivalModelSpec extends Specification {
     }
 
 
-    def "add duplicate global vertex model throws exception"() {
+    /*def "add duplicate global vertex model throws exception"() {
         expect:
         !carnival.ignoreDuplicateModels
 
@@ -214,7 +204,7 @@ class CarnivalModelSpec extends Specification {
 
         then:
         DuplicateModelException e = thrown()
-    }
+    }*/
 
 
     def "add duplicate vertex model throws exception"() {

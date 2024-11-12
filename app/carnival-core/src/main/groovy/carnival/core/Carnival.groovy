@@ -33,6 +33,7 @@ import carnival.core.graph.GraphValidator
 import carnival.core.graph.GraphValidationError
 import carnival.core.graph.DefaultGraphValidator
 import carnival.core.graph.EdgeConstraint
+import carnival.core.graph.PropertyConstraint
 import carnival.core.graph.VertexConstraint
 import carnival.core.util.DuplicateModelException
 
@@ -104,7 +105,7 @@ abstract class Carnival implements GremlinTrait {
 	 */
 	public void initialize(Graph graph, GraphTraversalSource g) {
 		log.info "Carnival initialize graph:$graph g:$g"
-		[Base.EX, Core.EX, Core.VX].each {
+		[Base.PX, Base.EX, Core.PX, Core.VX, Core.EX].each {
 			addModel(graph, g, it)
 		}
 	} 
@@ -253,6 +254,9 @@ abstract class Carnival implements GremlinTrait {
 	 * @param defClass The element definition class.
 	 */
 	public void addModel(Class<ElementDefinition> defClass) {
+
+		log.debug "\n\ndefClass:${defClass}\n\n"
+
 		assert defClass
 		withGremlin { graph, g ->
 			addModel(graph, g, defClass)
@@ -276,8 +280,8 @@ abstract class Carnival implements GremlinTrait {
 		def defInterfaces = defClass.getInterfaces()
 		if (defInterfaces.contains(VertexDefinition)) addVertexModel(graph, g, defClass)
 		else if (defInterfaces.contains(EdgeDefinition)) addEdgeModel(graph, g, defClass)
+		else if (defInterfaces.contains(PropertyDefinition)) addPropertyModel(graph, g, defClass)
 		else throw new RuntimeException("unrecognized definition class: $defClass")
-
 	}
 
 
@@ -324,6 +328,29 @@ abstract class Carnival implements GremlinTrait {
 			addConstraint(ec)
 		}
 	}
+
+
+	/**
+	 * Add the edge models in the provided property definition class to this
+	 * Carnival using the provided graph and graph traversal source. This is an
+	 * internal method and not expected to be called by client code.
+	 * @param graph A gremlin graph.
+	 * @param g A graph traversal source.
+	 * @param defClass A property definition class.
+	 */
+	public void addPropertyModel(Graph graph, GraphTraversalSource g, Class<PropertyDefinition> defClass) {
+		assert graph
+		assert g
+		assert defClass
+
+		log.debug "\n\naddPropertyModel defClass:${defClass}\n\n"
+
+		Set<PropertyConstraint> propertyConstraints = findNewPropertyConstraints(defClass)
+		propertyConstraints.each { pc ->
+			addConstraint(pc)
+		}
+	}
+
 
 
 	///////////////////////////////////////////////////////////////////////////
@@ -490,6 +517,83 @@ abstract class Carnival implements GremlinTrait {
 	 */
 	boolean existsInGraphSchema(EdgeConstraint ec) {
 		graphSchema.edgeConstraints.find {
+			it.label == ec.label && it.nameSpace == ec.nameSpace
+		}
+	}
+
+
+
+	///////////////////////////////////////////////////////////////////////////
+	// GRAPH CONSTRAINTS - PROPERTIES
+	///////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Add the provided property constraint to this carnival.
+	 * @param propertyConst The property constraint to add.
+	 */
+	public void addConstraint(PropertyConstraint propertyConst) {
+		log.trace "addConstraint propertyConst: ${propertyConst.label} $propertyConst"
+
+		log.trace "adding property definition to graph schema ${propertyConst.label} ${propertyConst}"
+		graphSchema.propertyConstraints.add(propertyConst)
+	}
+
+
+	/**
+	 * Find property constraints in an property definition class that are not already
+	 * present in this Carnival.
+	 * @param propertyDefClass The property definition class.
+	 * @return A collection of property constraints.
+	 */
+	public Collection<PropertyConstraint> findNewPropertyConstraints(Class<PropertyDefinition> propertyDefClass) {
+		assert propertyDefClass
+		Set<Class<PropertyDefinition>> edcs = new HashSet<Class<PropertyDefinition>>()
+		edcs.add(propertyDefClass)
+		findNewPropertyConstraints(edcs)
+	}
+
+
+	/** 
+	 * Find property constraints in a provided set of property definition classes that
+	 * are not already present in this Carnival.
+	 * @param propertyDefClasses A set of property definition classes.
+	 * @return A collection of property constraints.
+	 */
+    public Collection<PropertyConstraint> findNewPropertyConstraints(Set<Class<PropertyDefinition>> propertyDefClasses) {
+		assert propertyDefClasses
+    	
+		Set<PropertyConstraint> newConstraints = new HashSet<PropertyConstraint>()
+
+        propertyDefClasses.each { Class edc ->
+        	log.trace "findNewPropertyConstraints edc: $edc"
+
+            edc.values().each { PropertyDefinition edef ->
+            	log.trace "findNewPropertyConstraints edef: $edef"
+
+				PropertyConstraint ec = PropertyConstraint.create(edef)
+				def exists = existsInGraphSchema(ec)
+				if (!exists) {
+					log.trace "new property constraint ${ec.label} ${ec}"
+					newConstraints.add(ec)
+				}
+				if (exists && !ignoreDuplicateModels) throw new DuplicateModelException(
+					"property constraint already exists: ${ec}"
+				)
+            }
+        }
+
+        return newConstraints
+    }
+
+    
+	/** 
+	 * Return true if the provided property constraint exists in the graph 
+	 * schema.
+	 * @param vc The property constraint
+	 * @return True if the property constraint exists
+	 */
+	boolean existsInGraphSchema(PropertyConstraint ec) {
+		graphSchema.propertyConstraints.find {
 			it.label == ec.label && it.nameSpace == ec.nameSpace
 		}
 	}

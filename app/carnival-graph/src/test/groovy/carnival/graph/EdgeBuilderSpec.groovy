@@ -22,8 +22,8 @@ class EdgeBuilderSpec extends Specification {
 
     @VertexModel
     static enum VX {
-        EBS_THING_1,
-        EBS_THING_2
+        EBS_THING_ONE,
+        EBS_THING_TWO
     }
 
     @PropertyModel
@@ -34,11 +34,11 @@ class EdgeBuilderSpec extends Specification {
 
     @EdgeModel
     static enum EX {
-        EBS_REL_1(
-            domain:[VX.EBS_THING_1],
-            range:[VX.EBS_THING_2]
+        EBS_REL_ONE(
+            domain:[VX.EBS_THING_ONE],
+            range:[VX.EBS_THING_TWO]
         ),
-        EBS_REL_2(
+        EBS_REL_TWO(
             propertyDefs:[
                 PX.EBS_PROP_A.withConstraints(required:true), 
                 PX.EBS_PROP_B.defaultValue(1).withConstraints(required:true)
@@ -85,11 +85,11 @@ class EdgeBuilderSpec extends Specification {
     def "properties simple"() {
         given:
         Exception e
-        def v1 = VX.EBS_THING_1.createVertex(graph)
-        def v2 = VX.EBS_THING_2.createVertex(graph)
+        def v1 = VX.EBS_THING_ONE.createVertex(graph)
+        def v2 = VX.EBS_THING_TWO.createVertex(graph)
 
         when:
-        def e1 = EX.EBS_REL_2.instance()
+        def e1 = EX.EBS_REL_TWO.instance()
             .from(v1)
             .to(v2)
         .create()
@@ -99,7 +99,7 @@ class EdgeBuilderSpec extends Specification {
         e instanceof RequiredPropertyException
 
         when:
-        def e2 = EX.EBS_REL_2.instance()
+        def e2 = EX.EBS_REL_TWO.instance()
             .withProperty(PX.EBS_PROP_A, 'a')
             .from(v1)
             .to(v2)
@@ -116,18 +116,18 @@ class EdgeBuilderSpec extends Specification {
         given:
         Exception e
         def eb
-        def v1 = VX.EBS_THING_1.createVertex(graph)
-        def v2 = VX.EBS_THING_2.createVertex(graph)
+        def v1 = VX.EBS_THING_ONE.createVertex(graph)
+        def v2 = VX.EBS_THING_TWO.createVertex(graph)
 
         when:
-        eb = EX.EBS_REL_1.instance().from(v2)
+        eb = EX.EBS_REL_ONE.instance().from(v2)
 
         then:
         e = thrown()
         e instanceof EdgeDomainException
 
         when:
-        eb = EX.EBS_REL_1.instance().from(v1)
+        eb = EX.EBS_REL_ONE.instance().from(v1)
 
         then:
         noExceptionThrown()
@@ -138,18 +138,18 @@ class EdgeBuilderSpec extends Specification {
         given:
         Exception e
         def eb
-        def v1 = VX.EBS_THING_1.createVertex(graph)
-        def v2 = VX.EBS_THING_2.createVertex(graph)
+        def v1 = VX.EBS_THING_ONE.createVertex(graph)
+        def v2 = VX.EBS_THING_TWO.createVertex(graph)
 
         when:
-        eb = EX.EBS_REL_1.instance().to(v1)
+        eb = EX.EBS_REL_ONE.instance().to(v1)
 
         then:
         e = thrown()
         e instanceof EdgeRangeException
 
         when:
-        eb = EX.EBS_REL_1.instance().to(v2)
+        eb = EX.EBS_REL_ONE.instance().to(v2)
 
         then:
         noExceptionThrown()
@@ -159,12 +159,12 @@ class EdgeBuilderSpec extends Specification {
     def "create simple"() {
         given:
         Exception e
-        def v1 = VX.EBS_THING_1.createVertex(graph)
-        def v2 = VX.EBS_THING_2.createVertex(graph)
+        def v1 = VX.EBS_THING_ONE.createVertex(graph)
+        def v2 = VX.EBS_THING_TWO.createVertex(graph)
 
         when:
-        def eb1 = EX.EBS_REL_1.instance().from(v1).to(v2).create()
-        def eb2 = EX.EBS_REL_1.instance().from(v1).to(v2).create()
+        def eb1 = EX.EBS_REL_ONE.instance().from(v1).to(v2).create()
+        def eb2 = EX.EBS_REL_ONE.instance().from(v1).to(v2).create()
 
         then:
         noExceptionThrown()
@@ -178,12 +178,12 @@ class EdgeBuilderSpec extends Specification {
     def "edge simple"() {
         given:
         Exception e
-        def v1 = VX.EBS_THING_1.createVertex(graph)
-        def v2 = VX.EBS_THING_2.createVertex(graph)
+        def v1 = VX.EBS_THING_ONE.createVertex(graph)
+        def v2 = VX.EBS_THING_TWO.createVertex(graph)
 
         when:
-        def eb1 = EX.EBS_REL_1.instance().from(v1).to(v2).ensure(g)
-        def eb2 = EX.EBS_REL_1.instance().from(v1).to(v2).ensure(g)
+        def eb1 = EX.EBS_REL_ONE.instance().from(v1).to(v2).ensure(g)
+        def eb2 = EX.EBS_REL_ONE.instance().from(v1).to(v2).ensure(g)
 
         then:
         noExceptionThrown()

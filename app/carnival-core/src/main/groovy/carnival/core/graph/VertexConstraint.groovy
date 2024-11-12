@@ -44,9 +44,12 @@ class VertexConstraint implements ElementConstraint {
 	 * @return A vertex constraint
 	 */
 	static public VertexConstraint create(VertexDefinition vdef) {
+		assert vdef
+
 		def propDefs = []
 		vdef.vertexProperties.each { PropertyDefinition pdef ->
 			propDefs << new VertexPropertyConstraint(
+				propertyDef: pdef,
 				name: pdef.label,
 				unique: pdef.unique,
 				required: pdef.required,

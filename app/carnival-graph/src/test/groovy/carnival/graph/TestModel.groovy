@@ -13,7 +13,7 @@ class TestModel {
     @VertexModel(global="true")
     static enum VXG {
         THING,
-        THING_1(
+        THING_ONE(
             vertexProperties:[
                 PX.PROP_A.withConstraints(required:true),
                 PX.PROP_B
@@ -26,7 +26,7 @@ class TestModel {
     static enum VX {
         THING,
 
-        THING_1(
+        THING_ONE(
             vertexProperties:[
                 PX.PROP_A.withConstraints(required:true),
                 PX.PROP_B
@@ -39,7 +39,7 @@ class TestModel {
     static enum EX {
     	IS_NOT(
             domain:[VX.THING], 
-            range:[VX.THING_1]            
+            range:[VX.THING_ONE]            
         )
     }
 

@@ -28,6 +28,14 @@ import org.apache.tinkerpop.gremlin.structure.Edge
 @Slf4j
 trait EdgeDefinition extends ElementDefinition {
 
+    //////////////////////////////////////////////////////////////////////////
+    // STATIC
+    ///////////////////////////////////////////////////////////////////////////
+
+    static enum Multiplicity {
+        MULTI, SIMPLE, MANY2ONE, ONE2MANY, ONE2ONE
+    }
+
 
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS
@@ -39,18 +47,27 @@ trait EdgeDefinition extends ElementDefinition {
     /** The set of permitted vertex definitions for to vertices */
     List<VertexDefinition> range = new ArrayList<VertexDefinition>()
 
+    /** */
+    Multiplicity multiplicity = Multiplicity.MULTI
+
 
     ///////////////////////////////////////////////////////////////////////////
     // GETTERS / SETTERS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** Getter wrapper for propertyDefs */
-    List<PropertyDefinition> getEdgeProperties() { propertyDefs }
+    /** 
+     * Getter wrapper for propertyDefs 
+     * @return A set of property definitions
+     */
+    Set<PropertyDefinition> getEdgeProperties() { this.propertyDefs }
     
-    /** Setter wrapper for propertyDefs */
-    void setEdgeProperties(ArrayList<PropertyDefinition> propertyDefs) {
+    /** 
+     * Setter wrapper for propertyDefs 
+     * @param A set of proeprty definitions
+     */
+    void setEdgeProperties(Set<PropertyDefinition> propertyDefs) {
         assert propertyDefs != null
-        propertyDefs = propertyDefs
+        this.propertyDefs = propertyDefs
     }
 
 
@@ -62,9 +79,9 @@ trait EdgeDefinition extends ElementDefinition {
      * Return the label to use for instantiated edges.
      * @return The label as a string
      */
-    public String getLabel() {
+    /*public String getLabel() {
         name().toLowerCase()
-    }
+    }*/
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -150,6 +167,13 @@ trait EdgeDefinition extends ElementDefinition {
      */
     public void assertRange(VertexDefinition toDef) {
         assert toDef != null
+
+        /*println "--- toDef: ${toDef} ${toDef.label}"
+        println "--- range: ${this.range}"
+        range.each {
+            println "${it}: ${it.label}"
+        }*/
+
         if (this.range.size() > 0) {
             if (this.range.contains(toDef)) return
             if (toDef.isGlobal() && this.range.find({ it.label == toDef.label })) return

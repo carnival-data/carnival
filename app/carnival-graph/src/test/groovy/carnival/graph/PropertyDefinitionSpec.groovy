@@ -10,6 +10,8 @@ import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
 import org.apache.tinkerpop.gremlin.structure.T
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
+import org.apache.tinkerpop.gremlin.structure.Vertex
+import org.apache.tinkerpop.gremlin.structure.VertexProperty
 
 
 
@@ -22,20 +24,23 @@ class PropertyDefinitionSpec extends Specification {
     @PropertyModel
     static enum PX {
         PROP_A,
-        PROP_B
+        PROP_B,
+        PROP_C(
+            cardinality: PropertyDefinition.Cardinality.LIST
+        )
     }
 
     @VertexModel
     static enum VX {
-        THING_1,
+        THING_ONE,
 
-        THING_2(
+        THING_TWO(
             vertexProperties:[
                 PX.PROP_A
             ]
         ),
 
-        THING_3(
+        THING_THREE(
             vertexProperties:[
                 PX.PROP_A,
                 PX.PROP_B
@@ -79,9 +84,37 @@ class PropertyDefinitionSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
+    def "cardinality"() {
+        expect:
+        PX.PROP_A.cardinality == PropertyDefinition.Cardinality.SINGLE
+        PX.PROP_B.cardinality == PropertyDefinition.Cardinality.SINGLE
+        PX.PROP_C.cardinality == PropertyDefinition.Cardinality.LIST
+    }
+
+
+    def "label format"() {
+        expect:
+        PX.PROP_A.label == 'PropA0CarnivalGraphPropertydefinitionspecPx'
+
+        when:
+        Vertex v1 = VX.THING_TWO.instance().withProperties(
+            PX.PROP_A, 'prop-a-val-1',
+        ).create(graph)
+
+        List<VertexProperty> props = v1.properties().toList()
+        //println "props: ${props}"
+        VertexProperty theProp = props.find({ 
+            it.label() ==  'PropA0CarnivalGraphPropertydefinitionspecPx'
+        })
+
+        then:
+        theProp
+    }
+
+
     def "base properties are defined"() {
         when:
-        def v1 = VX.THING_2.instance().create(graph)
+        def v1 = VX.THING_TWO.instance().create(graph)
         pm.valueOf(v1)
 
         then:
@@ -94,7 +127,7 @@ class PropertyDefinitionSpec extends Specification {
 
     def "valueOf throws an exception for undefined property"() {
         when:
-        def v1 = VX.THING_2.instance().create(graph)
+        def v1 = VX.THING_TWO.instance().create(graph)
         PX.PROP_B.valueOf(v1)
 
         then:
@@ -104,7 +137,7 @@ class PropertyDefinitionSpec extends Specification {
 
     def "valueOf returns null if property not present"() {
         when:
-        def v1 = VX.THING_2.instance().create(graph)
+        def v1 = VX.THING_TWO.instance().create(graph)
 
         then:
         !PX.PROP_A.of(v1).isPresent()
@@ -114,7 +147,7 @@ class PropertyDefinitionSpec extends Specification {
 
     def "valueOf returns property value if present"() {
         when:
-        def v1 = VX.THING_2.instance().withProperty(PX.PROP_A, 'a').create(graph)
+        def v1 = VX.THING_TWO.instance().withProperty(PX.PROP_A, 'a').create(graph)
 
         then:
         PX.PROP_A.valueOf(v1) == 'a'
@@ -123,7 +156,7 @@ class PropertyDefinitionSpec extends Specification {
 
     def "set closure result"() {
         when:
-        def v1 = VX.THING_2.instance().create(graph)
+        def v1 = VX.THING_TWO.instance().create(graph)
 
         then:
         !PX.PROP_A.of(v1).isPresent()
@@ -153,7 +186,7 @@ class PropertyDefinitionSpec extends Specification {
 
     def "setIf closure result"() {
         when:
-        def v1 = VX.THING_2.instance().create(graph)
+        def v1 = VX.THING_TWO.instance().create(graph)
 
         then:
         !PX.PROP_A.of(v1).isPresent()
@@ -181,7 +214,7 @@ class PropertyDefinitionSpec extends Specification {
         Exception e
 
         when:
-        def v1 = VX.THING_1.instance().create(graph)
+        def v1 = VX.THING_ONE.instance().create(graph)
         PX.PROP_A.set(v1, 'a')
 
         then:
@@ -189,7 +222,7 @@ class PropertyDefinitionSpec extends Specification {
         e instanceof IllegalArgumentException
 
         when:
-        def v2 = VX.THING_2.instance().create(graph)
+        def v2 = VX.THING_TWO.instance().create(graph)
         PX.PROP_A.set(v2, 'a')
 
         then:

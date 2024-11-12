@@ -23,6 +23,33 @@ import carnival.graph.Base
 @Slf4j
 class Definition {
 
+    /** */
+    static public String splitCapitalize(String source, String separator) {
+        assert source != null
+
+        String[] chunks = source.split(separator)
+
+        StringBuffer str = new StringBuffer()
+        chunks.each { str.append(it.toLowerCase().capitalize()) }
+        str.toString()
+    }
+
+
+    /** */
+    static private parseLabel(String source) {
+        assert source != null
+
+        String label
+        def result = (source =~ /^([a-zA-Z0-9]+)0[A-Z]/).findAll()
+        //log.debug "result: ${result}"
+        if (result) {
+            label = result.first().last()
+        }
+
+        return label
+    }
+
+
     /** 
      * Look up the element definition of the provided element.  If the element
      * is a vertex, a VertexDefinition will be returned; if the element is an
@@ -34,12 +61,13 @@ class Definition {
         assert v != null
         assert (v instanceof Edge || v instanceof Vertex)
 
-        String label = v.label()
-        //log.trace "label: ${label}"
+        String label = parseLabel(v.label())
+        //log.debug "label: '${label}'"
+        if (label == null) return null
 
         def defName
         if (v instanceof Vertex) defName = StringUtils.toScreamingSnakeCase(label)
-        else if (v instanceof Edge) defName = label.toUpperCase()
+        else if (v instanceof Edge) defName = StringUtils.toScreamingSnakeCase(label) //label.toUpperCase()
         //log.trace "defName: $defName"
 
         def defClassName

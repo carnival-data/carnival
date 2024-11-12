@@ -59,9 +59,9 @@ class ModelTransformationSpec extends Specification {
     def "vertexdef global"() {
         expect:
         TestModel.VX.THING.global == false
-        TestModel.VX.THING_1.global == false
+        TestModel.VX.THING_ONE.global == false
         TestModel.VXG.THING.global == true
-        TestModel.VXG.THING_1.global == true
+        TestModel.VXG.THING_ONE.global == true
 
     }
 

@@ -29,6 +29,14 @@ import carnival.graph.Base
 trait ElementDefinition extends WithPropertyDefsTrait {
 
     ///////////////////////////////////////////////////////////////////////////
+    // STATIC
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** The default separator for components of a name */
+    public static final String NAME_SEPARATOR = '_'
+
+
+    ///////////////////////////////////////////////////////////////////////////
     // GLOBAL
     ///////////////////////////////////////////////////////////////////////////
 
@@ -65,10 +73,54 @@ trait ElementDefinition extends WithPropertyDefsTrait {
     ///////////////////////////////////////////////////////////////////////////
 
     /** 
-     * If false, verticies created by this definition can contain properties
-     * that were not defined by this VertexDefinition.
+     * If false, elements created by this definition can contain properties
+     * that were not defined by this ElementDefinition.
      */
     Boolean propertiesMustBeDefined = true
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // LABEL
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** 
+     * Return the string label to use for instantiated vertices.
+     * @return The string label
+     */
+    public String getLabel() {
+
+        /*println "--- this: ${this}"
+        println "--- this.class: ${this.class}"
+        println "--- this instanceof Enum: ${(this instanceof Enum)}"*/
+        
+        def thisClass
+        if (this instanceof Enum) {
+            thisClass = this.declaringClass    
+        } else if (this instanceof DynamicVertexDef) {
+            thisClass = this.metaClass.theClass        
+        } else {
+            thisClass = this.class
+        }
+        assert thisClass
+
+        String classQual = String.valueOf(thisClass)
+        //println "--1 classQual :${classQual}"
+        classQual = classQual.minus('class ')
+        //println "--2 classQual :${classQual}"
+        classQual = classQual.replace('$', '.')
+        //println "--3 classQual :${classQual}"
+        classQual = Definition.splitCapitalize(classQual, '\\.')
+        //println "--4 classQual :${classQual}"
+
+        String n = name()
+        n = Definition.splitCapitalize(n, NAME_SEPARATOR)
+
+        StringBuffer str = new StringBuffer(n)
+        str.append('0')
+        str.append(classQual)
+
+        return str.toString()
+    }
 
 
     ///////////////////////////////////////////////////////////////////////////

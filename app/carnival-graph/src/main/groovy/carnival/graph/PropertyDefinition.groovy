@@ -3,6 +3,8 @@ package carnival.graph
 
 
 import groovy.util.logging.Slf4j
+import org.codehaus.groovy.ast.ClassNode
+import org.codehaus.groovy.transform.trait.Traits
 
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
@@ -25,14 +27,31 @@ import org.apache.tinkerpop.gremlin.structure.Property
 @Slf4j
 trait PropertyDefinition {
 
+    ///////////////////////////////////////////////////////////////////////////
+    // STATIC
+    ///////////////////////////////////////////////////////////////////////////
+
+    /** The default separator for components of a name */
+    public static final String NAME_SEPARATOR = '_'
+
+    /** Cardinality of the property */
+    static enum Cardinality {
+        SINGLE, LIST, SET
+    }
+
 
     ///////////////////////////////////////////////////////////////////////////
     // FIELDS
     ///////////////////////////////////////////////////////////////////////////
 
     /** 
+     * The data type of the property. 
+     */
+    Class dataType = String.class
+
+    /** 
      * Set by #withDefault()
-    */
+     */
     Object defaultValue = null
 
     /**
@@ -52,6 +71,12 @@ trait PropertyDefinition {
      * system. Set by #withConstraints()
      */
     Boolean index = false
+
+    /**
+     * The cardinality of the property.
+     * 
+     */
+    Cardinality cardinality = Cardinality.SINGLE
 
 
 	///////////////////////////////////////////////////////////////////////////
@@ -183,11 +208,14 @@ trait PropertyDefinition {
         if (allBaseDefs.contains(this)) return
 
         boolean isDefined = false
-        
+
         ElementDefinition edt = Definition.lookup(el)
+
         if (edt != null && !(edt instanceof DynamicVertexDef)) {
             if (edt.propertiesMustBeDefined) {
-                isDefined = edt.propertyDefs.find({it.label == getLabel()})
+                isDefined = edt.propertyDefs.find({
+                    it.label == getLabel()
+                })
             }
         }
         
@@ -264,17 +292,49 @@ trait PropertyDefinition {
     }
 
 
-	/** 
-     * Returns the property label to use for this property definition.
-     * @return The property label as a string
-     */
-    public String getLabel() {
+	
+    /*public String getLabel() {
         def chunks = name().split('_')
         if (chunks.size() == 1) return chunks[0].toLowerCase()
 
         def str = chunks[0].toLowerCase()
         chunks.drop(1).each { str += it.toLowerCase().capitalize() }
         return str
+    }*/
+
+    /** 
+     * Returns the property label to use for this property definition.
+     * @return The property label as a string
+     */
+    public String getLabel() {
+
+        def thisClass
+        if (this instanceof Enum) {
+            thisClass = this.declaringClass
+        } else if (this instanceof PropertyDefinitionHolder) {
+            def t0 = this
+            while (t0 instanceof PropertyDefinitionHolder) {
+                t0 = t0.source
+            }
+            thisClass = t0.class
+        } else {
+            thisClass = this.class
+        }
+        assert thisClass
+
+        String classQual = String.valueOf(thisClass)
+        classQual = classQual.minus('class ')
+        classQual = classQual.replace('$', '.')
+        classQual = Definition.splitCapitalize(classQual, '\\.')
+
+        String n = name()
+        n = Definition.splitCapitalize(n, NAME_SEPARATOR)
+
+        StringBuffer str = new StringBuffer(n)
+        str.append('0')
+        str.append(classQual)
+
+        return str.toString()
     }
 
 

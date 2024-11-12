@@ -22,14 +22,14 @@ class EdgeDefSpec extends Specification {
     @VertexModel
     static enum VX {
         THING,
-        THING_1
+        THING_ONE
     }
 
     @EdgeModel
     static enum EX {
     	IS_NOT(
             domain:[VX.THING], 
-            range:[VX.THING_1]            
+            range:[VX.THING_ONE]            
         )
     }
 
@@ -74,7 +74,7 @@ class EdgeDefSpec extends Specification {
     def "lookup"() {
         when:
         Vertex v1 = VX.THING.instance().create(graph)
-        Vertex v2 = VX.THING_1.instance().create(graph)
+        Vertex v2 = VX.THING_ONE.instance().create(graph)
         Edge e = EX.IS_NOT.instance().from(v1).to(v2).create()
         EdgeDefinition edt = Definition.lookup(e)
 

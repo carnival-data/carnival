@@ -25,7 +25,7 @@ class VertexDefinitionSpec extends Specification {
     static enum VX implements VertexDefinition {
         THING,
 
-        THING_1(
+        THING_ONE(
             vertexProperties:[
                 PX.PROP_A.withConstraints(required:true)
             ]
@@ -115,6 +115,19 @@ class VertexDefinitionSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+    def "label format"() {
+        expect:
+        VX.THING.label == 'Thing0CarnivalGraphVertexdefinitionspecVx'
+
+        when:
+        def v1 = VX.THING.instance().create(graph)
+        def lbl = v1.label
+
+        then:
+        lbl == 'Thing0CarnivalGraphVertexdefinitionspecVx'
+    }
+
 
     def "instanceOf edge is automatically created"() {
         setup:

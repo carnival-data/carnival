@@ -84,7 +84,7 @@ class GremlinTraitUtilities {
      * @param cl The closure to execute
      * @return The result of the closure
      */
-    static public Object withGremlin(Map args ,Graph graph, GraphTraversalSource g, Closure cl) {
+    static public Object withGremlin(Map args, Graph graph, GraphTraversalSource g, Closure cl) {
         assert args != null
         assert graph != null
         assert g != null

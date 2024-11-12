@@ -109,4 +109,20 @@ class DefaultGraphSchema implements GraphSchema {
 		return edgeConstraints
 	}
 
+
+	///////////////////////////////////////////////////////////////////////////
+	// PROPERTY CONSTRAINTS
+	///////////////////////////////////////////////////////////////////////////
+
+	/** edge constraints */
+	private Set<PropertyConstraint> propertyConstraints = new HashSet<PropertyConstraint>()
+
+	/** 
+	 * Get property constraints 
+	 * @return Set of PropertyConstraint
+	 */
+	public Set<PropertyConstraint> getPropertyConstraints() {
+		return propertyConstraints
+	}
+
 }

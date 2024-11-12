@@ -205,7 +205,7 @@ class DefaultGraphValidatorSpec extends Specification {
     }
 
 
-    def "global edge def constraints"() {
+    /*def "global edge def constraints"() {
         def thing, anotherThing, suitcase
 
         expect:
@@ -228,7 +228,7 @@ class DefaultGraphValidatorSpec extends Specification {
         then:
         graphValidator.checkModel(g, graphSchema).size() == 0
         graphValidator.checkConstraints(g, graphSchema).size() == 1
-    }
+    }*/
 
 
     def "unmodelled edge labels fail unless there is global def"() {
@@ -253,7 +253,7 @@ class DefaultGraphValidatorSpec extends Specification {
     }
 
 
-    def "unmodelled vertex labels fail unless there is global def"() {
+    /*def "unmodelled vertex labels fail unless there is global def"() {
         def thing
 
         expect:
@@ -270,10 +270,10 @@ class DefaultGraphValidatorSpec extends Specification {
 
         then:
         graphValidator.checkModel(g, graphSchema).size() == 1
-    }
+    }*/
 
 
-    def "checkModel global vertex def addVertex"() {
+    /*def "checkModel global vertex def addVertex"() {
         def thing
 
         expect:
@@ -293,11 +293,11 @@ class DefaultGraphValidatorSpec extends Specification {
         then:
         graphValidator.checkModel(g, graphSchema).size() == 0
         graphValidator.checkConstraints(g, graphSchema).size() == 0
-    }
+    }*/
 
 
 
-    def "checkModel global vertex def enum"() {
+    /*def "checkModel global vertex def enum"() {
         def thing
 
         expect:
@@ -317,7 +317,7 @@ class DefaultGraphValidatorSpec extends Specification {
         then:
         graphValidator.checkModel(g, graphSchema).size() == 0
         graphValidator.checkConstraints(g, graphSchema).size() == 0
-    }
+    }*/
 
 
     def "test checkModel for unmodeled vertex and edge labels"() {

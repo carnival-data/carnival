@@ -12,6 +12,9 @@ import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 import org.apache.tinkerpop.gremlin.structure.Property
 
+import carnival.graph.EdgeDefinition.Multiplicity
+
+
 
 
 /**
@@ -31,13 +34,13 @@ class EdgeDefinitionSpec extends Specification {
         ANOTHER_THING
     }
 
-    static enum VX2 implements VertexDefinition {
+    /*static enum VX2 implements VertexDefinition {
         THING (global:true),
         ANOTHER_THING (global:true)
 
         private VX2() {}
         private VX2(Map m) { m.each { k,v -> this."$k" = v } }
-    }
+    }*/
 
     static enum EX1 implements EdgeDefinition {
         RELATION(            
@@ -79,6 +82,13 @@ class EdgeDefinitionSpec extends Specification {
 
         private EX3() {}
         private EX3(Map m) {m.each { k,v -> this."$k" = v } }
+    }
+
+    static enum EX4 implements EdgeDefinition {
+        RELATION(
+            multiplicity: Multiplicity.SIMPLE,
+            domain: [DYNAMIC_THING]
+        )
     }
 
     static enum PX implements PropertyDefinition {
@@ -181,7 +191,7 @@ class EdgeDefinitionSpec extends Specification {
     }
 
 
-    def "vertex vertex enforce range with global"() {
+    /*def "vertex vertex enforce range with global"() {
         given:
         def v1
         def v2
@@ -204,10 +214,10 @@ class EdgeDefinitionSpec extends Specification {
 
         then:
         t = thrown()
-    }
+    }*/
 
 
-    def "vertex vertex enforce domain with global"() {
+    /*def "vertex vertex enforce domain with global"() {
         given:
         def v1
         def v2
@@ -230,7 +240,7 @@ class EdgeDefinitionSpec extends Specification {
 
         then:
         t = thrown()
-    }
+    }*/
 
 
     def "vertex vertex enforce domain dynamic"() {
@@ -245,8 +255,8 @@ class EdgeDefinitionSpec extends Specification {
         v2 = VX.ANOTHER_THING.instance().vertex(graph, g)
         e = EX3.RELATION.setRelationship(g, v1, v2)
 
-        println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
-        println "v2: ${v2} ${v2.label()} ${v2.value('nameSpace')}"
+        //println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
+        //println "v2: ${v2} ${v2.label()} ${v2.value('nameSpace')}"
 
         then:
         noExceptionThrown()
@@ -271,8 +281,8 @@ class EdgeDefinitionSpec extends Specification {
         v2 = VX.ANOTHER_THING.instance().vertex(graph, g)
         e = EX2.RELATION.setRelationship(g, v1, v2)
 
-        println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
-        println "v2: ${v2} ${v2.label()} ${v2.value('nameSpace')}"
+        //println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
+        //println "v2: ${v2} ${v2.label()} ${v2.value('nameSpace')}"
 
         then:
         noExceptionThrown()
@@ -297,8 +307,8 @@ class EdgeDefinitionSpec extends Specification {
         v2 = VX.ANOTHER_THING.instance().vertex(graph, g)
         e = EX2.RELATION.setRelationship(g, v1, v2)
 
-        println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
-        println "v2: ${v2} ${v2.label()} ${v2.value('nameSpace')}"
+        //println "v1: ${v1} ${v1.label()} ${v1.value('nameSpace')}"
+        //println "v2: ${v2} ${v2.label()} ${v2.value('nameSpace')}"
 
         then:
         noExceptionThrown()

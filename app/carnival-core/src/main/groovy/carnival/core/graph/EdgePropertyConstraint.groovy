@@ -8,9 +8,6 @@ import groovy.transform.EqualsAndHashCode
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import carnival.graph.PropertyDefinition
-
-
 
 /**
  * Defines the rules governing the given property.
@@ -27,10 +24,7 @@ import carnival.graph.PropertyDefinition
  * efficient lookup.
  */
 @ToString
-class VertexPropertyConstraint {
-
-	/** The source property definition */
-	PropertyDefinition propertyDef
+class EdgePropertyConstraint {
 
 	/** The name of the property */
 	String name

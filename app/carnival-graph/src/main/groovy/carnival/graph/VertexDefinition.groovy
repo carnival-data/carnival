@@ -40,7 +40,7 @@ trait VertexDefinition extends ElementDefinition {
     public static final String CLASS_SUFFIX = '_class'
 
     /** The default separator for components of a name */
-    public static final String NAME_SEPARATOR = '_'
+    //public static final String NAME_SEPARATOR = '_'
 
 
 
@@ -137,13 +137,27 @@ trait VertexDefinition extends ElementDefinition {
      * Return the string label to use for instantiated vertices.
      * @return The string label
      */
-    public String getLabel() {
+    /*public String getLabel() {
+        
+        def thisClass = this.class
+        if (!thisClass && (this instanceof Enum)) {
+            thisClass = this.declaringClass
+        }
+
+        def classQual = String.valueOf(thisClass)
+        classQual = classQual.minus('class ')
+        classQual = classQual.replace('$', '_')
+
         def n = name()
         def chunks = n.split(NAME_SEPARATOR)
         def str = ""
         chunks.each { str += it.toLowerCase().capitalize() }
+
+        str += '-'
+        str += classQual
+
         return str
-    }
+    }*/
 
 
     /** 

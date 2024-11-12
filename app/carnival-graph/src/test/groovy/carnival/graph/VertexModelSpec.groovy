@@ -23,7 +23,7 @@ class VertexModelSpec extends Specification {
 
     @VertexModel
     static enum VX {
-        THING_1(PX)
+        THING_ONE(PX)
 
         /*VX(Class aClass) {
             println "aClass: ${aClass}"
@@ -57,7 +57,7 @@ class VertexModelSpec extends Specification {
     static enum EX {
     	IS_NOT(
             domain:[VX.THING], 
-            range:[VX.THING_1]            
+            range:[VX.THING_ONE]            
         )
     }*/
 
@@ -111,8 +111,8 @@ class VertexModelSpec extends Specification {
 
     def "vertex props"() {
         expect:
-        VX.THING_1.propertyDefs != null
-        VX.THING_1.propertyDefs.size() == 3
+        VX.THING_ONE.propertyDefs != null
+        VX.THING_ONE.propertyDefs.size() == 3
     }
 
 }

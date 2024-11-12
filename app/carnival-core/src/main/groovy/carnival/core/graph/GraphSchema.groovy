@@ -63,6 +63,13 @@ interface GraphSchema {
 	 */
 	Collection<EdgeConstraint> getEdgeConstraints()
 
+
+	/** 
+	 * Return the constraints on properties.
+	 * @return The collection of property constraints
+	 */
+	Collection<PropertyConstraint> getPropertyConstraints()
+
 }
 
 

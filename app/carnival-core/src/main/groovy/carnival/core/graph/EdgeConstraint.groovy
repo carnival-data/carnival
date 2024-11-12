@@ -19,6 +19,7 @@ import org.apache.tinkerpop.gremlin.structure.Edge
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 
 import carnival.graph.EdgeDefinition
+import carnival.graph.EdgeDefinition.Multiplicity
 import carnival.graph.PropertyDefinition
 import carnival.graph.VertexDefinition
 import carnival.graph.VertexBuilder
@@ -44,12 +45,25 @@ class EdgeConstraint implements ElementConstraint {
 	 */
 	static public EdgeConstraint create(EdgeDefinition edgeDef) {
 		assert edgeDef
+
+		def propDefs = []
+		edgeDef.edgeProperties.each { PropertyDefinition pdef ->
+			propDefs << new EdgePropertyConstraint(
+				name: pdef.label,
+				unique: pdef.unique,
+				required: pdef.required,
+				index: pdef.index
+			)
+		}
+
 		EdgeConstraint rd = new EdgeConstraint(
 			edgeDef:edgeDef,
 			label:edgeDef.label,
 			nameSpace:edgeDef.nameSpace,
 			domainLabels: edgeDef.domainLabels,
-			rangeLabels: edgeDef.rangeLabels//,
+			rangeLabels: edgeDef.rangeLabels,
+			multiplicity: edgeDef.multiplicity,
+			properties: propDefs
 		)
 		return rd
 	}
@@ -73,6 +87,12 @@ class EdgeConstraint implements ElementConstraint {
 
 	/** The allowable out-vertex labels; null indicates any allowed */
 	List<String> rangeLabels
+
+	/** The multiplicity of the relationthip */
+	Multiplicity multiplicity
+
+	/** List of allowed vertex properties */
+	List<EdgePropertyConstraint> properties
 
 
 	///////////////////////////////////////////////////////////////////////////

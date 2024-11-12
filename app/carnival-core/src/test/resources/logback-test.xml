@@ -1,0 +1,66 @@
+<configuration>
+
+    <!-- appenders -->
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!--withJansi>true</withJansi-->
+        <encoder>
+            <pattern>%cyan(%d{HH:mm:ss.SSS}) %green([%thread]) %highlight(%-5level) %magenta(%logger{36}) %msg%n</pattern>
+        </encoder>
+    </appender>
+  
+    <!-- loggers -->
+
+    <!-- java -->
+    <logger name="javax.management" level="INFO"/>
+    <logger name="org.reflections" level="WARN"/>    
+
+    <!-- groovy -->
+    <logger name="groovy.util" level="INFO"/>
+
+    <!-- netty -->
+    <logger name="org.jboss.netty" level="INFO"/>
+    <logger name="com.ning.http.client" level="INFO"/>
+    <logger name="reactor.ipc.netty.http.server" level="INFO"/>
+    <logger name="reactor.ipc.netty.channel" level="INFO"/>
+    <logger name="io.netty" level="INFO"/>
+
+    <!-- micronaut -->
+    <logger name="io.micronaut" level="INFO"/>
+    <logger name="io.micronaut.context.condition" level="INFO"/>
+    <logger name="io.micronaut.context.lifecycle" level="INFO"/>
+    <logger name="io.micronaut.context.DefaultBeanContext" level="INFO"/>
+    <!-- set to DEBUG or TRACE to see serialization issues -->
+    <logger name="io.micronaut.http.client" level="DEBUG"/>
+
+    <!-- reactor -->
+    <logger name="reactor" level="INFO"/>
+
+    <!-- neo4j -->
+    <logger name="org.neo4j.ogm" level="INFO"/>
+
+    <!-- hibernate -->
+    <!-- https://vladmihalcea.com/the-best-way-to-log-jdbc-statements/ -->
+    <logger name="org.hibernate" level="INFO"/>
+    <logger name="org.hibernate.SQL" level="debug"/>
+    <logger name="org.hibernate.orm.jdbc.bind" level="TRACE"/>
+
+    <!-- hikari connection pool -->
+    <logger name="com.zaxxer.hikari" level="INFO"/>
+
+    <!-- janusgraph -->
+    <logger name="org.janusgraph" level="INFO"/>
+    <logger name="org.janusgraph.diskstorage.berkeleyje" level="INFO"/>
+
+    <!-- carnival -->
+    <logger name="carnival" level="DEBUG"/>
+    <logger name="carnival.core.graph.GraphMethodList" level="DEBUG"/>
+
+    <!-- set to trace to see vine method message -->
+    <logger name="java.lang.Class" level="DEBUG"/>
+
+    <root level="TRACE">
+        <appender-ref ref="STDOUT" />
+    </root>
+    
+</configuration>

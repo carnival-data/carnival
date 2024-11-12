@@ -253,6 +253,10 @@ subprojects {
             events 'standard_out'
         }
 
+        /* 
+        I think all this is a relic of the past when Carnival was an app and
+         and no longer appropriate.
+
         if (System.getProperty('carnival.home')) {
             systemProperty('carnival.home', System.getProperty('carnival.home'))
             systemProperty('logback.configurationFile', System.getProperty('carnival.home') + '/config/logback.xml')
@@ -272,6 +276,7 @@ subprojects {
                 ant.echo "WARNING: Logback configuration file not set. Use the -D command line argument like -Dlogback.configurationFile=/path/to/file.xml.  Or, set the environment variable CARNIVAL_LOGBACK_CONFIG to /path/to/file.xml. See documentation."
             }
         }
+        */
     }
 }
 

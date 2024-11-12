@@ -2,9 +2,9 @@
 // DEPENDENCIES
 ///////////////////////////////////////////////////////////////////////////////
 
-//@Grab('io.github.carnival-data:carnival-core:3.0.2-SNAPSHOT')
-@Grab('io.github.carnival-data:carnival-core:3.0.1')
-@Grab('org.apache.tinkerpop:gremlin-core:3.4.10')
+@Grab('io.github.carnival-data:carnival-core:5.0.2-SNAPSHOT')
+//@Grab('io.github.carnival-data:carnival-core:3.0.1')
+@Grab('org.apache.tinkerpop:gremlin-core:3.7.2')
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -37,20 +37,19 @@ model: ${cg.checkModel()}
 """
 //System.console().readLine 'Return to continue'
 
-graph.addVertex('Thing')
-println """\
-We have added a vertex with the unmodeled label 'Thing'
-model: ${cg.checkModel()}
-"""
 
-@VertexModel(global="true")
+//
+// Vertex model definition
+//
+@VertexModel
 enum VX1 {
     THING
 }
+
 Vertex thing1V = VX1.THING.instance().create(graph)
 println """\
-We have created a model for 'Thing', but not yet incorporated it into the
-graph model.  So, we will still see a model error.
+We have added a vertex with the type VX.THING, but not yet incorporated the 
+model into the Carnival, so there will be model errors.
 model: ${cg.checkModel()}
 """
 
@@ -66,23 +65,14 @@ enum VX2 {
     THING,
     ANOTHER_THING
 }
+cg.addModel(VX2)
 Vertex thing2V = VX2.THING.instance().create(graph)
 VX2.ANOTHER_THING.instance().create(graph)
 println """\
-We have created a new model, which includes 'Thing', but is not global. We can
-have both global and non-global models.  However, global models supercede non-
-global models.  Here we see that the VX2.THING that we create in the graph does
-not cause a model error, due to the global model.  However, VX2.ANOTHER_THING 
-does cause an error.
+There are no model errors for these new modeled vertices.
 model: ${cg.checkModel()}
 """
 
-cg.addModel(VX2)
-println """\
-Now that we have added the VX2 model to our graph model, there are no model
-errors.
-model: ${cg.checkModel()}
-"""
 
 @EdgeModel
 enum EX1 {

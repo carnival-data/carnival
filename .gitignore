@@ -82,6 +82,7 @@ target
 #data/h2
 #data/tmp/
 #data/source
+docs/groovy/data/
 
 # include the source/readme which describes how the directory is to be used
 #!data/source/readme.txt

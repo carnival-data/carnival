@@ -27,10 +27,26 @@ class CarnivalModelSpec extends Specification {
     // DEFS
     ///////////////////////////////////////////////////////////////////////////
 
+    @PropertyModel
+    static enum PX1 {
+        PA
+    }
+
     @VertexModel
     static enum VX1 {
         THING,
-        GLOBAL_THING(global:true)
+        ANOTHER_THING(propertyDefs:[PX1.PA])
+    }
+
+    @VertexModel
+    static enum VX2 {
+        THING,
+        THING_CLASS
+    }
+
+    @EdgeModel
+    static enum EX1 {
+        VERB
     }
 
     /*@VertexModel
@@ -88,6 +104,71 @@ class CarnivalModelSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+    def "edge model result"() {
+        when:
+        carnival.addModel(PX1)
+        carnival.addModel(VX1)
+        def res = carnival.addModel(EX1)
+
+        then:
+        res
+        res.edgeConstraints
+        res.edgeConstraints.size() == 1
+    }
+
+
+    def "property model result"() {
+        when:
+        def res = carnival.addModel(PX1)
+
+        then:
+        res
+        res.propertyConstraints
+        res.propertyConstraints.size() == 1
+    }
+
+        
+    def "core model class vertices"() {
+        when:
+        def processClassVs
+        carnival.withGremlin { graph, g ->
+            processClassVs = g.V().isa(Core.VX.PROCESS_CLASS).toList()
+        }
+
+        then:
+        processClassVs
+        processClassVs.size() == 1
+    }
+
+
+    def "addModel vertex creates class vertices"() {
+
+        when:
+        def res = carnival.addModel(VX2)
+
+        def thingClassVs
+        carnival.withGremlin { graph, g ->
+            thingClassVs = g.V().isa(VX2.THING_CLASS).toList()
+        }
+
+        then:
+        thingClassVs
+        thingClassVs.size() == 1
+    }
+
+
+    def "vertex model result"() {
+        when:
+        carnival.addModel(PX1)
+        def res = carnival.addModel(VX1)
+
+        then:
+        res
+        res.vertexConstraints
+        res.vertexConstraints.size() == 2
+    }
+
 
     /*def "duplicate global edge model ignoreDuplicateModels no exception"() {
         when:
@@ -380,13 +461,18 @@ class CarnivalModelSpec extends Specification {
 
     def "set superclass"() {
         when:
-        carnival.addModelsFromPackage(graph, g, 'test.coregraphspec')
+        carnival.addModelsFromPackage('test.coregraphspec')
+
+        def classSubGraph
+        carnival.withGremlin { graph, g ->
+            classSubGraph = g.V(GraphModel.VX.COLLIE_CLASS.vertex)
+                .out(Base.EX.IS_SUBCLASS_OF.label)
+                .is(GraphModel.VX.DOG_CLASS.vertex)
+            .tryNext()
+        }
 
         then:
-        g.V(GraphModel.VX.COLLIE_CLASS.vertex)
-            .out(Base.EX.IS_SUBCLASS_OF.label)
-            .is(GraphModel.VX.DOG_CLASS.vertex)
-        .tryNext().isPresent()
+        classSubGraph.isPresent()
     }
     
 }

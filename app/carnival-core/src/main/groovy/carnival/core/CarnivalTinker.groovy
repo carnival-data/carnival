@@ -42,24 +42,19 @@ class CarnivalTinker extends Carnival {
     public static CarnivalTinker create(Map args = [:]) {
 		log.info "CarnivalTinker create args:$args"
 
-    	def graph = TinkerGraph.open()
+    	def gremlinGraph = TinkerGraph.open()
 
 		def graphSchema
         if (args.vertexBuilders) graphSchema = new DefaultGraphSchema(args.vertexBuilders)
         else graphSchema = new DefaultGraphSchema()
 
         def graphValidator = new DefaultGraphValidator()
-        def carnival = new CarnivalTinker(graph, graphSchema, graphValidator)
+        def carnival = new CarnivalTinker(gremlinGraph, graphSchema, graphValidator)
 
-    	def g = graph.traversal()
+        carnival.withGremlin { graph, g ->
+            carnival.initialize(graph, g)
+        }
 
-    	try {
-	    	carnival.initialize(graph, g)
-    	} finally {
-    		if (g) g.close()
-    	}
-
-    	assert carnival
 		return carnival
     }
 

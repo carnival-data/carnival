@@ -174,10 +174,15 @@ class JsonVineMethodCall<T> implements VineMethodCall<T> {
      * @param args Map of arguments for the call.
      * @return The file object if it exists, otherwise null.
      */
-    static public File findFile(File dir, Class vineMethodClass, Map args) { 
+    static public File findFile(File dir, Class vineMethodClass, Map args) {
         File file = file(dir, vineMethodClass, args)
-        if (file.exists() && file.isFile()) return file
-        else return null
+        if (file.exists() && file.isFile()) {
+            log.trace "file found"
+            return file
+        } else {
+            log.trace "file NOT found"
+            return null
+        }
     }
 
 
@@ -189,8 +194,10 @@ class JsonVineMethodCall<T> implements VineMethodCall<T> {
      * @param args Map of arguments for the call
      * @return The file object
      */
-    static public File file(File dir, Class vineMethodClass, Map args) { 
+    static public File file(File dir, Class vineMethodClass, Map args) {
+        log.trace "file dir:${dir} vineMethodClass:${vineMethodClass} args:${args}" 
         String fileName = computedName(vineMethodClass, args)
+        log.trace "fileName: ${fileName}"
         new File(dir, fileName)
     }
 

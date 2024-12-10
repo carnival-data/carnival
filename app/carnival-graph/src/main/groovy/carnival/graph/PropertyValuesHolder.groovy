@@ -231,7 +231,7 @@ class PropertyValuesHolder<T> {
                 el.property(vp.label, val) 
             } catch (Exception e) {
                 throw new RuntimeException(
-                    "Could not set property ${vp} with value ${val} of element ${el} with definition " + ElementDef.lookup(el), 
+                    "Could not set property ${vp} with value ${val} of element ${el} with definition " + Definition.lookup(el), 
                     e
                 )
             }

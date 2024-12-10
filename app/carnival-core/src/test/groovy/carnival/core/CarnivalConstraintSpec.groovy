@@ -83,7 +83,7 @@ class CarnivalConstraintSpec extends Specification {
         expect:
         carnival.graphSchema
         carnival.graphSchema.propertyConstraints
-        carnival.graphSchema.propertyConstraints.size() == 2
+        carnival.graphSchema.propertyConstraints.size() == 21
 
         PX.VOLUME instanceof PropertyDefinition
         PX.VOLUME.dataType == Float.class

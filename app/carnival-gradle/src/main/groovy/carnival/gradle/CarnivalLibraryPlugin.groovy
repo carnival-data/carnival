@@ -22,6 +22,7 @@ class CarnivalLibraryPlugin implements Plugin<Project> {
         def groovyVersion = versions.getString("groovyVersion")
         def gremlinVersion = versions.getString("gremlinVersion")
         def carnivalVersion = versions.getString("carnivalVersion")
+        def janusGraphVersion = versions.getString("janusGraphVersion")
 
         println "[Carnival] Java version: ${System.getProperty('java.version')}"
         println "[Carnival] Groovy version: ${groovyVersion}"
@@ -37,6 +38,10 @@ class CarnivalLibraryPlugin implements Plugin<Project> {
             implementation "org.apache.tinkerpop:gremlin-core:${gremlinVersion}"
             implementation "org.apache.tinkerpop:gremlin-groovy:${gremlinVersion}"
             implementation "org.apache.tinkerpop:tinkergraph-gremlin:${gremlinVersion}"
+
+            // JanusGraph
+            implementation("org.janusgraph:janusgraph-core:${janusGraphVersion}")
+            implementation("org.janusgraph:janusgraph-berkeleyje:${janusGraphVersion}")
 
             // Carnival
             implementation("io.github.carnival-data:carnival-util:${carnivalVersion}")

@@ -12,6 +12,7 @@ import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSo
 
 import carnival.graph.*
 import carnival.core.graph.*
+import carnival.core.Carnival.AddModelResult
 
 
 
@@ -72,6 +73,84 @@ class CarnivalSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+    def "AddModelResult add edge constraint"() {
+        when:
+        def pc1 = new EdgeConstraint(label:'ec1')
+        def amr1 = new AddModelResult()
+        amr1.add(pc1)
+        def amr2 = new AddModelResult()
+
+        amr1.add(amr2)
+
+        then:
+        !amr1.vertexConstraints
+        !amr1.propertyConstraints
+        amr1.edgeConstraints
+        amr1.edgeConstraints.size() == 1
+
+        when:
+        amr2.add(amr1)
+
+        then:
+        !amr2.vertexConstraints
+        !amr2.propertyConstraints
+        amr2.edgeConstraints
+        amr2.edgeConstraints.size() == 1
+    }
+
+
+    def "AddModelResult add property constraint"() {
+        when:
+        def pc1 = new PropertyConstraint(label:'pc1')
+        def amr1 = new AddModelResult()
+        amr1.add(pc1)
+        def amr2 = new AddModelResult()
+
+        amr1.add(amr2)
+
+        then:
+        !amr1.vertexConstraints
+        !amr1.edgeConstraints
+        amr1.propertyConstraints
+        amr1.propertyConstraints.size() == 1
+
+        when:
+        amr2.add(amr1)
+
+        then:
+        !amr2.vertexConstraints
+        !amr2.edgeConstraints
+        amr2.propertyConstraints
+        amr2.propertyConstraints.size() == 1
+    }
+
+
+    def "AddModelResult add vertex constraint"() {
+        when:
+        def vc1 = new VertexConstraint(label:'vc1')
+        def amr1 = new AddModelResult()
+        amr1.add(vc1)
+        def amr2 = new AddModelResult()
+
+        amr1.add(amr2)
+
+        then:
+        !amr1.propertyConstraints
+        !amr1.edgeConstraints
+        amr1.vertexConstraints
+        amr1.vertexConstraints.size() == 1
+
+        when:
+        amr2.add(amr1)
+
+        then:
+        !amr2.propertyConstraints
+        !amr2.edgeConstraints
+        amr2.vertexConstraints
+        amr2.vertexConstraints.size() == 1
+    }
+
     
     /**
     * This will test graph initizilation once it's been moved to Carnival

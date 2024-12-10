@@ -10,6 +10,7 @@ import spock.lang.Shared
 
 public class CoreUtilSpec extends Specification {
 
+
     void "arguments uniquifier recurse into maps"() {
         when:
         def u1 = CoreUtil.argumentsUniquifier(a:[b:1])

@@ -9,7 +9,9 @@ import spock.lang.Shared
 import org.apache.tinkerpop.gremlin.structure.T
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
+import org.apache.tinkerpop.gremlin.structure.Vertex
 
+import org.janusgraph.graphdb.database.management.ManagementSystem
 import org.janusgraph.core.schema.JanusGraphManagement
 import org.janusgraph.core.schema.JanusGraphManagement.IndexBuilder
 import org.janusgraph.core.schema.JanusGraphIndex
@@ -17,6 +19,7 @@ import org.janusgraph.core.Connection
 import org.janusgraph.core.VertexLabel
 import org.janusgraph.core.EdgeLabel
 import org.janusgraph.core.PropertyKey
+import org.janusgraph.core.schema.SchemaStatus
 
 import carnival.graph.*
 import carnival.core.graph.*
@@ -101,6 +104,86 @@ class CarnivalJanusBerkeleySpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+
+    def "wait for indexes"() {
+        when:
+        carnival.addModel(PX)
+        carnival.addModel(VX)
+
+        carnival.indexNames.each { idxName ->
+            ManagementSystem
+                .awaitGraphIndexStatus(carnival.graph, idxName)
+                .status(SchemaStatus.ENABLED)
+            .call()
+        }
+
+        then:
+        noExceptionThrown()
+    }
+
+
+    def "index names are recorded"() {
+        when:
+        carnival.addModel(PX)
+        carnival.addModel(VX)
+
+        JanusGraphManagement mgmt = carnival.graph.openManagement()
+        Set<JanusGraphIndex> vertexIndices = mgmt.getGraphIndexes(Vertex.class)
+        
+        println()
+        vertexIndices.each { vdx ->
+            println "${vdx.name()} ${vdx.fieldKeys}"
+        }
+
+        println()
+        vertexIndices.each { vdx ->
+            println "${vdx.name()}"
+            vdx.getFieldKeys().each { PropertyKey pk ->
+                println "    ${pk} ${vdx.getIndexStatus(pk)}"
+
+            }
+        }
+
+        println()
+        vertexIndices.each { vdx ->
+            List<PropertyKey> notEnabled = vdx.getFieldKeys().findAll { pk ->
+                vdx.getIndexStatus(pk) != SchemaStatus.ENABLED
+            }
+            if (notEnabled) {
+                println "${vdx.name()}"
+                notEnabled.each { PropertyKey pk ->
+                    SchemaStatus ss = vdx.getIndexStatus(pk)
+                    println "    ${pk} ${ss}"
+                }
+            }
+        }
+
+        println()
+        println 'CARNIVAL'
+        carnival.indexNames.toList().sort().each {
+            println "${it}"
+        }
+
+        println()
+        println 'JANUS'
+        vertexIndices.collect({it.name()}).toList().sort().each {
+            println "${it}"
+        }
+
+        vertexIndices.collect({it.name()}).each({ jin ->
+            assert carnival.indexNames.find({ jin })
+        })
+
+
+        mgmt.rollback()
+
+        then:
+        vertexIndices
+        carnival.indexNames
+        carnival.indexNames.size() == vertexIndices.size()
+    }
+
 
     def "property uniqueness"(){
         when:
@@ -202,7 +285,7 @@ class CarnivalJanusBerkeleySpec extends Specification {
 
         JanusGraphManagement mgmt = carnival.graph.openManagement()
 
-        String idxName = VX.SUITCASE.label + '-' + PX.VOLUME.label
+        String idxName = 'idx' + VX.SUITCASE.label + '-' + PX.VOLUME.label
         JanusGraphIndex idx = mgmt.getGraphIndex(idxName)
 
         mgmt.rollback()

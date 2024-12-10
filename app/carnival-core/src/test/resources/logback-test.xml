@@ -55,6 +55,8 @@
     <!-- carnival -->
     <logger name="carnival" level="DEBUG"/>
     <logger name="carnival.core.graph.GraphMethodList" level="DEBUG"/>
+    <logger name="carnival.core.CarnivalJanusBerkeley" level="TRACE"/>
+    <logger name="carnival.core.Carnival" level="TRACE"/>
 
     <!-- set to trace to see vine method message -->
     <logger name="java.lang.Class" level="DEBUG"/>

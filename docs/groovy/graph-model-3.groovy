@@ -2,8 +2,9 @@
 // DEPENDENCIES
 ///////////////////////////////////////////////////////////////////////////////
 
-@Grab('io.github.carnival-data:carnival-core:3.0.1')
-@Grab('org.apache.tinkerpop:gremlin-core:3.4.10')
+@Grab('io.github.carnival-data:carnival-core:5.0.2-SNAPSHOT')
+//@Grab('io.github.carnival-data:carnival-core:3.0.1')
+@Grab('org.apache.tinkerpop:gremlin-core:3.7.2')
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -17,7 +18,9 @@ import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.structure.Edge
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 
+import carnival.core.Carnival
 import carnival.core.CarnivalTinker
+import carnival.core.CarnivalJanusBerkeley
 import carnival.graph.VertexModel
 import carnival.graph.PropertyModel
 import carnival.graph.EdgeModel
@@ -30,7 +33,16 @@ import carnival.core.graph.GraphMethod
 // SCRIPT
 ///////////////////////////////////////////////////////////////////////////////
 
-def cg = CarnivalTinker.create()
+
+// Uncomment the following to use the in-memory Tinkergraph database
+Carnival cg = CarnivalTinker.create()
+
+// Uncomment the following to use the Janus Berkeley DB graph database
+//CarnivalJanusBerkeley.Config config = new CarnivalJanusBerkeley.Config()
+//CarnivalJanusBerkeley.clearGraph(config)
+//Carnival cg = CarnivalJanusBerkeley.create(config)
+
+
 Graph graph = cg.graph
 GraphTraversalSource g = graph.traversal()
 
@@ -84,3 +96,6 @@ List<Vertex> alsoDogVs = g.V()
     .isInstanceOf(VX.CLASS_OF_ALL_DOGS)
 .toList()
 println "alsoDogVs: ${alsoDogVs} ${alsoDogVs*.label()}"
+
+
+cg.close()

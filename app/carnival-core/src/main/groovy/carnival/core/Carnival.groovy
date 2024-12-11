@@ -97,7 +97,7 @@ abstract class Carnival implements GremlinTrait {
 
 
 	/** */
-	static class InitializeResult {
+	static class InitModelResult {
 
 		/** */
 		List<AddModelResult> addModelResults = new ArrayList<AddModelResult>()
@@ -136,7 +136,9 @@ abstract class Carnival implements GremlinTrait {
 	 * @param graphSchema A graph schema
 	 * @param graphValidator A graph validator
 	 */
-	protected Carnival(Graph graph, GraphSchema graphSchema, GraphValidator graphValidator) {
+	protected Carnival(
+		Graph graph, GraphSchema graphSchema, GraphValidator graphValidator
+	) {
 		assert graph
 		assert graphSchema
 		assert graphValidator
@@ -156,13 +158,13 @@ abstract class Carnival implements GremlinTrait {
 	 * @param graph The gremlin graph to initialize
 	 * @param g A graph traversal source to use during initialization.
 	 */
-	public InitializeResult initialize(Graph graph, GraphTraversalSource g) {
-		log.info "Carnival initialize graph:$graph g:$g"
+	public InitModelResult initModel(Graph graph, GraphTraversalSource g) {
+		log.info "Carnival initModel graph:$graph g:$g"
 
-		InitializeResult res = new InitializeResult()
+		InitModelResult res = new InitModelResult()
 
 		[Base.PX, Base.EX, Core.PX, Core.VX, Core.EX].each {
-			AddModelResult amr = addModel(graph, g, it)
+			AddModelResult amr = addModel(it)
 			res.addModelResults << amr
 		}
 
@@ -174,6 +176,138 @@ abstract class Carnival implements GremlinTrait {
 
 		res
 	} 
+
+
+
+	///////////////////////////////////////////////////////////////////////////
+	// GRAPH MODEL - CLASSES
+	///////////////////////////////////////////////////////////////////////////
+
+	/** 
+	 * Add the model defined in the given class to this Carnival.
+	 * @param defClass The element definition class.
+	 */
+	public AddModelResult addModel(Class<ElementDefinition> defClass) {
+		log.trace "addModel defClass:${defClass}"
+
+		assert defClass
+
+		AddModelResult res
+
+		def defInterfaces = defClass.getInterfaces()
+		if (defInterfaces.contains(VertexDefinition)) res = addVertexModel(defClass)
+		else if (defInterfaces.contains(EdgeDefinition)) res = addEdgeModel(defClass)
+		else if (defInterfaces.contains(PropertyDefinition)) res = addPropertyModel(defClass)
+		else throw new RuntimeException("unrecognized definition class: $defClass")
+
+		if (res.vertexConstraints) {
+			withGremlin { graph, g ->
+				addClassVertices(graph, g, res.vertexConstraints)
+			}
+		}
+
+		res
+	}
+
+
+	/**
+	 * Add a model defined in the given class to this Carnival using the
+	 * provided graph and graph traversal source.  This is an internal method;
+	 * it is expected that client code will use addModel(Class) to add models.
+	 * @see #addModel(Class<ElementDefinition>)
+	 * @param graph A gremlin graph.
+	 * @param g A grpah traversal source to use.
+	 * @param defClass The element definition class.
+	 */
+	/*public AddModelResult addModel(Graph graph, GraphTraversalSource g, Class<ElementDefinition> defClass) {
+		assert graph
+		assert g
+		assert defClass
+
+		AddModelResult res
+
+		def defInterfaces = defClass.getInterfaces()
+		if (defInterfaces.contains(VertexDefinition)) res = addVertexModel(defClass)
+		else if (defInterfaces.contains(EdgeDefinition)) res = addEdgeModel(defClass)
+		else if (defInterfaces.contains(PropertyDefinition)) res = addPropertyModel(defClass)
+		else throw new RuntimeException("unrecognized definition class: $defClass")
+
+		res
+	}*/
+
+
+	/**
+	 * Add a vertex model defined in the given vertex definition class to this
+	 * Carnival using the provided graph and graph traversal source.  This is
+	 * an internal method; it is expected that client code will use
+	 * addModel(Class) to add models.
+	 * @see #addModel(Class<ElementDefinition>)
+	 * @param defClass The vertex definition class.
+	 * @param graph A gremlin graph.
+	 * @param g A graph traversal source to use.
+	 */
+	public AddModelResult addVertexModel(Class<VertexDefinition> defClass) {
+		assert defClass
+
+		AddModelResult res = new AddModelResult()
+
+		Set<VertexConstraint> vertexConstraints = findNewVertexConstraints(defClass)
+
+		if (!vertexConstraints) return res
+
+		addVertexConstraints(vertexConstraints)
+		vertexConstraints.each { res.add(it) }
+		return res
+	}
+
+
+
+	/**
+	 * Add the edge models in the provided edge definition class to this
+	 * Carnival using the provided graph and graph traversal source. This is an
+	 * internal method and not expected to be called by client code.
+	 * @param graph A gremlin graph.
+	 * @param g A graph traversal source.
+	 * @param defClass An edge definition class.
+	 */
+	public AddModelResult addEdgeModel(Class<EdgeDefinition> defClass) {
+		assert defClass
+
+		AddModelResult res = new AddModelResult()
+
+		Set<EdgeConstraint> edgeConstraints = findNewEdgeConstraints(defClass)
+		edgeConstraints.each { ec ->
+			addConstraint(ec)
+			res.add(ec)
+		}
+
+		res
+	}
+
+
+	/**
+	 * Add the edge models in the provided property definition class to this
+	 * Carnival using the provided graph and graph traversal source. This is an
+	 * internal method and not expected to be called by client code.
+	 * @param graph A gremlin graph.
+	 * @param g A graph traversal source.
+	 * @param defClass A property definition class.
+	 */
+	public AddModelResult addPropertyModel(Class<PropertyDefinition> defClass) {
+		log.trace "addPropertyModel defClass:${defClass}"
+
+		assert defClass
+
+		AddModelResult res = new AddModelResult()
+
+		Set<PropertyConstraint> propertyConstraints = findNewPropertyConstraints(defClass)
+		propertyConstraints.each { pc ->
+			addConstraint(pc)
+			res.add(pc)
+		}
+
+		res
+	}
 
 
 
@@ -232,41 +366,26 @@ abstract class Carnival implements GremlinTrait {
 	 * Add vertex models from a package of the given name.
 	 * @param graph The gremlin graph to add models.
 	 * @param g A graph traversal source to use.
-	 * @packageName The name of the package in which to search for models.
+	 * @param packageName The name of the package in which to search for models.
 	 */
-    public AddModelResult addVertexModelsFromPackage(Graph graph, GraphTraversalSource g, String packageName) {
-		log.info "Carnival addVertexModelsFromPackage graph:$graph g:$g packageName:$packageName"
+    public AddModelResult addVertexModelsFromPackage(
+    	Graph graph, GraphTraversalSource g, String packageName
+	) {
+		log.info "Carnival addVertexModelsFromPackage packageName:$packageName"
 		
 		assert graph
 		assert g
 		assert packageName
 
+		AddModelResult res = new AddModelResult()
+
 		Set<VertexConstraint> vertexConstraints = findNewVertexConstraints(packageName)
-		if (!vertexConstraints) return new AddModelResult()
-		addVertexModels(graph, g, vertexConstraints)
-    }
-
-
-    /** */
-    public AddModelResult addVertexModels(
-    	Graph graph, 
-    	GraphTraversalSource g, 
-    	Set<VertexConstraint> vertexConstraints
-    ) { 
-    	log.trace "addVertexModels vertexConstraints:${vertexConstraints}"
-
-    	assert graph
-    	assert g
-    	assert vertexConstraints
-
-    	AddModelResult res = new AddModelResult()
-
-    	vertexConstraints.each { vc ->
-			addConstraint(vc)
-			res.add(vc)
-		}
-
-		res
+		
+		if (!vertexConstraints) return res
+		
+		addVertexConstraints(vertexConstraints)
+		vertexConstraints.each { res.add(it) }
+		return res
     }
 
 
@@ -367,138 +486,22 @@ abstract class Carnival implements GremlinTrait {
     }
 
 
-	///////////////////////////////////////////////////////////////////////////
-	// GRAPH MODEL - CLASSES
-	///////////////////////////////////////////////////////////////////////////
-
-	/** 
-	 * Add the model defined in the given class to this Carnival.
-	 * @param defClass The element definition class.
-	 */
-	public AddModelResult addModel(Class<ElementDefinition> defClass) {
-		log.trace "addModel defClass:${defClass}"
-
-		assert defClass
-
-		AddModelResult res
-
-		withGremlin { graph, g ->
-			res = addModel(graph, g, defClass)
-		}
-
-		if (res.vertexConstraints) {
-			withGremlin { graph, g ->
-				addClassVertices(graph, g, res.vertexConstraints)
-			}
-		}
-
-		res
-	}
-
-
-	/**
-	 * Add a model defined in the given class to this Carnival using the
-	 * provided graph and graph traversal source.  This is an internal method;
-	 * it is expected that client code will use addModel(Class) to add models.
-	 * @see #addModel(Class<ElementDefinition>)
-	 * @param graph A gremlin graph.
-	 * @param g A grpah traversal source to use.
-	 * @param defClass The element definition class.
-	 */
-	public AddModelResult addModel(Graph graph, GraphTraversalSource g, Class<ElementDefinition> defClass) {
-		assert graph
-		assert g
-		assert defClass
-
-		AddModelResult res
-
-		def defInterfaces = defClass.getInterfaces()
-		if (defInterfaces.contains(VertexDefinition)) res = addVertexModel(graph, g, defClass)
-		else if (defInterfaces.contains(EdgeDefinition)) res = addEdgeModel(graph, g, defClass)
-		else if (defInterfaces.contains(PropertyDefinition)) res = addPropertyModel(graph, g, defClass)
-		else throw new RuntimeException("unrecognized definition class: $defClass")
-
-		res
-	}
-
-
-	/**
-	 * Add a vertex model defined in the given vertex definition class to this
-	 * Carnival using the provided graph and graph traversal source.  This is
-	 * an internal method; it is expected that client code will use
-	 * addModel(Class) to add models.
-	 * @see #addModel(Class<ElementDefinition>)
-	 * @param defClass The vertex definition class.
-	 * @param graph A gremlin graph.
-	 * @param g A graph traversal source to use.
-	 */
-	public AddModelResult addVertexModel(Graph graph, GraphTraversalSource g, Class<VertexDefinition> defClass) {
-		assert graph
-		assert g
-		assert defClass
-
-		Set<VertexConstraint> vertexConstraints = findNewVertexConstraints(defClass)
-		if (!vertexConstraints) return new AddModelResult()
-		addVertexModels(graph, g, vertexConstraints)
-	}
-
-
-	/**
-	 * Add the edge models in the provided edge definition class to this
-	 * Carnival using the provided graph and graph traversal source. This is an
-	 * internal method and not expected to be called by client code.
-	 * @param graph A gremlin graph.
-	 * @param g A graph traversal source.
-	 * @param defClass An edge definition class.
-	 */
-	public AddModelResult addEdgeModel(Graph graph, GraphTraversalSource g, Class<EdgeDefinition> defClass) {
-		assert graph
-		assert g
-		assert defClass
-
-		AddModelResult res = new AddModelResult()
-
-		Set<EdgeConstraint> edgeConstraints = findNewEdgeConstraints(defClass)
-		edgeConstraints.each { ec ->
-			addConstraint(ec)
-			res.add(ec)
-		}
-
-		res
-	}
-
-
-	/**
-	 * Add the edge models in the provided property definition class to this
-	 * Carnival using the provided graph and graph traversal source. This is an
-	 * internal method and not expected to be called by client code.
-	 * @param graph A gremlin graph.
-	 * @param g A graph traversal source.
-	 * @param defClass A property definition class.
-	 */
-	public AddModelResult addPropertyModel(Graph graph, GraphTraversalSource g, Class<PropertyDefinition> defClass) {
-		log.trace "addPropertyModel defClass:${defClass}"
-
-		assert graph
-		assert g
-		assert defClass
-
-		AddModelResult res = new AddModelResult()
-
-		Set<PropertyConstraint> propertyConstraints = findNewPropertyConstraints(defClass)
-		propertyConstraints.each { pc ->
-			addConstraint(pc)
-			res.add(pc)
-		}
-
-		res
-	}
-
-
 
 	///////////////////////////////////////////////////////////////////////////
 	// GRAPH CONSTRAINTS - VERTEX
 	///////////////////////////////////////////////////////////////////////////
+
+	/** */
+    public void addVertexConstraints(Set<VertexConstraint> vertexConstraints) { 
+    	log.trace "addVertexConstraints vertexConstraints:${vertexConstraints}"
+
+    	assert vertexConstraints != null
+
+    	vertexConstraints.each { vc ->
+			addConstraint(vc)
+		}
+    }
+
 
 	/** 
 	 * Add the provided vertex constraint to this Carnival.
@@ -779,19 +782,19 @@ abstract class Carnival implements GremlinTrait {
 	 * @param graph A gremlin graph to which to add vertices.
 	 * @param g A graph traversal to use.
 	 */
-	public void addClassVertices(Graph graph, GraphTraversalSource g, Set<VertexConstraint> vcs) {
+	public void addClassVertices(
+		Graph graph, GraphTraversalSource g, Set<VertexConstraint> vcs
+	) {
 		assert graph
 		assert g
 		assert vcs
 
-		//GremlinTraitUtilities.withGremlin(graph, g) {
         vcs.each { vc ->
 			createClassVertex(graph, g, vc)
 		}
         vcs.each { vc ->
 			connectClassVertices(graph, g, vc)
 		}
-		//}
 	}
 
 
@@ -802,7 +805,9 @@ abstract class Carnival implements GremlinTrait {
 	 * @param graph The gremlin graph to use.
 	 * @param g The graph traversal to use.
 	 */
-	public void createClassVertex(Graph graph, GraphTraversalSource g, VertexConstraint vertexConstraint) {
+	public void createClassVertex(
+		Graph graph, GraphTraversalSource g, VertexConstraint vertexConstraint
+	) {
 		log.trace "createClassVertex vertexConstraint: ${vertexConstraint.label} $vertexConstraint"
 
 		// create class singleton vertex, which can only be done if there
@@ -815,12 +820,12 @@ abstract class Carnival implements GremlinTrait {
 
 			if (!ci) {
 				ci = vdef.instance()
-				log.trace "created controlled instance ${ci.vertexDef.label} ${ci}"
+				log.trace "created vertex builder ${ci.vertexDef.label} ${ci}"
 				graphSchema.vertexBuilders << ci
 			}
 			
 			vdef.vertex = ci.vertex(graph, g)
-			log.trace "created controlled instance vertex ${vdef.label} ${vdef.nameSpace} ${vdef.vertex}"
+			log.trace "created vertex ${vdef.label} ${vdef.nameSpace} ${vdef.vertex}"
 		}
 	}
 
@@ -832,7 +837,9 @@ abstract class Carnival implements GremlinTrait {
 	 * @param graph A gremlin graph to use.
 	 * @param g A graph traversal source to use.
 	 */
-	public void connectClassVertices(Graph graph, GraphTraversalSource g, VertexConstraint vertexConstraint) {
+	public void connectClassVertices(
+		Graph graph, GraphTraversalSource g, VertexConstraint vertexConstraint
+	) {
 		def vdef = vertexConstraint.vertexDef
 
 		if (vdef.superClass) {

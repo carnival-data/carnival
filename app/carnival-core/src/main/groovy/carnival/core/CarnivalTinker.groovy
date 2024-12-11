@@ -52,7 +52,7 @@ class CarnivalTinker extends Carnival {
         def carnival = new CarnivalTinker(gremlinGraph, graphSchema, graphValidator)
 
         carnival.withGremlin { graph, g ->
-            carnival.initialize(graph, g)
+            carnival.initModel(graph, g)
         }
 
 		return carnival

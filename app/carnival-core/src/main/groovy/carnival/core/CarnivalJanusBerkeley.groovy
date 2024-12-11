@@ -96,6 +96,9 @@ class CarnivalJanusBerkeley extends Carnival {
 
     /** 
      * Create a ready-to-use CarnivalJanusBerkeley object.
+     * @param config The CarnivalJanusBerkeley.Config
+     * @param args Optional arguments
+     * @param args.failOnExisting Fail if the graph directory already exists
      * @return A CarnivalJanusBerkeley object.
      */
     public static CarnivalJanusBerkeley create(Config config, Map args = [:]) {
@@ -103,6 +106,20 @@ class CarnivalJanusBerkeley extends Carnival {
 
         assert config
         assert config.storage.directory
+
+        String graphDir = config.storage.directory
+        Path graphPath = Paths.get(graphDir)
+        boolean graphDirExists = Files.isDirectory(graphPath)
+        if (graphDirExists && args.failOnExisting) {
+            DirectoryExistsException exception = new DirectoryExistsException(
+                "graph directory exists: ${graphDir}"
+            )
+            exception.graphDirectoryPath = graphDir
+            throw exception
+        }
+        
+        //if (Files.isDirectory(graphPath)) Files.createDirectory(graphPath)
+        //Files.isDirectory(graphPath)
 
         JanusGraph gremlinGraph = JanusGraphFactory.build().
             set("storage.backend", "berkeleyje").
@@ -130,28 +147,66 @@ class CarnivalJanusBerkeley extends Carnival {
         )
         carnival.config = config
 
-        carnival.addPropModel()
-        carnival.addVertModel()
-        carnival.addEdgeModel()
+        if (graphDirExists) {
+
+            carnival.initPropModelNoMgmt()
+            carnival.initVertModelNoMgmt()
+            carnival.initEdgeModelNoMgmt()
+
+        } else {
+
+            carnival.initPropModel()
+            carnival.initVertModel()
+            carnival.initEdgeModel()
+
+        }
 
 		return carnival
     }
 
 
     /** */
-    public List<AddModelResult> addPropModel() {
-        log.info "Carnival addPropModel"
+    public List<AddModelResult> initPropModelNoMgmt() {
+        log.info "Carnival initPropModel"
+
+        List<AddModelResult> results = new ArrayList<AddModelResult>()
 
         AddModelResult amrBase
         AddModelResult amrCore
 
         withGremlin { graph, g ->
-            amrBase = addModel(graph, g, Base.PX)
-            amrCore = addModel(graph, g, Core.PX)
+            amrBase = addPropertyModelNoMgmt(Base.PX)
+            amrCore = addPropertyModelNoMgmt(Core.PX)
         }
+
+        results.add(amrBase)
+        results.add(amrCore)
+
+        return results
+    }
+
+
+    /** */
+    public List<AddModelResult> initPropModel() {
+        log.info "Carnival initPropModel"
+
+        List<AddModelResult> results = new ArrayList<AddModelResult>()
+
+        AddModelResult amrBase
+        AddModelResult amrCore
+
+        withGremlin { graph, g ->
+            amrBase = addPropertyModelNoMgmt(Base.PX)
+            amrCore = addPropertyModelNoMgmt(Core.PX)
+        }
+
+        results.add(amrBase)
+        results.add(amrCore)
 
         JanusGraphManagement mgmt = graph.openManagement()
         List<String> idxNames = new ArrayList<String>()
+
+        Exception exception
 
         try {
 
@@ -166,74 +221,98 @@ class CarnivalJanusBerkeley extends Carnival {
             )
 
         } catch (Exception e) {
+            exception = e
             log.error "error creating janus schema", e
             log.warn "rolling back janus management"
-            mgmt.rollback()
+            try {
+                mgmt.rollback()
+            } catch (Exception e2) {
+                log.warn "error rolling back janus schema", e2
+            }
+            throw e
         } finally {
-            mgmt.commit()
+            if (!exception) mgmt.commit()
         }
-        log.trace "addPropModel idxNames: ${idxNames}"
+        log.trace "initPropModel idxNames: ${idxNames}"
 
         // wait for index availability
         idxNames.each { idxName ->
-            log.trace "addPropModel await registered ${idxName}"
+            log.trace "initPropModel await registered ${idxName}"
             ManagementSystem
                 .awaitGraphIndexStatus(graph, idxName)
                 .status(SchemaStatus.ENABLED)
             .call()
         }
+
+        return results
     }
 
 
     /** */
-    public List<AddModelResult> addVertModel() {
-        log.info "Carnival addVertModel"
-        [Base.EX, Core.VX].each {
-            addModel(it)
-        }
-    } 
+    public AddModelResult addPropertyModelNoMgmt(Class<ElementDefinition> defClass) {
+        log.trace "addPropertyModelNoMgmt defClass:${defClass}"
+
+        assert defClass
+
+        AddModelResult res
+
+        def defInterfaces = defClass.getInterfaces()
+        assert defInterfaces.contains(PropertyDefinition)
+        res = addPropertyModel(defClass)
+    }
+
 
     /** */
-    public List<AddModelResult> addEdgeModel() {
-        log.info "Carnival addEdgeModel"
-        [Core.EX].each {
-            addModel(it)
+    public List<AddModelResult> initVertModel() {
+        log.info "Carnival initVertModel"
+        List<AddModelResult> results = new ArrayList<AddModelResult>()
+        [Base.EX, Core.VX].each {
+            AddModelResult res = addModel(it)
+            results.add(res)
         }
+        results
+    } 
+
+
+    /** */
+    public List<AddModelResult> initVertModelNoMgmt() {
+        log.info "Carnival initVertModel"
+        List<AddModelResult> results = new ArrayList<AddModelResult>()
+        [Base.EX, Core.VX].each {
+            AddModelResult res = addModelNoMgmt(it)
+            results.add(res)
+        }
+        results
+    } 
+
+
+    /** */
+    public List<AddModelResult> initEdgeModelNoMgmt() {
+        log.info "Carnival initEdgeModel"
+        List<AddModelResult> results = new ArrayList<AddModelResult>()
+        [Core.EX].each {
+            AddModelResult res = addModelNoMgmt(it)
+            results.add(res)
+        }
+        results
+    } 
+
+
+    /** */
+    public List<AddModelResult> initEdgeModel() {
+        log.info "Carnival initEdgeModel"
+        List<AddModelResult> results = new ArrayList<AddModelResult>()
+        [Core.EX].each {
+            AddModelResult res = addModel(it)
+            results.add(res)
+        }
+        results
     } 
 
 
     ///////////////////////////////////////////////////////////////////////////
     // SCHEMA MANAGEMENT
     ///////////////////////////////////////////////////////////////////////////
-
-    /** */
-    /*public void janusSchemaManagementGlobal() {
-        log.trace "janusSchemaManagementGlobal"
-
-        JanusGraphManagement mgmt = graph.openManagement()
-        List<String> idxNames
-
-        try {
-
-            idxNames = janusSchemaManagementGlobal(mgmt)
-
-        } catch (Exception e) {
-            log.error "error creating janus schema", e
-            log.warn "rolling back janus management"
-            mgmt.rollback()
-        } finally {
-            mgmt.commit()
-        }
-
-        // wait for index availability
-        idxNames.each { idxName ->
-            log.trace "janusSchemaManagementGlobal await registered ${idxName}"
-            ManagementSystem
-                .awaitGraphIndexStatus(graph, idxName)
-                .status(SchemaStatus.ENABLED)
-            .call()
-        }
-    }*/
 
 
     /** */
@@ -298,18 +377,6 @@ class CarnivalJanusBerkeley extends Carnival {
         if (amr.edgeConstraints) {
             janusEdgeSchema(amr.edgeConstraints)
         }
-
-        
-        // 1) Modify Carnival addModel() methods to return a result object. The
-        //    result object contains a list of any vertex, edge, and property
-        //    constraints that were added.
-        // 2) Pass the result to the janus schema management methods
-        // 3) Remove the calls to janus schema management in the carnival
-        //    addModel() methods
-
-        // wait for index
-
-        // reindex
     }
 
 
@@ -617,6 +684,7 @@ class CarnivalJanusBerkeley extends Carnival {
     }
 
 
+
     /** 
      * Add the model defined in the given class to this Carnival.
      * @param defClass The element definition class.
@@ -629,11 +697,40 @@ class CarnivalJanusBerkeley extends Carnival {
 
         AddModelResult res
 
-        withGremlin { graph, g ->
-            res = addModel(graph, g, defClass)
-        }
+        def defInterfaces = defClass.getInterfaces()
+        if (defInterfaces.contains(VertexDefinition)) res = addVertexModel(defClass)
+        else if (defInterfaces.contains(EdgeDefinition)) res = addEdgeModel(defClass)
+        else if (defInterfaces.contains(PropertyDefinition)) res = addPropertyModel(defClass)
+        else throw new RuntimeException("unrecognized definition class: $defClass")
 
         janusSchemaManagement(res)
+
+        if (res.vertexConstraints) {
+            withGremlin { graph, g ->
+                addClassVertices(graph, g, res.vertexConstraints)
+            }
+        }
+
+        res
+    }
+
+
+    /** 
+     * Add the model defined in the given class to this Carnival.
+     * @param defClass The element definition class.
+     */
+    public AddModelResult addModelNoMgmt(Class<ElementDefinition> defClass) {
+        log.trace "addModel defClass:${defClass}"
+
+        assert defClass
+
+        AddModelResult res
+
+        def defInterfaces = defClass.getInterfaces()
+        if (defInterfaces.contains(VertexDefinition)) res = addVertexModel(defClass)
+        else if (defInterfaces.contains(EdgeDefinition)) res = addEdgeModel(defClass)
+        else if (defInterfaces.contains(PropertyDefinition)) res = addPropertyModel(defClass)
+        else throw new RuntimeException("unrecognized definition class: $defClass")
 
         if (res.vertexConstraints) {
             withGremlin { graph, g ->
@@ -679,66 +776,18 @@ class CarnivalJanusBerkeley extends Carnival {
 
 
     ///////////////////////////////////////////////////////////////////////////
-    // STATIC
+    // STATIC CLASS
     ///////////////////////////////////////////////////////////////////////////
 
-    /** 
-     * Utility method to run a closure in the context of a fresh transaction
-     * that will be comitted and closed upon successful termination of the
-     * closure. 
-     * If there is a prior open transaction, it will be closed, but not 
-     * committed.
-     * If the closure accepts no arguments, it will be called without 
-     * arguments.
-     * If the closure accepts one argument, it will be called with the 
-     * transaction object as the argument.
-     * If the closure accepts any other number of arguments, a runtime
-     * exception will be thrown.
-     * Note that if the gremlin graph does not support transactions, then an
-     * error will be thrown.
-     * @param graph The gremlin graph.
-     * @param cl The closure to execute.
-     */
-    /*static public void withTransaction(Graph graph, Closure cl) {
-        assert graph != null
-        assert cl != null
+    /** */
+    static class DirectoryExistsException extends Exception { 
+        String graphDirectoryPath
+    }
 
-        // open a new transaction
-        def tx = graph.tx()
-        if (tx.isOpen()) tx.close()
-        tx.open()
 
-        // execute the closure
-        def maxClosureParams = cl.getMaximumNumberOfParameters()
-        try {
-            if (maxClosureParams == 0) {
-                cl()
-            } else if (maxClosureParams == 1) {
-                cl(tx)
-            } else {
-                throw new RuntimeException("closure must accept zero or one arguments")
-            }
-        } catch (Exception e) {
-            try {
-                tx.rollback()
-            } catch (Exception e2) {
-                log.error("could not rollback tx", e2)
-            }
-            throw e
-        } finally {
-            try {
-                tx.commit()
-            } catch (Exception e3) {
-                log.error("could not commit tx", e3)
-            }
-            try {
-                tx.close()
-            } catch (Exception e4) {
-                log.error("could not close tx", e4)
-            }
-        }
-    }*/
-
+    ///////////////////////////////////////////////////////////////////////////
+    // STATIC
+    ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Return a compound index name for the provided series of property

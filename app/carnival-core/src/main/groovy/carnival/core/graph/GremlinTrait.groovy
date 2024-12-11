@@ -89,6 +89,7 @@ trait GremlinTrait  {
         Graph graph = graph
         assert graph
 
+        // withTraversal closes g
         GremlinTraitUtilities.withTraversal(graph, g, cl)
     }
 
@@ -111,7 +112,7 @@ trait GremlinTrait  {
         try {
             GremlinTraitUtilities.withGremlin(graph, g, cl)    
         } finally {
-            g.close()
+            if (g) g.close()
         }        
     }
 

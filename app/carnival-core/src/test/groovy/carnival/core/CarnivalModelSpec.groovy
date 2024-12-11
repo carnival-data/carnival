@@ -14,6 +14,7 @@ import carnival.graph.*
 import test.coregraphspec.GraphModel
 import carnival.core.graph.*
 import carnival.core.util.DuplicateModelException
+import carnival.core.Carnival.AddModelResult
 
 
 
@@ -96,6 +97,7 @@ class CarnivalModelSpec extends Specification {
 
 
     def cleanup() {
+        if (g) g.close()
         if (carnival) carnival.close()
     }
 
@@ -104,6 +106,85 @@ class CarnivalModelSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+    def "add models from package results"() {
+        when:
+        List<AddModelResult> results = carnival
+            .addModelsFromPackage('test.coregraphspec')
+
+        then:
+        results
+        results.size() == 2
+
+        when:
+        AddModelResult vertexModelRes = results.find{
+            it.vertexConstraints
+        }
+        AddModelResult edgeModelRes = results.find{
+            it.edgeConstraints
+        }
+
+        then:
+        vertexModelRes
+        edgeModelRes
+    }
+
+
+    def "add vertex model from package"() {
+        def modelErrs
+
+        expect:
+        carnival.checkModel().size() == 0
+        GraphModel.VX.DOG_CLASS.vertex == null
+
+        when:
+        int numVerts1
+        carnival.withGremlin { graph, g ->
+            numVerts1 = g.V().count().next()
+        }
+        GraphModel.VX.DOG.instance().create(graph)
+        modelErrs = carnival.checkModel()
+
+        then:
+        modelErrs.size() == 1
+
+        when:
+        carnival.addModelsFromPackage('test.coregraphspec')
+        int numVerts2
+        carnival.withGremlin { graph, g ->
+            numVerts2 = g.V().count().next()
+        }
+        modelErrs = carnival.checkModel()
+
+        then:
+        modelErrs.size() == 0
+        GraphModel.VX.DOG_CLASS.vertex
+        GraphModel.VX.COLLIE_CLASS.vertex
+        numVerts2 == numVerts1 + 3
+    }
+
+
+    def "add vertex model"() {
+        def modelErrs 
+
+        expect:
+        carnival.checkModel().size() == 0
+
+        when:
+        GraphModel.VX.DOG.instance().create(graph)
+        modelErrs = carnival.checkModel()
+
+        then:
+        modelErrs.size() == 1
+
+        when:
+        carnival.addModel(GraphModel.VX)
+        modelErrs = carnival.checkModel()
+
+        then:
+        modelErrs.size() == 0
+    }
+
 
     def "edge model result"() {
         when:
@@ -342,7 +423,7 @@ class CarnivalModelSpec extends Specification {
         modelErrs.size() == 1
 
         when:
-        carnival.addVertexModel(graph, g, GraphModel.VX)
+        carnival.addVertexModel(GraphModel.VX)
 
         modelErrs = carnival.checkModel()
 
@@ -389,7 +470,7 @@ class CarnivalModelSpec extends Specification {
         carnival.checkModel().size() == 0
 
         when:
-        carnival.addModel(graph, g, GraphModel.VX)
+        carnival.addModel(GraphModel.VX)
         def d1 = GraphModel.VX.DOG.instance().create(graph)
         def d2 = GraphModel.VX.DOG.instance().create(graph)
         modelErrs = carnival.checkModel()
@@ -405,7 +486,7 @@ class CarnivalModelSpec extends Specification {
         modelErrs.size() == 1
 
         when:
-        carnival.addModel(graph, g, GraphModel.EX)
+        carnival.addModel(GraphModel.EX)
         modelErrs = carnival.checkModel()
 
         then:
@@ -451,7 +532,7 @@ class CarnivalModelSpec extends Specification {
         modelErrs.size() == 1
 
         when:
-        carnival.addModel(graph, g, GraphModel.VX)
+        carnival.addModel(GraphModel.VX)
         modelErrs = carnival.checkModel()
 
         then:

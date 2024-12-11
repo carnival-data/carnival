@@ -75,7 +75,11 @@ class Identifier {
 	 */
 	public Vertex getOrCreateNode(Graph graph) {
 		def g = graph.traversal()
-		getOrCreateNode(graph, g)
+		try {
+			getOrCreateNode(graph, g)
+		} finally {
+			if (g) g.close()
+		}
 	}
 
 

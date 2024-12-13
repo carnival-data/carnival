@@ -72,4 +72,12 @@ class CarnivalTinker extends Carnival {
         graph.close()
     }
 
+
+    /** 
+     * Dispose of the resources of this Carnival.
+     */
+    public void dispose() {
+        this.close()
+    }
+
 }

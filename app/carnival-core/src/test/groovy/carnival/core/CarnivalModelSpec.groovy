@@ -135,9 +135,10 @@ class CarnivalModelSpec extends Specification {
 
         expect:
         carnival.checkModel().size() == 0
-        GraphModel.VX.DOG_CLASS.vertex == null
 
         when:
+        GraphModel.VX.DOG_CLASS.vertex = null
+        
         int numVerts1
         carnival.withGremlin { graph, g ->
             numVerts1 = g.V().count().next()

@@ -73,7 +73,7 @@ class CarnivalInitSpec extends Specification {
 
         def g = graph.traversal()
         try {
-            carnival.initialize(graph, g)
+            carnival.initModel(graph, g)
         } finally {
             if (g) g.close()
         }

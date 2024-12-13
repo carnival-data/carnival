@@ -78,6 +78,9 @@ class CarnivalJanusBerkeley extends Carnival {
     /** The names of the indexes created */
     Set<String> indexNames = new HashSet<String>()
 
+    /** */
+    boolean openedExisting = false
+
 
 	///////////////////////////////////////////////////////////////////////////
 	// FACTORY 
@@ -149,6 +152,7 @@ class CarnivalJanusBerkeley extends Carnival {
 
         if (graphDirExists) {
 
+            carnival.openedExisting = true
             carnival.initPropModelNoMgmt()
             carnival.initVertModelNoMgmt()
             carnival.initEdgeModelNoMgmt()
@@ -752,6 +756,15 @@ class CarnivalJanusBerkeley extends Carnival {
      */
     public void close() {
         graph.close()
+    }
+
+
+    /** 
+     * Dispose of the resources of this Carnival.
+     */
+    public void dispose() {
+        this.close()
+        CarnivalJanusBerkeley.clearGraph(this.config)
     }
 
 

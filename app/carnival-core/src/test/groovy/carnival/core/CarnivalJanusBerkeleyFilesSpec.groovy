@@ -118,6 +118,8 @@ class CarnivalJanusBerkeleyFilesSpec extends Specification {
         }
 
         then:
+        carnival
+        !carnival.openedExisting
         numVerts1
 
         when:
@@ -130,6 +132,7 @@ class CarnivalJanusBerkeleyFilesSpec extends Specification {
 
         then:
         carnival
+        carnival.openedExisting
         numVerts1 == numVerts2
 
         cleanup:

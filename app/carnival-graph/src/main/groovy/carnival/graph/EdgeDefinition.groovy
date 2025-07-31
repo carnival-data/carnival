@@ -219,9 +219,9 @@ trait EdgeDefinition extends ElementDefinition {
      * Synonym for setRelationship().
      * @see #setRelationship(GraphTraversalSource, VertexDefinition, VertexDefinition)
      */
-    public Edge relate(GraphTraversalSource g, VertexDefinition from, VertexDefinition to) {
+    /*public Edge relate(GraphTraversalSource g, VertexDefinition from, VertexDefinition to) {
         setRelationship(g, from, to)
-    }
+    }*/
 
 
     /** 
@@ -235,7 +235,7 @@ trait EdgeDefinition extends ElementDefinition {
      * @param to The to vertex definition
      * @return The new or existing edge
      */
-    public Edge setRelationship(GraphTraversalSource g, VertexDefinition from, VertexDefinition to) {
+    /*public Edge setRelationship(GraphTraversalSource g, VertexDefinition from, VertexDefinition to) {
         assert g != null
         assert from != null
         assert to != null
@@ -258,7 +258,7 @@ trait EdgeDefinition extends ElementDefinition {
                 Base.PX.NAME_SPACE.label, ns
             )
         }
-    }
+    }*/
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -269,9 +269,9 @@ trait EdgeDefinition extends ElementDefinition {
      * Synonym for setRelationship().
      * @see #setRelationship(GraphTraversalSource, Vertex, VertexDefinition)
      */
-    public Edge relate(GraphTraversalSource g, Vertex from, VertexDefinition to) {
+    /*public Edge relate(GraphTraversalSource g, Vertex from, VertexDefinition to) {
         setRelationship(g, from, to)
-    }
+    }*/
 
 
     /** 
@@ -282,7 +282,7 @@ trait EdgeDefinition extends ElementDefinition {
      * @param to The to vertex definition that must have a singleton vertex
      * @return The new or existing edge
      */
-    public Edge setRelationship(GraphTraversalSource g, Vertex from, VertexDefinition to) {
+    /*public Edge setRelationship(GraphTraversalSource g, Vertex from, VertexDefinition to) {
         assert g != null
         assert from != null
         assert to != null
@@ -304,7 +304,7 @@ trait EdgeDefinition extends ElementDefinition {
                 Base.PX.NAME_SPACE.label, ns
             )
         }
-    }
+    }*/
 
 
     ///////////////////////////////////////////////////////////////////////////

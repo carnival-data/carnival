@@ -52,7 +52,7 @@ class VertexDefinitionSpec extends Specification {
 
         THING_5(propertiesMustBeDefined:false),
 
-        A_CLASS,
+        A_CLASS/*,
         B_CLASS (
             superClass: VX.A_CLASS
         ),
@@ -66,7 +66,7 @@ class VertexDefinitionSpec extends Specification {
 
         NOT_A_CLASS (
             isClass: false
-        )
+        )*/
 
         private VX() {}
         private VX(Map m) {m.each { k,v -> this."$k" = v }}
@@ -129,7 +129,7 @@ class VertexDefinitionSpec extends Specification {
     }
 
 
-    def "instanceOf edge is automatically created"() {
+    /*def "instanceOf edge is automatically created"() {
         setup:
         // these have to be explicitly set as we are not using Carnival, just
         // creating a TinkerGraph and testing VertexDefinition in isolation
@@ -145,7 +145,7 @@ class VertexDefinitionSpec extends Specification {
             .out(Base.EX.IS_INSTANCE_OF)
             .is(VX.B_CLASS.vertex)
         .tryNext().isPresent()
-    }
+    }*/
 
 
     class Something implements VertexDefinition {
@@ -155,7 +155,7 @@ class VertexDefinitionSpec extends Specification {
         }
     }
 
-    def "cannot set superclass unless is a class"() {
+    /*def "cannot set superclass unless is a class"() {
         when:
         def s = new Something(name:"a")
 
@@ -167,10 +167,10 @@ class VertexDefinitionSpec extends Specification {
 
         then:
         Exception e = thrown()
-    }
+    }*/
 
 
-    def "cannot set instanceof of class"() {
+    /*def "cannot set instanceof of class"() {
         when:
         def s = new Something(name:"a_class")
 
@@ -183,16 +183,16 @@ class VertexDefinitionSpec extends Specification {
         then:
         Exception e = thrown()
 
-    }
+    }*/
 
 
-    def "explicit isClass"() {
+    /*def "explicit isClass"() {
         expect:
         VX.CLASS_OF_SOMETHING.isClass()
         !VX.NOT_A_CLASS.isClass()
         VX.A_CLASS.isClass
         VX.A_CLASS.isClass()
-    }
+    }*/
 
 
     def "can add undefined props on switch"() {

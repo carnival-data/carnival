@@ -75,9 +75,9 @@ class Core {
         ),
 
         /** Graph process class */
-        GRAPH_PROCESS_CLASS(
+        GRAPH_PROCESS_CLASS/*(
             superClass: VX.PROCESS_CLASS
-        ),
+        )*/,
 
         /** Graph process */
         GRAPH_PROCESS(
@@ -91,9 +91,9 @@ class Core {
         ),
 
         /** Data transformation process class */
-        DATA_TRANSFORMATION_PROCESS_CLASS(
+        DATA_TRANSFORMATION_PROCESS_CLASS/*(
             superClass: VX.PROCESS_CLASS            
-        ),
+        )*/,
 
         /** Validation failure */
         VALIDATION_FAILURE,

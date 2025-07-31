@@ -22,9 +22,9 @@ class GraphModel {
 
     static enum VX implements VertexDefinition {
         DOG_CLASS,
-        COLLIE_CLASS (
+        COLLIE_CLASS/*(
             superClass:VX.DOG_CLASS
-        ),
+        )*/,
         DOG
 
         private VX() {}

@@ -125,13 +125,13 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
 
         assertRequiredProperties()
 
-        boolean isClass = vertexDef.isClass()
+        //boolean isClass = vertexDef.isClass()
         def lbl = vertexDef.getLabel()
         def ns = vertexDef.getNameSpace()
         assert ns != null
         
         def traversal = g.V().hasLabel(lbl)
-        if (isClass) traversal.has(Base.PX.IS_CLASS.label, isClass)
+        //if (isClass) traversal.has(Base.PX.IS_CLASS.label, isClass)
         traversal.has(Base.PX.NAME_SPACE.label, ns)
 
         traversal
@@ -175,12 +175,12 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
             Base.PX.NAME_SPACE.label, ns
         )
         
-        if (vertexDef.isClass()) v.property(Base.PX.IS_CLASS.label, vertexDef.isClass())
+        //if (vertexDef.isClass()) v.property(Base.PX.IS_CLASS.label, vertexDef.isClass())
         if (vertexDef.isGlobal()) v.property(Base.PX.VERTEX_DEFINITION_CLASS.label, vertexDef.elementDefinitionClass)
-        if (vertexDef.instanceOf != null) {
+        /*if (vertexDef.instanceOf != null) {
             assert vertexDef.instanceOf.vertex
             Base.EX.IS_INSTANCE_OF.instance().from(v).to(vertexDef.instanceOf.vertex).create()
-        }
+        }*/
 
         setElementProperties(v)
 

@@ -709,11 +709,11 @@ class CarnivalJanusBerkeley extends Carnival {
 
         janusSchemaManagement(res)
 
-        if (res.vertexConstraints) {
+        /*if (res.vertexConstraints) {
             withGremlin { graph, g ->
                 addClassVertices(graph, g, res.vertexConstraints)
             }
-        }
+        }*/
 
         res
     }
@@ -736,11 +736,11 @@ class CarnivalJanusBerkeley extends Carnival {
         else if (defInterfaces.contains(PropertyDefinition)) res = addPropertyModel(defClass)
         else throw new RuntimeException("unrecognized definition class: $defClass")
 
-        if (res.vertexConstraints) {
+        /*if (res.vertexConstraints) {
             withGremlin { graph, g ->
                 addClassVertices(graph, g, res.vertexConstraints)
             }
-        }
+        }*/
 
         res
     }

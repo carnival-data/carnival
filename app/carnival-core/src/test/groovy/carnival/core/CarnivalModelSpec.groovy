@@ -130,7 +130,7 @@ class CarnivalModelSpec extends Specification {
     }
 
 
-    def "add vertex model from package"() {
+    /*def "add vertex model from package"() {
         def modelErrs
 
         expect:
@@ -162,7 +162,7 @@ class CarnivalModelSpec extends Specification {
         GraphModel.VX.DOG_CLASS.vertex
         GraphModel.VX.COLLIE_CLASS.vertex
         numVerts2 == numVerts1 + 3
-    }
+    }*/
 
 
     def "add vertex model"() {
@@ -211,7 +211,7 @@ class CarnivalModelSpec extends Specification {
     }
 
         
-    def "core model class vertices"() {
+    /*def "core model class vertices"() {
         when:
         def processClassVs
         carnival.withGremlin { graph, g ->
@@ -221,10 +221,10 @@ class CarnivalModelSpec extends Specification {
         then:
         processClassVs
         processClassVs.size() == 1
-    }
+    }*/
 
 
-    def "addModel vertex creates class vertices"() {
+    /*def "addModel vertex creates class vertices"() {
 
         when:
         def res = carnival.addModel(VX2)
@@ -237,7 +237,7 @@ class CarnivalModelSpec extends Specification {
         then:
         thingClassVs
         thingClassVs.size() == 1
-    }
+    }/
 
 
     def "vertex model result"() {
@@ -541,7 +541,7 @@ class CarnivalModelSpec extends Specification {
     }
 
 
-    def "set superclass"() {
+    /*def "set superclass"() {
         when:
         carnival.addModelsFromPackage('test.coregraphspec')
 
@@ -555,7 +555,7 @@ class CarnivalModelSpec extends Specification {
 
         then:
         classSubGraph.isPresent()
-    }
+    }*/
     
 }
 

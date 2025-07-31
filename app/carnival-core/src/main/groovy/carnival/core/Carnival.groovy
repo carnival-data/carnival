@@ -186,11 +186,11 @@ abstract class Carnival implements GremlinTrait {
 			res.addModelResults << amr
 		}
 
-		res.addModelResults.each { amr ->
+		/*res.addModelResults.each { amr ->
 			if (amr.vertexConstraints) {
 				addClassVertices(graph, g, amr.vertexConstraints)
 			}
-		}
+		}*/
 
 		res
 	} 
@@ -218,11 +218,11 @@ abstract class Carnival implements GremlinTrait {
 		else if (defInterfaces.contains(PropertyDefinition)) res = addPropertyModel(defClass)
 		else throw new RuntimeException("unrecognized definition class: $defClass")
 
-		if (res.vertexConstraints) {
+		/*if (res.vertexConstraints) {
 			withGremlin { graph, g ->
 				addClassVertices(graph, g, res.vertexConstraints)
 			}
-		}
+		}*/
 
 		res
 	}
@@ -342,13 +342,13 @@ abstract class Carnival implements GremlinTrait {
 			amrs = addModelsFromPackage(graph, g, packageName)
 		}
 
-		amrs.each { amr ->
+		/*amrs.each { amr ->
 			if (amr.vertexConstraints) {
 				withGremlin { graph, g ->
 					addClassVertices(graph, g, amr.vertexConstraints)
 				}
 			}
-		}
+		}*/
 
 		amrs
 	}
@@ -800,7 +800,7 @@ abstract class Carnival implements GremlinTrait {
 	 * @param graph A gremlin graph to which to add vertices.
 	 * @param g A graph traversal to use.
 	 */
-	public void addClassVertices(
+	/*public void addClassVertices(
 		Graph graph, GraphTraversalSource g, Set<VertexConstraint> vcs
 	) {
 		assert graph
@@ -813,7 +813,7 @@ abstract class Carnival implements GremlinTrait {
         vcs.each { vc ->
 			connectClassVertices(graph, g, vc)
 		}
-	}
+	}*/
 
 
 	/** 
@@ -823,7 +823,7 @@ abstract class Carnival implements GremlinTrait {
 	 * @param graph The gremlin graph to use.
 	 * @param g The graph traversal to use.
 	 */
-	public void createClassVertex(
+	/*public void createClassVertex(
 		Graph graph, GraphTraversalSource g, VertexConstraint vertexConstraint
 	) {
 		log.trace "createClassVertex vertexConstraint: ${vertexConstraint.label} $vertexConstraint"
@@ -845,7 +845,7 @@ abstract class Carnival implements GremlinTrait {
 			vdef.vertex = ci.vertex(graph, g)
 			log.trace "created vertex ${vdef.label} ${vdef.nameSpace} ${vdef.vertex}"
 		}
-	}
+	}*/
 
 
 	/** 
@@ -855,7 +855,7 @@ abstract class Carnival implements GremlinTrait {
 	 * @param graph A gremlin graph to use.
 	 * @param g A graph traversal source to use.
 	 */
-	public void connectClassVertices(
+	/*public void connectClassVertices(
 		Graph graph, GraphTraversalSource g, VertexConstraint vertexConstraint
 	) {
 		def vdef = vertexConstraint.vertexDef
@@ -868,7 +868,7 @@ abstract class Carnival implements GremlinTrait {
 			assert vdef.superClass.vertex
 			vdef.setSubclassOf(g, vdef.superClass)
 		}
-	}
+	}*/
 
 
 	///////////////////////////////////////////////////////////////////////////

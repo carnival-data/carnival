@@ -168,7 +168,7 @@ class GraphMethodBase {
         String argsHash = CoreUtil.argumentsUniquifier(this.arguments)
 
         // grab the defs
-        def pcvDef = getProcessClassVertexDef()
+        //def pcvDef = getProcessClassVertexDef()
         def pvDef = getProcessVertexDef()
 
         // assert that the process def has the required properties
@@ -182,14 +182,14 @@ class GraphMethodBase {
         ).create(graph)
         
         // the process vertex is an instance of the process class
-        Base.EX.IS_INSTANCE_OF.instance()
+        /*Base.EX.IS_INSTANCE_OF.instance()
             .from(procV)
             .to(pcvDef.vertex)
-        .create()
+        .create()*/
         
         // ensure that the process class is a subclass of GRAPH_PROCESS_CLASS
         // it is troubling that this happens every time a graph method is called
-        if (
+        /*if (
             pcvDef.label != Core.VX.GRAPH_PROCESS_CLASS.label ||
             pcvDef.nameSpace != Core.VX.GRAPH_PROCESS_CLASS.nameSpace
         ) {
@@ -197,7 +197,7 @@ class GraphMethodBase {
                 .from(pcvDef.vertex)
                 .to(Core.VX.GRAPH_PROCESS_CLASS.vertex)
             .ensure(g)
-        }
+        }*/
 
         // set the internal process vertex
         this.processVertex = procV
@@ -289,14 +289,14 @@ class GraphMethodBase {
         ).create(graph)
         
         // the process vertex is an instance of the process class
-        Base.EX.IS_INSTANCE_OF.instance()
+        /*Base.EX.IS_INSTANCE_OF.instance()
             .from(procV)
             .to(pcvDef.vertex)
-        .create()
+        .create()*/
         
         // ensure that the process class is a subclass of GRAPH_PROCESS_CLASS
         // it is troubling that this happens every time a graph method is called
-        if (
+        /*if (
             pcvDef.label != Core.VX.GRAPH_PROCESS_CLASS.label ||
             pcvDef.nameSpace != Core.VX.GRAPH_PROCESS_CLASS.nameSpace
         ) {
@@ -304,7 +304,7 @@ class GraphMethodBase {
                 .from(pcvDef.vertex)
                 .to(Core.VX.GRAPH_PROCESS_CLASS.vertex)
             .ensure(g)
-        }
+        }*/
 
         // if an exception was caught, record the message in the process vertex
         if (exception != null) {

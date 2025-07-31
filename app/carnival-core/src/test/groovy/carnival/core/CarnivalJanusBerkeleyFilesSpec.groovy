@@ -120,7 +120,7 @@ class CarnivalJanusBerkeleyFilesSpec extends Specification {
         then:
         carnival
         !carnival.openedExisting
-        numVerts1
+        numVerts1 == 0
 
         when:
         carnival.close()

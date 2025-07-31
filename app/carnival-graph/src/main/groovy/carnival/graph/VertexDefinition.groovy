@@ -52,23 +52,23 @@ trait VertexDefinition extends ElementDefinition {
      * The singleton vertex, if applicable, for this vertex definition. 
      * Singleton vertices are valuable so they can be used in gremlin traversals.
      */
-    Vertex vertex
+    //Vertex vertex
     
     /** 
      * optional, defines what the superclass of this class is.
      */
-    VertexDefinition superClass
+    //VertexDefinition superClass
 
     /** 
      * optional, defines what class these verticies are instances of.
      */
-    VertexDefinition instanceOf
+    //VertexDefinition instanceOf
 
     /** 
      * Explicitly designate this definition as a class. A singleton vertex will
      * automatically be created in the graph.
      */
-    Boolean isClass = null
+    //Boolean isClass = null
 
     // NOTE: propertyDefs come from WithPropertyDefsTrait, via
     // ElementDefinition extends WithPropertyDefsTrait
@@ -96,36 +96,36 @@ trait VertexDefinition extends ElementDefinition {
      * Get the superclass vertex definition of this vertex definition.
      * @return The superclass vertex definition
      */
-    VertexDefinition getSuperClass() { this.superClass }
+    //VertexDefinition getSuperClass() { this.superClass }
 
     /** 
      * Set the superclass vertex definition of this vertex definition.
      * @param vDef The superclass vertex definition
      */
-    void setSuperClass(VertexDefinition vDef) {
+    /*void setSuperClass(VertexDefinition vDef) {
         assert vDef != null
         if (!isClass()) throw new RuntimeException("cannot set superClass when isClass() is false")
         
         this.superClass = vDef
-    }
+    }*/
 
     /** 
      * Return the vertex definition of which this definition is an instance.
      * @return The instanceOf vertex definition
      */
-    VertexDefinition getInstanceOf() { this.instanceOf }
+    //VertexDefinition getInstanceOf() { this.instanceOf }
 
     /** 
      * Set the vertex definition of which this definition is an instance; 
      * applies only to vertex definitions that do not define classes.
      * @param vDef The instanceOf vertex definition
      */
-    void setInstanceOf(VertexDefinition vDef) {
+    /*void setInstanceOf(VertexDefinition vDef) {
         assert vDef != null
         if (isClass()) throw new RuntimeException("cannot set instanceOf when isClass() is true")
         
         this.instanceOf = vDef
-    }
+    }*/
 
 
 
@@ -175,19 +175,19 @@ trait VertexDefinition extends ElementDefinition {
      * Synonym for isClass()
      * @see #isClass()
      */
-    boolean getIsClass() {
+    /*boolean getIsClass() {
         isClass()        
-    }
+    }*/
 
 
     /** 
      * Return true if this definition defines a class vertex.
      * @return A boolean value
      */
-    public boolean isClass() {
+    /*public boolean isClass() {
         if (this.isClass != null) return this.isClass
         name().toLowerCase().endsWith(CLASS_SUFFIX)
-    }
+    }*/
 
 
     /** 
@@ -232,7 +232,7 @@ trait VertexDefinition extends ElementDefinition {
      */
     public Vertex createVertex(Graph graph) {
         assert graph
-        if (isClass()) throw new RuntimeException("cannot create instance vertex of class ${this}")
+        //if (isClass()) throw new RuntimeException("cannot create instance vertex of class ${this}")
         def lbl = getLabel()
         def ns = getNameSpace()
         def v = graph.addVertex(
@@ -286,7 +286,7 @@ trait VertexDefinition extends ElementDefinition {
      * @param graph The target property graph
      * @param g The graph traversal source to use
      */
-    public void applyTo(Graph graph, GraphTraversalSource g) {
+    /*public void applyTo(Graph graph, GraphTraversalSource g) {
         if (this.isClass() && this.requiredProperties.size() == 0) {
             this.vertex = this.instance().ensure(graph, g)
         }
@@ -298,7 +298,7 @@ trait VertexDefinition extends ElementDefinition {
 			assert this.superClass.vertex
 			this.setSubclassOf(g, this.superClass)
 		}
-    }
+    }*/
 
 
     /** 
@@ -307,7 +307,7 @@ trait VertexDefinition extends ElementDefinition {
      * @param g The graph graversal source to use
      * @param superClassDef The superclass definition
      */
-    public void setSubclassOf(GraphTraversalSource g, VertexDefinition superClassDef) {
+    /*public void setSubclassOf(GraphTraversalSource g, VertexDefinition superClassDef) {
         assert g
         assert superClassDef
         if (superClassDef.vertex == null) throw new IllegalArgumentException("superClassDef.vertex is null: $superClassDef")
@@ -318,7 +318,7 @@ trait VertexDefinition extends ElementDefinition {
         .tryNext().orElseGet {
             Base.EX.IS_SUBCLASS_OF.relate(g, vertex, superClassDef.vertex)
         }
-    }
+    }*/
 
 
     /** 
@@ -327,7 +327,7 @@ trait VertexDefinition extends ElementDefinition {
      * @param g The graph traversal source to use
      * @param subclassV The subclass vertex.
      */
-    public void setSuperclassOf(GraphTraversalSource g, Vertex subclassV) {
+    /*public void setSuperclassOf(GraphTraversalSource g, Vertex subclassV) {
         assert g
         assert subclassV
         if (!this.vertex) throw new RuntimeException("vertex is null: $this")
@@ -337,7 +337,7 @@ trait VertexDefinition extends ElementDefinition {
             .tryNext().orElseGet {
                 Base.EX.IS_SUBCLASS_OF.relate(g, subclassV, this.vertex)
         }
-    }
+    }*/
 
 
     /** 
@@ -348,7 +348,7 @@ trait VertexDefinition extends ElementDefinition {
      * @param rel The edge definition
      * @param targetClassDef The target class definition
      */
-    public void setRelationship(GraphTraversalSource g, EdgeDefinition rel, VertexDefinition targetClassDef) {
+    /*public void setRelationship(GraphTraversalSource g, EdgeDefinition rel, VertexDefinition targetClassDef) {
         //log.debug "setRelationship rel:$rel"
         g.V(vertex)
             .outE(rel.label).as('r')
@@ -361,7 +361,7 @@ trait VertexDefinition extends ElementDefinition {
                 Base.PX.NAME_SPACE.label, rel.nameSpace
             )
         }
-    }
+    }*/
 
 
     ///////////////////////////////////////////////////////////////////////////

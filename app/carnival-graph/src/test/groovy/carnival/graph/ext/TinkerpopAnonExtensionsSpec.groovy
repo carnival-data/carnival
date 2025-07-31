@@ -59,7 +59,7 @@ class TinkerpopAnonExtensionsSpec extends Specification {
         ID
     }
 
-    @VertexModel
+    /*@VertexModel
     static enum VX3 {
         CLASS_OF_ALL_DOGS (
             isClass:true
@@ -81,7 +81,7 @@ class TinkerpopAnonExtensionsSpec extends Specification {
             instanceOf: COLLIE_CLASS,
             vertexProperties:[PX3.ID, PX3.DATE_OF_BIRTH]
         )
-    }
+    }*/
 
     @PropertyModel
     static enum PX3 {
@@ -107,9 +107,9 @@ class TinkerpopAnonExtensionsSpec extends Specification {
         graph = TinkerGraph.open()
         g = graph.traversal()
 
-        [VX3.CLASS_OF_ALL_DOGS, VX3.COLLIE_CLASS, VX3.SHIBA_INU_CLASS].each {
+        /*[VX3.CLASS_OF_ALL_DOGS, VX3.COLLIE_CLASS, VX3.SHIBA_INU_CLASS].each {
             it.applyTo(graph, g)
-        }
+        }*/
     } 
 
 

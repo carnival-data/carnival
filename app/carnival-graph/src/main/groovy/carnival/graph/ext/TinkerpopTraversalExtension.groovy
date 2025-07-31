@@ -71,7 +71,7 @@ class TinkerpopTraversalExtension {
      * @param vdef      The vertex definition
      * @return          The modified traversal
      */
-    static GraphTraversal isInstanceOf(DefaultTraversal traversal, VertexDefinition vdef) {
+    /*static GraphTraversal isInstanceOf(DefaultTraversal traversal, VertexDefinition vdef) {
         traversal
             .as('ttev')
             .out(Base.EX.IS_INSTANCE_OF)
@@ -82,7 +82,7 @@ class TinkerpopTraversalExtension {
                 __.out(Base.EX.IS_SUBCLASS_OF)
             )
         .select('ttev')
-    }
+    }*/
 
 
     /** 
@@ -110,11 +110,11 @@ class TinkerpopTraversalExtension {
      * @param traversal The traversal this method will modify.
      * @return          The modified traversal
      */
-    static GraphTraversal instanceClass(DefaultTraversal traversal) {
+    /*static GraphTraversal instanceClass(DefaultTraversal traversal) {
         traversal
             .out(Base.EX.IS_INSTANCE_OF)
             .has(Base.PX.IS_CLASS, Boolean.TRUE)
-    }
+    }*/
 
 
     /** 

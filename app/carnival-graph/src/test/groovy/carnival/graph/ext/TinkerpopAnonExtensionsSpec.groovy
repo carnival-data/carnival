@@ -1,4 +1,4 @@
-package carnival.graph
+package carnival.graph.ext
 
 
 
@@ -78,8 +78,15 @@ class TinkerpopAnonExtensionsSpec extends Specification {
         ),
 
         COLLIE (
-            instanceOf: COLLIE_CLASS
+            instanceOf: COLLIE_CLASS,
+            vertexProperties:[PX3.ID, PX3.DATE_OF_BIRTH]
         )
+    }
+
+    @PropertyModel
+    static enum PX3 {
+        ID,
+        DATE_OF_BIRTH
     }
 
     static enum LOCAL_ID { ID1 }
@@ -117,6 +124,43 @@ class TinkerpopAnonExtensionsSpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
+
+    /*def "anonymous traversal date property"() {
+        when:
+        Date d1 = new Date()
+        def v1 = VX3.COLLIE.instance().withProperties(
+            PX3.ID, '1',
+            PX3.DATE_OF_BIRTH, d1
+        ).ensure(graph, g)
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d1);
+        cal.add(Calendar.DAY_OF_MONTH, -1);
+
+        Date d2 = cal.getTime();
+        def v2 = VX3.COLLIE.instance().withProperties(
+            PX3.ID, '2',
+            PX3.DATE_OF_BIRTH, d2
+        ).ensure(graph, g)
+
+        then:
+        d1 != d2
+        d1.compareTo(d2) != 0
+
+        when:
+        def collie1 = g.V()
+            .isa(VX3.COLLIE)
+            .and(
+                __.has(PX3.ID, '1'),
+                __.has(PX3.DATE_OF_BIRTH, d1)
+            )
+        .toList()
+
+        then:
+        collie1
+        collie1.size() == 1
+        collie1[0] == v1
+    }*/
 
 
     def "anonymous traversal isa"() {

@@ -62,8 +62,18 @@ class TinkerpopAnonTraversalExtension {
     }
 
     /** @see TinkerpopTraversalExtension#has(DefaultTraversal, PropertyDefinition, Enum) */
+    static GraphTraversal has(__ traversal, PropertyDefinition pdef, String value) {
+        traversal.has(pdef.label, value)
+    }
+
+    /** @see TinkerpopTraversalExtension#has(DefaultTraversal, PropertyDefinition, Enum) */
     static GraphTraversal has(__ traversal, PropertyDefinition pdef, Enum value) {
         traversal.has(pdef.label, value.name())
+    }
+
+    /** @see TinkerpopTraversalExtension#has(DefaultTraversal, PropertyDefinition, Enum) */
+    static GraphTraversal has(__ traversal, PropertyDefinition pdef, Date value) {
+        traversal.has(pdef.label, value)
     }
 
     /** @see TinkerpopTraversalExtension#has(DefaultTraversal, PropertyDefinition, Object) */

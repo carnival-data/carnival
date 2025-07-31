@@ -63,12 +63,15 @@ abstract class GraphMethod extends GraphMethodBase {
         Exception exception
         Instant startTime
         GraphMethodCall gmcOut
+
+        // if an exception happens here, it needs to be thrown based on the
+        // fact that this method is expected to return a GraphMethodCall
+        startTime = Instant.now()
+        gmcOut = graphMethodCallStart(graph, g, startTime)
         
         // execute the graph method recording the start
         // and stop times
         try {
-            startTime = Instant.now()
-            gmcOut = graphMethodCallStart(graph, g, startTime)
             execute(graph, g)
         } catch (Exception e) {
             exception = e

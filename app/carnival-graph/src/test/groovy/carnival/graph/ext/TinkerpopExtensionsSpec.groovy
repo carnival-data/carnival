@@ -1,4 +1,4 @@
-package carnival.graph
+package carnival.graph.ext
 
 
 
@@ -12,6 +12,7 @@ import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
 import org.apache.tinkerpop.gremlin.process.traversal.Traversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
+import org.apache.tinkerpop.gremlin.process.traversal.Order
 
 import carnival.graph.VertexModel
 import carnival.graph.PropertyModel
@@ -34,7 +35,7 @@ class TinkerpopExtensionsSpec extends Specification {
     @VertexModel
     static enum VX {
         THING(
-            vertexProperties:[PX.ID, PX.NAME]
+            vertexProperties:[PX.ID, PX.NAME, PX.CREATED]
         )
     }
 
@@ -58,7 +59,8 @@ class TinkerpopExtensionsSpec extends Specification {
     @PropertyModel
     static enum PX {
         ID,
-        NAME
+        NAME,
+        CREATED
     }
 
     @VertexModel
@@ -231,6 +233,70 @@ class TinkerpopExtensionsSpec extends Specification {
         matches.size() == 2
         matches.contains(v1)
         matches.contains(v3)
+    }
+
+
+    def "order by default order"() {
+        when:
+        def v1 = VX.THING.instance().withProperty(PX.ID, '58').create(graph)
+        def v2 = VX.THING.instance().withProperty(PX.ID, '57').create(graph)
+        def v3 = VX.THING.instance().withProperty(PX.ID, '59').create(graph)
+
+        def orderedVs = g.V().isa(VX.THING).order().by(PX.ID).toList()
+
+        then:
+        orderedVs.size() == 3
+        orderedVs == [v2, v1, v3]
+    }
+
+
+    def "order by asc"() {
+        when:
+        def v1 = VX.THING.instance().withProperty(PX.ID, '58').create(graph)
+        def v2 = VX.THING.instance().withProperty(PX.ID, '57').create(graph)
+        def v3 = VX.THING.instance().withProperty(PX.ID, '59').create(graph)
+
+        def orderedVs = g.V().isa(VX.THING).order().by(PX.ID, Order.asc).toList()
+
+        then:
+        orderedVs.size() == 3
+        orderedVs == [v2, v1, v3]
+    }
+
+
+    def "order by desc"() {
+        when:
+        def v1 = VX.THING.instance().withProperty(PX.ID, '58').create(graph)
+        def v2 = VX.THING.instance().withProperty(PX.ID, '57').create(graph)
+        def v3 = VX.THING.instance().withProperty(PX.ID, '59').create(graph)
+
+        def orderedVs = g.V().isa(VX.THING).order().by(PX.ID, Order.desc).toList()
+
+        then:
+        orderedVs.size() == 3
+        orderedVs == [v3, v1, v2]
+    }
+
+
+    def "has pdef date value"() {
+        expect:
+        g.V().isa(VX.THING).count().next() == 0
+
+        when:
+        Date d = new Date()
+        def v1 = VX.THING.instance().withProperty(PX.CREATED, d).create(graph)
+
+        then:
+        g.V().isa(VX.THING).count().next() == 1
+        g.V(v1).has(PX.CREATED, d).tryNext().isPresent()
+
+        when:
+        Date e = new Date()
+        e.setYear(d.year-1)
+
+        then:
+        e.compareTo(d) != 0
+        !g.V(v1).has(PX.CREATED, e).tryNext().isPresent()
     }
 
 

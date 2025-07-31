@@ -12,6 +12,7 @@ import groovy.transform.EqualsAndHashCode
 
 import org.apache.tinkerpop.gremlin.process.traversal.util.DefaultTraversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal
+import org.apache.tinkerpop.gremlin.process.traversal.Order
 import org.apache.tinkerpop.gremlin.structure.Vertex
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.__
 
@@ -112,7 +113,7 @@ class TinkerpopTraversalExtension {
     static GraphTraversal instanceClass(DefaultTraversal traversal) {
         traversal
             .out(Base.EX.IS_INSTANCE_OF)
-            .has(Base.PX.IS_CLASS, true)
+            .has(Base.PX.IS_CLASS, Boolean.TRUE)
     }
 
 
@@ -259,16 +260,112 @@ class TinkerpopTraversalExtension {
 
 
     /** 
-     * Extension of the Has step that accepts a property definition and a 
-     * value.
+     * Extension of the Has step that accepts a property definition and a
+     * Date will be used as the property value.
      *
      * @param traversal The traversal this method will modify.
      * @param pdef      The property definition
-     * @param value     The value to use as the property value
+     * @param value     The property value
      * @return          The modified traversal
      */
-    static GraphTraversal has(DefaultTraversal traversal, PropertyDefinition pdef, Object value) {
+    static GraphTraversal has(DefaultTraversal traversal, PropertyDefinition pdef, Date value) {
         traversal.has(pdef.label, value)
+    }
+
+
+    /** 
+     * Extension of the Has step that accepts a property definition and a
+     * String will be used as the property value.
+     *
+     * @param traversal The traversal this method will modify.
+     * @param pdef      The property definition
+     * @param value     The property value
+     * @return          The modified traversal
+     */
+    static GraphTraversal has(DefaultTraversal traversal, PropertyDefinition pdef, String value) {
+        traversal.has(pdef.label, value)
+    }
+
+
+    /** 
+     * Extension of the Has step that accepts a property definition and a
+     * Long that will be used as the property value.
+     *
+     * @param traversal The traversal this method will modify.
+     * @param pdef      The property definition
+     * @param value     The property value
+     * @return          The modified traversal
+     */
+    static GraphTraversal has(DefaultTraversal traversal, PropertyDefinition pdef, Long value) {
+        traversal.has(pdef.label, value)
+    }
+
+
+    /** 
+     * Extension of the Has step that accepts a property definition and a
+     * Integer that will be used as the property value.
+     *
+     * @param traversal The traversal this method will modify.
+     * @param pdef      The property definition
+     * @param value     The property value
+     * @return          The modified traversal
+     */
+    static GraphTraversal has(DefaultTraversal traversal, PropertyDefinition pdef, Integer value) {
+        traversal.has(pdef.label, value)
+    }
+
+
+    /** 
+     * Extension of the Has step that accepts a property definition and a
+     * Boolean that will be used as the property value.
+     *
+     * @param traversal The traversal this method will modify.
+     * @param pdef      The property definition
+     * @param value     The the property value
+     * @return          The modified traversal
+     */
+    static GraphTraversal has(DefaultTraversal traversal, PropertyDefinition pdef, Boolean value) {
+        traversal.has(pdef.label, value)
+    }
+
+
+    /** 
+     * Extension of the Has step that accepts a property definition and a
+     * boolean that will be used as the property value.
+     *
+     * @param traversal The traversal this method will modify.
+     * @param pdef      The property definition
+     * @param value     The property value
+     * @return          The modified traversal
+     */
+    static GraphTraversal has(DefaultTraversal traversal, PropertyDefinition pdef, boolean value) {
+        traversal.has(pdef.label, Boolean.valueOf(value))
+    }
+
+
+    /** 
+     * Extension of the By step that accepts a property definition and a 
+     * sort order.
+     *
+     * @param traversal The traversal this method will modify.
+     * @param pdef      The property definition of the property key
+     * @param orderBy   The sort order.
+     * @return          The modified traversal
+     */
+    static GraphTraversal by(DefaultTraversal traversal, PropertyDefinition pdef, Order orderBy) {
+        traversal.by(pdef.label, orderBy)
+    }
+
+
+    /** 
+     * Extension of the By step that accepts a property definition.
+     *
+     * @param traversal The traversal this method will modify.
+     * @param pdef      The property definition of the property key
+     * @return          The modified traversal
+     */
+    static GraphTraversal by(DefaultTraversal traversal, PropertyDefinition pdef) {
+        traversal.by(pdef.label)
     }
 
 

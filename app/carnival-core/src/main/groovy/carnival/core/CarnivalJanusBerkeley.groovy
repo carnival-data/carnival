@@ -755,7 +755,18 @@ class CarnivalJanusBerkeley extends Carnival {
      * Close this Carnival.
      */
     public void close() {
-        graph.close()
+        log.trace "CarnivalJanusBerkeley close()"
+
+        if (graph.isClosed()) {
+            log.warn "CarnivalJanusBerkeley graph is already closed"
+            return
+        }
+
+        try {
+            graph.close()
+        } catch (Exception e) {
+            log.warn "Exception closing graph ${graph}", e
+        }
     }
 
 
@@ -763,6 +774,7 @@ class CarnivalJanusBerkeley extends Carnival {
      * Dispose of the resources of this Carnival.
      */
     public void dispose() {
+        log.trace "CarnivalJanusBerkeley dispose()"
         this.close()
         CarnivalJanusBerkeley.clearGraph(this.config)
     }

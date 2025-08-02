@@ -137,6 +137,9 @@ class Core {
     @EdgeModel
     static enum EX {
 
+        /** Used to relate an instance with a class */
+        IS_INSTANCE_OF,
+
         /** Is identified by */
     	IS_IDENTIFIED_BY,
 

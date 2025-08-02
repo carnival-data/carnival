@@ -181,7 +181,7 @@ abstract class Carnival implements GremlinTrait {
 
 		InitModelResult res = new InitModelResult()
 
-		[Base.PX, Base.EX, Core.PX, Core.VX, Core.EX].each {
+		[Base.PX, /*Base.EX,*/ Core.PX, Core.VX, Core.EX].each {
 			AddModelResult amr = addModel(it)
 			res.addModelResults << amr
 		}

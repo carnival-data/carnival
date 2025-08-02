@@ -59,29 +59,13 @@ class TinkerpopAnonExtensionsSpec extends Specification {
         ID
     }
 
-    /*@VertexModel
+    @VertexModel
     static enum VX3 {
-        CLASS_OF_ALL_DOGS (
-            isClass:true
-        ),
-        
-        COLLIE_CLASS (
-            superClass: CLASS_OF_ALL_DOGS
-        ),
-
-        SHIBA_INU_CLASS (
-            superClass: CLASS_OF_ALL_DOGS
-        ),
-
-        SHIBA_INU (
-            instanceOf: SHIBA_INU_CLASS
-        ),
-
+        SHIBA_INU,
         COLLIE (
-            instanceOf: COLLIE_CLASS,
             vertexProperties:[PX3.ID, PX3.DATE_OF_BIRTH]
         )
-    }*/
+    }
 
     @PropertyModel
     static enum PX3 {
@@ -125,7 +109,7 @@ class TinkerpopAnonExtensionsSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
-    /*def "anonymous traversal date property"() {
+    def "anonymous traversal date property"() {
         when:
         Date d1 = new Date()
         def v1 = VX3.COLLIE.instance().withProperties(
@@ -160,7 +144,38 @@ class TinkerpopAnonExtensionsSpec extends Specification {
         collie1
         collie1.size() == 1
         collie1[0] == v1
-    }*/
+    }
+
+
+    def "anonymous traversal isa union"() {
+        when:
+        def v1 = VX.THING.instance().withProperty(PX.ID, '58').ensure(graph, g)
+        def v2 = VX2.THING.instance().withProperty(PX.ID, '59').ensure(graph, g)
+        println "$v1 $v2"        
+        
+        /*
+
+        def verts = g.V().union(
+            __.hasLabel(VX.THING.label),
+            __.hasLabel(VX2.THING.label),
+        ).toList()
+
+        def verts = g.V().union(
+            __.has(Base.PX.ELEMENT_LABEL.label, VX.THING.label),
+            __.has(Base.PX.ELEMENT_LABEL.label, VX2.THING.label),
+        ).toList()
+
+        */
+
+        def verts = g.V().union(
+            __.isa(VX.THING),
+            __.isa(VX2.THING),
+        ).toList()
+
+        then:
+        verts
+        verts.size() == 2
+    }
 
 
     def "anonymous traversal isa"() {
@@ -175,6 +190,24 @@ class TinkerpopAnonExtensionsSpec extends Specification {
 
         then:
         op.isPresent()
+    }
+
+
+    def "anonymous traversal has string"() {
+        when:
+        def v1 = VX.THING.instance().withProperty(PX.ID, '58').ensure(graph, g)
+        def v2 = VX.THING.instance().withProperty(PX.ID, '59').ensure(graph, g)
+        def v3 = VX.THING.instance().withProperty(PX.ID, '60').ensure(graph, g)
+        println "$v1 $v2 $v3"        
+
+        def verts = g.V().union(
+            __.has(PX.ID, '58'),
+            __.has(PX.ID, '59')
+        ).toList()
+
+        then:
+        verts
+        verts.size() == 2
     }
 
 

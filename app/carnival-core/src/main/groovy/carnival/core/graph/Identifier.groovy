@@ -96,7 +96,7 @@ class Identifier {
 		if (identifierScope) {
 			def foundVert = g.V().hasLabel(Core.VX.IDENTIFIER.label).has(Core.PX.VALUE.label, value).as("id")
 			.and(
-				__.out(Base.EX.IS_INSTANCE_OF.label).hasId(identifierClass.id()),
+				__.out(Core.EX.IS_INSTANCE_OF.label).hasId(identifierClass.id()),
 				__.out(Core.EX.IS_SCOPED_BY.label).hasId(identifierScope.id())
 			) .select("id").tryNext()
 
@@ -105,7 +105,7 @@ class Identifier {
 			}
 			else {
 				def idVert = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, value).createVertex(graph)
-				Base.EX.IS_INSTANCE_OF.relate(g, idVert, identifierClass)
+				Core.EX.IS_INSTANCE_OF.relate(g, idVert, identifierClass)
 				Core.EX.IS_SCOPED_BY.relate(g, idVert, identifierScope)
 				return idVert
 			}
@@ -113,7 +113,7 @@ class Identifier {
 		else if (identifierFacility) {
 			def foundVert = g.V().hasLabel(Core.VX.IDENTIFIER.label).has(Core.PX.VALUE.label, value).as("id")
 			.and(
-				__.out(Base.EX.IS_INSTANCE_OF.label).hasId(identifierClass.id()),
+				__.out(Core.EX.IS_INSTANCE_OF.label).hasId(identifierClass.id()),
 				__.out(Core.EX.WAS_CREATED_BY.label).hasId(identifierFacility.id())
 			) .select("id").tryNext()
 
@@ -122,20 +122,20 @@ class Identifier {
 			}
 			else {
 				def idVert = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, value).createVertex(graph)
-				Base.EX.IS_INSTANCE_OF.relate(g, idVert, identifierClass)
+				Core.EX.IS_INSTANCE_OF.relate(g, idVert, identifierClass)
 				Core.EX.WAS_CREATED_BY.relate(g, idVert, identifierFacility)
 				return idVert
 			}
 		}
 		else {
-			def foundVert = g.V().hasLabel(Core.VX.IDENTIFIER.label).has(Core.PX.VALUE.label, value).as("id").out(Base.EX.IS_INSTANCE_OF.label).hasId(identifierClass.id()).select("id").tryNext()
+			def foundVert = g.V().hasLabel(Core.VX.IDENTIFIER.label).has(Core.PX.VALUE.label, value).as("id").out(Core.EX.IS_INSTANCE_OF.label).hasId(identifierClass.id()).select("id").tryNext()
 
 			if (foundVert.isPresent()) {
 				return foundVert.get()
 			}
 			else {
 				def idVert = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, value).createVertex(graph)
-				Base.EX.IS_INSTANCE_OF.relate(g, idVert, identifierClass)
+				Core.EX.IS_INSTANCE_OF.relate(g, idVert, identifierClass)
 				return idVert
 			}
 		}

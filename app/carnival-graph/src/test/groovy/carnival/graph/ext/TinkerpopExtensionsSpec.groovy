@@ -404,6 +404,7 @@ class TinkerpopExtensionsSpec extends Specification {
     }
 
 
+
     /*def "nextOne"() {
         given:
         def res

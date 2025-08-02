@@ -277,7 +277,7 @@ class VertexDefinitionSpec extends Specification {
 
         then:
         v
-        !v.property(Base.PX.IS_CLASS.label).isPresent()
+        //!v.property(Base.PX.IS_CLASS.label).isPresent()
         v.property(Base.PX.NAME_SPACE.label).isPresent()
         v.value(Base.PX.NAME_SPACE.label) == 'carnival.graph.VertexDefinitionSpec$VX'
     }
@@ -306,7 +306,7 @@ class VertexDefinitionSpec extends Specification {
 
         then:
         v
-        !v.property(Base.PX.IS_CLASS.label).isPresent()
+        //!v.property(Base.PX.IS_CLASS.label).isPresent()
         v.property(Base.PX.NAME_SPACE.label).isPresent()
         v.value(Base.PX.NAME_SPACE.label) == 'some.custom.NameSpace'
     }
@@ -324,7 +324,7 @@ class VertexDefinitionSpec extends Specification {
 
         then:
         v
-        !v.property(Base.PX.IS_CLASS.label).isPresent()
+        //!v.property(Base.PX.IS_CLASS.label).isPresent()
         v.property(Base.PX.NAME_SPACE.label).isPresent()
         v.value(Base.PX.NAME_SPACE.label) == 'carnival.graph.VertexDefinitionSpec$VX'
     }
@@ -354,7 +354,7 @@ class VertexDefinitionSpec extends Specification {
 
         then:
         v
-        !v.property(Base.PX.IS_CLASS.label).isPresent()
+        //!v.property(Base.PX.IS_CLASS.label).isPresent()
         v.property(Base.PX.NAME_SPACE.label).isPresent()
         v.value(Base.PX.NAME_SPACE.label) == 'some.custom.NameSpace'
     }

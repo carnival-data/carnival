@@ -333,7 +333,7 @@ class DefaultGraphValidatorSpec extends Specification {
             Core.PX.HAS_CREATION_FACILITY, false,
             Core.PX.HAS_SCOPE, false
         ).vertex(graph, g)
-        Base.EX.IS_INSTANCE_OF.relate(g, id, idClass)
+        Core.EX.IS_INSTANCE_OF.relate(g, id, idClass)
 
         then:
         CarnivalUtils.printGraph(g)

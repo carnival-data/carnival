@@ -39,20 +39,20 @@ class Base {
     /** 
      * Defines edges used to express class relationships in Carnival graphs.
      * */
-    static enum EX implements EdgeDefinition {
+    //static enum EX implements EdgeDefinition {
 
         /** 
          * Out vertex represents a class that is a sublass of the class
          * represented by the in vertex.
          */
-        IS_SUBCLASS_OF,
+        //IS_SUBCLASS_OF,
 
         /**
          * The out vertex represents and object that is an instance of the
          * class represented by the in vertex.
          */
-        IS_INSTANCE_OF
-    }
+        //IS_INSTANCE_OF
+    //}
 
 
     /** 
@@ -61,7 +61,15 @@ class Base {
     static enum PX implements PropertyDefinition {
 
         /** If true, the vertex represents a class */
-        IS_CLASS,
+        //IS_CLASS,
+
+        /** 
+         * A property for the element label, which is the same value as as the
+         * label of the element, included here because at least one database
+         * engine (Janus Berkeley) does not index the element label, but can
+         * index properties.
+         */
+        ELEMENT_LABEL,
 
         /** 
          * The name space of the vertex label, set by Carnival to differentiate

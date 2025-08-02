@@ -78,6 +78,47 @@ class VertexBuilderSpec extends Specification {
     // TESTS
     ///////////////////////////////////////////////////////////////////////////
 
+    def "createVertex prop element label"() {
+        when:
+        def v1 = VX.CIS_THING2.instance().create(graph)
+        def v1El = Base.PX.ELEMENT_LABEL.of(v1)
+
+        then:
+        v1El.isPresent()
+
+        when:
+        def v1Elv = v1El.value()
+
+        then:
+        v1Elv == 'CisThing20CarnivalGraphVertexbuilderspecVx'
+    }
+
+
+    def "createVertex prop name space"() {
+        when:
+        def v1 = VX.CIS_THING2.instance().create(graph)
+        def v1Ns = Base.PX.NAME_SPACE.of(v1)
+
+        then:
+        v1Ns.isPresent()
+
+        when:
+        def v1Nsv = v1Ns.value()
+
+        then:
+        v1Nsv == 'carnival.graph.VertexBuilderSpec$VX'
+    }
+
+
+    def "createVertex vertex label"() {
+        when:
+        def v1 = VX.CIS_THING2.instance().create(graph)
+
+        then:
+        v1.label == 'CisThing20CarnivalGraphVertexbuilderspecVx'
+    }
+
+
     def "ensure works with zoned date times"() {
         expect:
         g.V().isa(VX.CIS_THING2).count().next() == 0

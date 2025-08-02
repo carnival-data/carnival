@@ -219,9 +219,9 @@ trait EdgeDefinition extends ElementDefinition {
      * Synonym for setRelationship().
      * @see #setRelationship(GraphTraversalSource, VertexDefinition, VertexDefinition)
      */
-    /*public Edge relate(GraphTraversalSource g, VertexDefinition from, VertexDefinition to) {
+    public Edge relate(GraphTraversalSource g, VertexDefinition from, VertexDefinition to) {
         setRelationship(g, from, to)
-    }*/
+    }
 
 
     /** 
@@ -346,6 +346,7 @@ trait EdgeDefinition extends ElementDefinition {
         .tryNext().orElseGet {
             from.addEdge(
                 lbl, to,
+                Base.PX.ELEMENT_LABEL.label, lbl,
                 Base.PX.NAME_SPACE.label, ns
             )
         }
@@ -368,6 +369,7 @@ trait EdgeDefinition extends ElementDefinition {
         def ns = getNameSpace()
         from.addEdge(
             lbl, to,
+            Base.PX.ELEMENT_LABEL.label, lbl,
             Base.PX.NAME_SPACE.label, ns
         )
     }

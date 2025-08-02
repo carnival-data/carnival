@@ -270,7 +270,7 @@ class CarnivalJanusBerkeley extends Carnival {
     public List<AddModelResult> initVertModel() {
         log.info "Carnival initVertModel"
         List<AddModelResult> results = new ArrayList<AddModelResult>()
-        [Base.EX, Core.VX].each {
+        [/*Base.EX,*/ Core.VX].each {
             AddModelResult res = addModel(it)
             results.add(res)
         }
@@ -282,7 +282,7 @@ class CarnivalJanusBerkeley extends Carnival {
     public List<AddModelResult> initVertModelNoMgmt() {
         log.info "Carnival initVertModel"
         List<AddModelResult> results = new ArrayList<AddModelResult>()
-        [Base.EX, Core.VX].each {
+        [/*Base.EX,*/ Core.VX].each {
             AddModelResult res = addModelNoMgmt(it)
             results.add(res)
         }
@@ -331,34 +331,42 @@ class CarnivalJanusBerkeley extends Carnival {
         Set<PropertyKey> propertyKeys = mgmt.getRelationTypes(PropertyKey).toSet()
         
         EnumSet.allOf(Base.PX).each { PropertyDefinition bpx ->
+            log.trace "bpx: ${bpx}"
             PropertyKey pk = propertyKeys.find {
                 it.name() == bpx.label
             }
+            log.trace "pk: ${pk}"
             assert pk
+
             String idxName = indexNameOf(bpx) 
+            log.trace "idxName: ${idxName}"
             idxNames.add(idxName)
             this.indexNames.add(idxName)
+
             mgmt
                 .buildIndex(idxName, Vertex.class)
                 .addKey(pk)
             .buildCompositeIndex()
         }
 
-        // combo index for isClass and nameSpace
-        PropertyKey icpk = propertyKeys.find {
-            it.name() == Base.PX.IS_CLASS.label
+        // combo index for elementLabel and nameSpace
+        PropertyKey elpk = propertyKeys.find {
+            it.name() == Base.PX.ELEMENT_LABEL.label
         }
-        assert icpk
+        assert elpk
         PropertyKey nspk = propertyKeys.find {
             it.name() == Base.PX.NAME_SPACE.label
         }
         assert nspk
-        String inIdxName = indexNameOf(Base.PX.IS_CLASS, Base.PX.NAME_SPACE)
+        String inIdxName = indexNameOf(
+            Base.PX.ELEMENT_LABEL, 
+            Base.PX.NAME_SPACE
+        )
         idxNames.add(inIdxName)
         this.indexNames.add(inIdxName)
         mgmt
             .buildIndex(inIdxName, Vertex.class)
-            .addKey(icpk)
+            .addKey(elpk)
             .addKey(nspk)
         .buildCompositeIndex()
 
@@ -426,6 +434,7 @@ class CarnivalJanusBerkeley extends Carnival {
         JanusGraphManagement mgmt
     ) {
         log.trace "janusPropertySchema propertyConstraints mgmt"
+        log.trace "propertyConstraints: ${propertyConstraints}"
 
         assert propertyConstraints
         assert graph
@@ -433,11 +442,40 @@ class CarnivalJanusBerkeley extends Carnival {
 
         List<String> idxNames = new ArrayList<String>()
 
-        // look for namespace property key
+        // list of all property keys
         Set<PropertyKey> propertyKeys = mgmt.getRelationTypes(PropertyKey).toSet()
+        log.trace "propertyKeys: ${propertyKeys}"
+
+        // look for namespace property key
         PropertyKey nspk = propertyKeys.find {
             it.name() == Base.PX.NAME_SPACE.label
         }
+
+        /*
+        assert nspk
+
+        // index namespace property
+        idxNames.add('namespace')
+        this.indexNames.add('namespace')
+        IndexBuilder nspkIb = mgmt
+            .buildIndex('namespace', Vertex.class)
+            .addKey(nspk)
+        .indexOnly(vl)
+
+        // look for vertex definition class
+        PropertyKey vdcpk = propertyKeys.find {
+            it.name() == Base.PX.VERTEX_DEFINITION_CLASS.label
+        }
+        assert vdcpk
+
+        // index vertex definition class property
+        idxNames.add('vertexdefinitionclass')
+        this.indexNames.add('vertexdefinitionclass')
+        IndexBuilder vdcpkIb = mgmt
+            .buildIndex('vertexdefinitionclass', Vertex.class)
+            .addKey(vdcpk)
+        .indexOnly(vl)
+        */
 
         propertyConstraints.each { PropertyConstraint pc ->
             log.trace "pc: ${pc}"
@@ -551,11 +589,11 @@ class CarnivalJanusBerkeley extends Carnival {
             }
             assert nspk
 
-            // find Base.PX.IS_CLASS property key
-            PropertyKey icpk = propertyKeys.find {
-                it.name() == Base.PX.IS_CLASS.label
+            // find Base.PX.ELEMENT_LABEL property key
+            PropertyKey elpk = propertyKeys.find {
+                it.name() == Base.PX.ELEMENT_LABEL.label
             }
-            assert icpk
+            assert elpk
 
             vertexConstraints.each { VertexConstraint vc ->
                 log.trace "vc: ${vc}"
@@ -563,16 +601,16 @@ class CarnivalJanusBerkeley extends Carnival {
                 VertexLabelMaker vlm = mgmt.makeVertexLabel(vc.label)
                 VertexLabel vl = vlm.make()
 
-                // combo isclass and namespace 
-                String icnsIdxName = indexNameOf(
-                    vc.vertexDef, Base.PX.IS_CLASS, Base.PX.NAME_SPACE
+                // combo elementLabel and namespace 
+                String elnsIdxName = indexNameOf(
+                    vc.vertexDef, Base.PX.ELEMENT_LABEL, Base.PX.NAME_SPACE
                 )
-                log.trace "icnsIdxName: ${icnsIdxName}"
-                idxNames.add(icnsIdxName)
-                this.indexNames.add(icnsIdxName)
+                log.trace "elnsIdxName: ${elnsIdxName}"
+                idxNames.add(elnsIdxName)
+                this.indexNames.add(elnsIdxName)
                 mgmt
-                    .buildIndex(icnsIdxName, Vertex.class)
-                    .addKey(icpk)
+                    .buildIndex(elnsIdxName, Vertex.class)
+                    .addKey(elpk)
                     .addKey(nspk)
                     .indexOnly(vl)
                 .buildCompositeIndex()
@@ -765,7 +803,7 @@ class CarnivalJanusBerkeley extends Carnival {
         try {
             graph.close()
         } catch (Exception e) {
-            log.warn "Exception closing graph ${graph}", e
+            log.error "Exception closing graph ${graph}", e
         }
     }
 

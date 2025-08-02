@@ -52,14 +52,14 @@ class TinkerpopTraversalExtension {
      * @return          The modified traversal
      *
      */
-    static GraphTraversal instances(DefaultTraversal traversal) {
+    /*static GraphTraversal instances(DefaultTraversal traversal) {
         traversal
             .emit()
             .repeat(
                 __.in(Base.EX.IS_SUBCLASS_OF)
             )
         .in(Base.EX.IS_INSTANCE_OF)
-    }
+    }*/
     
 
     /** 
@@ -92,14 +92,14 @@ class TinkerpopTraversalExtension {
      * @param traversal The traversal this method will modify.
      * @return          The modified traversal
      */
-    static GraphTraversal classes(DefaultTraversal traversal) {
+    /*static GraphTraversal classes(DefaultTraversal traversal) {
         traversal
             .out(Base.EX.IS_INSTANCE_OF)
             .emit()
         .repeat(
             __.out(Base.EX.IS_SUBCLASS_OF)
         )
-    }
+    }*/
 
 
     /** 
@@ -126,7 +126,10 @@ class TinkerpopTraversalExtension {
      * @return          The modified traversal
      */
     static GraphTraversal isa(DefaultTraversal traversal, VertexDefinition vdef) {
-        traversal.hasLabel(vdef.label).has(Base.PX.NAME_SPACE.label, vdef.nameSpace)
+        traversal.has(Base.PX.ELEMENT_LABEL.label, vdef.label)
+            .has(Base.PX.NAME_SPACE.label, vdef.nameSpace)
+        /*traversal.hasLabel(vdef.label)
+            .has(Base.PX.NAME_SPACE.label, vdef.nameSpace)*/
     }
 
 
@@ -139,7 +142,10 @@ class TinkerpopTraversalExtension {
      * @return          The modified traversal
      */
     static GraphTraversal isa(DefaultTraversal traversal, EdgeDefinition edef) {
-        traversal.hasLabel(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace)
+        traversal.has(Base.PX.ELEMENT_LABEL.label, edef.label)
+            .has(Base.PX.NAME_SPACE.label, edef.nameSpace)
+        /*traversal.hasLabel(edef.label)
+            .has(Base.PX.NAME_SPACE.label, edef.nameSpace)*/
     }
 
 
@@ -325,6 +331,21 @@ class TinkerpopTraversalExtension {
      * @return          The modified traversal
      */
     static GraphTraversal has(DefaultTraversal traversal, PropertyDefinition pdef, Boolean value) {
+        traversal.has(pdef.label, value)
+    }
+
+
+
+    /** 
+     * Extension of the Has step that accepts a property definition and an
+     * Object that will be used as the property value.
+     *
+     * @param traversal The traversal this method will modify.
+     * @param pdef      The property definition
+     * @param value     The the property value
+     * @return          The modified traversal
+     */
+    static GraphTraversal has(DefaultTraversal traversal, PropertyDefinition pdef, Object value) {
         traversal.has(pdef.label, value)
     }
 

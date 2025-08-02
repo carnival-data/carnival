@@ -310,7 +310,7 @@ class CarnivalSpec extends Specification {
         carnival.checkConstraints().size() == 0
 
         when:
-        Base.EX.IS_INSTANCE_OF.relate(g, identifier, identifierClass)
+        Core.EX.IS_INSTANCE_OF.relate(g, identifier, identifierClass)
         //identifier.addEdge("is_instance_of", identifierClass)
         Core.EX.WAS_CREATED_BY.relate(g, identifier, identifierFacility)
         //identifier.addEdge("was_created_by", identifierFacility)
@@ -355,7 +355,7 @@ class CarnivalSpec extends Specification {
         carnival.checkConstraints().size() == 0
 
         when:
-        Base.EX.IS_INSTANCE_OF.relate(g, identifier, identifierClass)
+        Core.EX.IS_INSTANCE_OF.relate(g, identifier, identifierClass)
         Core.EX.WAS_CREATED_BY.relate(g, identifier, identifierFacility)
         //identifier.addEdge("is_instance_of", identifierClass)
         //identifier.addEdge("was_created_by", identifierFacility)
@@ -389,7 +389,7 @@ class CarnivalSpec extends Specification {
             Core.PX.HAS_CREATION_FACILITY, false,
             Core.PX.HAS_SCOPE, false
         ).vertex(graph, g)
-        Base.EX.IS_INSTANCE_OF.relate(g, id, idClass)
+        Core.EX.IS_INSTANCE_OF.relate(g, id, idClass)
 
         then:
         CarnivalUtils.printGraph(g)
@@ -475,22 +475,22 @@ class CarnivalSpec extends Specification {
 
 
         def id1Class1 = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, 'id1').vertex(graph, g)
-        Base.EX.IS_INSTANCE_OF.relate(g, id1Class1, idClass1) 
+        Core.EX.IS_INSTANCE_OF.relate(g, id1Class1, idClass1) 
 
         println "--- id1Class1: ${id1Class1.label}"
 
         def id2Class1 = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, 'id2').vertex(graph, g)
-        Base.EX.IS_INSTANCE_OF.relate(g, id2Class1, idClass1) 
+        Core.EX.IS_INSTANCE_OF.relate(g, id2Class1, idClass1) 
 
         def id1Class2 = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, 'id1').vertex(graph, g)
-        Base.EX.IS_INSTANCE_OF.relate(g, id1Class2, idClass2) 
+        Core.EX.IS_INSTANCE_OF.relate(g, id1Class2, idClass2) 
 
         def scopedId = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, 'scopedId1').vertex(graph, g)
-        Base.EX.IS_INSTANCE_OF.relate(g, scopedId, scopedIdClass) 
+        Core.EX.IS_INSTANCE_OF.relate(g, scopedId, scopedIdClass) 
         Core.EX.IS_SCOPED_BY.relate(g, scopedId, scope1) 
 
         def facilityId = Core.VX.IDENTIFIER.instance().withProperty(Core.PX.VALUE, 'facilityId1').vertex(graph, g)
-        Base.EX.IS_INSTANCE_OF.relate(g, facilityId, facilityIdClass) 
+        Core.EX.IS_INSTANCE_OF.relate(g, facilityId, facilityIdClass) 
         Core.EX.WAS_CREATED_BY.relate(g, facilityId, facility1) 
 
         def allIdVerts = [id1Class1, id2Class1, id1Class2, scopedId, facilityId]

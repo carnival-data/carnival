@@ -106,6 +106,87 @@ class CarnivalJanusBerkeleySpec extends Specification {
     ///////////////////////////////////////////////////////////////////////////
 
 
+    def "check for ensure full scan warning"() {
+        when:
+        carnival.addModel(PX)
+        carnival.addModel(VX)
+
+        println "\n\nINDEX NAMES:"
+        carnival.indexNames.each {
+            println it
+        }
+        println "\n\n"
+
+        def numVerts1
+        def numVerts2
+        def numVerts3
+        def numVerts4
+
+        carnival.withGremlin { graph, g ->
+            println 'full scan NOT ok'
+            (1..10).each { idx ->
+                VX.SUITCASE.instance().withProperties(
+                    PX.ID, String.valueOf(idx),
+                    PX.VOLUME, idx
+                ).ensure(graph, g)
+            }
+
+            println 'full scan ok'
+            numVerts1 = g.V().count().next()
+
+            println 'full scan NOT ok'
+            numVerts2 = g.V().isa(VX.SUITCASE).toList().size()
+        }
+
+        then:
+        numVerts1 == 10
+        numVerts2 == 10
+    }
+
+
+    def "check for isa full scan warning"() {
+        when:
+        carnival.addModel(PX)
+        carnival.addModel(VX)
+
+        def numVerts1
+        def numVerts2
+        def numVerts3
+        def numVerts4
+
+        carnival.withGremlin { graph, g ->
+            (1..100).each { idx ->
+                VX.SUITCASE.instance().withProperties(
+                    PX.ID, String.valueOf(idx),
+                    PX.VOLUME, idx
+                ).create(graph)
+            }
+
+            println 'full scan ok'
+            numVerts1 = g.V().count().next()
+
+            println 'full scan NOT ok'
+            numVerts2 = g.V().isa(VX.SUITCASE).toList().size()
+
+            println 'full scan NOT ok'
+            numVerts3 = g.V()
+                .isa(VX.SUITCASE)
+                .has(PX.ID, '58')
+            .toList().size()
+
+            println 'full scan NOT ok'
+            numVerts4 = g.V()
+                .has(Base.PX.ELEMENT_LABEL, 'sdfsf')
+            .count().next()
+        }
+
+        then:
+        numVerts1 == 100
+        numVerts2 == 100
+        numVerts3 == 1
+    }
+
+
     def "wait for indexes"() {
         when:
         carnival.addModel(PX)
@@ -206,7 +287,7 @@ class CarnivalJanusBerkeleySpec extends Specification {
     }
 
 
-    def "vertex isclass namespace compound indices"() {
+    /*def "vertex isclass namespace compound indices"() {
         when:
         carnival.addModel(PX)
         carnival.addModel(VX)
@@ -223,7 +304,7 @@ class CarnivalJanusBerkeleySpec extends Specification {
 
         then:
         idx
-    }
+    }*/
 
 
     def "vertex namespace compound indices"() {
@@ -246,7 +327,7 @@ class CarnivalJanusBerkeleySpec extends Specification {
     }
 
 
-    def "isclass and namespace are indexed"() {
+    /*def "isclass and namespace are indexed"() {
         when:
         JanusGraphManagement mgmt = carnival.graph.openManagement()
 
@@ -260,7 +341,7 @@ class CarnivalJanusBerkeleySpec extends Specification {
 
         then:
         idx
-    }
+    }*/
 
 
     def "namespace is indexed"() {

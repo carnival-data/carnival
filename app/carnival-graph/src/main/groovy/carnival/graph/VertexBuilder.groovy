@@ -130,8 +130,9 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
         def ns = vertexDef.getNameSpace()
         assert ns != null
         
-        def traversal = g.V().hasLabel(lbl)
+        //def traversal = g.V().hasLabel(lbl)
         //if (isClass) traversal.has(Base.PX.IS_CLASS.label, isClass)
+        def traversal = g.V().has(Base.PX.ELEMENT_LABEL, lbl)
         traversal.has(Base.PX.NAME_SPACE.label, ns)
 
         traversal
@@ -172,6 +173,7 @@ class VertexBuilder extends PropertyValuesHolder<VertexBuilder> {
 
         def v = graph.addVertex(
             T.label, lbl,
+            Base.PX.ELEMENT_LABEL.label, lbl,
             Base.PX.NAME_SPACE.label, ns
         )
         

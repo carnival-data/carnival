@@ -48,37 +48,46 @@ class TinkerpopAnonTraversalExtension {
 
     /** @see TinkerpopTraversalExtension#isa(DefaultTraversal, VertexDefinition) */
     static GraphTraversal isa(__ traversal, VertexDefinition vdef) {
-        __.hasLabel(vdef.label).has(Base.PX.NAME_SPACE.label, vdef.nameSpace)
+        //__.hasLabel(vdef.label).has(Base.PX.NAME_SPACE.label, vdef.nameSpace)
+        //println "traversal: ${traversal}"
+        __.has(Base.PX.ELEMENT_LABEL, vdef.label)
+        .has(Base.PX.NAME_SPACE.label, vdef.nameSpace)
     }
 
     /** @see TinkerpopTraversalExtension#isa(DefaultTraversal, EdgeDefinition) */
     static GraphTraversal isa(__ traversal, EdgeDefinition edef) {
-        __.hasLabel(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace)
+        //__.hasLabel(edef.label).has(Base.PX.NAME_SPACE.label, edef.nameSpace)
+        __.has(Base.PX.ELEMENT_LABEL, edef.label)
+        .has(Base.PX.NAME_SPACE.label, edef.nameSpace)
     }
 
     /** @see TinkerpopTraversalExtension#has(DefaultTraversal, PropertyDefinition) */
     static GraphTraversal has(__ traversal, PropertyDefinition pdef) {
-        traversal.has(pdef.label)
-    }
-
-    /** @see TinkerpopTraversalExtension#has(DefaultTraversal, PropertyDefinition, Enum) */
-    static GraphTraversal has(__ traversal, PropertyDefinition pdef, String value) {
-        traversal.has(pdef.label, value)
+        __.has(pdef.label)
     }
 
     /** @see TinkerpopTraversalExtension#has(DefaultTraversal, PropertyDefinition, Enum) */
     static GraphTraversal has(__ traversal, PropertyDefinition pdef, Enum value) {
-        traversal.has(pdef.label, value.name())
+        __.has(pdef.label, value.name())
     }
 
-    /** @see TinkerpopTraversalExtension#has(DefaultTraversal, PropertyDefinition, Enum) */
+    /*
+    static GraphTraversal has(__ traversal, PropertyDefinition pdef, String value) {
+        traversal.has(pdef.label, value)
+    }
+
     static GraphTraversal has(__ traversal, PropertyDefinition pdef, Date value) {
         traversal.has(pdef.label, value)
     }
+    */
 
     /** @see TinkerpopTraversalExtension#has(DefaultTraversal, PropertyDefinition, Object) */
     static GraphTraversal has(__ traversal, PropertyDefinition pdef, Object value) {
-        traversal.has(pdef.label, value)
+        //println "__: ${__}"
+        //println "traversal: ${traversal}"
+        //println "pdef: ${pdef}"
+        //println "value: ${value}"
+        __.has(pdef.label, value)
     }
 
 }

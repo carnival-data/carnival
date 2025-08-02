@@ -176,7 +176,7 @@ class GraphEntityCache {
         String key = "${idClassV.id()}-${idValue}"
         if (identifierCache.containsKey(key)) return identifierCache.get(key)
         def outV = g.V(idClassV)
-            .in(Base.EX.IS_INSTANCE_OF.label)
+            .in(Core.EX.IS_INSTANCE_OF.label)
             .hasLabel(Core.VX.IDENTIFIER.label)
             .has(Core.PX.VALUE.label, idValue)
             .tryNext().orElseGet {
@@ -184,7 +184,7 @@ class GraphEntityCache {
                     T.label, Core.VX.IDENTIFIER.label,
                     Core.PX.VALUE.label, idValue
                 )
-                idv.addEdge(Base.EX.IS_INSTANCE_OF.label, idClassV)
+                idv.addEdge(Core.EX.IS_INSTANCE_OF.label, idClassV)
                 return idv
             }
         identifierCache.put(key, outV)

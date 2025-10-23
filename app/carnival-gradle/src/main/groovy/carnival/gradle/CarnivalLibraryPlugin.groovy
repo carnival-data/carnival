@@ -29,25 +29,30 @@ class CarnivalLibraryPlugin implements Plugin<Project> {
         println "[Carnival] Gremlin version: ${gremlinVersion}"
         println "[Carnival] Carnival version: ${carnivalVersion}"
 
-        // apply dependencies
-        project.dependencies {
-            // Groovy
-            implementation "org.apache.groovy:groovy-all:${groovyVersion}"
-
+        List<String> deps = [
             // Tinkerpop
-            implementation "org.apache.tinkerpop:gremlin-core:${gremlinVersion}"
-            implementation "org.apache.tinkerpop:gremlin-groovy:${gremlinVersion}"
-            implementation "org.apache.tinkerpop:tinkergraph-gremlin:${gremlinVersion}"
+            "org.apache.tinkerpop:gremlin-core:${gremlinVersion}",
+            "org.apache.tinkerpop:gremlin-groovy:${gremlinVersion}",
+            "org.apache.tinkerpop:tinkergraph-gremlin:${gremlinVersion}",
 
             // JanusGraph
-            implementation("org.janusgraph:janusgraph-core:${janusGraphVersion}")
-            implementation("org.janusgraph:janusgraph-berkeleyje:${janusGraphVersion}")
+            "org.janusgraph:janusgraph-core:${janusGraphVersion}",
+            "org.janusgraph:janusgraph-berkeleyje:${janusGraphVersion}",
 
             // Carnival
-            implementation("io.github.carnival-data:carnival-util:${carnivalVersion}")
-            implementation("io.github.carnival-data:carnival-graph:${carnivalVersion}")
-            implementation("io.github.carnival-data:carnival-core:${carnivalVersion}")
-            implementation("io.github.carnival-data:carnival-vine:${carnivalVersion}")
+            "io.github.carnival-data:carnival-util:${carnivalVersion}",
+            "io.github.carnival-data:carnival-graph:${carnivalVersion}",
+            "io.github.carnival-data:carnival-core:${carnivalVersion}",
+            "io.github.carnival-data:carnival-vine:${carnivalVersion}",
+        ]
+
+        // apply dependencies
+        project.dependencies.add('implementation', "org.apache.groovy:groovy-all:${groovyVersion}")
+        deps.each { project.dependencies.add('implementation', it) }
+
+        // apply java-test-fixtures dependencies
+        project.pluginManager.withPlugin('java-test-fixtures') {
+            deps.each { project.dependencies.add('testFixturesImplementation', it) }
         }
     }
 }

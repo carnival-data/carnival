@@ -484,6 +484,7 @@ class CarnivalJanusBerkeley extends Carnival {
             PropertyKeyMaker pkm = mgmt
                 .makePropertyKey(pc.label)
             .dataType(pc.dataType)
+            log.trace "pkm: ${pkm}"
 
             if (pc.cardinality) {
                 Cardinality pcc = Enum.valueOf(
@@ -494,6 +495,7 @@ class CarnivalJanusBerkeley extends Carnival {
                 pkm = pkm.cardinality(pcc)
             }
             PropertyKey pk = pkm.make()
+            log.trace "pk: ${pk}"
 
             // add composite index with namespace
             if (nspk) {
